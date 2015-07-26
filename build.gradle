@@ -1,0 +1,36 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
+    }
+}
+
+apply plugin: 'java' // ensure clean is also triggered for root build folder
+apply plugin: 'com.github.ben-manes.versions'
+
+allprojects {
+    ext {
+        guavaVersion = '18.0'
+        lombokVersion = '1.16.4'
+        daggerVersion = '2.0.1'
+        eventBusVersion = '2.4.0'
+        jodaTimeVersion = '2.8.1'
+        flowDbVersion = '2.2.1'
+        libphonenumberVersion = '7.0.8'
+
+        //Testing
+        junitVersion = '4.12'
+        robolectricVersion = '3.0'
+        assertjVersion = '1.7.0'
+    }
+    repositories {
+        jcenter()
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.5'
+}
