@@ -1,38 +1,79 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.rodrigodev.datanucleus-android'
+apply plugin: 'idea'
 
 android {
-    compileSdkVersion 20
+    compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "com.aticosoft.appointments.mobile.business"
-        minSdkVersion 15
-        targetSdkVersion 20
+        minSdkVersion 19
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets.main.java.srcDirs += ['src/domain/java']
+    sourceSets.test.java.srcDirs += ['src/domainTest/java']
+
+    packagingOptions {
+        exclude 'META-INF/README.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'plugin.xml'
+    }
+}
+
+datanucleus {
+    entitiesDir 'com/aticosoft/appointments/mobile/business/domain/model'
+    alwaysDetachable true
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.google.guava:guava:${guavaVersion}"
-    compile "de.greenrobot:eventbus:${eventBusVersion}"
-    compile "joda-time:joda-time:${jodaTimeVersion}"
-    compile "com.googlecode.libphonenumber:libphonenumber:${libphonenumberVersion}"
-    provided "org.projectlombok:lombok:${lombokVersion}"
-    compile "com.google.dagger:dagger:${daggerVersion}"
-    provided "com.google.dagger:dagger-compiler:${daggerVersion}"
-    compile "com.raizlabs.android:DBFlow-Core:${flowDbVersion}"
-    compile "com.raizlabs.android:DBFlow:${flowDbVersion}"
-    provided "com.raizlabs.android:DBFlow-Compiler:${flowDbVersion}"
+    compile "com.google.guava:guava:$guavaVersion"
+    compile "de.greenrobot:eventbus:$eventBusVersion"
+    compile "joda-time:joda-time:$jodaTimeVersion"
+    compile "com.googlecode.libphonenumber:libphonenumber:$libphonenumberVersion"
+    provided "org.projectlombok:lombok:$lombokVersion"
+    apt "org.projectlombok:lombok:$lombokVersion"
+    compile "com.google.dagger:dagger:$daggerVersion"
+    apt "com.google.dagger:dagger-compiler:$daggerVersion"
+    compile "javax.annotation:jsr250-api:$jsr250ApiVersion" // needed for Dagger
+    compile "commons-io:commons-io:$commonsIoVersion"
+    //datanucleus "org.datanucleus:datanucleus-accessplatform-jdo-rdbms:$datanucleusJdoRdbmsVersion"
+    datanucleus "org.datanucleus:datanucleus-core:$datanucleusCoreVersion"
+    datanucleus "org.datanucleus:datanucleus-api-jdo:$datanucleusApiJdoVersion"
+    datanucleus "org.datanucleus:datanucleus-rdbms:$datanucleusRdbmsVersion"
+    datanucleus "org.datanucleus:datanucleus-jodatime:$datanucleusJodatimeVersion"
+    datanucleus "javax.jdo:jdo-api:$jdoApiVersion"
+    jdkClasses files('libs/harmony-javax-jndi.jar')
+    jarjar files("$buildSystemPath/jarjar/jarjar-1.4.jar")
+    compile "com.h2database:h2:$h2Version"
+    compile "io.reactivex:rxjava:$rxJavaVersion"
 
-    testCompile "junit:junit:${junitVersion}"
-    testCompile "org.assertj:assertj-core:${assertjVersion}"
-    testCompile "org.robolectric:robolectric:${robolectricVersion}"
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.assertj:assertj-core:$assertjVersion"
+    testCompile "org.robolectric:robolectric:$robolectricVersion"
+    //TODO remove/change line below when this issue is fixed? https://bitbucket.org/hvisser/android-apt/issues/22/dagger-robolectric-gradle-apt-source-not
+    testApt "com.google.dagger:dagger-compiler:$daggerVersion"
 }
+
+//TODO remove/change line below when this issue is fixed? https://bitbucket.org/hvisser/android-apt/issues/22/dagger-robolectric-gradle-apt-source-not
+//apply from: "$buildSystemPath/testing/add-generated-test-sources.gradle"

@@ -4,7 +4,9 @@
 /build
 **/build
 /local.properties
+buildSrc/local.properties
 /.idea
 /captures
 *.iml
 *.jar
+!harmony-javax-jndi.jar

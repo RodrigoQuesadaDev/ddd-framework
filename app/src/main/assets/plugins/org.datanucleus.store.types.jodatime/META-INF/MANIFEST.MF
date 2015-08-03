@@ -1,0 +1,47 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven Bundle Plugin
+Built-By: andy
+Build-Jdk: 1.8.0_40
+Bnd-LastModified: 1431973364087
+Bundle-Description: Plugin providing DataNucleus support for Jodatime 
+ types.
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion: 2
+Bundle-Name: DataNucleus Jodatime plugin
+Bundle-SymbolicName: org.datanucleus.store.types.jodatime;singleton:=t
+ rue
+Bundle-Version: 4.1.0.release
+Export-Package: org.datanucleus.store.types.jodatime.rdbms.mapping;use
+ s:="org.datanucleus,org.datanucleus.metadata,org.datanucleus.store.rd
+ bms,org.datanucleus.store.rdbms.mapping.java,org.datanucleus.store.rd
+ bms.table";version="4.1.0.release",org.datanucleus.store.types.jodati
+ me.rdbms.sql.expression;uses:="org.datanucleus.store.rdbms.mapping.ja
+ va,org.datanucleus.store.rdbms.sql,org.datanucleus.store.rdbms.sql.ex
+ pression,org.joda.time";version="4.1.0.release",org.datanucleus.store
+ .types.jodatime.rdbms.sql.method;uses:="org.datanucleus.store.rdbms.s
+ ql.expression,org.datanucleus.store.rdbms.sql.method";version="4.1.0.
+ release",org.datanucleus.store.types.jodatime.query.inmemory;uses:="o
+ rg.datanucleus.query.expression,org.datanucleus.query.inmemory";versi
+ on="4.1.0.release",org.datanucleus.store.types.jodatime.converters;us
+ es:="org.datanucleus.store.types.converters,org.joda.time";version="4
+ .1.0.release"
+Import-Package: org.joda.time;version="2.0",org.joda.time.format;versi
+ on="2.0",org.datanucleus.store.rdbms;version="4.1.0.release";resoluti
+ on:=optional,org.datanucleus.store.rdbms.mapping;version="4.1.0.relea
+ se";resolution:=optional,org.datanucleus.store.rdbms.mapping.datastor
+ e;version="4.1.0.release";resolution:=optional,org.datanucleus.store.
+ rdbms.mapping.java;version="4.1.0.release";resolution:=optional,org.d
+ atanucleus.store.rdbms.sql;version="4.1.0.release";resolution:=option
+ al,org.datanucleus.store.rdbms.sql.expression;version="4.1.0.release"
+ ;resolution:=optional,org.datanucleus.store.rdbms.sql.method;version=
+ "4.1.0.release";resolution:=optional,org.datanucleus.store.rdbms.tabl
+ e;version="4.1.0.release";resolution:=optional,org.datanucleus;versio
+ n="4.1.0.release",org.datanucleus.exceptions;version="4.1.0.release",
+ org.datanucleus.metadata;version="4.1.0.release",org.datanucleus.quer
+ y.expression;version="4.1.0.release",org.datanucleus.query.inmemory;v
+ ersion="4.1.0.release",org.datanucleus.store.types;version="4.1.0.rel
+ ease",org.datanucleus.store.types.converters;version="4.1.0.release",
+ org.datanucleus.util;version="4.1.0.release"
+Tool: Bnd-2.1.0.20130426-122213
+

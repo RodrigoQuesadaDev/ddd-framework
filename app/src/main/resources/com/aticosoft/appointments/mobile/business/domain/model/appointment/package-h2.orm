@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
+<orm>
+    <package name="com.aticosoft.appointments.mobile.business.domain.model.appointment">
+        <class name="Appointment" table="APPOINTMENT">
+            <version column="VERSION" strategy="version-number"/>
+            <field name="id">
+                <column name="_ID"/>
+            </field>
+            <field name="scheduledTime">
+                <column name="SCHEDULED_TIME"/>
+            </field>
+        </class>
+    </package>
+</orm>

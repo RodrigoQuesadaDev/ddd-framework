@@ -1,0 +1,19 @@
+task addGeneratedTestSources {
+    def file = file(project.name + ".iml")
+    outputs.file file
+    doLast {
+        try {
+            def parsedXml = (new XmlParser()).parse(file)
+            def node = parsedXml.component[1].content[0]
+
+            new Node(node, 'sourceFolder', ['url': 'file://$MODULE_DIR$/build/generated/source/apt/test/debug', 'isTestSource': 'true', 'generated': 'true'])
+
+            def writer = new StringWriter()
+            new XmlNodePrinter(new PrintWriter(writer)).print(parsedXml)
+            file.text = writer.toString()
+        } catch (FileNotFoundException e) {
+            // iml not found, common on command line only builds
+        }
+    }
+}
+tasks.preBuild.dependsOn addGeneratedTestSources

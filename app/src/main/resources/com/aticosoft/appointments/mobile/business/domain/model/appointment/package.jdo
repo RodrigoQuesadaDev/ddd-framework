@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
+<jdo>
+    <package name="com.aticosoft.appointments.mobile.business.domain.model.appointment">
+        <class name="Appointment">
+            <field name="id" primary-key="true" value-strategy="native"/>
+            <field name="scheduledTime"/>
+        </class>
+    </package>
+</jdo>
