@@ -2,6 +2,8 @@ package com.aticosoft.appointments.mobile.business.domain.model.appointment;
 
 import org.joda.time.DateTime;
 
+import javax.jdo.annotations.PersistenceCapable;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +13,7 @@ import lombok.experimental.Accessors;
 /**
  * Created by rodrigo on 26/07/15.
  */
+@PersistenceCapable
 @Data
 @EqualsAndHashCode(exclude = "id")
 @Getter(AccessLevel.NONE)

@@ -1,10 +1,5 @@
 package com.rodrigodev.gradle.plugin.jarjar
 
-import com.rodrigodev.gradle.plugin.jarjar.rule.Keep
-import com.rodrigodev.gradle.plugin.jarjar.rule.Rule
-import com.rodrigodev.gradle.plugin.jarjar.rule.Zap
-import groovy.transform.CompileStatic
-import groovy.transform.TypeChecked
 import org.gradle.api.Project
 
 class PluginExtension {
@@ -20,7 +15,7 @@ class PluginExtension {
         this.rules = new Rules(project)
     }
 
-    Set getRules(){
+    Set getRules() {
         return rules.set
     }
 
@@ -50,7 +45,7 @@ class PluginExtension {
             addPatternElementMap(pattern)
         }
 
-        private void addPatternElementMap(String pattern){
+        private void addPatternElementMap(String pattern) {
             set.add(pattern: pattern)
         }
     }

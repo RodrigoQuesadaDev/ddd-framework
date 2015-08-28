@@ -6,7 +6,6 @@ import com.aticosoft.appointments.mobile.business.ApplicationModule;
 import com.aticosoft.appointments.mobile.business.BuildConfig;
 import com.aticosoft.appointments.mobile.business.domain.application.AppointmentService;
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentRepository;
-import com.aticosoft.appointments.mobile.business.test.common.infrastructure.persistence.TestPersistenceConfigurer;
 import com.aticosoft.appointments.mobile.business.test.common.infrastructure.persistence.TestPersistenceModule;
 import com.aticosoft.appointments.mobile.business.test.common.model.appointment.AppointmentAwareSpecification;
 import com.aticosoft.appointments.mobile.business.test.specifications.BaseSpecification.TestApplication;
@@ -35,7 +34,7 @@ public abstract class BaseSpecification implements AppointmentAwareSpecification
         @Override protected TestApplicationComponent createApplicationComponent() {
             return DaggerBaseSpecification_TestApplicationComponent.builder()
                     .applicationModule(new ApplicationModule(this))
-                    .persistenceModule(new TestPersistenceModule(new TestPersistenceConfigurer()))
+                    .persistenceModule(new TestPersistenceModule())
                     .build();
         }
 

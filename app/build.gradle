@@ -22,7 +22,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -63,7 +63,11 @@ dependencies {
     datanucleus "org.datanucleus:datanucleus-rdbms:$datanucleusRdbmsVersion"
     datanucleus "org.datanucleus:datanucleus-jodatime:$datanucleusJodatimeVersion"
     datanucleus "javax.jdo:jdo-api:$jdoApiVersion"
-    jdkClasses files('libs/harmony-javax-jndi.jar')
+    compile ("com.querydsl:querydsl-jdo:$queryDslVersion") {
+        exclude module: 'jdo-api'
+    }
+    apt ("com.querydsl:querydsl-apt:$queryDslVersion:jdo")
+    jdkClasses files('jdk-files/harmony-javax-jndi.jar')
     jarjar files("$buildSystemPath/jarjar/jarjar-1.4.jar")
     compile "com.h2database:h2:$h2Version"
     compile "io.reactivex:rxjava:$rxJavaVersion"
@@ -73,6 +77,7 @@ dependencies {
     testCompile "org.robolectric:robolectric:$robolectricVersion"
     //TODO remove/change line below when this issue is fixed? https://bitbucket.org/hvisser/android-apt/issues/22/dagger-robolectric-gradle-apt-source-not
     testApt "com.google.dagger:dagger-compiler:$daggerVersion"
+    testApt "com.querydsl:querydsl-apt:$queryDslVersion:jdo"
 }
 
 //TODO remove/change line below when this issue is fixed? https://bitbucket.org/hvisser/android-apt/issues/22/dagger-robolectric-gradle-apt-source-not

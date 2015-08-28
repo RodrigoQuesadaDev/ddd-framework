@@ -11,6 +11,7 @@ class PluginConfiguration {
     private static final String DATANUCLEUS = 'datanucleus'
     private static final String EXTENSION_NAME = 'datanucleus'
     static final String OUTPUT_DIR_NAME = 'datanucleus'
+    private static final String OUTPUT_FILE_NAME = 'datanucleus.jar'
 
     private Project project
     final PluginExtension extension
@@ -24,10 +25,13 @@ class PluginConfiguration {
         this.project = project;
         this.extension = project.extensions.create(EXTENSION_NAME, PluginExtension)
         this.datanucleusDependencies = project.configurations.create(DATANUCLEUS)
-        project.configurations.compile.extendsFrom datanucleusDependencies
-
         this.copyPluginFilesConfiguration = new CopyPluginFilesConfiguration(this)
         this.enhanceJdoEntitiesConfiguration = new EnhanceJdoEntitiesConfiguration(this)
         this.jarJarConfiguration = new JarJarConfiguration(this);
+    }
+
+    File getRepackagedFile(){
+        File outputDir = new File(project.buildDir, OUTPUT_DIR_NAME)
+        return new File(outputDir, OUTPUT_FILE_NAME)
     }
 }

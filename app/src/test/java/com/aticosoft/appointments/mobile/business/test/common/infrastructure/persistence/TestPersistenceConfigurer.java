@@ -2,8 +2,6 @@ package com.aticosoft.appointments.mobile.business.test.common.infrastructure.pe
 
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceConfigurer;
 
-import org.datanucleus.PropertyNames;
-
 import java.util.Map;
 
 /**
@@ -13,13 +11,12 @@ public class TestPersistenceConfigurer extends PersistenceConfigurer {
 
     public static final String IN_MEMORY_LOCATION = "mem:db1";
 
-    @Override protected String location() {
-        return IN_MEMORY_LOCATION;
+    protected TestPersistenceConfigurer(Services services) {
+        super(services);
     }
 
-    @Override protected Map overrideProperties(Map properties) {
-        properties.remove(PropertyNames.PROPERTY_CLASSLOADER_PRIMARY);
-        return properties;
+    @Override protected String location() {
+        return IN_MEMORY_LOCATION;
     }
 
     @Override protected Map overrideConnectionUrlParameters(Map parameters) {

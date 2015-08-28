@@ -38,10 +38,19 @@ public class PersistenceConfigurer {
         public static final String CACHE_SIZE = "CACHE_SIZE";
     }
 
-    @Inject CustomDataNucleusClassLoader customDataNucleusClassLoader;
-    @Inject ApplicationInfo applicationInfo;
+    public static class Services {
 
-    @Inject protected PersistenceConfigurer() {
+        @Inject CustomDataNucleusClassLoader customDataNucleusClassLoader;
+        @Inject ApplicationInfo applicationInfo;
+
+        @Inject public Services() {
+        }
+    }
+
+    private Services s;
+
+    protected PersistenceConfigurer(Services services) {
+        this.s = services;
     }
 
     public PersistenceManagerFactory createPersistenceManagerFactory() {
@@ -65,14 +74,14 @@ public class PersistenceConfigurer {
     }
 
     protected String location() {
-        return applicationInfo.dataDir + "/databases/h2";
+        return s.applicationInfo.dataDir + "/databases/h2";
     }
 
     @SuppressWarnings("unchecked")
     private ImmutableMap properties() {
         Map props = new HashMap();
         props.put(PropertyNames.PROPERTY_CONNECTION_URL, connectionUrl());
-        props.put(PropertyNames.PROPERTY_CLASSLOADER_PRIMARY, customDataNucleusClassLoader);
+        props.put(PropertyNames.PROPERTY_CLASSLOADER_PRIMARY, s.customDataNucleusClassLoader);
         return ImmutableMap.copyOf(overrideProperties(props));
     }
 

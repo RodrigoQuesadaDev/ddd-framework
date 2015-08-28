@@ -20,6 +20,7 @@ class DataNucleusPlugin implements Plugin<Project> {
         PluginConfiguration pluginConfiguration = new PluginConfiguration(project);
 
         project.afterEvaluate {
+
             if (!isAndroidProject()) {
                 throw new GradleException("This plugin may only be applied to Android projects.")
             }

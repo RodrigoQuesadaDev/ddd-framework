@@ -23,13 +23,6 @@ import static org.assertj.core.api.Assertions.*;
 @Accessors(chain = false)
 public class ScheduleAppointmentTests extends BaseSpecification {
 
-    @Singleton
-    public static class TestPersistenceConfigurer {
-        @Inject
-        public TestPersistenceConfigurer() {
-        }
-    }
-
     @Test
     public void appointmentIsScheduled() {
         DateTime time = new DateTime(1234, 3, 7, 11, 13);

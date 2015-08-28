@@ -1,5 +1,7 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence;
 
+import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceConfigurer.Services;
+
 import javax.inject.Singleton;
 import javax.jdo.PersistenceManagerFactory;
 
@@ -11,6 +13,11 @@ import dagger.Provides;
  */
 @Module
 public class PersistenceModule {
+
+    @Provides @Singleton
+    protected PersistenceConfigurer providePersistenceConfigurer(Services services) {
+        return new PersistenceConfigurer(services);
+    }
 
     @Provides @Singleton
     protected PersistenceManagerFactory providePersistenceManagerFactory(PersistenceConfigurer persistenceConfigurer) {

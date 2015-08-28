@@ -8,16 +8,18 @@ class JarJarConfiguration {
 
     private static final String JARJAR_PLUGIN_ID = 'com.rodrigodev.jarjar'
     private static final String JDK_CLASSES = 'jdkClasses'
-    private static final String OUTPUT_FILE_NAME = 'datanucleus.jar'
 
+    @Delegate PluginConfiguration pluginConfiguration
     private Project project
 
     JarJarConfiguration(PluginConfiguration pluginConfiguration) {
-        project = pluginConfiguration.project
+        this.pluginConfiguration = pluginConfiguration
+        this.project = pluginConfiguration.project
         project.apply {
             plugin JARJAR_PLUGIN_ID
         }
 
+        File outputFile = repackagedFile
         project.jarjar {
             rules {
                 rule pattern: 'javax.naming.**', result: 'org.datanucleus.@0'
@@ -38,17 +40,12 @@ class JarJarConfiguration {
             excludes = [
                     'plugin.xml'
             ]
-            output outputFile().absolutePath
+            output outputFile.absolutePath
         }
 
         Configuration jdkClasses = project.configurations.create(JDK_CLASSES)
-        project.configurations.compile.extendsFrom jdkClasses
-        project.configurations.repackage.extendsFrom pluginConfiguration.datanucleusDependencies
+        project.configurations.repackage.extendsFrom datanucleusDependencies
         project.configurations.repackage.extendsFrom jdkClasses
-    }
-
-    private File outputFile(){
-        File outputDir = new File(project.buildDir, PluginConfiguration.OUTPUT_DIR_NAME)
-        return new File(outputDir, OUTPUT_FILE_NAME)
+        project.dependencies.compile project.files(repackagedFile)
     }
 }

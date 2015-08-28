@@ -86,23 +86,26 @@ public class Plugin {
     }
 
     private void copyFile(String filePath) {
-        InputStream input = null;
-        FileOutputStream output = null;
-        try {
-            input = s.assetManager.open(sourceDir.join(filePath));
+        File outputFile = new File(targetDir.join(filePath));
+        if (!outputFile.exists()) {
 
-            File outputFile = new File(targetDir.join(filePath));
-            outputFile.getParentFile().mkdirs();
-            output = new FileOutputStream(outputFile);
+            InputStream input = null;
+            FileOutputStream output = null;
+            try {
+                input = s.assetManager.open(sourceDir.join(filePath));
 
-            IOUtils.copy(input, output);
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        finally {
-            IOUtils.closeQuietly(input);
-            IOUtils.closeQuietly(output);
+                outputFile.getParentFile().mkdirs();
+                output = new FileOutputStream(outputFile);
+
+                IOUtils.copy(input, output);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            finally {
+                IOUtils.closeQuietly(input);
+                IOUtils.closeQuietly(output);
+            }
         }
     }
 }

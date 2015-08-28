@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment;
+import com.aticosoft.appointments.mobile.business.domain.model.appointment.QAppointment;
+import com.querydsl.jdo.JDOQueryFactory;
 
 import org.joda.time.DateTime;
 
-import java.util.List;
-
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Transaction;
@@ -54,14 +55,24 @@ public class MainActivity extends Activity {
             pm.close();
         }
 
-        pm = pmf.getPersistenceManager();
-        tx = pm.currentTransaction();
+        final PersistenceManager pm2 = pmf.getPersistenceManager();
+        JDOQueryFactory queryFactory = new JDOQueryFactory(new Provider<PersistenceManager>() {
+            @Override public PersistenceManager get() {
+                return pm2;
+            }
+        });
+        tx = pm2.currentTransaction();
         try {
             tx.begin();
-            pm.makePersistent(appointment);
+            pm2.makePersistent(appointment);
 
-            appointment = pm.getObjectById(Appointment.class, appointment.id());
-            int size = ((List) pm.newQuery(Appointment.class).execute()).size();
+            QAppointment a = QAppointment.appointment;
+            appointment = queryFactory
+                    .selectFrom(a)
+                    .where(a.id.eq(appointment.id()))
+                    .fetchOne();
+
+            long size = queryFactory.selectFrom(a).fetchCount();
             textView.setText(size + " | " + appointment.scheduledTime().toString());
 
             tx.commit();
@@ -73,7 +84,7 @@ public class MainActivity extends Activity {
             if (tx.isActive()) {
                 tx.rollback();
             }
-            pm.close();
+            pm2.close();
         }
     }
 }

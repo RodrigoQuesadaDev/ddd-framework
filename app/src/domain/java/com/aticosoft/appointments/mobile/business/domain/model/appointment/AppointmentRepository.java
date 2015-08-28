@@ -1,10 +1,12 @@
 package com.aticosoft.appointments.mobile.business.domain.model.appointment;
 
+import com.querydsl.jdo.JDOQueryFactory;
+
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 /**
@@ -42,13 +44,23 @@ public class AppointmentRepository {
 
     public Appointment get(long id) {
         Appointment appointment;
-        PersistenceManager pm = persistenceManager();
+        final PersistenceManager pm = persistenceManager();
+        JDOQueryFactory queryFactory = new JDOQueryFactory(new Provider<PersistenceManager>() {
+            @Override public PersistenceManager get() {
+                return pm;
+            }
+        });
+
         Transaction tx = pm.currentTransaction();
         try {
             tx.begin();
-            Query query = pm.newQuery(Appointment.class, "id == " + id);
-            query.setUnique(true);
-            appointment = (Appointment) query.execute();
+
+            QAppointment a = QAppointment.appointment;
+            appointment = queryFactory
+                    .selectFrom(a)
+                    .where(a.id.eq(id))
+                    .fetchOne();
+
             tx.commit();
         }
         finally {

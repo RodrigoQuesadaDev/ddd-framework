@@ -57,7 +57,8 @@ class EnhanceJdoEntities extends DataNucleusTask {
             ) {
                 classpath {
                     pathelement(path: variant.javaCompile.destinationDir.canonicalPath.toURI().toString())
-                    pathelement(path: variant.javaCompile.classpath.asPath)
+                    pathelement(path: (variant.javaCompile.classpath - project.files(configuration.repackagedFile)).asPath)
+                    pathelement(path: configuration.datanucleusDependencies.asPath)
                 }
                 jdoFiles.addToAntBuilder(ant, 'fileset', FileCollection.AntType.FileSet)
             }

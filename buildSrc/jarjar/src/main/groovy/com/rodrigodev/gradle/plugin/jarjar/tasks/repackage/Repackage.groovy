@@ -1,8 +1,6 @@
 package com.rodrigodev.gradle.plugin.jarjar.tasks.repackage
 
 import com.rodrigodev.gradle.plugin.jarjar.tasks.RunJarJarTask
-import com.rodrigodev.gradle.plugin.jarjar.tasks.modify_dependencies.ModifyDependencies
-import com.rodrigodev.gradle.plugin.jarjar.tasks.modify_dependencies.TaskWrapper
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.file.FileCollection
@@ -10,9 +8,8 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.compile.JavaCompile
 
-abstract class AbstractRepackage extends RunJarJarTask {
+class Repackage extends RunJarJarTask {
 
     static final String TASK_NAME = 'repackage'
 
@@ -34,31 +31,13 @@ abstract class AbstractRepackage extends RunJarJarTask {
         this.verbose = configuration.verboseRepackaging
     }
 
-    protected static def setUp(
-            Project project,
-            RepackageConfiguration configuration,
-            Class repackageClass,
-            JavaCompile compileTask,
-            Task taskDependentOnJarJar,
-            String nameSuffix
-    ) {
-        AbstractRepackage repackageTask = project.task(namespace(TASK_NAME, nameSuffix), type: repackageClass) {
+    protected static void setUp(Project project, RepackageConfiguration configuration) {
+        Task repackageTask = project.task(namespace(TASK_NAME), type: Repackage) {
             delegate.configuration = configuration
         }
         repackageTask.init()
-        repackageTask.mustRunAfter compileTask
-        taskDependentOnJarJar.dependsOn repackageTask
 
-        ModifyDependencies modifyDependenciesTask = ModifyDependencies.setUp(project, configuration, nameSuffix)
-        TaskWrapper compileTaskWrapper = [
-                getDependencies: { compileTask.classpath },
-                setDependencies: { d -> compileTask.classpath = d }
-        ] as TaskWrapper
-        modifyDependenciesTask.removeOldDependenciesAndAddRepackageJar(compileTaskWrapper)
-
-        repackageTask.dependsOn modifyDependenciesTask
-
-        return [repackageTask, modifyDependenciesTask]
+        project.tasks.preBuild.dependsOn repackageTask
     }
 
     @TaskAction
@@ -83,3 +62,4 @@ abstract class AbstractRepackage extends RunJarJarTask {
         }
     }
 }
+
