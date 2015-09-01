@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_layout);
         textView = (TextView) findViewById(R.id.textView);
-        ((Application) getApplicationContext()).applicationComponent().inject(this);
+        ((Application) getApplicationContext()).getApplicationComponent().inject(this);
         renderStuff();
     }
 
@@ -69,11 +69,11 @@ public class MainActivity extends Activity {
             QAppointment a = QAppointment.appointment;
             appointment = queryFactory
                     .selectFrom(a)
-                    .where(a.id.eq(appointment.id()))
+                    .where(a.id.eq(appointment.getId()))
                     .fetchOne();
 
             long size = queryFactory.selectFrom(a).fetchCount();
-            textView.setText(size + " | " + appointment.scheduledTime().toString());
+            textView.setText(size + " | " + appointment.getScheduledTime().toString());
 
             tx.commit();
         }

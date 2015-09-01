@@ -5,16 +5,12 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:1.3.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
     }
 }
 
-apply plugin: 'java' // ensure clean is also triggered for root build folder
-apply plugin: 'com.github.ben-manes.versions'
-
-allprojects {
+subprojects {
     ext {
-        ext.buildSystemPath = "${rootProject.getProjectDir().path}/buildsystem"
+        buildSystemPath = "${rootProject.getProjectDir().path}/buildsystem"
 
         guavaVersion = '18.0'
         lombokVersion = '1.16.6'
@@ -33,16 +29,34 @@ allprojects {
         queryDslVersion = '4.0.3'
         h2Version = '1.4.188'
         jsr250ApiVersion = '1.0'
+        kotlinVersion = '0.1-SNAPSHOT'
 
         //Testing
         junitVersion = '4.12'
         robolectricVersion = '3.0'
         assertjVersion = '1.7.0'
     }
+
+    buildscript {
+        repositories {
+            jcenter()
+            mavenLocal()
+            maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
+        }
+        dependencies {
+            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        }
+    }
+
     repositories {
         jcenter()
+        mavenLocal()
+        maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
     }
 }
+
+apply plugin: 'java' // ensure clean is also triggered for root build folder
+apply plugin: 'com.github.ben-manes.versions'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.6'

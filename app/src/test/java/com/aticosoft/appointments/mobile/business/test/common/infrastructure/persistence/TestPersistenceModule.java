@@ -4,14 +4,9 @@ import com.aticosoft.appointments.mobile.business.infrastructure.persistence.Per
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceConfigurer.Services;
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceModule;
 
-import javax.jdo.PersistenceManagerFactory;
-
-import lombok.AllArgsConstructor;
-
 /**
  * Created by rodrigo on 22/08/15.
  */
-@AllArgsConstructor
 public class TestPersistenceModule extends PersistenceModule {
 
     @Override protected PersistenceConfigurer providePersistenceConfigurer(Services services) {

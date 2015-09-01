@@ -8,6 +8,6 @@ import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appoi
  */
 public interface AppointmentAwareSpecification {
 
-    void appointmentService(AppointmentService appointmentService);
-    void appointmentRepository(AppointmentRepository appointmentRepository);
+    void setAppointmentService(AppointmentService appointmentService);
+    void setAppointmentRepository(AppointmentRepository appointmentRepository);
 }

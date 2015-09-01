@@ -1,9 +1,9 @@
 package com.rodrigodev.gradle.plugin.datanucleus.tasks.enhance
 
-import com.rodrigodev.gradle.plugin.datanucleus.common.VariantData
 import com.rodrigodev.gradle.plugin.datanucleus.tasks.DataNucleusTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.TaskAction
 
@@ -16,15 +16,25 @@ class EnhanceJdoEntities extends DataNucleusTask {
 
     static void setUp(Project project, EnhanceJdoEntitiesConfiguration configuration) {
         project.android.applicationVariants.each { variant ->
-            VariantData variantData = new VariantData(variant: variant)
+            def variantData = variant.variantData
 
-            def enhanceJdoEntities = project.task(namespace(TASK_NAME, variantData.suffix), type: EnhanceJdoEntities) {
+            def enhanceJdoEntities = project.task(namespace(TASK_NAME, variantData.name), type: EnhanceJdoEntities) {
                 delegate.configuration = configuration
                 delegate.variant = variant
             }
 
-            variant.javaCompile.finalizedBy enhanceJdoEntities
+            Task kotlinAfterJavaTask = project.tasks.findByName(kotlinTaskName(variantData))
+            if (kotlinAfterJavaTask) {
+                kotlinAfterJavaTask.finalizedBy enhanceJdoEntities
+            }
+            else {
+                variant.javaCompile.finalizedBy enhanceJdoEntities
+            }
         }
+    }
+
+    static String kotlinTaskName(def variantData) {
+        return "compile${variantData.name.capitalize()}KotlinAfterJava"
     }
 
     @TaskAction

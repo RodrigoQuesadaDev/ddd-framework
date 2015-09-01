@@ -8,19 +8,13 @@ import com.aticosoft.appointments.mobile.business.test.specifications.BaseSpecif
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.jdo.JDOHelper;
-
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import static org.assertj.core.api.Assertions.*;
 
 /**
  * Created by rodrigo on 26/07/15.
  */
-@Accessors(chain = false)
 public class ScheduleAppointmentTests extends BaseSpecification {
 
     @Test
@@ -31,13 +25,23 @@ public class ScheduleAppointmentTests extends BaseSpecification {
         Appointment actualAppointment = appointmentService.scheduleAppointment(time);
 
         assertThat(actualAppointment).isEqualTo(expectedAppointment);
-        assertThat(appointmentRepository.get(actualAppointment.id())).isEqualTo(expectedAppointment);
+        assertThat(appointmentRepository.get(actualAppointment.getId())).isEqualTo(expectedAppointment);
 
         assertThat(JDOHelper.isDirty(actualAppointment)).isFalse();
-        actualAppointment.scheduledTime(null);
+        actualAppointment.setScheduledTime(DateTime.now());
         assertThat(JDOHelper.isDirty(actualAppointment)).isTrue();
     }
 
-    @Setter private AppointmentService appointmentService;
-    @Setter private AppointmentRepository appointmentRepository;
+    private AppointmentService appointmentService;
+    private AppointmentRepository appointmentRepository;
+
+    @Override
+    public void setAppointmentService(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
+    }
+
+    @Override
+    public void setAppointmentRepository(AppointmentRepository appointmentRepository) {
+        this.appointmentRepository = appointmentRepository;
+    }
 }

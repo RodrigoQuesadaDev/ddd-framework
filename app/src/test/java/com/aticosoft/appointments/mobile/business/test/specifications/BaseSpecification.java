@@ -61,10 +61,10 @@ public abstract class BaseSpecification implements AppointmentAwareSpecification
     }
 
     @Override @Inject
-    public void appointmentService(AppointmentService appointmentService) {
+    public void setAppointmentService(AppointmentService appointmentService) {
     }
 
     @Override @Inject
-    public void appointmentRepository(AppointmentRepository appointmentRepository) {
+    public void setAppointmentRepository(AppointmentRepository appointmentRepository) {
     }
 }

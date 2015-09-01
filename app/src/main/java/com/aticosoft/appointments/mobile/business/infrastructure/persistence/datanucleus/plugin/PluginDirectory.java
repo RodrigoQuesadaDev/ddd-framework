@@ -2,19 +2,20 @@ package com.aticosoft.appointments.mobile.business.infrastructure.persistence.da
 
 import com.rodrigodev.common.file.PathUtils;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Value;
-import lombok.experimental.Accessors;
-
 /**
  * Created by rodrigo on 14/08/15.
  */
-@Value
-@Accessors
 public class PluginDirectory {
 
     private String path;
+
+    public PluginDirectory(String path) {
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
+    }
 
     public String join(String filePath) {
         return PathUtils.join(path, filePath);

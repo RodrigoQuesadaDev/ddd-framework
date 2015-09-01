@@ -14,16 +14,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
-
 import static com.rodrigodev.common.exception.ExceptionUtils.unchecked;
 
 /**
  * Created by rodrigo on 07/08/15.
  */
 @Singleton
-@FieldDefaults(makeFinal = true)
 public class CustomPluginManager {
 
     static class Services {
@@ -37,7 +33,7 @@ public class CustomPluginManager {
 
     private Services s;
     private ImmutableList<Plugin> plugins;
-    @NonFinal private Optional<ImmutableList<URL>> pluginUrls;
+    private Optional<ImmutableList<URL>> pluginUrls;
 
     @Inject CustomPluginManager(Services services) {
         this.s = services;
@@ -62,7 +58,7 @@ public class CustomPluginManager {
         if (!pluginUrls.isPresent()) {
             pluginUrls = Optional.of(ImmutableList.copyOf(Lists.transform(plugins, new Function<Plugin, URL>() {
                 @Override public URL apply(Plugin plugin) {
-                    return plugin.url();
+                    return plugin.getUrl();
                 }
             })));
         }

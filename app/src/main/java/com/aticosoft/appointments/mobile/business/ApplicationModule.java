@@ -12,13 +12,11 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import lombok.experimental.FieldDefaults;
 
 /**
  * Created by rodrigo on 27/07/15.
  */
 @Module(includes = PersistenceModule.class)
-@FieldDefaults(makeFinal = true)
 public class ApplicationModule {
 
     private Application application;

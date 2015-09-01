@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.rodrigodev.datanucleus-android'
-apply plugin: 'idea'
 
 android {
     compileSdkVersion 22
@@ -40,6 +39,10 @@ android {
     }
 }
 
+kapt {
+    generateStubs = true
+}
+
 datanucleus {
     entitiesDir 'com/aticosoft/appointments/mobile/business/domain/model'
     alwaysDetachable true
@@ -51,10 +54,10 @@ dependencies {
     compile "de.greenrobot:eventbus:$eventBusVersion"
     compile "joda-time:joda-time:$jodaTimeVersion"
     compile "com.googlecode.libphonenumber:libphonenumber:$libphonenumberVersion"
-    provided "org.projectlombok:lombok:$lombokVersion"
-    apt "org.projectlombok:lombok:$lombokVersion"
+    //provided "org.projectlombok:lombok:$lombokVersion"
+    //apt "org.projectlombok:lombok:$lombokVersion"
     compile "com.google.dagger:dagger:$daggerVersion"
-    apt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     compile "javax.annotation:jsr250-api:$jsr250ApiVersion" // needed for Dagger
     compile "commons-io:commons-io:$commonsIoVersion"
     //datanucleus "org.datanucleus:datanucleus-accessplatform-jdo-rdbms:$datanucleusJdoRdbmsVersion"
@@ -63,21 +66,23 @@ dependencies {
     datanucleus "org.datanucleus:datanucleus-rdbms:$datanucleusRdbmsVersion"
     datanucleus "org.datanucleus:datanucleus-jodatime:$datanucleusJodatimeVersion"
     datanucleus "javax.jdo:jdo-api:$jdoApiVersion"
-    compile ("com.querydsl:querydsl-jdo:$queryDslVersion") {
+    compile("com.querydsl:querydsl-jdo:$queryDslVersion") {
         exclude module: 'jdo-api'
     }
-    apt ("com.querydsl:querydsl-apt:$queryDslVersion:jdo")
+    kapt "com.querydsl:querydsl-apt:$queryDslVersion:jdo"
+    kapt "javax.jdo:jdo-api:$jdoApiVersion"
     jdkClasses files('jdk-files/harmony-javax-jndi.jar')
     jarjar files("$buildSystemPath/jarjar/jarjar-1.4.jar")
     compile "com.h2database:h2:$h2Version"
     compile "io.reactivex:rxjava:$rxJavaVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.robolectric:robolectric:$robolectricVersion"
+    kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
     //TODO remove/change line below when this issue is fixed? https://bitbucket.org/hvisser/android-apt/issues/22/dagger-robolectric-gradle-apt-source-not
-    testApt "com.google.dagger:dagger-compiler:$daggerVersion"
-    testApt "com.querydsl:querydsl-apt:$queryDslVersion:jdo"
+    //testApt "com.google.dagger:dagger-compiler:$daggerVersion"
 }
 
 //TODO remove/change line below when this issue is fixed? https://bitbucket.org/hvisser/android-apt/issues/22/dagger-robolectric-gradle-apt-source-not

@@ -16,18 +16,12 @@ import java.net.URL;
 
 import javax.inject.Inject;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
-import lombok.experimental.FieldDefaults;
-
 import static com.rodrigodev.common.exception.ExceptionUtils.unchecked;
 import static com.rodrigodev.common.file.PathUtils.join;
 
 /**
  * Created by rodrigo on 07/08/15.
  */
-@FieldDefaults(makeFinal = true)
-@Accessors
 public class Plugin {
 
     public static String BASE_PATH = "plugins";
@@ -48,7 +42,7 @@ public class Plugin {
     private String id;
     private PluginDirectory sourceDir;
     private PluginDirectory targetDir;
-    @Getter private URL url;
+    private URL url;
 
     Plugin(Services services, String id) {
         this.s = services;
@@ -58,6 +52,10 @@ public class Plugin {
         copySourceFiles();
         // Assign url value after files have been moved and directories created
         this.url = initUrl();
+    }
+
+    public URL getUrl() {
+        return url;
     }
 
     private PluginDirectory initSourceDir() {
@@ -74,7 +72,7 @@ public class Plugin {
         return unchecked(
                 new ThrowableMethodCallWithReturn<URL>() {
                     @Override public URL call() throws Throwable {
-                        return new File(targetDir.path()).toURI().toURL();
+                        return new File(targetDir.getPath()).toURI().toURL();
                     }
                 }
         );
