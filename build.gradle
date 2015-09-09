@@ -29,7 +29,8 @@ subprojects {
         queryDslVersion = '4.0.3'
         h2Version = '1.4.188'
         jsr250ApiVersion = '1.0'
-        kotlinVersion = '0.1-SNAPSHOT'
+        //kotlinVersion = '0.1-SNAPSHOT'
+        kotlinVersion = '0.12.1230'
 
         //Testing
         junitVersion = '4.12'
@@ -40,17 +41,18 @@ subprojects {
     buildscript {
         repositories {
             jcenter()
-            mavenLocal()
+            //mavenLocal()
             maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
         }
         dependencies {
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+            classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
         }
     }
 
     repositories {
         jcenter()
-        mavenLocal()
+        //mavenLocal()
         maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
     }
 }

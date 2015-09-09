@@ -6,8 +6,10 @@ import javax.jdo.annotations.PersistenceCapable
 /**
  * Created by rodrigo on 26/07/15.
  */
-PersistenceCapable
-data class Appointment(var scheduledTime: DateTime) {
+@PersistenceCapable
+data class Appointment(
+        var scheduledTime: DateTime
+) {
 
     var id: Long = 0
 }
