@@ -16,5 +16,5 @@ class CustomPluginManager @Inject constructor(
 ) {
 
     private val plugins: List<Plugin> = assetManager.list(Plugin.BASE_PATH).map { pluginFactory.create(it) }
-    val pluginUrls: List<URL> by Delegates.lazy { plugins.map { it.url } }
+    val pluginUrls: List<URL> by lazy { plugins.map { it.url } }
 }

@@ -30,9 +30,10 @@ subprojects {
         h2Version = '1.4.188'
         jsr250ApiVersion = '1.0'
         //kotlinVersion = '0.1-SNAPSHOT'
-        kotlinVersion = '0.12.1230'
+        kotlinVersion = '0.13.1513'
 
         //Testing
+        jBehaveVersion = '4.0.4'
         junitVersion = '4.12'
         robolectricVersion = '3.0'
         assertjVersion = '1.7.0'

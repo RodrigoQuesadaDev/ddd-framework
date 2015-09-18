@@ -27,7 +27,11 @@ android {
     }
 
     sourceSets.main.java.srcDirs += ['src/domain/java']
-    sourceSets.test.java.srcDirs += ['src/domainTest/java']
+    sourceSets.test {
+        java.srcDirs += ['src/domainTest/java', 'src/domainSpecs/java']
+        resources.srcDirs += ['src/domainSpecs/java']
+        resources.include '**/*.story'
+    }
 
     packagingOptions {
         exclude 'META-INF/README.txt'
@@ -77,6 +81,7 @@ dependencies {
     compile "io.reactivex:rxjava:$rxJavaVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
+    testCompile 'org.jbehave:jbehave-core:4.0.4'
     testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.robolectric:robolectric:$robolectricVersion"
