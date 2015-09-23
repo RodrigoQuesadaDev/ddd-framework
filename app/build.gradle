@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.rodrigodev.datanucleus-android'
+apply plugin: 'com.rodrigodev.jbehave'
 
 android {
     compileSdkVersion 22
@@ -26,9 +27,9 @@ android {
         }
     }
 
-    sourceSets.main.java.srcDirs += ['src/domain/java']
+    sourceSets.main.java.srcDirs += ['src/domain/java', 'src/common/java']
     sourceSets.test {
-        java.srcDirs += ['src/domainTest/java', 'src/domainSpecs/java']
+        java.srcDirs = ['src/domainTest/java', 'src/domainSpecs/java', 'src/commonTest/java']
         resources.srcDirs += ['src/domainSpecs/java']
         resources.include '**/*.story'
     }
@@ -81,7 +82,9 @@ dependencies {
     compile "io.reactivex:rxjava:$rxJavaVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    testCompile 'org.jbehave:jbehave-core:4.0.4'
+    testCompile "org.jbehave:jbehave-core:$jBehaveVersion"
+    jbehaveSiteResources "org.jbehave:jbehave-core:$jBehaveVersion"
+    jbehaveSiteResources "org.jbehave.site:jbehave-site-resources:$jBehaveSiteVersion:@zip"
     testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.robolectric:robolectric:$robolectricVersion"

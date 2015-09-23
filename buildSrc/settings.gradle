@@ -1,1 +1,1 @@
-include 'jarjar', 'datanucleus-android'
+include 'jarjar', 'datanucleus-android', 'jbehave'

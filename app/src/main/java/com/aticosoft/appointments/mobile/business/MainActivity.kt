@@ -1,8 +1,10 @@
 package com.aticosoft.appointments.mobile.business
 
+
 import android.app.Activity
 import android.os.Bundle
 import android.widget.TextView
+import com.aticosoft.appointments.mobile.business.domain.model.IdentityGenerator
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.QAppointment
 import com.querydsl.jdo.JDOQueryFactory
@@ -12,31 +14,28 @@ import javax.inject.Provider
 import javax.jdo.PersistenceManager
 import javax.jdo.PersistenceManagerFactory
 
-
-import kotlin.properties.Delegates
-
 /**
  * Created by rodrigo on 09/09/15.
  */
-class MainActivity : Activity() {
+internal class MainActivity : Activity() {
 
-    private var textView: TextView by Delegates.notNull()
-    private var pmf: PersistenceManagerFactory by Delegates.notNull()
-        @Inject internal set
+    private lateinit var textView: TextView
+    @Inject protected lateinit var identityGenerator: IdentityGenerator
+    @Inject protected lateinit var pmf: PersistenceManagerFactory
 
     override protected fun onCreate(savedInstanceState: Bundle) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.test_layout)
         textView = findViewById(R.id.textView) as TextView
-        (getApplicationContext() as Application).applicationComponent.inject(this)
+        (applicationContext as Application).applicationComponent.inject(this)
         renderStuff()
     }
 
     private fun renderStuff() {
 
-        var appointment = Appointment(DateTime.now())
+        var appointment = Appointment(identityGenerator.generate(), 1, DateTime.now())
 
-        val pm = pmf.getPersistenceManager()
+        val pm = pmf.persistenceManager
         val tx = pm.currentTransaction()
         try {
             tx.begin()
@@ -49,13 +48,13 @@ class MainActivity : Activity() {
             e.printStackTrace()
         }
         finally {
-            if (tx.isActive()) {
+            if (tx.isActive) {
                 tx.rollback()
             }
             pm.close()
         }
 
-        val pm2 = pmf.getPersistenceManager()
+        val pm2 = pmf.persistenceManager
         val queryFactory = JDOQueryFactory(object : Provider<PersistenceManager> {
             override fun get(): PersistenceManager {
                 return pm2
@@ -73,7 +72,7 @@ class MainActivity : Activity() {
                     .fetchOne()
 
             val size = queryFactory.selectFrom(a).fetchCount()
-            textView.setText("$size | ${appointment.scheduledTime.toString()}")
+            textView.text = "$size | ${appointment.scheduledTime.toString()}"
 
             tx2.commit()
         }
@@ -81,7 +80,7 @@ class MainActivity : Activity() {
             e.printStackTrace()
         }
         finally {
-            if (tx2.isActive()) {
+            if (tx2.isActive) {
                 tx2.rollback()
             }
             pm2.close()

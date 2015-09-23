@@ -8,7 +8,7 @@ import javax.inject.Singleton
  * Created by rodrigo on 09/09/15.
  */
 @Module
-open class PersistenceModule {
+/*internal*/ open class PersistenceModule {
 
     @Provides @Singleton
     open fun providePersistenceConfigurer(services: PersistenceConfigurer.Services) = PersistenceConfigurer(services)

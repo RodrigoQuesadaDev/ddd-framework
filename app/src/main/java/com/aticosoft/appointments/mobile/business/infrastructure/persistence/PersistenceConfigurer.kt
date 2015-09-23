@@ -13,13 +13,13 @@ import javax.jdo.JDOHelper
  * Created by rodrigo on 08/09/15.
  */
 @Singleton
-open class PersistenceConfigurer(
+/*internal*/ open class PersistenceConfigurer(
         private val s: PersistenceConfigurer.Services
 ) {
-    companion object {
-        private val PERSISTENCE_UNIT_NAME = "Appointments"
-        private val CONNECTION_URL_FORMAT = "jdbc:h2:%s"
-        private val CONNECTION_URL_PARAM_FORMAT = ";%s=%s"
+    private companion object {
+        val PERSISTENCE_UNIT_NAME = "Appointments"
+        val CONNECTION_URL_FORMAT = "jdbc:h2:%s"
+        val CONNECTION_URL_PARAM_FORMAT = ";%s=%s"
     }
 
     //TODO this object should be protected but it doesnt work right now
@@ -44,17 +44,17 @@ open class PersistenceConfigurer(
             PropertyNames.PROPERTY_CLASSLOADER_PRIMARY to s.customDataNucleusClassLoader
     ))
 
-    open protected fun overrideProperties(props: MutableMap<String, Any>): Map<String, Any> = props
+    protected open fun overrideProperties(props: MutableMap<String, Any>): Map<String, Any> = props
 
     private fun connectionUrl() = CONNECTION_URL_FORMAT.format(location()) + urlParams()
 
-    open protected fun location(): String = pathOf(s.applicationInfo.dataDir, "databases/h2")
+    protected open fun location(): String = pathOf(s.applicationInfo.dataDir, "databases/h2")
 
     private fun urlParams() = connectionUrlParameters().map { CONNECTION_URL_PARAM_FORMAT.format(it.key, it.value) }
 
     private fun connectionUrlParameters(): Map<String, Any> = overrideConnectionUrlParameters(ConnectionUrlParameters.defaultValues.toHashMap())
 
-    open protected fun overrideConnectionUrlParameters(parameters: MutableMap<String, Any>): Map<String, Any> = parameters
+    protected open fun overrideConnectionUrlParameters(parameters: MutableMap<String, Any>): Map<String, Any> = parameters
 
     class Services @Inject constructor(
             val customDataNucleusClassLoader: CustomDataNucleusClassLoader,

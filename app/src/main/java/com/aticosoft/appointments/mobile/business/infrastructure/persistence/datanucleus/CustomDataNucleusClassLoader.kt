@@ -7,4 +7,4 @@ import javax.inject.Inject
 /**
  * Created by rodrigo on 08/09/15.
  */
-class CustomDataNucleusClassLoader @Inject constructor(customPluginManager: CustomPluginManager) : URLClassLoader(customPluginManager.pluginUrls.toTypedArray())
+internal class CustomDataNucleusClassLoader @Inject constructor(customPluginManager: CustomPluginManager) : URLClassLoader(customPluginManager.pluginUrls.toTypedArray())

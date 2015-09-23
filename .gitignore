@@ -3,7 +3,6 @@
 *~
 /build
 /**/build
-/**/target
 /local.properties
 buildSrc/local.properties
 /.idea

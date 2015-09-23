@@ -1,5 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.model.appointment
 
+import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import org.joda.time.DateTime
 import javax.jdo.annotations.PersistenceCapable
 
@@ -7,9 +8,8 @@ import javax.jdo.annotations.PersistenceCapable
  * Created by rodrigo on 26/07/15.
  */
 @PersistenceCapable
-data class Appointment(
+class Appointment(
+        id: Long,
+        var clientId: Long,
         var scheduledTime: DateTime
-) {
-
-    var id: Long = 0
-}
+) : Entity(id)
