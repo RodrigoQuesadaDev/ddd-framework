@@ -6,7 +6,6 @@ import com.aticosoft.appointments.mobile.business.domain.specs.common.model.clie
 import com.aticosoft.appointments.mobile.business.domain.specs.stories.DomainStory
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
-import org.jbehave.core.annotations.Named
 import org.jbehave.core.annotations.Then
 import org.jbehave.core.annotations.When
 import org.joda.time.DateTime
@@ -24,8 +23,7 @@ internal class AppointmentSteps(domainStory: DomainStory) : AppointmentServicesA
     @When("the owner schedules an appointment for \$client on \$date")
     fun theOwnerSchedulesAnAppointmentFor(client: String, date: DateTime) {
         val clientsResult = clientRepository.find(clientRepository.QUERIES.nameLike(client))
-        val clientEntity = clientsResult.get(0)
-        appointmentServices.scheduleAppointment.execute(ScheduleAppointment.Command(clientEntity.id, date))
+        appointmentServices.scheduleAppointment.execute(ScheduleAppointment.Command(clientsResult.first().id, date))
     }
 
     @Then("an appointment is scheduled for \$client on \$date")

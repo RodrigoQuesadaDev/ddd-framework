@@ -1,6 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.model.client
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import org.joda.time.LocalDate
 import javax.jdo.annotations.PersistenceCapable
 
 /**
@@ -9,5 +10,12 @@ import javax.jdo.annotations.PersistenceCapable
 @PersistenceCapable
 class Client(
         id: Long,
-        var name: String
-) : Entity(id)
+        name: String,
+        birthDate: LocalDate
+) : Entity(id) {
+
+    var name: String = name
+        private set
+    var birthDate: LocalDate = birthDate
+        private set
+}

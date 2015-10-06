@@ -4,6 +4,7 @@ import com.aticosoft.appointments.mobile.business.domain.application.ClientServi
 import com.aticosoft.appointments.mobile.business.domain.model.IdentityGenerator
 import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientRepository
+import org.joda.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,14 +23,18 @@ import javax.inject.Singleton
     ) : ApplicationService<AddClient.Command>(services) {
 
         class Command(
-                val name: String
+                val name: String,
+                val birthDate: LocalDate
         ) : ApplicationCommand
 
         override fun doExecute(command: Command) {
-            clientRepository.add(Client(
-                    identityGenerator.generate(),
-                    name = command.name
-            ))
+            with(command) {
+                clientRepository.add(Client(
+                        identityGenerator.generate(),
+                        name = name,
+                        birthDate = birthDate
+                ))
+            }
         }
     }
 }

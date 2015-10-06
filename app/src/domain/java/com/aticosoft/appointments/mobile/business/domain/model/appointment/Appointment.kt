@@ -10,6 +10,12 @@ import javax.jdo.annotations.PersistenceCapable
 @PersistenceCapable
 class Appointment(
         id: Long,
-        var clientId: Long,
-        var scheduledTime: DateTime
-) : Entity(id)
+        clientId: Long,
+        scheduledTime: DateTime
+) : Entity(id) {
+
+    var clientId: Long = clientId
+        private set
+    var scheduledTime: DateTime = scheduledTime
+        private set
+}

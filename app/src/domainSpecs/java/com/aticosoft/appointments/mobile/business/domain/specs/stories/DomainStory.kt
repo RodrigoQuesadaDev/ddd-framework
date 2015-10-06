@@ -13,6 +13,7 @@ import com.aticosoft.appointments.mobile.business.domain.specs.common.model.appo
 import com.aticosoft.appointments.mobile.business.domain.specs.common.model.client.ClientServicesAware
 import com.aticosoft.appointments.mobile.business.domain.specs.common.model.client.ClientServicesAwareImpl
 import com.aticosoft.appointments.mobile.business.domain.specs.test.common.infrastructure.persistence.TestPersistenceModule
+import com.rodrigodev.specs.stories.common.converter.LocalDateConverter
 import dagger.Component
 import org.jbehave.core.configuration.Configuration
 import org.jbehave.core.configuration.MostUsefulConfiguration
@@ -39,7 +40,9 @@ internal abstract class DomainStory constructor(
 
     override fun configuration(): Configuration {
         return MostUsefulConfiguration()
-                .useParameterConverters(ParameterConverters().addConverters(*customConverters()))
+                .useParameterConverters(ParameterConverters().addConverters(
+                        LocalDateConverter(), *customConverters())
+                )
                 .useParameterControls(ParameterControls()
                         .useDelimiterNamedParameters(true)
                 )
@@ -53,7 +56,7 @@ internal abstract class DomainStory constructor(
                                 .withRelativeDirectory("../build/jbehave"))
     }
 
-    protected abstract fun customConverters(): Array<ParameterConverters.ParameterConverter>
+    open protected fun customConverters(): Array<ParameterConverters.ParameterConverter> = emptyArray()
 
     class TestApplication : AbstractApplication<TestApplicationComponent>(), TestLifecycleApplication {
 
