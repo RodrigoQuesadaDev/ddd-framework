@@ -13,6 +13,7 @@ import com.aticosoft.appointments.mobile.business.domain.specs.common.model.appo
 import com.aticosoft.appointments.mobile.business.domain.specs.common.model.client.ClientServicesAware
 import com.aticosoft.appointments.mobile.business.domain.specs.common.model.client.ClientServicesAwareImpl
 import com.aticosoft.appointments.mobile.business.domain.specs.test.common.infrastructure.persistence.TestPersistenceModule
+import com.aticosoft.appointments.mobile.business.domain.specs.test.common.infrastructure.rx.TestRxModule
 import com.rodrigodev.specs.stories.common.converter.LocalDateConverter
 import dagger.Component
 import org.jbehave.core.configuration.Configuration
@@ -30,6 +31,10 @@ import org.robolectric.TestLifecycleApplication
 import org.robolectric.annotation.Config
 import java.lang.reflect.Method
 import javax.inject.Singleton
+
+//TODO change implementation for testing, you should be able to parameterize modules by having smart default
+//TODO that way you can decide and fine-grain tune them (choose whatever module you may want) on implementing testing classes.
+//TODO Also, *AwareImpl do not look so cool after all, so I guess you better specify specific component implementation—that injects test—on child like you used to.
 
 @RunWith(RobolectricGradleTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(19), application = DomainStory.TestApplication::class)
@@ -64,6 +69,7 @@ internal abstract class DomainStory constructor(
             return DaggerDomainStory_TestApplicationComponent.builder()
                     .applicationModule(ApplicationModule(this))
                     .persistenceModule(TestPersistenceModule())
+                    .rxModule(TestRxModule())
                     .build()
         }
 

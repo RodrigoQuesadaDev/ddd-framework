@@ -1,8 +1,10 @@
 package com.aticosoft.appointments.mobile.business.domain.specs.stories.client
 
-import com.aticosoft.appointments.mobile.business.domain.application.ClientServices.AddClient
+import com.aticosoft.appointments.mobile.business.domain.application.client.ClientServices.AddClient
 import com.aticosoft.appointments.mobile.business.domain.specs.common.model.client.ClientServicesAware
 import com.aticosoft.appointments.mobile.business.domain.specs.stories.DomainStory
+import com.rodrigodev.test.firstEvent
+import com.rodrigodev.test.subscribe
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.AsParameters
 import org.jbehave.core.annotations.Given
@@ -34,12 +36,12 @@ internal class ClientSteps(domainStory: DomainStory) : ClientServicesAware by do
 
     @Then("\$n clients were added")
     fun nClientsWereAdded(n: Long) {
-        assertThat(clientRepository.size()).isEqualTo(n)
+        assertThat(subscribe(clientObserver.observeSize()).firstEvent()).isEqualTo(n)
     }
 
     @Then("a client with name \$name and birthDate \$birthDate exists in the system")
     fun aClientExistsInTheSystem(name: String, birthDate: LocalDate) {
-        val clientsResult = clientRepository.find(clientRepository.QUERIES.nameLike(name))
+        val clientsResult = subscribe(clientObserver.observe(clientQueries.nameLike(name))).firstEvent()
         assertThat(clientsResult.filter { it.birthDate == birthDate }).isNotEmpty()
     }
 }

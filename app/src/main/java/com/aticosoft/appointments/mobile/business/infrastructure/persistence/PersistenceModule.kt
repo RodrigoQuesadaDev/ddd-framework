@@ -1,7 +1,9 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
+import com.aticosoft.appointments.mobile.business.ModulePostInitializer
 import dagger.Module
 import dagger.Provides
+import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
@@ -11,8 +13,16 @@ import javax.inject.Singleton
 /*internal*/ open class PersistenceModule {
 
     @Provides @Singleton
-    open fun providePersistenceConfigurer(services: PersistenceConfigurer.Services) = PersistenceConfigurer(services)
+    open fun providePersistenceConfigurer(services: PersistenceConfigurator.Services) = PersistenceConfigurator(services)
 
     @Provides @Singleton
-    fun providePersistenceManagerFactory(persistenceConfigurer: PersistenceConfigurer) = persistenceConfigurer.createPersistenceManagerFactory()
+    fun providePersistenceManagerFactory(persistenceConfigurer: PersistenceConfigurator) = persistenceConfigurer.createPersistenceManagerFactory()
+
+    @Singleton
+    class PostInitializer @Inject constructor(private val entityObserversManager: EntityObserversManager) : ModulePostInitializer {
+
+        override fun init() {
+            entityObserversManager.registerObservers()
+        }
+    }
 }

@@ -15,16 +15,15 @@ import javax.inject.Singleton
  * Created by rodrigo on 27/09/15.
  */
 @Singleton
-/*internal*/ class JdoClientRepository @Inject constructor(context: PersistenceContext) : JdoRepositoryBase<Client, ClientQueries>(context), ClientRepository {
-
-    override val QUERIES = JdoClientQueries(context)
+/*internal*/ class JdoClientRepository @Inject constructor(context: PersistenceContext) : JdoRepositoryBase<Client>(context), ClientRepository {
 
     override val queryEntity = object : QueryEntity<Client, QClient>(QClient.client) {
         override val id = entityPath.id
     }
 }
 
-internal class JdoClientQueries(val context: PersistenceContext) : ClientQueries {
+@Singleton
+internal class JdoClientQueries @Inject constructor(private val context: PersistenceContext) : ClientQueries {
 
     override fun nameLike(name: String) = ListQuery {
         val c = QClient.client

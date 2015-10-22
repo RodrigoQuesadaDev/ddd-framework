@@ -13,8 +13,8 @@ import javax.jdo.JDOHelper
  * Created by rodrigo on 08/09/15.
  */
 @Singleton
-/*internal*/ open class PersistenceConfigurer(
-        private val s: PersistenceConfigurer.Services
+/*internal*/ open class PersistenceConfigurator(
+        private val s: PersistenceConfigurator.Services
 ) {
     private companion object {
         val PERSISTENCE_UNIT_NAME = "Appointments"

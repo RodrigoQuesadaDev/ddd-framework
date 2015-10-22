@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.specs.test.common.infrastructure.persistence
 
-import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceConfigurer
+import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceConfigurator
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceModule
 
 /**
@@ -8,5 +8,5 @@ import com.aticosoft.appointments.mobile.business.infrastructure.persistence.Per
  */
 internal class TestPersistenceModule : PersistenceModule() {
 
-    override fun providePersistenceConfigurer(services: PersistenceConfigurer.Services) = TestPersistenceConfigurer(services)
+    override fun providePersistenceConfigurer(services: PersistenceConfigurator.Services) = TestPersistenceConfigurator(services)
 }

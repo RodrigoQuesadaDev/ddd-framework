@@ -1,13 +1,13 @@
 package com.aticosoft.appointments.mobile.business.domain.specs.test.common.infrastructure.persistence
 
-import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceConfigurer
-import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceConfigurer.ConnectionUrlParameters
+import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceConfigurator
+import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceConfigurator.ConnectionUrlParameters
 import org.datanucleus.PropertyNames
 
 /**
  * Created by rodrigo on 10/09/15.
  */
-internal class TestPersistenceConfigurer(services: PersistenceConfigurer.Services) : PersistenceConfigurer(services) {
+internal class TestPersistenceConfigurator(services: PersistenceConfigurator.Services) : PersistenceConfigurator(services) {
 
     private companion object {
         val IN_MEMORY_LOCATION: String = "mem:db1"
@@ -25,7 +25,7 @@ internal class TestPersistenceConfigurer(services: PersistenceConfigurer.Service
     }
 
     override fun overrideProperties(props: MutableMap<String, Any>): Map<String, Any> {
-        props.put(PropertyNames.PROPERTY_SCHEMA_GENERATE_DATABASE_MODE, "drop")
+        props.put(PropertyNames.PROPERTY_SCHEMA_GENERATE_DATABASE_MODE, "drop-and-create")
         return props
     }
 }

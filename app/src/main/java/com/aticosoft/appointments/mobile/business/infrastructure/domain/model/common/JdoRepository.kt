@@ -8,12 +8,12 @@ import com.aticosoft.appointments.mobile.business.infrastructure.persistence.Per
 /**
  * Created by rodrigo on 21/09/15.
  */
-/*internal*/ interface JdoRepository<E : Entity, Q : Repository.Queries> : Repository<E, Q> {
+/*internal*/ interface JdoRepository<E : Entity> : Repository<E> {
 
     val queryEntity: QueryEntity<E, *>
 }
 
-internal abstract class JdoRepositoryBase<E : Entity, Q : Repository.Queries>(protected val context: PersistenceContext) : JdoRepository<E, Q> {
+internal abstract class JdoRepositoryBase<E : Entity>(protected val context: PersistenceContext) : JdoRepository<E> {
 
     override abstract val queryEntity: QueryEntity<E, *>
 

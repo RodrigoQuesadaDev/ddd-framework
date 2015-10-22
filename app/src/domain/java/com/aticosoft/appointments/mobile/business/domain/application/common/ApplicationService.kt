@@ -1,6 +1,6 @@
-package com.aticosoft.appointments.mobile.business.domain.application
+package com.aticosoft.appointments.mobile.business.domain.application.common
 
-import com.aticosoft.appointments.mobile.business.domain.application.ApplicationService.Services
+import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationService.Services
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.TransactionManager
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ internal abstract class ApplicationService<C : ApplicationCommand>(
 
     protected abstract fun doExecute(command: C)
 
-    protected class Services @Inject constructor(
+    class Services @Inject constructor(
             val transactionManager: TransactionManager
     )
 }

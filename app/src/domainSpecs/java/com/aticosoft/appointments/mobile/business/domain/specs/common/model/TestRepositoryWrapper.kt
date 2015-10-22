@@ -1,10 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.specs.common.model
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
-import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
-import com.aticosoft.appointments.mobile.business.domain.model.common.queries.ListQuery
-import com.aticosoft.appointments.mobile.business.domain.model.common.queries.UniqueQuery
-import com.aticosoft.appointments.mobile.business.domain.specs.common.model.TestRepositoryWrapper.Services
+import com.aticosoft.appointments.mobile.business.domain.specs.common.model.TestRepository.Services
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.JdoRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.TransactionManager
@@ -14,25 +11,13 @@ import javax.inject.Singleton
 /**
  * Created by rodrigo on 24/09/15.
  */
-internal class TestRepositoryWrapper<R : JdoRepository<E, Q>, E : Entity, Q : Repository.Queries>(
+internal class TestRepository<R : JdoRepository<E>, E : Entity>(
         private val s: Services,
         private val repository: R
-) : JdoRepository<E, Q> by repository {
-
-    override fun add(entity: E) {
-        s.transactionManager.transactional { repository.add(entity) }
-    }
-
-    override fun get(id: Long) = s.transactionManager.transactional { repository.get(id) }
-
-    override fun find(query: UniqueQuery<E?>) = s.transactionManager.transactional { repository.find(query) }
-
-    override fun find(query: ListQuery<E>) = s.transactionManager.transactional { repository.find(query) }
-
-    override fun size() = s.transactionManager.transactional { repository.size() }
+) {
 
     fun clear() {
-        s.transactionManager.transactional { s.context.queryFactory.delete(queryEntity).execute() }
+        s.transactionManager.transactional { s.context.queryFactory.delete(repository.queryEntity).execute() }
     }
 
     protected class Services @Inject constructor(
@@ -43,6 +28,6 @@ internal class TestRepositoryWrapper<R : JdoRepository<E, Q>, E : Entity, Q : Re
     @Singleton
     class Factory @Inject constructor(val services: Services) {
 
-        fun <R : JdoRepository<E, Q>, E : Entity, Q : Repository.Queries> create(repository: R) = TestRepositoryWrapper<R, E, Q>(services, repository)
+        fun <R : JdoRepository<E>, E : Entity> create(repository: R) = TestRepository<R, E>(services, repository)
     }
 }

@@ -1,6 +1,8 @@
-package com.aticosoft.appointments.mobile.business.domain.application
+package com.aticosoft.appointments.mobile.business.domain.application.appointment
 
-import com.aticosoft.appointments.mobile.business.domain.application.AppointmentServices.ScheduleAppointment
+import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationCommand
+import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationService
+import com.aticosoft.appointments.mobile.business.domain.application.appointment.AppointmentServices.ScheduleAppointment
 import com.aticosoft.appointments.mobile.business.domain.model.IdentityGenerator
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentRepository

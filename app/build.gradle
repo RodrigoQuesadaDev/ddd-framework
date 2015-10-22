@@ -80,6 +80,8 @@ dependencies {
     jarjar files("$buildSystemPath/jarjar/jarjar-1.4.jar")
     compile "com.h2database:h2:$h2Version"
     compile "io.reactivex:rxjava:$rxJavaVersion"
+    compile "io.reactivex:rxkotlin:$rxKotlinVersion"
+    compile "io.reactivex:rxandroid:$rxAndroidVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     testCompile "org.jbehave:jbehave-core:$jBehaveVersion"

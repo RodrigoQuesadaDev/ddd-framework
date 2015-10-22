@@ -1,6 +1,8 @@
-package com.aticosoft.appointments.mobile.business.domain.application
+package com.aticosoft.appointments.mobile.business.domain.application.client
 
-import com.aticosoft.appointments.mobile.business.domain.application.ClientServices.AddClient
+import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationCommand
+import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationService
+import com.aticosoft.appointments.mobile.business.domain.application.client.ClientServices.AddClient
 import com.aticosoft.appointments.mobile.business.domain.model.IdentityGenerator
 import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientRepository

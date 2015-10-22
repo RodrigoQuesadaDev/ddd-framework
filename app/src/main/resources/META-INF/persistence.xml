@@ -16,7 +16,7 @@
             <property name="javax.jdo.option.ConnectionPassword" value=""/>
             <property name="javax.jdo.option.Mapping" value="h2"/>
 
-            <property name="datanucleus.generateSchema.database.mode" value="create"/>
+            <property name="datanucleus.generateSchema.database.mode" value="drop-and-create"/>
 
             <property name="datanucleus.Optimistic" value="true"/>
             <property name="datanucleus.detachedState" value="all"/>
@@ -24,6 +24,8 @@
             <property name="datanucleus.detachAsWrapped" value="true"/>
             <property name="datanucleus.NontransactionalWrite" value="false"/>
             <property name="datanucleus.NontransactionalRead" value="false"/>
+
+            <property name="datanucleus.allowListenerUpdateAfterInit" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>

@@ -11,4 +11,5 @@ import javax.inject.Singleton
 interface ApplicationComponent {
 
     fun inject(mainActivity: MainActivity)
+    fun inject(applicationConfigurator: AbstractApplication.Configurator)
 }
