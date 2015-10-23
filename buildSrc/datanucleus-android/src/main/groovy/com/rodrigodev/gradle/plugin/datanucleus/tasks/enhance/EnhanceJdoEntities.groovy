@@ -11,24 +11,27 @@ class EnhanceJdoEntities extends DataNucleusTask {
 
     static final String TASK_NAME = 'enhanceJdoEntities'
 
-    EnhanceJdoEntitiesConfiguration configuration;
+    EnhanceJdoEntitiesConfiguration configuration
     def variant
 
     static void setUp(Project project, EnhanceJdoEntitiesConfiguration configuration) {
-        project.android.applicationVariants.each { variant ->
-            def variantData = variant.variantData
+        project.android.applicationVariants.each {
+            [it, it.unitTestVariant].each { variant ->
+                if (variant) {
+                    def variantData = variant.variantData
 
-            def enhanceJdoEntities = project.task(namespace(TASK_NAME, variantData.name), type: EnhanceJdoEntities) {
-                delegate.configuration = configuration
-                delegate.variant = variant
-            }
+                    def enhanceJdoEntities = project.task(namespace(TASK_NAME, variantData.name), type: EnhanceJdoEntities) {
+                        delegate.configuration = configuration
+                        delegate.variant = variant
+                    }
 
-            Task kotlinAfterJavaTask = project.tasks.findByName(kotlinTaskName(variantData))
-            if (kotlinAfterJavaTask) {
-                kotlinAfterJavaTask.finalizedBy enhanceJdoEntities
-            }
-            else {
-                variant.javaCompile.finalizedBy enhanceJdoEntities
+                    Task kotlinAfterJavaTask = project.tasks.findByName(kotlinTaskName(variantData))
+                    if (kotlinAfterJavaTask) {
+                        kotlinAfterJavaTask.finalizedBy enhanceJdoEntities
+                    } else {
+                        variant.javaCompile.finalizedBy enhanceJdoEntities
+                    }
+                }
             }
         }
     }
@@ -40,17 +43,21 @@ class EnhanceJdoEntities extends DataNucleusTask {
     @TaskAction
     def taskAction() {
         try {
-            logger.info 'Enhancing DataNucleus classes...'
+            logger.info "Enhancing DataNucleus classes for variant '$variant.name'..."
 
-            String entitiesDir = removeLastPathSeparator(configuration.entitiesDir)
+            def entitiesDirs = configuration.entitiesDirs.collect { removeLastPathSeparator(it) }
 
             def jdoFiles = project.fileTree(variant.javaCompile.destinationDir).matching {
-                include "$entitiesDir/**/*.class"
+                entitiesDirs.each {
+                    include "$it/**/*.class"
+                }
             }
 
             variant.sourceSets.each {
                 jdoFiles = jdoFiles.plus(it.resources.sourceFiles.matching {
-                    include "$entitiesDir/**/*.jdo"
+                    entitiesDirs.each {
+                        include "$it/**/*.jdo"
+                    }
                 })
             }
 
@@ -66,7 +73,7 @@ class EnhanceJdoEntities extends DataNucleusTask {
                     verbose: true
             ) {
                 classpath {
-                    pathelement(path: variant.javaCompile.destinationDir.canonicalPath.toURI().toString())
+                    pathelement(path: project.files(variant.javaCompile.destinationDir).asPath)
                     pathelement(path: (variant.javaCompile.classpath - project.files(configuration.repackagedFile)).asPath)
                     pathelement(path: configuration.datanucleusDependencies.asPath)
                 }
@@ -81,7 +88,7 @@ class EnhanceJdoEntities extends DataNucleusTask {
         }
     }
 
-    private static String removeLastPathSeparator(String path) {
+    protected static String removeLastPathSeparator(String path) {
         if (path.endsWith('/')) {
             path = path.subSequence(0, path.size() - 1)
         }

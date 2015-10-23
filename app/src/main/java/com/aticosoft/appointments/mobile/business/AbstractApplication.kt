@@ -9,7 +9,7 @@ import javax.inject.Inject
 /*internal*/ abstract class AbstractApplication<C : ApplicationComponent> : Application() {
 
     lateinit var applicationComponent: C
-        private set
+        protected set
 
     override fun onCreate() {
         super.onCreate()

@@ -36,6 +36,8 @@ class CopySiteResources extends JBehaveTask {
             }
             into(viewDir)
         }
+
+        testTask.dependsOn this
     }
 
     def jarFile(String jarName) {
@@ -48,6 +50,5 @@ class CopySiteResources extends JBehaveTask {
         }
 
         task.init()
-        project.tasks.preBuild.dependsOn task
     }
 }

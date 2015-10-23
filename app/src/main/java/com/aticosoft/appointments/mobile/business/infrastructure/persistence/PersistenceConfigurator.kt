@@ -5,6 +5,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.persistence.dat
 import com.rodrigodev.common.collection.toHashMap
 import com.rodrigodev.common.file.pathOf
 import org.datanucleus.PropertyNames
+import org.datanucleus.util.PersistenceUtils
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.jdo.JDOHelper
@@ -17,7 +18,7 @@ import javax.jdo.JDOHelper
         private val s: PersistenceConfigurator.Services
 ) {
     private companion object {
-        val PERSISTENCE_UNIT_NAME = "Appointments"
+        val PROPERTIES_FILE = "META-INF/datanucleus.properties"
         val CONNECTION_URL_FORMAT = "jdbc:h2:%s"
         val CONNECTION_URL_PARAM_FORMAT = ";%s=%s"
     }
@@ -37,14 +38,20 @@ import javax.jdo.JDOHelper
         )
     }
 
-    fun createPersistenceManagerFactory() = JDOHelper.getPersistenceManagerFactory(properties(), PERSISTENCE_UNIT_NAME)
+    fun createPersistenceManagerFactory() = JDOHelper.getPersistenceManagerFactory(properties())
 
-    private fun properties(): Map<String, Any> = overrideProperties(hashMapOf(
-            PropertyNames.PROPERTY_CONNECTION_URL to connectionUrl(),
-            PropertyNames.PROPERTY_CLASSLOADER_PRIMARY to s.customDataNucleusClassLoader
-    ))
+    private fun properties(): Map<Any, Any> {
 
-    protected open fun overrideProperties(props: MutableMap<String, Any>): Map<String, Any> = props
+        val props = hashMapOf<Any, Any>(
+                PropertyNames.PROPERTY_CONNECTION_URL to connectionUrl(),
+                PropertyNames.PROPERTY_CLASSLOADER_PRIMARY to s.customDataNucleusClassLoader
+        )
+        props.putAll(PersistenceUtils.setPropertiesUsingFile(PROPERTIES_FILE))
+
+        return overrideProperties(props)
+    }
+
+    protected open fun overrideProperties(props: MutableMap<Any, Any>): Map<Any, Any> = props
 
     private fun connectionUrl() = CONNECTION_URL_FORMAT.format(location()) + urlParams()
 

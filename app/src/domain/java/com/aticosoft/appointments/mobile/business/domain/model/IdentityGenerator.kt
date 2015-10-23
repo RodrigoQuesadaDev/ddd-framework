@@ -43,7 +43,6 @@ import javax.jdo.PersistenceManagerFactory
                         return connection
                     }
 
-
                     override fun releaseConnection() {
                         if (connection != null) {
                             //TODO report issue below?

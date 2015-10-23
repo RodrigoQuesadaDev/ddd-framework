@@ -6,6 +6,8 @@ import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQuer
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment.JdoAppointmentQueries
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment.JdoAppointmentRepository
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client.JdoClientQueries
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client.JdoClientRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

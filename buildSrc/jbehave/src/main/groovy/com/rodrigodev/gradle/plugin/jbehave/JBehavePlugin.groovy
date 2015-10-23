@@ -1,5 +1,6 @@
 package com.rodrigodev.gradle.plugin.jbehave
 
+import com.rodrigodev.gradle.plugin.jbehave.tasks.execution.CreateTargetDir
 import com.rodrigodev.gradle.plugin.jbehave.tasks.site.CopySiteResources
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,6 +16,7 @@ class JBehavePlugin implements Plugin<Project> {
         PluginConfiguration pluginConfiguration = new PluginConfiguration(project);
 
         project.afterEvaluate {
+            CreateTargetDir.setUp(project)
             CopySiteResources.setUp(project, pluginConfiguration.copySiteResourcesConfiguration)
         }
     }

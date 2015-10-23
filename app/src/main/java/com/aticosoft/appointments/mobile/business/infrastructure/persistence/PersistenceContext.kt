@@ -2,6 +2,8 @@ package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityCallbackListener
 import com.querydsl.jdo.JDOQueryFactory
+import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
+import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.jdo.PersistenceManager
@@ -15,25 +17,19 @@ import javax.jdo.PersistenceManagerFactory
         private val pmf: PersistenceManagerFactory
 ) {
 
-    private val persistenceManagerTL = object : ThreadLocal<PersistenceManager>() {
-        override fun initialValue() = pmf.persistenceManager
-    }
+    private val threadLocalCleaner = ThreadLocalCleaner()
 
-    val persistenceManager: PersistenceManager
-        get() = persistenceManagerTL.get()
+    val persistenceManager: PersistenceManager by ThreadLocalDelegate(threadLocalCleaner) { pmf.persistenceManager }
 
-    private val queryFactoryTL = object : ThreadLocal<JDOQueryFactory>() {
-        override fun initialValue() = JDOQueryFactory { persistenceManager }
-    }
+    val queryFactory: JDOQueryFactory by ThreadLocalDelegate(threadLocalCleaner) { JDOQueryFactory { persistenceManager } }
 
-    val queryFactory: JDOQueryFactory
-        get() = queryFactoryTL.get()
+    private val entityListenerListBuilder = EntityListenerListBuilder()
 
-    private lateinit var entityListeners: Array<out EntityCallbackListener<*>>
+    private val entityListeners: List<EntityCallbackListener<*>> by lazy { entityListenerListBuilder.build() }
 
-    fun registerEntityListeners(vararg entityListeners: EntityCallbackListener<*>) {
-        entityListeners.forEach { it.register(pmf) }
-        this.entityListeners = entityListeners
+    fun registerEntityListener(entityListener: EntityCallbackListener<*>) {
+        pmf.addInstanceLifecycleListener(entityListener, arrayOf(entityListener.entityType.java))
+        entityListenerListBuilder.add(entityListener)
     }
 
     fun onTransactionCommitted() {
@@ -41,8 +37,7 @@ import javax.jdo.PersistenceManagerFactory
     }
 
     fun close() {
-        persistenceManagerTL.remove()
-        queryFactoryTL.remove()
+        threadLocalCleaner.cleanUpThreadLocalInstances()
         entityListeners.forEach { it.resetLocalState() }
     }
 
@@ -54,4 +49,15 @@ import javax.jdo.PersistenceManagerFactory
             close()
         }
     }
+}
+
+private class EntityListenerListBuilder {
+
+    private val listeners: MutableList<EntityCallbackListener<*>> = arrayListOf()
+
+    fun add(listener: EntityCallbackListener<*>) {
+        listeners.add(listener)
+    }
+
+    fun build() = listeners
 }

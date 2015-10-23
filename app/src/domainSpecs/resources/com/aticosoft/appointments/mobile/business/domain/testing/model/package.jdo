@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
+<jdo>
+    <package name="com.aticosoft.appointments.mobile.business.domain.model.common">
+        <class name="Entity">
+            <inheritance strategy="subclass-table"/>
+            <field name="id" primary-key="true"/>
+        </class>
+    </package>
+    <package name="com.aticosoft.appointments.mobile.business.domain.testing.model.test_data">
+        <class name="TestData">
+            <field name="value"/>
+        </class>
+    </package>
+</jdo>

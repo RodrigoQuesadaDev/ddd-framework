@@ -22,17 +22,16 @@ class CopyPluginFiles extends DataNucleusTask {
     @InputFiles FileCollection jarFiles
     @OutputDirectory File pluginsDir
 
-    public void init() {
+    public void init(project) {
         this.jarFiles = configuration.datanucleusDependencies
-        this.pluginsDir = new File(PLUGINS_DIR_PATH)
-        pluginsDir.mkdirs()
+        this.pluginsDir = project.file(PLUGINS_DIR_PATH)
     }
 
     public static void setUp(Project project, CopyPluginFilesConfiguration configuration) {
         CopyPluginFiles task = project.task(namespace(TASK_NAME), type: CopyPluginFiles) {
             delegate.configuration = configuration
         }
-        task.init()
+        task.init(project)
         project.tasks.preBuild.dependsOn task
     }
 

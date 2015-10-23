@@ -13,7 +13,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.persistence.Per
     val queryEntity: QueryEntity<E, *>
 }
 
-internal abstract class JdoRepositoryBase<E : Entity>(protected val context: PersistenceContext) : JdoRepository<E> {
+/*internal*/ abstract class JdoRepositoryBase<E : Entity>(protected val context: PersistenceContext) : JdoRepository<E> {
 
     override abstract val queryEntity: QueryEntity<E, *>
 
@@ -22,6 +22,10 @@ internal abstract class JdoRepositoryBase<E : Entity>(protected val context: Per
     }
 
     override fun get(id: Long) = context.queryFactory.selectFrom(queryEntity).where(queryEntity.id.eq(id)).fetchOne()
+
+    override fun remove(entity: E) {
+        context.persistenceManager.deletePersistent(entity)
+    }
 
     override fun size() = context.queryFactory.selectFrom(queryEntity).fetchCount()
 }

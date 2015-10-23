@@ -7,7 +7,7 @@ import javax.inject.Inject
 /**
  * Created by rodrigo on 23/09/15.
  */
-internal abstract class ApplicationService<C : ApplicationCommand>(
+/*internal*/ abstract class ApplicationService<C : ApplicationCommand>(
         private val s: Services
 ) {
 
@@ -20,4 +20,4 @@ internal abstract class ApplicationService<C : ApplicationCommand>(
     )
 }
 
-internal interface ApplicationCommand
+/*internal*/ interface ApplicationCommand

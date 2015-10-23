@@ -4,28 +4,8 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
 
-    <!-- Tutorial "unit" -->
     <persistence-unit name="Appointments">
-        <mapping-file>
-            com/aticosoft/appointments/mobile/business/domain/model/appointment/package.jdo
-        </mapping-file>
+        <mapping-file>com/aticosoft/appointments/mobile/business/domain/model/package.jdo</mapping-file>
         <exclude-unlisted-classes/>
-        <properties>
-            <property name="javax.jdo.option.ConnectionDriverName" value="org.h2.Driver"/>
-            <property name="javax.jdo.option.ConnectionUserName" value="sa"/>
-            <property name="javax.jdo.option.ConnectionPassword" value=""/>
-            <property name="javax.jdo.option.Mapping" value="h2"/>
-
-            <property name="datanucleus.generateSchema.database.mode" value="drop-and-create"/>
-
-            <property name="datanucleus.Optimistic" value="true"/>
-            <property name="datanucleus.detachedState" value="all"/>
-            <property name="datanucleus.detachAllOnCommit" value="true"/>
-            <property name="datanucleus.detachAsWrapped" value="true"/>
-            <property name="datanucleus.NontransactionalWrite" value="false"/>
-            <property name="datanucleus.NontransactionalRead" value="false"/>
-
-            <property name="datanucleus.allowListenerUpdateAfterInit" value="true"/>
-        </properties>
     </persistence-unit>
 </persistence>

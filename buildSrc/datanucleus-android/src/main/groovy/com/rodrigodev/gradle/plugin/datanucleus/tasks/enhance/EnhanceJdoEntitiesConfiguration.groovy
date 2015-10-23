@@ -12,6 +12,12 @@ class EnhanceJdoEntitiesConfiguration {
         return extension.entitiesDir
     }
 
+    public List<String> getEntitiesDirs() {
+        def entitiesDirs = extension.entitiesDirs
+        if (extension.entitiesDir) entitiesDirs += configuration.entitiesDir
+        return entitiesDirs
+    }
+
     public String getAlwaysDetachable() {
         return extension.alwaysDetachable
     }

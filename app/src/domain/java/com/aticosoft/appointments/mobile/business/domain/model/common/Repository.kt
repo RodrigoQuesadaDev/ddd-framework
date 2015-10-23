@@ -8,9 +8,11 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.queries.Un
  */
 /*internal*/ interface Repository<E : Entity> {
 
-    fun add(entity: E): Unit
+    fun add(entity: E)
 
     fun get(id: Long): E?
+
+    fun remove(entity: E)
 
     fun find(query: UniqueQuery<E>): E? = query.execute()
 
