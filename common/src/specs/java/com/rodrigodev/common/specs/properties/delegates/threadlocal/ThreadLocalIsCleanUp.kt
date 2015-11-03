@@ -10,13 +10,13 @@ import org.jbehave.core.annotations.When
 import kotlin.properties.Delegates.notNull
 
 /**
- * Created by rodrigo on 26/10/15.
- */
+* Created by Rodrigo Quesada on 26/10/15.
+*/
 internal class ThreadLocalIsCleanUp : SpecStory() {
 
-    override val steps = arrayOf(Steps())
+    override val steps = arrayOf(LocalSteps())
 
-    class Steps {
+    class LocalSteps {
 
         private class DelegatedPropertyContainer<T>(cleaner: ThreadLocalCleaner, initialValueCall: () -> T) {
 

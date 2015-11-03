@@ -5,14 +5,14 @@ import org.joda.time.LocalDate
 import javax.jdo.annotations.PersistenceCapable
 
 /**
- * Created by rodrigo on 27/09/15.
+ * Created by Rodrigo Quesada on 27/09/15.
  */
 @PersistenceCapable
 class Client(
-        id: Long,
+        context: Entity.Context,
         name: String,
         birthDate: LocalDate
-) : Entity(id) {
+) : Entity(context) {
 
     var name: String = name
         private set

@@ -10,10 +10,17 @@
         </class>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.testing.model.test_data">
-        <class name="TestData" table="TEST_DATA">
+        <class name="AbstractTestData">
             <field name="value">
                 <column name="VALUE"/>
             </field>
         </class>
+        <class name="TestData" table="TEST_DATA"/>
+        <class name="TestDataParent" table="TEST_DATA_PARENT">
+            <field name="child">
+                <column name="CHILD_ID"/>
+            </field>
+        </class>
+        <class name="TestDataChild" table="TEST_DATA_CHILD"/>
     </package>
 </orm>

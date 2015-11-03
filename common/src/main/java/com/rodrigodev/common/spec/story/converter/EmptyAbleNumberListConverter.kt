@@ -4,8 +4,8 @@ import org.jbehave.core.steps.ParameterConverters
 import java.lang.reflect.Type
 
 /**
- * Created by rodrigo on 31/10/15.
- */
+* Created by Rodrigo Quesada on 31/10/15.
+*/
 class EmptyAbleNumberListConverter : ParameterConverters.NumberListConverter() {
 
     //TODO remove suppression when KT-8619 is fixed

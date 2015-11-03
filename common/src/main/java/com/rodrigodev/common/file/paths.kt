@@ -4,8 +4,8 @@ import org.apache.commons.io.FilenameUtils
 import java.io.File
 
 /**
- * Created by rodrigo on 08/09/15.
- */
+* Created by Rodrigo Quesada on 08/09/15.
+*/
 
 fun pathOf(vararg parts: String) = parts
         .map { FilenameUtils.normalizeNoEndSeparator(it) }

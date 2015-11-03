@@ -1,33 +1,35 @@
 package com.aticosoft.appointments.mobile.business.domain.application.common.observation
 
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityChangeEvent.EventType.ADD
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityChangeEvent.EventType.REMOVE
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver.Services
 import com.aticosoft.appointments.mobile.business.domain.common.time.TimeService
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
-import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
-import com.aticosoft.appointments.mobile.business.domain.model.common.queries.ListQuery
-import com.aticosoft.appointments.mobile.business.domain.model.common.queries.UniqueQuery
+import com.aticosoft.appointments.mobile.business.domain.model.common.*
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.TransactionManager
-import com.rodrigodev.common.rx.throttleLast
+import com.rodrigodev.common.rx.Observables
+import com.rodrigodev.common.rx.firstOrNull
+import org.joda.time.Duration
 import org.joda.time.Duration.millis
 import rx.Observable
 import rx.Observable.merge
+import rx.lang.kotlin.toObservable
 import rx.schedulers.Schedulers
 import rx.util.async.Async.fromCallable
 import javax.inject.Inject
-import kotlin.reflect.KClass
 
 /**
- * Created by rodrigo on 15/10/15.
+ * Created by Rodrigo Quesada on 15/10/15.
  */
 //TODO this should be abstract?
-open /*internal*/ class EntityObserver<E : Entity>(
-        private val s: Services,
-        private val entityRepository: Repository<E>,
-        private val entityType: KClass<E>
+@Suppress("NOTHING_TO_INLINE")
+/*internal*/ abstract class EntityObserver<E : Entity>(
+        private val s: Services<E>,
+        private val entityType: Class<E>
 ) {
-    private companion object {
+    companion object {
         val DATA_REFRESH_RATE_TIME = millis(500)
     }
+
     //TODO handle errors? Add Crashlytics for handling them (use RxJavaErrorHandler?)
 
     //TODO use retryWhen to add exponential back-off retry (starts at 0.5s to a max of 5s),
@@ -35,49 +37,77 @@ open /*internal*/ class EntityObserver<E : Entity>(
 
     //TODO add consistent (?) parameter that indicates if the underlying db operation should be transactional
 
-    //TODO should this field be exposed after changes to registration of listeners?
-    protected open val entityListener = EntityCallbackListener(s.listenerServices, entityType)
-    private val entityChanges = entityListener.changes
+    private val totalCountFilters = arrayOf(EntityObservationFilter(entityType, ADD, REMOVE))
+    protected open fun entityByIdFilters(id: Long): Array<EntityObservationFilter<*>> = arrayOf(EntityObservationFilter(entityType) { it.id == id })
 
-    fun register() {
-        entityListener.register()
-    }
+    //TODO test/implement filter for get(id)
+    fun observe(id: Long) = entityObservable(entityByIdFilters(id)) { s.entityRepository.get(id) }
 
-    fun observe(id: Long) = entityObservable { entityRepository.get(id) }
+    fun observe(query: UniqueQuery<E>) = entityObservable(query.filters) { s.entityRepository.find(query) }
 
-    fun observe(query: UniqueQuery<E>) = entityObservable { entityRepository.find(query) }
+    fun observe(query: ListQuery<E>) = entityObservable(query.filters) { s.entityRepository.find(query) }
 
-    fun observe(query: ListQuery<E>) = entityObservable { entityRepository.find(query) }
+    fun observe(query: CountQuery<E>) = entityObservable(query.filters) { s.entityRepository.count(query) }
 
-    fun observeSize() = entityObservable { entityRepository.size() }
+    fun observeTotalCount() = entityObservable(totalCountFilters) { s.entityRepository.size() }
 
+    //TODO queryView
+
+    //TODO default filters based on query views
+
+    //TODO test all observation methods?
+
+    //TODO test filters
     //TODO filter must go BEFORE throttling
-
-    //TODO observe type of change? (Such as DELETE or UPDATE. Check InstanceLifecycleEvent class.)
-
-    //TODO specs for observed changes on entityChanges
+    //window->first of the window that satisfies filter OR null->flat map->not null
 
     //TODO use defaultOrEmpty? -->Nothing
 
     //TODO change to inline fun when KT-8668 is fixed
-    private /*inline*/ fun <R> entityObservable(queryExecution: () -> R): Observable<R> {
-        return merge(
-                fromCallable(
-                        { executeQuery(queryExecution) },
-                        Schedulers.io()
-                ),
-                entityChanges
-                        .throttleLast(s.timeService.randomDuration(DATA_REFRESH_RATE_TIME), DATA_REFRESH_RATE_TIME)
-                        .observeOn(Schedulers.io())
-                        .map { executeQuery(queryExecution) }
-        )
-    }
+    private /*inline*/ fun <R> entityObservable(filters: Array<out EntityObservationFilter<*>>, queryExecution: () -> R): Observable<R> = merge(
+            fromCallable(
+                    { executeQuery(queryExecution) },
+                    Schedulers.io()
+            ),
+            filters.group().toObservable()
+                    .mergeWithEntityChangeEvents()
+                    .throttleFirstChange(s.timeService.randomDuration(DATA_REFRESH_RATE_TIME), DATA_REFRESH_RATE_TIME)
+                    .observeOn(Schedulers.io())
+                    .map { executeQuery(queryExecution) }
+    )
 
     private inline fun <R> executeQuery(queryExecution: () -> R): R = s.transactionManager.transactional { queryExecution() }
 
-    class Services @Inject constructor(
-            val listenerServices: EntityCallbackListener.Services,
-            val transactionManager: TransactionManager,
-            val timeService: TimeService
+    private inline fun <T : FilterableEntityChangeEvent> Observable<T>.throttleFirstChange(initialIntervalDuration: Duration, intervalDuration: Duration): Observable<T> {
+        val ticks = Observables.interval(initialIntervalDuration, intervalDuration).share()
+        return window(ticks)
+                .flatMap {
+                    it.firstOrNull { e -> e.entityChange.matchesAll(e.filters) }
+                            .filter { it != null }
+                            .zipWith(ticks, { e, t -> e })
+                }
+    }
+
+    private inline fun Array<out EntityObservationFilter<*>>.group(): List<FilterGroup> = groupBy { it.entityType }.map { FilterGroup(it.key, it.value.toTypedArray()) }
+
+    private inline fun Observable<FilterGroup>.mergeWithEntityChangeEvents(): Observable<FilterableEntityChangeEvent> = flatMap(
+            { filterGroup -> s.entityListenersManager.forType(filterGroup.type).changes },
+            { filterGroup, e -> EntityObserver.FilterableEntityChangeEvent(e, filterGroup.filters) }
     )
+
+    private inline fun EntityChangeEvent<*>.matchesAll(filters: Array<out EntityObservationFilter<*>>) = filters.all { filter -> filter(this) }
+
+    private data class FilterGroup(val type: Class<*>, val filters: Array<EntityObservationFilter<*>>)
+
+    private data class FilterableEntityChangeEvent(val entityChange: EntityChangeEvent<*>, val filters: Array<out EntityObservationFilter<*>>)
+
+    abstract class Services<E : Entity> {
+        lateinit var entityListenersManager: EntityListenersManager
+            @Inject protected set
+        lateinit var transactionManager: TransactionManager
+            @Inject protected set
+        lateinit var timeService: TimeService
+            @Inject protected set
+        abstract val entityRepository: Repository<E>
+    }
 }

@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.rodrigodev.common.rx
 
 import com.rodrigodev.common.rx.Observables.interval
@@ -6,11 +8,12 @@ import rx.Observable
 import java.util.concurrent.TimeUnit
 
 /**
- * Created by rodrigo on 29/10/15.
+ * Created by Rodrigo Quesada on 29/10/15.
  */
 object Observables {
-    @Suppress("NOTHING_TO_INLINE")
     inline fun interval(initialDelay: Duration, period: Duration) = Observable.interval(initialDelay.millis, period.millis, TimeUnit.MILLISECONDS)
+
+    inline fun timer(delay: Duration) = Observable.timer(delay.millis, TimeUnit.MILLISECONDS)
 }
 
 /**
@@ -18,11 +21,10 @@ object Observables {
  * time windows of a specified duration. This variation of the method uses a different interval duration
  * for the first time window.
  * */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> Observable<T>.throttleLast(initialIntervalDuration: Duration, intervalDuration: Duration): Observable<T> = sample(interval(initialIntervalDuration, intervalDuration))
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> Observable<T>.throttleLast(intervalDuration: Duration) = throttleLast(intervalDuration.millis, TimeUnit.MILLISECONDS)
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> Observable<T>.delaySubscription(delay: Duration) = delaySubscription(delay.millis, TimeUnit.MILLISECONDS)
+
+inline fun <T> Observable<T>.firstOrNull(crossinline predicate: (T) -> Boolean): Observable<T?> = firstOrDefault<T>(null) { predicate(it) }

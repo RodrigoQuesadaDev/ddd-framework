@@ -4,8 +4,8 @@ import dagger.Component
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 10/09/15.
- */
+* Created by Rodrigo Quesada on 10/09/15.
+*/
 @Singleton
 @Component(modules = arrayOf(ApplicationModule::class))
 interface ApplicationComponent {

@@ -6,8 +6,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 22/09/15.
- */
+* Created by Rodrigo Quesada on 22/09/15.
+*/
 internal class PluginFileCopier private constructor(
         private val s: PluginFileCopier.Services,
         private val sourceDir: PluginDirectory,

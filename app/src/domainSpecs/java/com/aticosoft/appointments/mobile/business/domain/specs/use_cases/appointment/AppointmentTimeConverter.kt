@@ -7,8 +7,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 21/09/15.
- */
+* Created by Rodrigo Quesada on 21/09/15.
+*/
 @Singleton
 internal class AppointmentTimeConverter @Inject constructor() : TimeConverter<DateTime>(DateTime::class.java, "yyyy-MM-dd 'at' HH:mm") {
 

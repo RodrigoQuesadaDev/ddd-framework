@@ -7,8 +7,8 @@ import javax.inject.Singleton
 import kotlin.properties.Delegates
 
 /**
- * Created by rodrigo on 08/09/15.
- */
+* Created by Rodrigo Quesada on 08/09/15.
+*/
 @Singleton
 internal class CustomPluginManager @Inject constructor(
         private val  pluginFactory: Plugin.Factory,

@@ -1,42 +1,28 @@
 package com.aticosoft.appointments.mobile.business.domain.application.client
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationCommand
-import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationService
-import com.aticosoft.appointments.mobile.business.domain.application.client.ClientServices.AddClient
-import com.aticosoft.appointments.mobile.business.domain.model.IdentityGenerator
+import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationServices
 import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientRepository
+import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import org.joda.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 02/10/15.
+ * Created by Rodrigo Quesada on 02/10/15.
  */
+@Singleton
 /*internal*/ class ClientServices @Inject constructor(
-        val addClient: AddClient
-) {
+        context: ApplicationServices.Context,
+        private val entityContext: Entity.Context,
+        private val clientRepository: ClientRepository
+) : ApplicationServices(context) {
 
-    @Singleton
-    class AddClient @Inject constructor(
-            services: ApplicationService.Services,
-            private val identityGenerator: IdentityGenerator,
-            private val clientRepository: ClientRepository
-    ) : ApplicationService<AddClient.Command>(services) {
+    class AddClient(val name: String, val birthDate: LocalDate) : Command()
 
-        class Command(
-                val name: String,
-                val birthDate: LocalDate
-        ) : ApplicationCommand
-
-        override fun doExecute(command: Command) {
-            with(command) {
-                clientRepository.add(Client(
-                        identityGenerator.generate(),
-                        name = name,
-                        birthDate = birthDate
-                ))
-            }
-        }
+    fun execute(command: AddClient) = command.execute {
+        clientRepository.add(Client(
+                entityContext, name = name, birthDate = birthDate
+        ))
     }
 }

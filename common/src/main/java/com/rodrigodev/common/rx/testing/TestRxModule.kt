@@ -5,8 +5,8 @@ import dagger.Provides
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 29/10/15.
- */
+* Created by Rodrigo Quesada on 29/10/15.
+*/
 @Module
 class TestRxModule {
 

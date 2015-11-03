@@ -1,38 +1,26 @@
 package com.aticosoft.appointments.mobile.business.domain.application.appointment
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationCommand
-import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationService
-import com.aticosoft.appointments.mobile.business.domain.application.appointment.AppointmentServices.ScheduleAppointment
-import com.aticosoft.appointments.mobile.business.domain.model.IdentityGenerator
+import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationServices
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentRepository
+import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import org.joda.time.DateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 07/09/15.
+ * Created by Rodrigo Quesada on 07/09/15.
  */
 @Singleton
 /*internal*/ class AppointmentServices @Inject constructor(
-        val scheduleAppointment: ScheduleAppointment
-) {
+        context: ApplicationServices.Context,
+        private val entityContext: Entity.Context,
+        private val appointmentRepository: AppointmentRepository
+) : ApplicationServices(context) {
 
-    @Singleton
-    class ScheduleAppointment @Inject constructor(
-            services: ApplicationService.Services,
-            private val identityGenerator: IdentityGenerator,
-            private val appointmentRepository: AppointmentRepository
-    ) : ApplicationService<ScheduleAppointment.Command>(services) {
+    class ScheduleAppointment(val clientId: Long, val time: DateTime) : Command()
 
-        class Command(val clientId: Long, val time: DateTime) : ApplicationCommand
-
-        override protected fun doExecute(command: Command) {
-            with(command) {
-                appointmentRepository.add(Appointment(
-                        identityGenerator.generate(), clientId = clientId, scheduledTime = time)
-                )
-            }
-        }
+    fun execute(command: ScheduleAppointment) = command.execute {
+        appointmentRepository.add(Appointment(entityContext, clientId = clientId, scheduledTime = time))
     }
 }

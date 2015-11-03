@@ -3,6 +3,6 @@ package com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appoin
 import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appointment.AppointmentStory
 
 /**
- * Created by rodrigo on 17/09/15.
- */
+* Created by Rodrigo Quesada on 17/09/15.
+*/
 internal class OwnerSchedulesAppointment : AppointmentStory()

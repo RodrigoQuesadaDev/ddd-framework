@@ -4,8 +4,8 @@ import com.aticosoft.appointments.mobile.business.infrastructure.persistence.Per
 import org.datanucleus.PropertyNames
 
 /**
- * Created by rodrigo on 10/09/15.
- */
+* Created by Rodrigo Quesada on 10/09/15.
+*/
 internal class TestPersistenceConfigurator(services: PersistenceConfigurator.Services) : PersistenceConfigurator(services) {
 
     private companion object {

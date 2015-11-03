@@ -5,7 +5,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.Do
 import dagger.Module
 
 /**
- * Created by rodrigo on 31/10/15.
- */
+* Created by Rodrigo Quesada on 31/10/15.
+*/
 @Module(includes = arrayOf(DomainCommonModule::class, DomainModelModule::class))
 internal class DomainModule

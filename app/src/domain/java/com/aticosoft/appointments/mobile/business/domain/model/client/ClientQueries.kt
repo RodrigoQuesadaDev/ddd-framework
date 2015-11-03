@@ -1,9 +1,9 @@
 package com.aticosoft.appointments.mobile.business.domain.model.client
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.queries.ListQuery
+import com.aticosoft.appointments.mobile.business.domain.model.common.ListQuery
 
 /**
- * Created by rodrigo on 19/10/15.
+ * Created by Rodrigo Quesada on 19/10/15.
  */
 interface ClientQueries {
 

@@ -6,8 +6,8 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 /**
- * Created by rodrigo on 31/10/15.
- */
+* Created by Rodrigo Quesada on 31/10/15.
+*/
 internal class TestDomainCommonModule : DomainCommonModule() {
 
     @Inject protected lateinit var testTimeServiceProvider: Provider<TestTimeService>

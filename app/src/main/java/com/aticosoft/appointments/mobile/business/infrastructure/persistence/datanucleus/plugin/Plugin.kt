@@ -8,8 +8,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 07/09/15.
- */
+* Created by Rodrigo Quesada on 07/09/15.
+*/
 internal class Plugin private constructor(
         private val s: Plugin.Services,
         private val id: String

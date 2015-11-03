@@ -10,16 +10,13 @@ import org.jbehave.core.annotations.When
 import kotlin.properties.Delegates.notNull
 
 /**
- * Created by rodrigo on 26/10/15.
- */
+* Created by Rodrigo Quesada on 26/10/15.
+*/
 internal class ThreadLocalDelegateSetsAndGetsValues : SpecStory() {
 
-    override val steps = arrayOf(Steps())
+    override val steps = arrayOf(LocalSteps())
 
-    class Steps {
-
-        //TODO simplify when KT-9772 is resolved
-
+    class LocalSteps {
         private class TestProxy<T>(initialValueCall: () -> T) {
             private companion object {
                 val DUMMY_CLEANER = ThreadLocalCleaner()

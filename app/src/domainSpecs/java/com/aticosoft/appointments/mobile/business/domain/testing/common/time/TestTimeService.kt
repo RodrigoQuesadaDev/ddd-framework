@@ -5,8 +5,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 31/10/15.
- */
+* Created by Rodrigo Quesada on 31/10/15.
+*/
 @Singleton
 internal class TestTimeService @Inject constructor() : TimeService() {
 

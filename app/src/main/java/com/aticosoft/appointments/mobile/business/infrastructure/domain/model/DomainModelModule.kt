@@ -13,8 +13,8 @@ import dagger.Provides
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 26/09/15.
- */
+* Created by Rodrigo Quesada on 26/09/15.
+*/
 @Module
 internal class DomainModelModule {
 

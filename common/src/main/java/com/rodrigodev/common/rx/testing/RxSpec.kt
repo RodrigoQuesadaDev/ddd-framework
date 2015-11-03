@@ -7,8 +7,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 31/10/15.
- */
+* Created by Rodrigo Quesada on 31/10/15.
+*/
 abstract class RxSpec : SpecStory() {
 
     @Inject protected lateinit var testScheduler: TestScheduler

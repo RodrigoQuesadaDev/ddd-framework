@@ -4,8 +4,8 @@ import com.aticosoft.appointments.mobile.business.infrastructure.persistence.Per
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceModule
 
 /**
- * Created by rodrigo on 10/09/15.
- */
+* Created by Rodrigo Quesada on 10/09/15.
+*/
 internal class TestPersistenceModule : PersistenceModule() {
 
     override fun providePersistenceConfigurator(services: PersistenceConfigurator.Services) = TestPersistenceConfigurator(services)

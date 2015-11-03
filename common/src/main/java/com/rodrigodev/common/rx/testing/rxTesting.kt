@@ -6,13 +6,13 @@ import rx.schedulers.Schedulers
 import rx.schedulers.TestScheduler
 
 /**
- * Created by rodrigo on 19/10/15.
+ * Created by Rodrigo Quesada on 19/10/15.
  */
-fun <T> subscribe(observable: Observable<T>): TestSubscriber<T> = TestSubscriber<T>().let { subscriber ->
+fun <T> Observable<T>.testSubscribe() = TestSubscriber<T>().let { subscriber ->
 
-    observable.subscribe(subscriber)
+    subscribe(subscriber)
 
-    (Schedulers.computation() as? TestScheduler)?.apply { triggerActions() }
+    (Schedulers.computation() as? TestScheduler)?.run { triggerActions() }
 
     subscriber.apply { assertNoErrors() }
 }

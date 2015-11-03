@@ -5,6 +5,6 @@ import java.net.URLClassLoader
 import javax.inject.Inject
 
 /**
- * Created by rodrigo on 08/09/15.
- */
+* Created by Rodrigo Quesada on 08/09/15.
+*/
 internal class CustomDataNucleusClassLoader @Inject constructor(customPluginManager: CustomPluginManager) : URLClassLoader(customPluginManager.pluginUrls.toTypedArray())

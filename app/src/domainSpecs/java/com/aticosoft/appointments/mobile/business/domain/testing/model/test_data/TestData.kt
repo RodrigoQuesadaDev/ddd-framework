@@ -4,10 +4,9 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import javax.jdo.annotations.PersistenceCapable
 
 /**
- * Created by rodrigo on 24/10/15.
+ * Created by Rodrigo Quesada on 24/10/15.
  */
 @PersistenceCapable
-internal class TestData(id: Long, value: Int) : Entity(id) {
+internal class TestData(context: Entity.Context, value: Int) : AbstractTestData(context, value)
 
-    var value: Int = value
-}
+internal abstract class AbstractTestData(context: Entity.Context, var value: Int) : Entity(context)

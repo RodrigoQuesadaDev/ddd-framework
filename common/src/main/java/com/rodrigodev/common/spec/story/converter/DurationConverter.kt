@@ -9,8 +9,8 @@ import java.lang.reflect.Type
 import kotlin.text.Regex
 
 /**
- * Created by rodrigo on 29/10/15.
- */
+* Created by Rodrigo Quesada on 29/10/15.
+*/
 class DurationConverter : ParameterConverterBase<Duration>(Duration::class.java) {
     private companion object {
         val TIME_PATTERN = Regex("(\\d+(?:\\.\\d+)?)\\s?(.+)")

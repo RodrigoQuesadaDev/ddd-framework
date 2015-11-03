@@ -5,14 +5,14 @@ import org.joda.time.DateTime
 import javax.jdo.annotations.PersistenceCapable
 
 /**
- * Created by rodrigo on 26/07/15.
+ * Created by Rodrigo Quesada on 26/07/15.
  */
 @PersistenceCapable
 class Appointment(
-        id: Long,
+        context: Entity.Context,
         clientId: Long,
         scheduledTime: DateTime
-) : Entity(id) {
+) : Entity(context) {
 
     var clientId: Long = clientId
         private set

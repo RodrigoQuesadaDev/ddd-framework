@@ -1,8 +1,8 @@
 package com.aticosoft.appointments.mobile.business.domain.specs
 
 /**
- * Created by rodrigo on 10/09/15.
- */
+* Created by Rodrigo Quesada on 10/09/15.
+*/
 //TODO change Delegates.lazy to lazy
 
 //TODO clean-up test classes using delegate https://youtrack.jetbrains.com/issue/KT-83 (e.g. AppointmentAwareSpecification by specification)

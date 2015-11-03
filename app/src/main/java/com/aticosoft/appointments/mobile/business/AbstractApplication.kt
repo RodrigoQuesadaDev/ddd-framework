@@ -4,8 +4,8 @@ import android.app.Application
 import javax.inject.Inject
 
 /**
- * Created by rodrigo on 10/09/15.
- */
+* Created by Rodrigo Quesada on 10/09/15.
+*/
 /*internal*/ abstract class AbstractApplication<C : ApplicationComponent> : Application() {
 
     lateinit var applicationComponent: C

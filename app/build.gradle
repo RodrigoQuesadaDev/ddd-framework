@@ -64,6 +64,8 @@ dependencies {
         transitive = false
     }
     compile "com.google.guava:guava:$guavaVersion"
+    //TODO use https://github.com/dlew/joda-time-android#why-this-library or https://github.com/JakeWharton/ThreeTenABP?
+    //TODO check http://blog.joda.org/2009/11/why-jsr-310-isn-joda-time_4941.html
     compile "joda-time:joda-time:$jodaTimeVersion"
     compile "com.googlecode.libphonenumber:libphonenumber:$libphonenumberVersion"
     compile "com.google.dagger:dagger:$daggerVersion"
@@ -99,6 +101,8 @@ dependencies {
     jbehaveSiteResources "org.jbehave:jbehave-core:$jBehaveVersion"
     jbehaveSiteResources "org.jbehave.site:jbehave-site-resources:$jBehaveSiteVersion:@zip"
     testCompile "junit:junit:$junitVersion"
+    testCompile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    testCompile "com.fasterxml.jackson.module:jackson-module-paranamer:$jacksonVersion"
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.robolectric:robolectric:$robolectricVersion"
     kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"

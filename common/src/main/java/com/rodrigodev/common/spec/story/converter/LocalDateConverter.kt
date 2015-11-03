@@ -4,8 +4,8 @@ import org.joda.time.LocalDate
 import java.lang.reflect.Type
 
 /**
- * Created by rodrigo on 05/10/15.
- */
+* Created by Rodrigo Quesada on 05/10/15.
+*/
 internal class LocalDateConverter : TimeConverter<LocalDate>(LocalDate::class.java, "yyyy-MM-dd") {
 
     override fun convertValue(value: String, type: Type) = timeFormatter.parseLocalDate(value)

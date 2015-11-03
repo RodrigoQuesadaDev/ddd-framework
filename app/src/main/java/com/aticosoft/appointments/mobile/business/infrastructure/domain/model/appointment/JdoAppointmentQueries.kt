@@ -2,14 +2,14 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.a
 
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.QAppointment
-import com.aticosoft.appointments.mobile.business.domain.model.common.queries.UniqueQuery
+import com.aticosoft.appointments.mobile.business.domain.model.common.UniqueQuery
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import org.joda.time.DateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 19/10/15.
+ * Created by Rodrigo Quesada on 19/10/15.
  */
 @Singleton
 internal class JdoAppointmentQueries @Inject constructor(private val context: PersistenceContext) : AppointmentQueries {

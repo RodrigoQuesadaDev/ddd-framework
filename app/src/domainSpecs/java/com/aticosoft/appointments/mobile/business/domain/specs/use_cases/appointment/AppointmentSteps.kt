@@ -8,7 +8,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appoi
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
 import com.aticosoft.appointments.mobile.business.domain.testing.model.AppointmentRepositoryManager
 import com.rodrigodev.common.testing.firstEvent
-import com.rodrigodev.common.testing.subscribe
+import com.rodrigodev.common.testing.testSubscribe
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
@@ -17,7 +17,7 @@ import org.joda.time.DateTime
 import javax.inject.Inject
 
 /**
- * Created by rodrigo on 17/09/15.
+ * Created by Rodrigo Quesada on 17/09/15.
  */
 internal class AppointmentSteps @Inject constructor(
         private val appointmentRepositoryManager: AppointmentRepositoryManager,
@@ -35,18 +35,18 @@ internal class AppointmentSteps @Inject constructor(
 
     @When("the owner schedules an appointment for \$client on \$date")
     fun whenTheOwnerSchedulesAnAppointmentFor(client: String, date: DateTime) {
-        val clientsResult = subscribe(clientObserver.observe(clientQueries.nameLike(client))).firstEvent()
-        appointmentServices.scheduleAppointment.execute(ScheduleAppointment.Command(clientsResult.first().id, date))
+        val clientsResult = clientObserver.observe(clientQueries.nameLike(client)).testSubscribe().firstEvent()
+        appointmentServices.execute(ScheduleAppointment(clientsResult.first().id, date))
     }
 
     @Then("an appointment is scheduled for \$client on \$date")
     fun thenAnAppointmentIsScheduledFor(client: String, date: DateTime) {
 
-        val actualAppointment = subscribe(appointmentObserver.observe(appointmentQueries.dateIs(date))).firstEvent()
+        val actualAppointment = appointmentObserver.observe(appointmentQueries.dateIs(date)).testSubscribe().firstEvent()
         assertThat(actualAppointment).isNotNull()
         assertThat(actualAppointment!!.scheduledTime).isEqualTo(date)
 
-        val actualClient = subscribe(clientObserver.observe(actualAppointment.clientId)).firstEvent()
+        val actualClient = clientObserver.observe(actualAppointment.clientId).testSubscribe().firstEvent()
         assertThat(actualClient).isNotNull()
         assertThat(actualClient!!.name).isEqualTo(client)
     }

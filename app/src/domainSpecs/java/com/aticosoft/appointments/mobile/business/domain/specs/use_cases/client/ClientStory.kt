@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.specs.use_cases.client
 
-import com.aticosoft.appointments.mobile.business.domain.specs.common.DomainStory
+import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.client.ClientStory.TestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
@@ -11,8 +11,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 05/10/15.
- */
+* Created by Rodrigo Quesada on 05/10/15.
+*/
 @Config(application = TestApplicationImpl::class)
 internal abstract class ClientStory : DomainStory() {
 
@@ -24,5 +24,5 @@ internal abstract class ClientStory : DomainStory() {
     @Component(modules = arrayOf(TestApplicationModule::class))
     interface TestApplicationComponentImpl : TestApplicationComponent<ClientStory>
 
-    class TestApplicationImpl : TestApplication(DaggerClientStory_TestApplicationComponentImpl::class)
+    class TestApplicationImpl : TestApplication(DaggerClientStory_TestApplicationComponentImpl::class.java)
 }

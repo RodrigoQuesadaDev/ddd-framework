@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityCallbackListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener
 import com.querydsl.jdo.JDOQueryFactory
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
 import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
@@ -10,7 +10,7 @@ import javax.jdo.PersistenceManager
 import javax.jdo.PersistenceManagerFactory
 
 /**
- * Created by rodrigo on 23/09/15.
+ * Created by Rodrigo Quesada on 23/09/15.
  */
 @Singleton
 /*internal*/ class PersistenceContext @Inject constructor(
@@ -25,10 +25,10 @@ import javax.jdo.PersistenceManagerFactory
 
     private val entityListenerListBuilder = EntityListenerListBuilder()
 
-    private val entityListeners: List<EntityCallbackListener<*>> by lazy { entityListenerListBuilder.build() }
+    private val entityListeners: List<EntityListener<*>> by lazy { entityListenerListBuilder.build() }
 
-    fun registerEntityListener(entityListener: EntityCallbackListener<*>) {
-        pmf.addInstanceLifecycleListener(entityListener, arrayOf(entityListener.entityType.java))
+    fun registerEntityListener(entityListener: EntityListener<*>) {
+        pmf.addInstanceLifecycleListener(entityListener, arrayOf(entityListener.entityType))
         entityListenerListBuilder.add(entityListener)
     }
 
@@ -53,9 +53,9 @@ import javax.jdo.PersistenceManagerFactory
 
 private class EntityListenerListBuilder {
 
-    private val listeners: MutableList<EntityCallbackListener<*>> = arrayListOf()
+    private val listeners: MutableList<EntityListener<*>> = arrayListOf()
 
-    fun add(listener: EntityCallbackListener<*>) {
+    fun add(listener: EntityListener<*>) {
         listeners.add(listener)
     }
 

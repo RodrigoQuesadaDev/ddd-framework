@@ -13,8 +13,8 @@ import javax.inject.Singleton
 import javax.jdo.PersistenceManagerFactory
 
 /**
- * Created by rodrigo on 04/10/15.
- */
+* Created by Rodrigo Quesada on 04/10/15.
+*/
 @Singleton
 /*internal*/ class IdentityGenerator @Inject constructor(
         private val pmf: PersistenceManagerFactory

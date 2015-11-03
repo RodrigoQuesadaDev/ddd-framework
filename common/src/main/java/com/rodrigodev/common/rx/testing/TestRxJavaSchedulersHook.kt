@@ -6,8 +6,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 21/10/15.
- */
+* Created by Rodrigo Quesada on 21/10/15.
+*/
 @Singleton
 class TestRxJavaSchedulersHook @Inject constructor() : RxJavaSchedulersHook() {
 

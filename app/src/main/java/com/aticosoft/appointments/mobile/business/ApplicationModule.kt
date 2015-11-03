@@ -11,8 +11,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 10/09/15.
- */
+* Created by Rodrigo Quesada on 10/09/15.
+*/
 @Module(includes = arrayOf(DomainModule::class, PersistenceModule::class))
 /*internal*/ class ApplicationModule(private val application: Application) {
 

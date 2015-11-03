@@ -2,13 +2,13 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.c
 
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
 import com.aticosoft.appointments.mobile.business.domain.model.client.QClient
-import com.aticosoft.appointments.mobile.business.domain.model.common.queries.ListQuery
+import com.aticosoft.appointments.mobile.business.domain.model.common.ListQuery
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 31/10/15.
+ * Created by Rodrigo Quesada on 31/10/15.
  */
 @Singleton
 internal class JdoClientQueries @Inject constructor(private val context: PersistenceContext) : ClientQueries {

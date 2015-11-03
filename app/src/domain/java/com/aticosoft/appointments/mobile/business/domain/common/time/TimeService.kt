@@ -5,8 +5,8 @@ import java.util.*
 import javax.inject.Singleton
 
 /**
- * Created by rodrigo on 30/10/15.
- */
+* Created by Rodrigo Quesada on 30/10/15.
+*/
 @Singleton
 /*internal*/ open class TimeService {
 
