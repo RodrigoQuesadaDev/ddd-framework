@@ -1,8 +1,6 @@
 package com.rodrigodev.common.spec.story
 
-import com.rodrigodev.common.spec.story.converter.JsonConverter
-import com.rodrigodev.common.spec.story.converter.ListConverter
-import com.rodrigodev.common.spec.story.converter.LocalDateConverter
+import com.rodrigodev.common.spec.story.converter.*
 import com.rodrigodev.common.spec.story.transformer.MultilineTableTransformer
 import org.jbehave.core.configuration.MostUsefulConfiguration
 import org.jbehave.core.io.LoadFromClasspath
@@ -32,7 +30,14 @@ abstract class SpecStory : JUnitStory() {
     private val tableFactory = ExamplesTableFactory(tableTransformers)
 
     protected val parameterConverters = ParameterConverters()
-    private val baseCustomConverters = arrayOf(ExamplesTableConverter(tableFactory), JsonConverter(), ListConverter(parameterConverters), LocalDateConverter());
+    private val baseCustomConverters = arrayOf(
+            ExamplesTableConverter(tableFactory),
+            JsonConverter(),
+            ListConverter(parameterConverters),
+            LocalDateConverter(),
+            CustomNumberListConverter(),
+            CustomNumberConverter()
+    );
     protected open val storyConverters: Array<ParameterConverter> = emptyArray()
 
     private val converters: List<ParameterConverter> by lazy {

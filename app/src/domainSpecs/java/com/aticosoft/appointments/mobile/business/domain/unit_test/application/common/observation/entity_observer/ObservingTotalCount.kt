@@ -7,9 +7,7 @@ import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataObserver
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.AddData
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServicesBase.ChangeData
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServicesBase.RemoveData
+import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.*
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.ObservingTotalCount.TestApplicationImpl
 import com.rodrigodev.common.rx.advanceTimeBy

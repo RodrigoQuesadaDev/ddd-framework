@@ -23,7 +23,7 @@ class JsonConverter : ParameterConverters.ParameterConverter {
 
     private fun List<Type?>.toCollectionType(): JavaType = with(mapper.typeFactory) {
         var javaType = constructType(last())
-        (1..size - 1).forEach {
+        (1 until size).forEach {
             javaType = constructCollectionType(MutableList::class.java, javaType)
         }
         javaType

@@ -1,13 +1,13 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer
+package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering
 
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestByIdFilter
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataParentObserver
-import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataParentQueries
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.ObservingSingleEntityById.TestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.FilteringObservationOfSingleEntityById.TestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestByIdFilter
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentObserver
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentQueries
 import com.rodrigodev.common.spec.story.SpecSteps
 import com.rodrigodev.common.testing.firstEvent
 import com.rodrigodev.common.testing.testSubscribe
@@ -21,20 +21,20 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 06/11/15.
  */
 @Config(application = TestApplicationImpl::class)
-internal class ObservingSingleEntityById : DomainStory() {
+internal class FilteringObservationOfSingleEntityById : DomainStory() {
 
     @Inject protected lateinit var localSteps: LocalSteps
 
-    override val steps by lazy { arrayOf(localSteps, localSteps.entityObserverSteps) }
+    override val steps by lazy { arrayOf(localSteps, localSteps.filteringObservationSteps) }
 
     @Singleton
     @Component(modules = arrayOf(TestApplicationModule::class))
-    interface TestApplicationComponentImpl : TestApplicationComponent<ObservingSingleEntityById>
+    interface TestApplicationComponentImpl : TestApplicationComponent<FilteringObservationOfSingleEntityById>
 
-    class TestApplicationImpl : TestApplication(DaggerObservingSingleEntityById_TestApplicationComponentImpl::class.java)
+    class TestApplicationImpl : TestApplication(DaggerFilteringObservationOfSingleEntityById_TestApplicationComponentImpl::class.java)
 
     class LocalSteps @Inject constructor(
-            val entityObserverSteps: EntityObserverUniqueEntitySteps,
+            val filteringObservationSteps: FilteringObservationUniqueEntitySteps,
             private val testDataParentQueries: TestDataParentQueries,
             private val testDataParentObserver: TestDataParentObserver
     ) : SpecSteps() {
@@ -46,7 +46,7 @@ internal class ObservingSingleEntityById : DomainStory() {
 
         @Given("I'm observing parent entity with value \$value")
         fun givenImObservingParentEntityWithValue(value: Int) {
-            with(entityObserverSteps) {
+            with(filteringObservationSteps) {
                 val data = testDataParentObserver.observe(testDataParentQueries.valueIs(value)).testSubscribe().firstEvent()!!
                 testSubscriber = testDataParentObserver.observe(data.id).testSubscribe()
             }

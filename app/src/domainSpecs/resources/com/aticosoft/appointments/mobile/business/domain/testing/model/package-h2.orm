@@ -16,11 +16,5 @@
             </field>
         </class>
         <class name="TestData" table="TEST_DATA"/>
-        <class name="TestDataParent" table="TEST_DATA_PARENT">
-            <field name="child">
-                <column name="CHILD_ID"/>
-            </field>
-        </class>
-        <class name="TestDataChild" table="TEST_DATA_CHILD"/>
     </package>
 </orm>

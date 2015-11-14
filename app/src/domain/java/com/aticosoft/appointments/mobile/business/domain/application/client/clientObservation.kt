@@ -11,10 +11,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 19/10/15.
  */
 @Singleton
-class ClientObserver @Inject constructor(services: ClientObserver.Services) : EntityObserver<Client>(services, Client::class.java) {
-
-    protected class Services @Inject constructor(override val entityRepository: ClientRepository) : EntityObserver.Services<Client>()
-}
+class ClientObserver @Inject constructor(services: EntityObserver.Services, clientRepository: ClientRepository) : EntityObserver<Client>(services, clientRepository, Client::class.java)
 
 @Singleton
 internal class ClientListener @Inject constructor(services: EntityListener.Services) : EntityListener<Client>(services, Client::class.java)

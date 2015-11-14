@@ -1,11 +1,12 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer
+package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataParentServices
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServicesBase
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataParentRepositoryManager
-import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataParent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.AbstractEntityObserverSteps.Services
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.AbstractFilteringObservationSteps.Services
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParent
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentServices
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentServices.ChangeData
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentServices.RemoveData
 import com.rodrigodev.common.rx.advanceTimeBy
 import com.rodrigodev.common.spec.story.SpecSteps
 import com.rodrigodev.common.spec.story.converter.JsonData
@@ -21,7 +22,7 @@ import kotlin.properties.Delegates.notNull
 /**
  * Created by Rodrigo Quesada on 11/11/15.
  */
-internal abstract class AbstractEntityObserverSteps(private val s: Services) : SpecSteps() {
+internal abstract class AbstractFilteringObservationSteps(private val s: Services) : SpecSteps() {
 
     @Given("no data")
     fun givenNoData() {
@@ -43,7 +44,7 @@ internal abstract class AbstractEntityObserverSteps(private val s: Services) : S
     @When("later I remove parent{s|} [\$values]")
     fun whenLaterIRemoveParents(values: MutableList<Int>) {
         advanceTime()
-        values.forEach { s.testDataParentServices.execute(TestDataServicesBase.RemoveData(it)) }
+        values.forEach { s.testDataParentServices.execute(RemoveData(it)) }
     }
 
     @When("later I change child of parent \$parent to \$newChildValue")
@@ -55,7 +56,7 @@ internal abstract class AbstractEntityObserverSteps(private val s: Services) : S
     @When("later I change parent \$currentValue to \$targetValue")
     fun whenLaterIChangeParentValueTo(currentValue: Int, targetValue: Int) {
         advanceTime()
-        s.testDataParentServices.execute(TestDataServicesBase.ChangeData(currentValue, targetValue))
+        s.testDataParentServices.execute(ChangeData(currentValue, targetValue))
     }
 
     protected fun advanceTime() {
@@ -73,7 +74,7 @@ internal abstract class AbstractEntityObserverSteps(private val s: Services) : S
     )
 }
 
-internal class EntityObserverUniqueEntitySteps @Inject constructor(services: Services) : AbstractEntityObserverSteps(services) {
+internal class FilteringObservationUniqueEntitySteps @Inject constructor(services: Services) : AbstractFilteringObservationSteps(services) {
 
     var testSubscriber: TestSubscriber<TestDataParent?> by notNull()
 
@@ -85,7 +86,7 @@ internal class EntityObserverUniqueEntitySteps @Inject constructor(services: Ser
     }
 }
 
-internal class EntityObserverEntityListSteps @Inject constructor(services: Services) : AbstractEntityObserverSteps(services) {
+internal class FilteringObservationEntityListSteps @Inject constructor(services: Services) : AbstractFilteringObservationSteps(services) {
 
     var testSubscriber: TestSubscriber<List<TestDataParent>> by notNull()
 
@@ -97,7 +98,7 @@ internal class EntityObserverEntityListSteps @Inject constructor(services: Servi
     }
 }
 
-internal class EntityObserverEntityCountSteps @Inject constructor(services: Services) : AbstractEntityObserverSteps(services) {
+internal class FilteringObservationEntityCountSteps @Inject constructor(services: Services) : AbstractFilteringObservationSteps(services) {
 
     var testSubscriber: TestSubscriber<Long> by notNull()
 

@@ -54,7 +54,9 @@ kapt {
 }
 
 datanucleus {
-    entitiesDirs = ['com/aticosoft/appointments/mobile/business/domain/model', 'com/aticosoft/appointments/mobile/business/domain/testing/model']
+    entitiesDirs = ['com/aticosoft/appointments/mobile/business/domain/model',
+                    'com/aticosoft/appointments/mobile/business/domain/testing/model',
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/filtering/test_data']
     alwaysDetachable true
 }
 

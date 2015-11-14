@@ -7,7 +7,7 @@ import javax.jdo.listener.InstanceLifecycleEvent
 /**
  * Created by Rodrigo Quesada on 10/11/15.
  */
-/*internal*/ class EntityChangeEvent<E : Entity>(val type: EventType, val entity: E) {
+/*internal*/ class EntityChangeEvent<E : Entity>(val type: EventType, val previousValue: E? = null, val currentValue: E? = null) {
 
     enum class EventType { ADD, UPDATE, REMOVE;
 

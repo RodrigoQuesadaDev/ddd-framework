@@ -10,6 +10,3 @@ import javax.inject.Singleton
  */
 @Singleton
 internal class TestDataRepository @Inject constructor(context: PersistenceContext) : JdoRepositoryBase<TestData>(context, QTestData.testData)
-
-@Singleton
-internal class TestDataParentRepository @Inject constructor(context: PersistenceContext) : JdoRepositoryBase<TestDataParent>(context, QTestDataParent.testDataParent)

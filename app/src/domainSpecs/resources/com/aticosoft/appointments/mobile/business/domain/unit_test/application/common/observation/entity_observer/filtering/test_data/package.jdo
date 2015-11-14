@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
+<jdo>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data">
+        <class name="TestDataParent">
+            <field name="child" dependent="true"/>
+        </class>
+        <class name="TestDataChild"/>
+    </package>
+</jdo>

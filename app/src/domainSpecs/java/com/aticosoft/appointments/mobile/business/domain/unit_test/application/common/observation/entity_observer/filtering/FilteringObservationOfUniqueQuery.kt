@@ -1,13 +1,13 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer
+package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering
 
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataParentObserver
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestValueIsFilter
-import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataParentQueries
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.ObservingUniqueQuery.TestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.FilteringObservationOfUniqueQuery.TestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentObserver
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentQueries
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestValueIsFilter
 import com.rodrigodev.common.spec.story.SpecSteps
 import com.rodrigodev.common.testing.testSubscribe
 import dagger.Component
@@ -21,20 +21,20 @@ import kotlin.properties.Delegates.notNull
  * Created by Rodrigo Quesada on 11/11/15.
  */
 @Config(application = TestApplicationImpl::class)
-internal class ObservingUniqueQuery : DomainStory() {
+internal class FilteringObservationOfUniqueQuery : DomainStory() {
 
     @Inject protected lateinit var localSteps: LocalSteps
 
-    override val steps by lazy { arrayOf(localSteps, localSteps.entityObserverSteps) }
+    override val steps by lazy { arrayOf(localSteps, localSteps.filteringObservationSteps) }
 
     @Singleton
     @Component(modules = arrayOf(TestApplicationModule::class))
-    interface TestApplicationComponentImpl : TestApplicationComponent<ObservingUniqueQuery>
+    interface TestApplicationComponentImpl : TestApplicationComponent<FilteringObservationOfUniqueQuery>
 
-    class TestApplicationImpl : TestApplication(DaggerObservingUniqueQuery_TestApplicationComponentImpl::class.java)
+    class TestApplicationImpl : TestApplication(DaggerFilteringObservationOfUniqueQuery_TestApplicationComponentImpl::class.java)
 
     class LocalSteps @Inject constructor(
-            val entityObserverSteps: EntityObserverUniqueEntitySteps,
+            val filteringObservationSteps: FilteringObservationUniqueEntitySteps,
             private val testDataParentQueries: TestDataParentQueries,
             private val testDataParentObserver: TestDataParentObserver
     ) : SpecSteps() {
@@ -48,7 +48,7 @@ internal class ObservingUniqueQuery : DomainStory() {
 
         @Given("I'm observing parent entity with value \$value")
         fun givenImObservingParentEntityWithValue(value: Int) {
-            with(entityObserverSteps) {
+            with(filteringObservationSteps) {
                 testSubscriber = testDataParentObserver.observe(testDataParentQueries.valueIs(value, valueIsFilter)).testSubscribe()
             }
         }

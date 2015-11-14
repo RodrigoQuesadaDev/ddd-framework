@@ -4,8 +4,10 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener.Services
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
+import com.aticosoft.appointments.mobile.business.infrastructure.persistence.datanucleus.CustomStateManager
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
 import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
+import org.datanucleus.api.jdo.JDOPersistenceManager
 import rx.Observable
 import rx.lang.kotlin.PublishSubject
 import rx.schedulers.Schedulers
@@ -52,21 +54,20 @@ import javax.jdo.listener.StoreLifecycleListener
 
     fun resetLocalState() = threadLocalCleaner.cleanUpThreadLocalInstances()
 
-    private fun onModifiedEvent(event: InstanceLifecycleEvent) {
+    override fun postCreate(event: InstanceLifecycleEvent) {
         @Suppress("UNCHECKED_CAST")
-        val entity = (event.persistentInstance as E)
-        entityChanges.add(EntityChangeEvent(EventType.from(event.eventType), entity))
+        entityChanges.add(EntityChangeEvent(EventType.from(event.eventType), currentValue = event.source as E))
     }
-
-    override fun postCreate(event: InstanceLifecycleEvent) = onModifiedEvent(event)
 
     override fun preStore(event: InstanceLifecycleEvent) {
         // Do nothing!
     }
 
     override fun postStore(event: InstanceLifecycleEvent) {
+        //only updates
         if (!JDOHelper.isNew(event.persistentInstance)) {
-            onModifiedEvent(event)
+            @Suppress("UNCHECKED_CAST")
+            entityChanges.add(EntityChangeEvent(EventType.from(event.eventType), previousValue = event.previousValue, currentValue = event.source as E))
         }
     }
 
@@ -74,7 +75,14 @@ import javax.jdo.listener.StoreLifecycleListener
         // Do nothing!
     }
 
-    override fun postDelete(event: InstanceLifecycleEvent) = onModifiedEvent(event)
+    override fun postDelete(event: InstanceLifecycleEvent) {
+        @Suppress("UNCHECKED_CAST")
+        entityChanges.add(EntityChangeEvent(EventType.from(event.eventType), previousValue = event.source as E))
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private val InstanceLifecycleEvent.previousValue: E
+        get() = ((s.persistenceContext.persistenceManager as JDOPersistenceManager).executionContext.findObjectProvider(source) as CustomStateManager).savedImage as E
 
     class Services @Inject constructor(
             val persistenceContext: PersistenceContext

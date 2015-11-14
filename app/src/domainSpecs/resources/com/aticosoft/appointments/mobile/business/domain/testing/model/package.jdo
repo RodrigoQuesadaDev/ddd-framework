@@ -13,9 +13,5 @@
             <field name="value"/>
         </class>
         <class name="TestData"/>
-        <class name="TestDataParent">
-            <field name="child" dependent="true"/>
-        </class>
-        <class name="TestDataChild"/>
     </package>
 </jdo>

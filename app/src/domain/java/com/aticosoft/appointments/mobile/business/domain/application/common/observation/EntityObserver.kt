@@ -23,7 +23,8 @@ import javax.inject.Inject
 //TODO this should be abstract?
 @Suppress("NOTHING_TO_INLINE")
 /*internal*/ abstract class EntityObserver<E : Entity>(
-        private val s: Services<E>,
+        private val s: Services,
+        private val entityRepository: Repository<E>,
         private val entityType: Class<E>
 ) {
     companion object {
@@ -41,25 +42,27 @@ import javax.inject.Inject
     protected open fun entityByIdFilters(id: Long): Array<EntityObservationFilter<*>> = arrayOf(EntityObservationFilter(entityType) { it.id == id })
 
     //TODO test/implement filter for get(id)
-    fun observe(id: Long) = entityObservable(entityByIdFilters(id)) { s.entityRepository.get(id) }
+    fun observe(id: Long) = entityObservable(entityByIdFilters(id)) { entityRepository.get(id) }
 
-    fun observe(query: UniqueQuery<E>) = entityObservable(query.filters) { s.entityRepository.find(query) }
+    fun observe(query: UniqueQuery<E>) = entityObservable(query.filters) { entityRepository.find(query) }
 
-    fun observe(query: ListQuery<E>) = entityObservable(query.filters) { s.entityRepository.find(query) }
+    fun observe(query: ListQuery<E>) = entityObservable(query.filters) { entityRepository.find(query) }
 
-    fun observe(query: CountQuery<E>) = entityObservable(query.filters) { s.entityRepository.count(query) }
+    fun observe(query: CountQuery<E>) = entityObservable(query.filters) { entityRepository.count(query) }
 
-    fun observeTotalCount() = entityObservable(totalCountFilters) { s.entityRepository.size() }
+    fun observeTotalCount() = entityObservable(totalCountFilters) { entityRepository.size() }
+
+    //TODO IMPORTANT test changes are observed when entity relationship changes!!! (well, think about it...)
 
     //TODO queryView
+
+    //TODO datanucleus.detachAllOnCommit only makes sense for observation? Actually, it makes sense for applicationServices but with fetch depth of 0...
+    //TODO datanucleus.detachedState should be "fetch-groups", not "all"
+    //TODO think carefully about detach process, where should it occur? (after service call? after query for observation?)
 
     //TODO default filters based on query views
 
     //TODO test all observation methods?
-
-    //TODO test filters
-    //TODO filter must go BEFORE throttling
-    //window->first of the window that satisfies filter OR null->flat map->not null
 
     //TODO use defaultOrEmpty? -->Nothing
 
@@ -101,13 +104,9 @@ import javax.inject.Inject
 
     private data class FilterableEntityChangeEvent(val entityChange: EntityChangeEvent<*>, val filters: Array<out EntityObservationFilter<*>>)
 
-    abstract class Services<E : Entity> {
-        lateinit var entityListenersManager: EntityListenersManager
-            @Inject protected set
-        lateinit var transactionManager: TransactionManager
-            @Inject protected set
-        lateinit var timeService: TimeService
-            @Inject protected set
-        abstract val entityRepository: Repository<E>
-    }
+    class Services @Inject constructor(
+            val entityListenersManager: EntityListenersManager,
+            val transactionManager: TransactionManager,
+            val timeService: TimeService
+    )
 }

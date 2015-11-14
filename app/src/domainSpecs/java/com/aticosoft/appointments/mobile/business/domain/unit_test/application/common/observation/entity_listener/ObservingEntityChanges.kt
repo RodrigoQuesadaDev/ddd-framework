@@ -7,9 +7,7 @@ import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataListener
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.AddData
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServicesBase.ChangeData
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServicesBase.RemoveData
+import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.*
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.ObservingEntityChanges.TestApplicationImpl
@@ -17,6 +15,7 @@ import com.rodrigodev.common.spec.story.SpecSteps
 import com.rodrigodev.common.testing.testSubscribe
 import dagger.Component
 import org.assertj.core.api.Assertions.assertThat
+import org.jbehave.core.annotations.AsParameters
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.jbehave.core.annotations.When
@@ -77,16 +76,21 @@ internal class ObservingEntityChanges : DomainStory() {
             testDataServices.execute(ChangeData(currentValue, targetValue))
         }
 
-        @Then("the entity change values observed were [\$values]")
-        fun thenTheEntityChangeValuesObservedWere(values: MutableList<Int>) {
+        @Then("the entity change events observed were \$events")
+        fun thenTheEntityChangeEventsObservedWere(events: MutableList<ChangeEventExample>) {
             testScheduler.triggerActions()
-            assertThat(testSubscriber.onNextEvents.map { it.entity.value }).containsExactlyElementsOf(values)
-        }
-
-        @Then("the entity change types observed were [\$values]")
-        fun thenTheEntityChangeTypesObservedWere(values: MutableList<EntityChangeEvent.EventType>) {
-            testScheduler.triggerActions()
-            assertThat(testSubscriber.onNextEvents.map { it.type }).containsExactlyElementsOf(values)
+            assertThat(testSubscriber.onNextEvents.map { it.toExample() }).containsExactlyElementsOf(events)
         }
     }
+}
+
+private fun EntityChangeEvent<TestData>.toExample() = ChangeEventExample(type, previous = previousValue?.value, current = currentValue?.value)
+
+@AsParameters
+private data class ChangeEventExample(
+        var type: EntityChangeEvent.EventType?,
+        var previous: Int?,
+        var current: Int?
+) {
+    constructor() : this(null, null, null)
 }

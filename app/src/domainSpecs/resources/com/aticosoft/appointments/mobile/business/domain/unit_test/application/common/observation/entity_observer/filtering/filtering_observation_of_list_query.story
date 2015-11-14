@@ -1,8 +1,8 @@
 Narrative:
 
-In order to observe a list query
+In order to filter the observation of a list query
 As a developer
-I want to be able to subscribe to an EntityObserver
+I want to be able to specify the filters to use when using the corresponding EntityObserver's method
 
 Scenario: scenario 1
 
@@ -32,6 +32,7 @@ Examples:
                                         [{p:2, c:2}, {p:3, c:3}, {p:5, c:5}, {p:7, c:7}],
                                         [{p:2, c:2}, {p:3, c:3}, {p:5, c:5}],
                                         [{p:2, c:2}, {p:23, c:33}, {p:5, c:5}],
+                                        [{p:2, c:2}, {p:5, c:5}],
                                         [{p:2, c:2}, {p:5, c:5}, {p:11, c:11}, {p:13, c:13}],
                                         [{p:2, c:2}, {p:3, c:35}, {p:5, c:5}, {p:11, c:11}, {p:13, c:13}],
                                         [{p:2, c:2}, {p:5, c:5}, {p:11, c:11}, {p:13, c:13}]
@@ -42,7 +43,8 @@ Examples:
                                         [{p:2, c:2}, {p:3, c:3}, {p:5, c:5}, {p:7, c:7}],
                                         [{p:2, c:2}, {p:5, c:5}],
                                         [{p:2, c:2}, {p:5, c:5}, {p:11, c:11}, {p:13, c:13}],
-                                        [{p:2, c:2}, {p:5, c:5}, {p:11, c:11}, {p:13, c:13}]
+                                        [{p:2, c:2}, {p:5, c:5}, {p:11, c:11}, {p:13, c:13}],
+                                        [{p:2, c:2}, {p:3, c:35}, {p:5, c:5}, {p:11, c:11}, {p:13, c:13}]
                                      ] |
 | ODD_CHILD                        | [
                                         [],
@@ -50,6 +52,7 @@ Examples:
                                         [{p:2, c:2}, {p:3, c:3}, {p:5, c:5}, {p:7, c:7}],
                                         [{p:2, c:2}, {p:3, c:3}, {p:5, c:5}],
                                         [{p:2, c:2}, {p:3, c:33}, {p:5, c:5}],
+                                        [{p:2, c:2}, {p:23, c:34}, {p:5, c:5}],
                                         [{p:2, c:2}, {p:5, c:5}, {p:11, c:11}, {p:13, c:13}],
                                         [{p:2, c:2}, {p:5, c:5}, {p:11, c:11}, {p:13, c:13}],
                                         [{p:2, c:2}, {p:5, c:5}, {p:11, c:11}, {p:13, c:13}]
@@ -65,5 +68,6 @@ Examples:
                                         [{p:2, c:2}, {p:3, c:3}, {p:5, c:5}, {p:7, c:7}],
                                         [{p:2, c:2}, {p:3, c:3}, {p:5, c:5}],
                                         [{p:2, c:2}, {p:3, c:33}, {p:5, c:5}],
+                                        [{p:2, c:2}, {p:23, c:34}, {p:5, c:5}],
                                         [{p:2, c:2}, {p:5, c:5}, {p:11, c:11}, {p:13, c:13}]
                                      ] |

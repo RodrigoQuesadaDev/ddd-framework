@@ -5,7 +5,6 @@ import com.rodrigodev.common.rx.testing.RxSpec
 import com.rodrigodev.common.rx.throttleLast
 import com.rodrigodev.common.spec.story.SpecSteps
 import com.rodrigodev.common.spec.story.converter.DurationConverter
-import com.rodrigodev.common.spec.story.converter.EmptyAbleNumberListConverter
 import com.rodrigodev.common.testing.testSubscribe
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
@@ -25,7 +24,7 @@ internal class ThrottleLastTest : RxSpec() {
 
     inner class LocalSteps : SpecSteps() {
 
-        override val converters: Array<ParameterConverter> = arrayOf(EmptyAbleNumberListConverter(), DurationConverter())
+        override val converters: Array<ParameterConverter> = arrayOf(DurationConverter())
 
         private var sourceObservable = PublishSubject<Int>()
         private var subscriber: TestSubscriber<Int> by notNull()

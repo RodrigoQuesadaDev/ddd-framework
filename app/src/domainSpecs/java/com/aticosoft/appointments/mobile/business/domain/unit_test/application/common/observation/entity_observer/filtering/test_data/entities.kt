@@ -1,6 +1,7 @@
-package com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
+package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
 import javax.jdo.annotations.PersistenceCapable
 
 /**

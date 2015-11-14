@@ -1,9 +1,9 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.persistence.observer
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataChildListener
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataChildListener
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataListener
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataParentListener
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentListener
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.observation.EntityListenersModule
 import javax.inject.Inject
 import javax.inject.Provider
