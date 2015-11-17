@@ -6,7 +6,6 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
  * Created by Rodrigo Quesada on 04/11/15.
  */
 /*internal*/ abstract class Query<R>(
-        //TODO add fetch groups? http://www.datanucleus.org/products/datanucleus/jdo/fetchgroup.html
         val filters: Array<out EntityObservationFilter<*>>,
         private val body: () -> R
 ) {

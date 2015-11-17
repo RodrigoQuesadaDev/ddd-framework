@@ -13,8 +13,8 @@ import javax.inject.Singleton
 import javax.jdo.PersistenceManagerFactory
 
 /**
-* Created by Rodrigo Quesada on 04/10/15.
-*/
+ * Created by Rodrigo Quesada on 04/10/15.
+ */
 @Singleton
 /*internal*/ class IdentityGenerator @Inject constructor(
         private val pmf: PersistenceManagerFactory
@@ -30,7 +30,6 @@ import javax.jdo.PersistenceManagerFactory
         val properties = Properties()
         properties.setProperty("sequence-name", "GLOBAL")
 
-        //TODO report issue below?
         @Suppress("UNCHECKED_CAST")
         val valueGenerator = mgr.createValueGenerator("MyGenerator",
                 TableGenerator::class.java, properties, storeManager,
@@ -44,11 +43,8 @@ import javax.jdo.PersistenceManagerFactory
                     }
 
                     override fun releaseConnection() {
-                        if (connection != null) {
-                            //TODO report issue below?
-                            connection?.close()
-                            connection = null
-                        }
+                        connection?.close()
+                        connection = null
                     }
                 }) as ValueGenerator<Long>
         this.valueGenerator = valueGenerator

@@ -56,7 +56,8 @@ kapt {
 datanucleus {
     entitiesDirs = ['com/aticosoft/appointments/mobile/business/domain/model',
                     'com/aticosoft/appointments/mobile/business/domain/testing/model',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/filtering/test_data']
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/filtering/test_data',
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/query_view/test_data']
     alwaysDetachable true
 }
 
@@ -108,11 +109,9 @@ dependencies {
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.robolectric:robolectric:$robolectricVersion"
     kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
-    //TODO remove/change line below when this issue is fixed? https://bitbucket.org/hvisser/android-apt/issues/22/dagger-robolectric-gradle-apt-source-not
-    //testApt "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptTest "com.querydsl:querydsl-apt:$queryDslVersion:jdo"
     kaptTest "javax.jdo:jdo-api:$jdoApiVersion"
+    testCompile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+    testCompile "org.apache.logging.log4j:log4j-api:$log4jVersion"
+    testCompile "org.apache.logging.log4j:log4j-1.2-api:$log4jVersion"
 }
-
-//TODO remove/change line below when this issue is fixed? https://bitbucket.org/hvisser/android-apt/issues/22/dagger-robolectric-gradle-apt-source-not
-//apply from: "$buildSystemPath/testing/add-generated-test-sources.gradle"

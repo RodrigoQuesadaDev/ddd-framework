@@ -1,9 +1,9 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.persistence.observer
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataChildListener
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataListener
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentListener
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestEntityListenersProviderForFiltering
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestEntityListenersProviderForQueryViews
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.observation.EntityListenersModule
 import javax.inject.Inject
 import javax.inject.Provider
@@ -13,14 +13,18 @@ import javax.inject.Provider
  */
 internal class TestEntityListenersModule : EntityListenersModule() {
 
-    @Inject protected lateinit var testDataListenerProvider: Provider<TestDataListener>
-    @Inject protected lateinit var testDataParentListenerProvider: Provider<TestDataParentListener>
-    @Inject protected lateinit var testDataChildListenerProvider: Provider<TestDataChildListener>
+    @Inject protected lateinit var s: Services
 
     override fun provideEntityListeners(entityListenersContainer: EntityListenersContainer): Array<EntityListener<*>> {
         return super.provideEntityListeners(entityListenersContainer) +
-                testDataListenerProvider.get() +
-                testDataParentListenerProvider.get() +
-                testDataChildListenerProvider.get()
+                s.testDataListenerProvider.get() +
+                s.testEntityListenersProviderForFiltering.get() +
+                s.testEntityListenersProviderForQueryViews.get()
     }
+
+    class Services @Inject constructor(
+            val testDataListenerProvider: Provider<TestDataListener>,
+            val testEntityListenersProviderForFiltering: TestEntityListenersProviderForFiltering,
+            val testEntityListenersProviderForQueryViews: TestEntityListenersProviderForQueryViews
+    )
 }

@@ -6,8 +6,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
-* Created by Rodrigo Quesada on 23/09/15.
-*/
+ * Created by Rodrigo Quesada on 23/09/15.
+ */
 @Singleton
 /*internal*/ class TransactionManager @Inject constructor(
         val context: PersistenceContext

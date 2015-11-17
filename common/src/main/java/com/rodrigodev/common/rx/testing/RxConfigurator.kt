@@ -5,16 +5,15 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
-* Created by Rodrigo Quesada on 29/10/15.
-*/
+ * Created by Rodrigo Quesada on 29/10/15.
+ */
 @Singleton
 class RxConfigurator @Inject constructor(
         private val rxJavaSchedulersHook: TestRxJavaSchedulersHook
 ) {
     companion object {
         @Volatile var REGISTERED_SCHEDULERS_HOOK: TestRxJavaSchedulersHook? = null
-        //TODO uncomment when KT-8928 is fixed
-        /*private set*/
+            private set
     }
 
     public var registeredSchedulersHook: TestRxJavaSchedulersHook?

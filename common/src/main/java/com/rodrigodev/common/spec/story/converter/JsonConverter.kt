@@ -30,24 +30,21 @@ class JsonConverter : ParameterConverters.ParameterConverter {
     }
 }
 
-//TODO remove '2' suffix whe KT-9923 is fixed
-private val Type.argumentType2: Type
+private val Type.argumentType: Type
     get() = (this as ParameterizedType).actualTypeArguments.first()
 
-//TODO remove '2' suffix whe KT-9923 is fixed
-private val Class<*>.isList2: Boolean
+private val Class<*>.isList: Boolean
     get() = isAssignableFrom(List::class.java)
 
-//TODO remove '2' suffix whe KT-9923 is fixed
-private val Type.isList2: Boolean
-    get() = this is ParameterizedType && (rawType as Class<*>).isList2
+private val Type.isList: Boolean
+    get() = this is ParameterizedType && (rawType as Class<*>).isList
 
 private val Type.typePathList: List<Type?>
     get() = calculateTypePathList(arrayListOf()).reversed()
 
 private fun Type.calculateTypePathList(pathList: MutableList<Type?>): List<Type?> {
     pathList.add(when {
-        isList2 -> this.apply { argumentType2.calculateTypePathList(pathList) }
+        isList -> this.apply { argumentType.calculateTypePathList(pathList) }
         this is Class<*> -> this
         else -> null
     })

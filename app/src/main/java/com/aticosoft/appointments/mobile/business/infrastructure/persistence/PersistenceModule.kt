@@ -2,7 +2,7 @@ package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
 import com.aticosoft.appointments.mobile.business.ModulePostInitializer
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListenersManager
-import com.aticosoft.appointments.mobile.business.infrastructure.persistence.observation.EntityListenersModule
+import com.aticosoft.appointments.mobile.business.infrastructure.persistence.observation.ObservationModule
 import dagger.Module
 import dagger.Provides
 import javax.inject.Inject
@@ -11,7 +11,7 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 09/09/15.
  */
-@Module(includes = arrayOf(EntityListenersModule::class))
+@Module(includes = arrayOf(ObservationModule::class))
 /*internal*/ open class PersistenceModule {
 
     @Provides @Singleton

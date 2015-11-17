@@ -8,11 +8,13 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentObserver
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentQueries
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestIsPrimeFilter
-import com.rodrigodev.common.spec.story.SpecSteps
 import com.rodrigodev.common.testing.testSubscribe
 import dagger.Component
+import org.assertj.core.api.Assertions
 import org.jbehave.core.annotations.Given
+import org.jbehave.core.annotations.Then
 import org.robolectric.annotation.Config
+import rx.observers.TestSubscriber
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.properties.Delegates.notNull
@@ -25,7 +27,7 @@ internal class FilteringObservationOfCountQuery : DomainStory() {
 
     @Inject protected lateinit var localSteps: LocalSteps
 
-    override val steps by lazy { arrayOf(localSteps, localSteps.filteringObservationSteps) }
+    override val steps by lazy { arrayOf(localSteps) }
 
     @Singleton
     @Component(modules = arrayOf(TestApplicationModule::class))
@@ -34,12 +36,13 @@ internal class FilteringObservationOfCountQuery : DomainStory() {
     class TestApplicationImpl : TestApplication(DaggerFilteringObservationOfCountQuery_TestApplicationComponentImpl::class.java)
 
     class LocalSteps @Inject constructor(
-            val filteringObservationSteps: FilteringObservationEntityCountSteps,
+            private val services: AbstractFilteringObservationSteps.Services,
             private val testDataParentQueries: TestDataParentQueries,
             private val testDataParentObserver: TestDataParentObserver
-    ) : SpecSteps() {
+    ) : AbstractFilteringObservationSteps(services) {
 
         private var isPrimeFilter: TestIsPrimeFilter by notNull()
+        private var testSubscriber: TestSubscriber<Long> by notNull()
 
         @Given("observation filter \$filter")
         fun GivenObservationFilter(filter: TestIsPrimeFilter) {
@@ -48,9 +51,13 @@ internal class FilteringObservationOfCountQuery : DomainStory() {
 
         @Given("I'm observing the amount of parent entities with prime value")
         fun givenImObservingTheAmountOfParentEntitiesWithPrimeValue() {
-            with(filteringObservationSteps) {
-                testSubscriber = testDataParentObserver.observe(testDataParentQueries.isPrimeCount(isPrimeFilter)).testSubscribe()
-            }
+            testSubscriber = testDataParentObserver.observe(testDataParentQueries.isPrimeCount(isPrimeFilter)).testSubscribe()
+        }
+
+        @Then("later the values observed were \$result")
+        fun thenLaterTheValuesObservedWere(result: MutableList<Long>) {
+            advanceTime()
+            Assertions.assertThat(testSubscriber.onNextEvents).containsExactlyElementsOf(result)
         }
     }
 }

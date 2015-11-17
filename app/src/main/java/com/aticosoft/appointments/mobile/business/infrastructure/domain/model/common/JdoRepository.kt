@@ -28,7 +28,6 @@ import com.querydsl.core.types.dsl.NumberPath
         context.persistenceManager.deletePersistent(entity)
     }
 
-    //TODO test this method works after changing TestDataParent hierarchy on jdo/orm files?
     override fun size() = context.queryFactory.selectFrom(queryEntity).fetchCount()
 }
 

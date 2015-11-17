@@ -5,14 +5,17 @@ import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.FilteringObservationOfListQuery.TestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentObserver
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentQueries
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestIsPrimeFilter
-import com.rodrigodev.common.spec.story.SpecSteps
 import com.rodrigodev.common.testing.testSubscribe
 import dagger.Component
+import org.assertj.core.api.Assertions
 import org.jbehave.core.annotations.Given
+import org.jbehave.core.annotations.Then
 import org.robolectric.annotation.Config
+import rx.observers.TestSubscriber
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.properties.Delegates.notNull
@@ -25,7 +28,7 @@ internal class FilteringObservationOfListQuery : DomainStory() {
 
     @Inject protected lateinit var localSteps: LocalSteps
 
-    override val steps by lazy { arrayOf(localSteps, localSteps.filteringObservationSteps) }
+    override val steps by lazy { arrayOf(localSteps) }
 
     @Singleton
     @Component(modules = arrayOf(TestApplicationModule::class))
@@ -34,12 +37,13 @@ internal class FilteringObservationOfListQuery : DomainStory() {
     class TestApplicationImpl : TestApplication(DaggerFilteringObservationOfListQuery_TestApplicationComponentImpl::class.java)
 
     class LocalSteps @Inject constructor(
-            val filteringObservationSteps: FilteringObservationEntityListSteps,
+            private val services: AbstractFilteringObservationSteps.Services,
             private val testDataParentQueries: TestDataParentQueries,
             private val testDataParentObserver: TestDataParentObserver
-    ) : SpecSteps() {
+    ) : AbstractFilteringObservationSteps(services) {
 
         private var isPrimeFilter: TestIsPrimeFilter by notNull()
+        private var testSubscriber: TestSubscriber<List<TestDataParent>> by notNull()
 
         @Given("observation filter \$filter")
         fun GivenObservationFilter(filter: TestIsPrimeFilter) {
@@ -48,9 +52,17 @@ internal class FilteringObservationOfListQuery : DomainStory() {
 
         @Given("I'm observing parent entities with prime value")
         fun givenImObservingParentEntitiesWithPrimeValue() {
-            with(filteringObservationSteps) {
-                testSubscriber = testDataParentObserver.observe(testDataParentQueries.isPrime(isPrimeFilter)).testSubscribe()
-            }
+            testSubscriber = testDataParentObserver.observe(testDataParentQueries.isPrime(isPrimeFilter)).testSubscribe()
+        }
+
+        @Then("later the values observed were \$result")
+        fun thenLaterTheValuesObservedWere(result: MutableList<MutableList<TestDataParentExample>>) {
+            advanceTime()
+            Assertions.assertThat(testSubscriber.onNextEvents.map { list -> list.map(TestDataParent::toExample) })
+                    .containsExactlyElementsOf(result)
         }
     }
 }
+
+//TODO remove when Kotlin > 1.0.0-beta-2423
+private fun TestDataParent.toExample() = TestDataParentExample(value, child.value)

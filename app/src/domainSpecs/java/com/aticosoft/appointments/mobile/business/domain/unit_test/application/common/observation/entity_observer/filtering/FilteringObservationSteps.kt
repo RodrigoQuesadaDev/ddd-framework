@@ -10,7 +10,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.rodrigodev.common.rx.advanceTimeBy
 import com.rodrigodev.common.spec.story.SpecSteps
 import com.rodrigodev.common.spec.story.converter.JsonData
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.jbehave.core.annotations.When
@@ -74,41 +74,26 @@ internal abstract class AbstractFilteringObservationSteps(private val s: Service
     )
 }
 
-internal class FilteringObservationUniqueEntitySteps @Inject constructor(services: Services) : AbstractFilteringObservationSteps(services) {
+internal abstract class FilteringObservationUniqueEntitySteps(services: Services) : AbstractFilteringObservationSteps(services) {
 
-    var testSubscriber: TestSubscriber<TestDataParent?> by notNull()
+    private var testSubscriber: TestSubscriber<TestDataParent?> by notNull()
+
+    @Given("I'm observing parent entity with value \$value")
+    fun givenImObservingParentEntityWithValue(value: Int) {
+        testSubscriber = observeTheParentEntityWithValue(value)
+    }
+
+    protected abstract fun observeTheParentEntityWithValue(value: Int): TestSubscriber<TestDataParent?>
 
     @Then("later the values observed were \$result")
     fun thenLaterTheValuesObservedWere(result: MutableList<TestDataParentExample>) {
         advanceTime()
-        Assertions.assertThat(testSubscriber.onNextEvents.map { it?.toExample() })
+        assertThat(testSubscriber.onNextEvents.map { it?.toExample() })
                 .containsExactlyElementsOf(result)
     }
 }
 
-internal class FilteringObservationEntityListSteps @Inject constructor(services: Services) : AbstractFilteringObservationSteps(services) {
-
-    var testSubscriber: TestSubscriber<List<TestDataParent>> by notNull()
-
-    @Then("later the values observed were \$result")
-    fun thenLaterTheValuesObservedWere(result: MutableList<MutableList<TestDataParentExample>>) {
-        advanceTime()
-        Assertions.assertThat(testSubscriber.onNextEvents.map { list -> list.map(TestDataParent::toExample) })
-                .containsExactlyElementsOf(result)
-    }
-}
-
-internal class FilteringObservationEntityCountSteps @Inject constructor(services: Services) : AbstractFilteringObservationSteps(services) {
-
-    var testSubscriber: TestSubscriber<Long> by notNull()
-
-    @Then("later the values observed were \$result")
-    fun thenLaterTheValuesObservedWere(result: MutableList<Long>) {
-        advanceTime()
-        Assertions.assertThat(testSubscriber.onNextEvents).containsExactlyElementsOf(result)
-    }
-}
-
+//TODO make public when Kotlin > 1.0.0-beta-2423
 private fun TestDataParent.toExample() = TestDataParentExample(value, child.value)
 
 @JsonData

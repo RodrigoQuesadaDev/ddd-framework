@@ -4,7 +4,7 @@ In order to schedule an appointment for a given client
 As a business owner
 I want to be able to manually schedule appointments
 
-GivenStories: com/aticosoft/appointments/mobile/business/domain/specs/use_cases/client/given_stories/some_existing_clients.story
+GivenStories: com/aticosoft/appointments/mobile/business/domain/specs/use_cases/client/given_stories/given_some_existing_clients.story
 
 Scenario: scenario 1
 

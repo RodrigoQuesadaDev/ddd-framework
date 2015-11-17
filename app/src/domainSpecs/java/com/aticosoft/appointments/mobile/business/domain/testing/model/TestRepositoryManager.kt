@@ -19,11 +19,11 @@ internal abstract class TestRepositoryManager<R : JdoRepository<*>>(
 ) {
 
     fun clear() {
-        s.transactionManager.transactional { s.context.queryFactory.delete(repository.queryEntity).execute() }
+        s.tm.transactional { s.context.queryFactory.delete(repository.queryEntity).execute() }
     }
 
     class Services @Inject constructor(
-            val transactionManager: TransactionManager,
+            val tm: TransactionManager,
             val context: PersistenceContext
     )
 }

@@ -45,6 +45,7 @@ subprojects {
         junitVersion = '4.12'
         robolectricVersion = '3.0'
         assertjVersion = '1.7.0'
+        log4jVersion = '2.4.1'
     }
 
     buildscript {

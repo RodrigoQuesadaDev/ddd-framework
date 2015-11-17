@@ -1,4 +1,6 @@
 
+Scenario: given some existing clients
+
 Given no clients
 When the next clients are added:
 | name              | birthDate  |

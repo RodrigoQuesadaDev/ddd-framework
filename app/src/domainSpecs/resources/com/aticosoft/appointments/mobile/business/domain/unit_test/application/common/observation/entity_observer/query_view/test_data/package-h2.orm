@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
+<orm>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data">
+        <class name="TestDataParent" table="TEST_DATA_PARENT2">
+            <field name="child1">
+                <column name="CHILD1_ID"/>
+            </field>
+            <field name="child2">
+                <column name="CHILD2_ID"/>
+            </field>
+        </class>
+        <class name="TestDataChild" table="TEST_DATA_CHILD2">
+            <field name="grandChild1">
+                <column name="GRAND_CHILD1_ID"/>
+            </field>
+            <field name="grandChild2">
+                <column name="GRAND_CHILD2_ID"/>
+            </field>
+        </class>
+        <class name="TestDataGrandChild" table="TEST_DATA_GRAND_CHILD2"/>
+    </package>
+</orm>

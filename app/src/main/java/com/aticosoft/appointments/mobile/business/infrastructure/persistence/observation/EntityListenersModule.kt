@@ -21,10 +21,9 @@ import kotlin.reflect.KProperty
 
         private val listenersList = arrayListOf<EntityListener<*>>();
 
-        //TODO uncomment visibility modifiers when KT-9712/KT-5870 is resolved
-        /*private*/ var appointmentListener: AppointmentListener by ListDelegate(listenersList)
+        private var appointmentListener: AppointmentListener by ListDelegate(listenersList)
             @Inject protected set
-        /*private*/ var clientListener: ClientListener by ListDelegate(listenersList)
+        private var clientListener: ClientListener by ListDelegate(listenersList)
             @Inject protected set
 
         fun asArray() = listenersList.toTypedArray()

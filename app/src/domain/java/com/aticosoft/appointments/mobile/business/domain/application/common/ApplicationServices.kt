@@ -9,11 +9,11 @@ import javax.inject.Inject
  */
 /*internal*/ abstract class ApplicationServices(protected val s: Context) {
 
-    protected inline fun <C : Command> C.execute(call: C.() -> Unit) = s.transactionManager.transactional { this.call() }
+    protected inline fun <C : Command> C.execute(call: C.() -> Unit) = s.tm.transactional { this.call() }
 
     abstract class Command
 
     class Context @Inject constructor(
-            val transactionManager: TransactionManager
+            val tm: TransactionManager
     )
 }
