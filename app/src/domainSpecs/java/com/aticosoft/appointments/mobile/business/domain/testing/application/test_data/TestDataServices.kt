@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.application.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationServices
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
@@ -34,6 +34,12 @@ internal class TestDataServices @Inject constructor(private val c: TestDataServi
         c.testDataRepository.find(c.testDataQueries.valueIs(currentValue))?.let { data ->
             data.value = targetValue
         }
+    }
+
+    class DoSomethingWithEntity(val entity: TestData) : Command(entity)
+
+    fun execute(command: DoSomethingWithEntity) = command.execute {
+        println("Here I'm doing something with this entity: $entity")
     }
 
     @Singleton

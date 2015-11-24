@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.application.appointment
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationServices
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity

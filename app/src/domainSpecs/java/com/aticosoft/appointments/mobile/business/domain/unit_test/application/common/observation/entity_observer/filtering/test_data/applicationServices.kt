@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.ApplicationServices
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import javax.inject.Inject
 import javax.inject.Singleton
