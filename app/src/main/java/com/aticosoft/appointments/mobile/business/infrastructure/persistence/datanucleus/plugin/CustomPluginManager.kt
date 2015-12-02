@@ -10,7 +10,7 @@ import kotlin.properties.Delegates
 * Created by Rodrigo Quesada on 08/09/15.
 */
 @Singleton
-internal class CustomPluginManager @Inject constructor(
+/*internal*/ class CustomPluginManager @Inject constructor(
         private val  pluginFactory: Plugin.Factory,
         private val  assetManager: AssetManager
 ) {

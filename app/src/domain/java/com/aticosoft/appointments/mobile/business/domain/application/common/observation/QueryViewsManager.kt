@@ -17,7 +17,7 @@ import kotlin.test.assertTrue
  * Created by Rodrigo Quesada on 17/11/15.
  */
 @Singleton
-internal class QueryViewsManager @Inject constructor(
+/*internal*/ class QueryViewsManager @Inject constructor(
         @QueryViews private val queryViewEnumDefinitions: Array<Class<out Enum<*>>>,
         private val pmf: PersistenceManagerFactory,
         private val context: PersistenceContext
@@ -42,7 +42,7 @@ internal class QueryViewsManager @Inject constructor(
         pmf.addBasicMembersToFetchGroups()
     }
 
-    inline fun <R> withView(view: QueryView, call: () -> R): R {
+    internal inline fun <R> withView(view: QueryView, call: () -> R): R {
         context.persistenceManager.fetchPlan.setGroup(view.fetchGroupName).setNoLimitFetchDepth()
         return call()
     }
@@ -66,7 +66,7 @@ private inline fun PersistenceManagerFactory.addFetchGroupForFieldType(info: Fet
 
 private inline fun PersistenceManagerFactory.addBasicMembersToFetchGroups() {
     addFetchGroups(*fetchGroups.asSequence().map {
-        (it as FetchGroup).addCategory(FetchGroup.BASIC)
+        (it as FetchGroup).addCategory(FetchGroup.DEFAULT)
     }.toTypedArray())
 }
 

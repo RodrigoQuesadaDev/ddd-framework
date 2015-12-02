@@ -60,7 +60,7 @@ internal class TestDataParentServices @Inject constructor(private val c: TestDat
     }
 
     @Singleton
-    protected class Context @Inject constructor(
+    class Context @Inject protected constructor(
             val superContext: ApplicationServices.Context,
             val entityContext: Entity.Context,
             val testDataRepository: TestDataParentRepository,

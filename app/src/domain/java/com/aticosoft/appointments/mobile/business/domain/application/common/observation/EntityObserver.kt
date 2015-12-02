@@ -39,7 +39,7 @@ import javax.inject.Inject
     //TODO use retryWhen to add exponential back-off retry (starts at 0.5s to a max of 5s),
     //TODO for this probably a custom operator is necessary since RxJava retry*/CATCH*??? operators do not reset after a successful emission? (Use composition for this custom operator?)
 
-    //TODO add consistent (?) parameter that indicates if the underlying db operation should be transactional
+    //TODO add consistent (?) parameter that indicates if the underlying db operation should be transactional (thinking about it this is probably not necessary + observation should be non-transactional)
 
     private val totalCountFilters = arrayOf(EntityObservationFilter(entityType, ADD, REMOVE))
 
@@ -66,11 +66,17 @@ import javax.inject.Inject
 
     //TODO use defaultOrEmpty? -->Nothing
 
-    //TODO change to inline fun when KT-8668 is fixed
-    private /*inline*/ fun <R> entityObservable(queryView: QueryView, query: Query<*>, queryExecution: () -> R): Observable<R> = entityObservable(queryView, query.filters, queryExecution)
+    //TODO inject entityContext at load time
 
-    //TODO change to inline fun when KT-8668 is fixed
-    private /*inline*/ fun <R> entityObservable(queryView: QueryView, filters: Array<out EntityObservationFilter<*>>, queryExecution: () -> R): Observable<R> = merge(
+    //TODO EntityListeners do not need to be declared, they can be created at runtime per each entity type available
+
+    //TODO take into account rollbacks during transactions???
+
+    //TODO implement test-time command implementation (entities use EntityDelegate)
+
+    private inline fun <R> entityObservable(queryView: QueryView, query: Query<*>, crossinline queryExecution: () -> R): Observable<R> = entityObservable(queryView, query.filters, queryExecution)
+
+    private inline fun <R> entityObservable(queryView: QueryView, filters: Array<out EntityObservationFilter<*>>, crossinline queryExecution: () -> R): Observable<R> = merge(
             fromCallable(
                     { executeQuery(queryView, queryExecution) },
                     Schedulers.io()
@@ -89,7 +95,7 @@ import javax.inject.Inject
         s.queryViewsManager.withView(queryView, queryExecution)
     }
 
-    private inline fun <T : FilterableEntityChangeEvent> Observable<T>.throttleFirstChange(initialIntervalDuration: Duration, intervalDuration: Duration): Observable<T> {
+    private inline fun Observable<FilterableEntityChangeEvent>.throttleFirstChange(initialIntervalDuration: Duration, intervalDuration: Duration): Observable<FilterableEntityChangeEvent> {
         val ticks = Observables.interval(initialIntervalDuration, intervalDuration).share()
         return window(ticks)
                 .flatMap {

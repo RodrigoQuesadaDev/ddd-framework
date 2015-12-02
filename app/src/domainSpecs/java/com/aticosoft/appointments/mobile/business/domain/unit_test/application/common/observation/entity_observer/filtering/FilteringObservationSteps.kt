@@ -17,7 +17,6 @@ import org.jbehave.core.annotations.When
 import rx.observers.TestSubscriber
 import rx.schedulers.TestScheduler
 import javax.inject.Inject
-import kotlin.properties.Delegates.notNull
 
 /**
  * Created by Rodrigo Quesada on 11/11/15.
@@ -67,7 +66,7 @@ internal abstract class AbstractFilteringObservationSteps(private val s: Service
         values.forEach { s.testDataParentServices.execute(TestDataParentServices.AddData(it.p, it.c)) }
     }
 
-    protected class Services @Inject constructor(
+    class Services @Inject protected constructor(
             val testDataParentRepositoryManager: TestDataParentRepositoryManager,
             val testDataParentServices: TestDataParentServices,
             val testScheduler: TestScheduler
@@ -76,7 +75,7 @@ internal abstract class AbstractFilteringObservationSteps(private val s: Service
 
 internal abstract class FilteringObservationUniqueEntitySteps(services: Services) : AbstractFilteringObservationSteps(services) {
 
-    private var testSubscriber: TestSubscriber<TestDataParent?> by notNull()
+    private lateinit var testSubscriber: TestSubscriber<TestDataParent?>
 
     @Given("I'm observing parent entity with value \$value")
     fun givenImObservingParentEntityWithValue(value: Int) {
@@ -93,8 +92,7 @@ internal abstract class FilteringObservationUniqueEntitySteps(services: Services
     }
 }
 
-//TODO make public when Kotlin > 1.0.0-beta-2423
-private fun TestDataParent.toExample() = TestDataParentExample(value, child.value)
+internal fun TestDataParent.toExample() = TestDataParentExample(value, child.value)
 
 @JsonData
 internal data class TestDataParentExample(

@@ -4,19 +4,14 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener.Services
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
-import com.aticosoft.appointments.mobile.business.infrastructure.persistence.datanucleus.CustomStateManager
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
 import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
-import org.datanucleus.api.jdo.JDOPersistenceManager
 import rx.Observable
 import rx.lang.kotlin.PublishSubject
 import rx.schedulers.Schedulers
 import javax.inject.Inject
 import javax.jdo.JDOHelper
-import javax.jdo.listener.CreateLifecycleListener
-import javax.jdo.listener.DeleteLifecycleListener
-import javax.jdo.listener.InstanceLifecycleEvent
-import javax.jdo.listener.StoreLifecycleListener
+import javax.jdo.listener.*
 
 /**
  * Created by Rodrigo Quesada on 18/10/15.
@@ -24,7 +19,7 @@ import javax.jdo.listener.StoreLifecycleListener
 /*internal*/ abstract class EntityListener<E : Entity>(
         private val s: Services,
         val entityType: Class<E>
-) : CreateLifecycleListener, StoreLifecycleListener, DeleteLifecycleListener {
+) : Entity.EntityStateReader, CreateLifecycleListener, StoreLifecycleListener, DeleteLifecycleListener, DirtyLifecycleListener {
 
     //TODO create JdoEntityListenerBase on infrastructure stuff??? (this class pertains to domain)
     //TODO create JdoEntityChangeEvent on infrastructure stuff??? (this class pertains to domain)
@@ -43,6 +38,8 @@ import javax.jdo.listener.StoreLifecycleListener
         s.persistenceContext.registerEntityListener(this)
     }
 
+    fun resetLocalState() = threadLocalCleaner.cleanUpThreadLocalInstances()
+
     fun onTransactionCommitted() {
         if (newEntityChanges) {
             // Prevent reentrant execution caused by recursion (onNext triggers a new transaction)
@@ -52,27 +49,26 @@ import javax.jdo.listener.StoreLifecycleListener
         }
     }
 
-    fun resetLocalState() = threadLocalCleaner.cleanUpThreadLocalInstances()
+    override fun preDirty(event: InstanceLifecycleEvent) {
+        @Suppress("UNCHECKED_CAST")
+        (event.source as E).let { entity ->
+            entity.previousValue = s.persistenceContext.persistenceManager.detachCopy(entity)
+        }
+    }
 
     override fun postCreate(event: InstanceLifecycleEvent) {
         @Suppress("UNCHECKED_CAST")
         entityChanges.add(EntityChangeEvent(EventType.from(event.eventType), currentValue = event.source as E))
     }
 
-    override fun preStore(event: InstanceLifecycleEvent) {
-        // Do nothing!
-    }
-
     override fun postStore(event: InstanceLifecycleEvent) {
         //only updates
         if (!JDOHelper.isNew(event.persistentInstance)) {
             @Suppress("UNCHECKED_CAST")
-            entityChanges.add(EntityChangeEvent(EventType.from(event.eventType), previousValue = event.previousValue, currentValue = event.source as E))
+            (event.source as E).let { entity ->
+                entityChanges.add(EntityChangeEvent(EventType.from(event.eventType), previousValue = entity.previousValue as E, currentValue = entity))
+            }
         }
-    }
-
-    override fun preDelete(event: InstanceLifecycleEvent) {
-        // Do nothing!
     }
 
     override fun postDelete(event: InstanceLifecycleEvent) {
@@ -80,9 +76,17 @@ import javax.jdo.listener.StoreLifecycleListener
         entityChanges.add(EntityChangeEvent(EventType.from(event.eventType), previousValue = event.source as E))
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private val InstanceLifecycleEvent.previousValue: E
-        get() = ((s.persistenceContext.persistenceManager as JDOPersistenceManager).executionContext.findObjectProvider(source) as CustomStateManager).savedImage as E
+    override fun preStore(event: InstanceLifecycleEvent) {
+        // Do nothing!
+    }
+
+    override fun preDelete(event: InstanceLifecycleEvent) {
+        // Do nothing!
+    }
+
+    override fun postDirty(event: InstanceLifecycleEvent?) {
+        // Do nothing!
+    }
 
     class Services @Inject constructor(
             val persistenceContext: PersistenceContext

@@ -16,7 +16,6 @@ import org.robolectric.annotation.Config
 import rx.observers.TestSubscriber
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.properties.Delegates.notNull
 
 /**
  * Created by Rodrigo Quesada on 11/11/15.
@@ -40,7 +39,7 @@ internal class FilteringObservationOfUniqueQuery : DomainStory() {
             private val testDataParentObserver: TestDataParentObserver
     ) : FilteringObservationUniqueEntitySteps(services) {
 
-        private var valueIsFilter: TestValueIsFilter by notNull()
+        private lateinit var valueIsFilter: TestValueIsFilter
 
         @Given("observation filter \$filter")
         fun GivenObservationFilter(filter: TestValueIsFilter) {

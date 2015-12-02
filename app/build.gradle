@@ -29,6 +29,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -80,12 +81,12 @@ dependencies {
     datanucleus "org.datanucleus:datanucleus-api-jdo:$datanucleusApiJdoVersion"
     datanucleus "org.datanucleus:datanucleus-rdbms:$datanucleusRdbmsVersion"
     datanucleus "org.datanucleus:datanucleus-jodatime:$datanucleusJodatimeVersion"
-    datanucleus "javax.jdo:jdo-api:$jdoApiVersion"
+    datanucleus "org.datanucleus:javax.jdo:$jdoApiVersion"
     compile("com.querydsl:querydsl-jdo:$queryDslVersion") {
         exclude module: 'jdo-api'
     }
     kapt "com.querydsl:querydsl-apt:$queryDslVersion:jdo"
-    kapt "javax.jdo:jdo-api:$jdoApiVersion"
+    kapt "org.datanucleus:javax.jdo:$jdoApiVersion"
     jdkClasses files('jdk-files/harmony-javax-jndi.jar')
     jarjar files("$buildSystemPath/jarjar/jarjar-1.4.jar")
     compile "com.h2database:h2:$h2Version"
@@ -110,8 +111,9 @@ dependencies {
     testCompile "org.robolectric:robolectric:$robolectricVersion"
     kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptTest "com.querydsl:querydsl-apt:$queryDslVersion:jdo"
-    kaptTest "javax.jdo:jdo-api:$jdoApiVersion"
+    kaptTest "org.datanucleus:javax.jdo:$jdoApiVersion"
     testCompile "org.apache.logging.log4j:log4j-core:$log4jVersion"
     testCompile "org.apache.logging.log4j:log4j-api:$log4jVersion"
     testCompile "org.apache.logging.log4j:log4j-1.2-api:$log4jVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 }

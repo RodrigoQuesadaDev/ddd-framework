@@ -18,7 +18,6 @@ import org.robolectric.annotation.Config
 import rx.observers.TestSubscriber
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.properties.Delegates.notNull
 
 /**
  * Created by Rodrigo Quesada on 11/11/15.
@@ -42,8 +41,8 @@ internal class FilteringObservationOfListQuery : DomainStory() {
             private val testDataParentObserver: TestDataParentObserver
     ) : AbstractFilteringObservationSteps(services) {
 
-        private var isPrimeFilter: TestIsPrimeFilter by notNull()
-        private var testSubscriber: TestSubscriber<List<TestDataParent>> by notNull()
+        private lateinit var isPrimeFilter: TestIsPrimeFilter
+        private lateinit var testSubscriber: TestSubscriber<List<TestDataParent>>
 
         @Given("observation filter \$filter")
         fun GivenObservationFilter(filter: TestIsPrimeFilter) {
@@ -63,6 +62,3 @@ internal class FilteringObservationOfListQuery : DomainStory() {
         }
     }
 }
-
-//TODO remove when Kotlin > 1.0.0-beta-2423
-private fun TestDataParent.toExample() = TestDataParentExample(value, child.value)

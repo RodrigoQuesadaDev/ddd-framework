@@ -3,7 +3,6 @@
 <orm>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.common">
         <class name="Entity">
-            <version column="VERSION" strategy="version-number"/>
             <field name="id">
                 <column name="_ID"/>
             </field>

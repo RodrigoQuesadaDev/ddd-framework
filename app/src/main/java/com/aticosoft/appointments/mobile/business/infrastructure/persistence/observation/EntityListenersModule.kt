@@ -17,7 +17,7 @@ import kotlin.reflect.KProperty
 /*internal*/ open class EntityListenersModule {
 
     @Singleton
-    protected class EntityListenersContainer @Inject constructor() {
+    class EntityListenersContainer @Inject protected constructor() {
 
         private val listenersList = arrayListOf<EntityListener<*>>();
 

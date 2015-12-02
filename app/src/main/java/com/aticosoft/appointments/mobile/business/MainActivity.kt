@@ -17,7 +17,7 @@ import javax.jdo.PersistenceManagerFactory
 /**
  * Created by Rodrigo Quesada on 09/09/15.
  */
-internal class MainActivity : Activity() {
+/*internal*/ class MainActivity : Activity() {
 
     private lateinit var textView: TextView
     @Inject protected lateinit var entityContext: Entity.Context

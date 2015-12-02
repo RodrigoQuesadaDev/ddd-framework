@@ -9,4 +9,5 @@ Scenario: scenario description
 Given entities [1, 3 ,5]
 When I get entity with value 3
 And I modify its value outside the domain layer
-Then when I call an application service passing that entity to it the system throws an exception indicating it's dirty
+And I call an application service passing that entity to it
+Then the system throws an exception indicating it's dirty

@@ -20,7 +20,7 @@ internal class TestDataParentServices @Inject constructor(private val c: TestDat
     class RemoveData(val value: Int) : Command()
 
     fun execute(command: RemoveData) = command.execute {
-        c.testDataRepository.find(c.testDataQueries.valueIs(value))?.let { data ->
+        c.testDataRepository.find(c.testDataQueries.valueIs(value))!!.let { data ->
             c.testDataRepository.remove(data)
         }
     }
@@ -28,7 +28,7 @@ internal class TestDataParentServices @Inject constructor(private val c: TestDat
     class ChangeData(val currentValue: Int, val  targetValue: Int) : Command()
 
     fun execute(command: ChangeData) = command.execute {
-        c.testDataRepository.find(c.testDataQueries.valueIs(currentValue))?.let { data ->
+        c.testDataRepository.find(c.testDataQueries.valueIs(currentValue))!!.let { data ->
             data.value = targetValue
         }
     }
@@ -41,7 +41,7 @@ internal class TestDataParentServices @Inject constructor(private val c: TestDat
     }
 
     @Singleton
-    protected class Context @Inject constructor(
+    class Context @Inject protected constructor(
             val superContext: ApplicationServices.Context,
             val entityContext: Entity.Context,
             val testDataRepository: TestDataParentRepository,

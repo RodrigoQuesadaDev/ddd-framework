@@ -26,7 +26,6 @@ import rx.observers.TestSubscriber
 import rx.schedulers.TestScheduler
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.properties.Delegates
 
 /**
  * Created by Rodrigo Quesada on 23/10/15.
@@ -52,7 +51,7 @@ internal class DataRefreshRateIsThrottled : DomainStory() {
             private val testTimeService: TestTimeService
     ) : SpecSteps() {
 
-        private var totalCountSubscriber: TestSubscriber<Long> by Delegates.notNull()
+        private lateinit var totalCountSubscriber: TestSubscriber<Long>
 
         override val converters = arrayOf<ParameterConverters.ParameterConverter>(DurationConverter())
 

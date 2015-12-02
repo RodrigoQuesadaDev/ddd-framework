@@ -8,7 +8,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 16/10/15.
  */
 @Singleton
-internal class EntityListenersManager @Inject constructor(
+/*internal*/ class EntityListenersManager @Inject constructor(
         @EntityListeners private val entityListeners: Array<EntityListener<*>>
 ) {
     private val entityListenerMap: Map<Class<*>, EntityListener<*>> = entityListeners.toMapBy { it.entityType }

@@ -99,13 +99,13 @@ internal abstract class ConstrainingViewOfSingleEntitySteps(s: Services) : Abstr
     }
 }
 
-private fun TestDataParent.toExample() = TestDataParentExample(
+internal fun TestDataParent.toExample() = TestDataParentExample(
         value,
         readField { child1 }?.let { c -> TestDataChildExample(c.value, readField { c.grandChild1 }?.value, readField { c.grandChild2 }?.value) },
         readField { child2 }?.let { c -> TestDataChildExample(c.value, readField { c.grandChild1 }?.value, readField { c.grandChild2 }?.value) }
 )
 
-private inline fun <T : Any> readField(body: () -> T?): T? = try {
+internal inline fun <T : Any> readField(body: () -> T?): T? = try {
     body()
 }
 catch(e: JDODetachedFieldAccessException) {

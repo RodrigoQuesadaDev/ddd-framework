@@ -1,9 +1,15 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.StaleEntityException
+import org.datanucleus.PropertyNames
 import org.datanucleus.javax.transaction.Status
 import org.datanucleus.javax.transaction.Synchronization
 import javax.inject.Inject
 import javax.inject.Singleton
+import javax.jdo.JDOOptimisticVerificationException
+import javax.jdo.PersistenceManager
 
 /**
  * Created by Rodrigo Quesada on 23/09/15.
@@ -29,6 +35,7 @@ import javax.inject.Singleton
     inline fun <R> transactional(call: () -> R): R = context.useThenClose {
         val result: R
         val pm = context.persistenceManager
+        pm.doNotReadFromCache()
         val tx = pm.currentTransaction()
         tx.synchronization = transactionListener
         try {
@@ -38,6 +45,9 @@ import javax.inject.Singleton
 
             tx.commit()
         }
+        catch(e: JDOOptimisticVerificationException) {
+            throw StaleEntityException(e)
+        }
         finally {
             if (tx.isActive) {
                 tx.rollback()
@@ -46,4 +56,6 @@ import javax.inject.Singleton
         }
         result
     }
+
+    fun PersistenceManager.doNotReadFromCache() = setProperty(PropertyNames.PROPERTY_CACHE_L2_RETRIEVE_MODE, "bypass")
 }

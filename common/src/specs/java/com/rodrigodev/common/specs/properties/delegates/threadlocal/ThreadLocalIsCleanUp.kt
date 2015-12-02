@@ -7,11 +7,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.jbehave.core.annotations.When
-import kotlin.properties.Delegates.notNull
 
 /**
-* Created by Rodrigo Quesada on 26/10/15.
-*/
+ * Created by Rodrigo Quesada on 26/10/15.
+ */
 internal class ThreadLocalIsCleanUp : SpecStory() {
 
     override val steps = arrayOf(LocalSteps())
@@ -24,8 +23,8 @@ internal class ThreadLocalIsCleanUp : SpecStory() {
             var delegatedProperty: T by delegate
         }
 
-        private var cleaner: ThreadLocalCleaner by notNull()
-        private var c: DelegatedPropertyContainer<Int> by notNull()
+        private lateinit var cleaner: ThreadLocalCleaner
+        private lateinit var c: DelegatedPropertyContainer<Int>
         private val registeredDelegatedProperties = arrayListOf<DelegatedPropertyContainer<Int>>()
 
         @Given("a ThreadLocalCleaner object is created")

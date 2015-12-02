@@ -8,6 +8,9 @@
     <Loggers>
         <Logger name="DataNucleus" level="off"/>
         <!--<Logger name="DataNucleus.Query" level="debug"/>-->
+        <!--<Logger name="DataNucleus.Cache" level="debug"/>-->
+        <!--<Logger name="DataNucleus.Datastore.Retrieve" level="debug"/>-->
+        <!--<Logger name="com.aticosoft.appointments" level="debug"/>-->
         <Root level="error">
             <AppenderRef ref="Console"/>
         </Root>

@@ -7,11 +7,10 @@ import org.assertj.core.api.Assertions
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.jbehave.core.annotations.When
-import kotlin.properties.Delegates.notNull
 
 /**
-* Created by Rodrigo Quesada on 26/10/15.
-*/
+ * Created by Rodrigo Quesada on 26/10/15.
+ */
 internal class ThreadLocalDelegateSetsAndGetsValues : SpecStory() {
 
     override val steps = arrayOf(LocalSteps())
@@ -26,7 +25,7 @@ internal class ThreadLocalDelegateSetsAndGetsValues : SpecStory() {
             var delegatedProperty: T by delegate
         }
 
-        private var p: TestProxy<Int> by notNull()
+        private lateinit var p: TestProxy<Int>
 
         @Given("a ThreadLocalDelegate that is initialized with a value of \$value")
         fun givenAThreadLocalDelegateThatIsInitializedWithAValueOfX(value: Int) {

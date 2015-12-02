@@ -133,6 +133,10 @@ Contributors:
         <persistence-property name="datanucleus.rdbms.fetchUnloadedAutomatically" datastore="true" value="false"
             validator="org.datanucleus.properties.BooleanPropertyValidator"/>
 
+        <persistence-property name="datanucleus.rdbms.mysql.engineType" datastore="true"/>
+        <persistence-property name="datanucleus.rdbms.mysql.collation" datastore="true"/>
+        <persistence-property name="datanucleus.rdbms.mysql.characterSet" datastore="true"/>
+
         <!-- TODO Rename these to "datanucleus.rdbms.connectionPool.*" or move to "core" -->
         <persistence-property name="datanucleus.connectionPool.maxStatements" datastore="true" value="0"
             validator="org.datanucleus.properties.IntegerPropertyValidator"/>
@@ -1041,6 +1045,8 @@ Contributors:
             evaluator="org.datanucleus.store.rdbms.sql.method.StringIndexOf5Method"/>
         <sql-method class="java.lang.String" method="indexOf" datastore="sybase"
             evaluator="org.datanucleus.store.rdbms.sql.method.StringIndexOf4Method"/>
+        <sql-method class="java.lang.String" method="indexOf" datastore="sqlite"
+            evaluator="org.datanucleus.store.rdbms.sql.method.StringIndexOf2Method"/>
         <sql-method class="java.lang.String" method="length"
             evaluator="org.datanucleus.store.rdbms.sql.method.StringLengthMethod"/>
         <sql-method class="java.lang.String" method="length" datastore="derby"
@@ -1085,11 +1091,11 @@ Contributors:
             evaluator="org.datanucleus.store.rdbms.sql.method.StringSubstring4Method"/>
         <sql-method class="java.lang.String" method="substring" datastore="sybase"
             evaluator="org.datanucleus.store.rdbms.sql.method.StringSubstring2Method"/>
+        <sql-method class="java.lang.String" method="substring" datastore="sqlite"
+            evaluator="org.datanucleus.store.rdbms.sql.method.StringSubstring3Method"/>
         <sql-method class="java.lang.String" method="substring" datastore="db2"
             evaluator="org.datanucleus.store.rdbms.sql.method.StringSubstring3Method"/>
         <sql-method class="java.lang.String" method="substring" datastore="derby"
-            evaluator="org.datanucleus.store.rdbms.sql.method.StringSubstring3Method"/>
-        <sql-method class="java.lang.String" method="substring" datastore="firebird"
             evaluator="org.datanucleus.store.rdbms.sql.method.StringSubstring3Method"/>
         <sql-method class="java.lang.String" method="substring" datastore="informix"
             evaluator="org.datanucleus.store.rdbms.sql.method.StringSubstring3Method"/>
@@ -1160,18 +1166,30 @@ Contributors:
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetDay2Method"/>
         <sql-method class="java.util.Date" method="getDate" datastore="postgresql"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetDay3Method"/>
+        <sql-method class="java.util.Date" method="getDate" datastore="sqlite"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetDay4Method"/>
+        <sql-method class="java.util.Date" method="getDate" datastore="firebird"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetDay5Method"/>
         <sql-method class="java.util.Date" method="getMonth"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetMonthMethod"/>
         <sql-method class="java.util.Date" method="getMonth" datastore="oracle"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetMonth2Method"/>
         <sql-method class="java.util.Date" method="getMonth" datastore="postgresql"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetMonth3Method"/>
+        <sql-method class="java.util.Date" method="getMonth" datastore="sqlite"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetMonth4Method"/>
+        <sql-method class="java.util.Date" method="getMonth" datastore="firebird"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetMonth5Method"/>
         <sql-method class="java.util.Date" method="getYear"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetYearMethod"/>
         <sql-method class="java.util.Date" method="getYear" datastore="oracle"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetYear2Method"/>
         <sql-method class="java.util.Date" method="getYear" datastore="postgresql"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetYear3Method"/>
+        <sql-method class="java.util.Date" method="getYear" datastore="sqlite"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetYear4Method"/>
+        <sql-method class="java.util.Date" method="getYear" datastore="firebird"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetYear5Method"/>
         <sql-method class="java.util.Date" method="getHour"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetHourMethod"/>
         <sql-method class="java.util.Date" method="getHour" datastore="oracle"
@@ -1180,6 +1198,10 @@ Contributors:
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetHour3Method"/>
         <sql-method class="java.util.Date" method="getHour" datastore="sqlserver"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetHour4Method"/>
+        <sql-method class="java.util.Date" method="getHour" datastore="sqlite"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetHour5Method"/>
+        <sql-method class="java.util.Date" method="getHour" datastore="firebird"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetHour6Method"/>
         <sql-method class="java.util.Date" method="getMinute"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetMinuteMethod"/>
         <sql-method class="java.util.Date" method="getMinute" datastore="oracle"
@@ -1188,6 +1210,10 @@ Contributors:
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetMinute3Method"/>
         <sql-method class="java.util.Date" method="getMinute" datastore="sqlserver"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetMinute4Method"/>
+        <sql-method class="java.util.Date" method="getMinute" datastore="sqlite"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetMinute5Method"/>
+        <sql-method class="java.util.Date" method="getMinute" datastore="firebird"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetMinute6Method"/>
         <sql-method class="java.util.Date" method="getSecond"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetSecondMethod"/>
         <sql-method class="java.util.Date" method="getSecond" datastore="oracle"
@@ -1198,6 +1224,10 @@ Contributors:
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetSecond4Method"/>
         <sql-method class="java.util.Date" method="getSecond" datastore="hsql"
             evaluator="org.datanucleus.store.rdbms.sql.method.DateGetSecond5Method"/>
+        <sql-method class="java.util.Date" method="getSecond" datastore="sqlite"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetSecond6Method"/>
+        <sql-method class="java.util.Date" method="getSecond" datastore="firebird"
+            evaluator="org.datanucleus.store.rdbms.sql.method.DateGetSecond7Method"/>
 
         <sql-method class="java.util.Map" method="mapKey" evaluator="org.datanucleus.store.rdbms.sql.method.MapKeyMethod"/>
         <sql-method class="java.util.Map" method="mapValue" evaluator="org.datanucleus.store.rdbms.sql.method.MapValueMethod"/>
@@ -1248,6 +1278,7 @@ Contributors:
     <extension point="org.datanucleus.store.rdbms.sql_tablenamer">
         <sql-tablenamer name="t-scheme" class="org.datanucleus.store.rdbms.sql.SQLTableTNamer"/>
         <sql-tablenamer name="alpha-scheme" class="org.datanucleus.store.rdbms.sql.SQLTableAlphaNamer"/>
+        <sql-tablenamer name="table-name" class="org.datanucleus.store.rdbms.sql.SQLTableNameNamer"/>
     </extension>
 
     <!-- DATASTORE ADAPTERS -->
@@ -1277,5 +1308,6 @@ Contributors:
         <datastore-adapter vendor-id="timesten" class-name="org.datanucleus.store.rdbms.adapter.TimesTenAdapter" priority="0"/>
         <datastore-adapter vendor-id="sqlite" class-name="org.datanucleus.store.rdbms.adapter.SQLiteAdapter" priority="0"/>
         <datastore-adapter vendor-id="virtuoso" class-name="org.datanucleus.store.rdbms.adapter.VirtuosoAdapter" priority="0"/>
+        <datastore-adapter vendor-id="sqlanywhere" class-name="org.datanucleus.store.rdbms.adapter.SQLAnywhereAdapter" priority="0"/>
     </extension>
 </plugin>

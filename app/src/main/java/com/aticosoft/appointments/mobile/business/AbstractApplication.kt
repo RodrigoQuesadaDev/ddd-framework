@@ -15,13 +15,16 @@ import kotlin.properties.Delegates.notNull
     override fun onCreate() {
         super.onCreate()
         applicationComponent = createApplicationComponent()
-        applicationComponent.inject(Configurator)
-        Configurator.configure()
+        Configurator().let { configurator ->
+            applicationComponent.inject(configurator)
+            configurator.configure()
+        }
     }
 
     protected abstract fun createApplicationComponent(): C
 
-    object Configurator {
+    class Configurator {
+
         @Inject protected lateinit var modulePostInitializer: ApplicationModule.PostInitializer
 
         fun configure() {

@@ -54,7 +54,7 @@ internal class ClientSteps @Inject constructor(
 }
 
 @AsParameters
-private class ClientExample {
+internal class ClientExample {
     lateinit var name: String
     lateinit var birthDate: LocalDate
 }

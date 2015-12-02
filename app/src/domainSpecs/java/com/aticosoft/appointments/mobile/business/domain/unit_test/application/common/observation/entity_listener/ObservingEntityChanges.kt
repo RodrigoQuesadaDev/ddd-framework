@@ -24,7 +24,6 @@ import rx.observers.TestSubscriber
 import rx.schedulers.TestScheduler
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.properties.Delegates.notNull
 
 /**
  * Created by Rodrigo Quesada on 31/10/15.
@@ -49,7 +48,7 @@ internal class ObservingEntityChanges : DomainStory() {
             private val testScheduler: TestScheduler
     ) : SpecSteps() {
 
-        private var testSubscriber: TestSubscriber<EntityChangeEvent<TestData>> by notNull()
+        private lateinit var testSubscriber: TestSubscriber<EntityChangeEvent<TestData>>
 
         @Given("no data")
         fun givenNoData() {
@@ -87,7 +86,7 @@ internal class ObservingEntityChanges : DomainStory() {
 private fun EntityChangeEvent<TestData>.toExample() = ChangeEventExample(type, previous = previousValue?.value, current = currentValue?.value)
 
 @AsParameters
-private data class ChangeEventExample(
+internal data class ChangeEventExample(
         var type: EntityChangeEvent.EventType?,
         var previous: Int?,
         var current: Int?

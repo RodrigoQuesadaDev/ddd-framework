@@ -13,7 +13,6 @@ import org.jbehave.core.steps.ParameterConverters.ParameterConverter
 import org.joda.time.Duration
 import rx.lang.kotlin.PublishSubject
 import rx.observers.TestSubscriber
-import kotlin.properties.Delegates.notNull
 
 /**
  * Created by Rodrigo Quesada on 31/10/15.
@@ -27,7 +26,7 @@ internal class ThrottleLastTest : RxSpec() {
         override val converters: Array<ParameterConverter> = arrayOf(DurationConverter())
 
         private var sourceObservable = PublishSubject<Int>()
-        private var subscriber: TestSubscriber<Int> by notNull()
+        private lateinit var subscriber: TestSubscriber<Int>
 
         @Given("I subscribe to an observable using throttleLast with initialIntervalDuration=\$initialDuration and intervalDuration=\$duration")
         fun givenISubscribeToAnObservableUsingThrottleLast(initialDuration: Duration, duration: Duration) {

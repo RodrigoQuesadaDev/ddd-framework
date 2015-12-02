@@ -5,8 +5,10 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataRepository
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.concurrent.thread
 
 /**
  * Created by Rodrigo Quesada on 25/10/15.
@@ -23,7 +25,7 @@ internal class TestDataServices @Inject constructor(private val c: TestDataServi
     class RemoveData(val value: Int) : Command()
 
     fun execute(command: RemoveData) = command.execute {
-        c.testDataRepository.find(c.testDataQueries.valueIs(value))?.let { data ->
+        c.testDataRepository.find(c.testDataQueries.valueIs(value))!!.let { data ->
             c.testDataRepository.remove(data)
         }
     }
@@ -31,19 +33,52 @@ internal class TestDataServices @Inject constructor(private val c: TestDataServi
     class ChangeData(val currentValue: Int, val  targetValue: Int) : Command()
 
     fun execute(command: ChangeData) = command.execute {
-        c.testDataRepository.find(c.testDataQueries.valueIs(currentValue))?.let { data ->
+        c.testDataRepository.find(c.testDataQueries.valueIs(currentValue))!!.let { data ->
             data.value = targetValue
         }
     }
 
-    class DoSomethingWithEntity(val entity: TestData) : Command(entity)
+    class OnlyUseEntity(entity: TestData) : Command() {
+        val entity by EntityDelegate(entity)
+    }
 
-    fun execute(command: DoSomethingWithEntity) = command.execute {
-        println("Here I'm doing something with this entity: $entity")
+    fun execute(command: OnlyUseEntity) = command.execute {
+        entity // it just reads the entity but it never modifies the database
+    }
+
+    class ModifyEntity(entity: TestData) : Command() {
+        val entity by EntityDelegate(entity)
+    }
+
+    fun execute(command: ModifyEntity) = command.execute {
+        entity.value += 10
+    }
+
+    class ModifyAnotherEntity(passedEntity: TestData, val anotherValue: Int) : Command() {
+        val passedEntity by EntityDelegate(passedEntity)
+    }
+
+    fun execute(command: ModifyAnotherEntity) = command.execute {
+        passedEntity //just reading the instance so that it is marked as part of the transaction
+        c.testDataRepository.find(c.testDataQueries.valueIs(anotherValue))!!.let { data ->
+            data.value += 10
+        }
+    }
+
+    class ConcurrentlyModifyPassedEntity(passedEntity: TestData, val anotherValue: Int) : Command() {
+        val passedEntity by EntityDelegate(passedEntity)
+    }
+
+    fun execute(command: ConcurrentlyModifyPassedEntity) = command.execute {
+        val passedEntityValue = passedEntity.value
+        thread { execute(ChangeData(passedEntityValue, passedEntityValue + 10)) }.join(TimeUnit.SECONDS.toMillis(5))
+        c.testDataRepository.find(c.testDataQueries.valueIs(anotherValue))!!.let { data ->
+            data.value += 10
+        }
     }
 
     @Singleton
-    protected class Context @Inject constructor(
+    class Context @Inject protected constructor(
             val superContext: ApplicationServices.Context,
             val entityContext: Entity.Context,
             val testDataRepository: TestDataRepository,

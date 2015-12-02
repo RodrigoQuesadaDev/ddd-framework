@@ -8,9 +8,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
-* Created by Rodrigo Quesada on 07/09/15.
-*/
-internal class Plugin private constructor(
+ * Created by Rodrigo Quesada on 07/09/15.
+ */
+/*internal*/ class Plugin private constructor(
         private val s: Plugin.Services,
         private val id: String
 ) {
@@ -43,13 +43,13 @@ internal class Plugin private constructor(
         fileCopier.copyFile(Files.MANIFEST_PATH)
     }
 
-    protected class Services @Inject constructor(
+    class Services @Inject protected constructor(
             val applicationInfo: android.content.pm.ApplicationInfo,
             val fileCopierFactory: PluginFileCopier.Factory
     )
 
     @Singleton
-    class Factory @Inject constructor(val services: Services) {
+    class Factory @Inject protected constructor(val services: Services) {
 
         fun create(id: String) = Plugin(services, id)
     }

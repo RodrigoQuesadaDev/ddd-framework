@@ -22,7 +22,6 @@ import rx.observers.TestSubscriber
 import rx.schedulers.TestScheduler
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.properties.Delegates
 
 /**
  * Created by Rodrigo Quesada on 05/11/15.
@@ -46,7 +45,7 @@ internal class ObservingTotalCount : DomainStory() {
             private val testDataObserver: TestDataObserver,
             private val testScheduler: TestScheduler
     ) {
-        private var totalCountSubscriber: TestSubscriber<Long> by Delegates.notNull()
+        private lateinit var totalCountSubscriber: TestSubscriber<Long>
 
         @Given("no data")
         fun givenNoData() {

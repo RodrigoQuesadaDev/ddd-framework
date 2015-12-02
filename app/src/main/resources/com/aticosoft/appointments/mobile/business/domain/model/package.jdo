@@ -4,7 +4,13 @@
     <package name="com.aticosoft.appointments.mobile.business.domain.model.common">
         <class name="Entity">
             <inheritance strategy="subclass-table"/>
+            <version strategy="version-number">
+                <extension vendor-name="datanucleus" key="field-name" value="version"/>
+            </version>
             <field name="id" primary-key="true"/>
+            <field name="version">
+                <column name="VERSION"/>
+            </field>
         </class>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.appointment">

@@ -13,12 +13,24 @@ import kotlin.properties.Delegates.notNull
 
     var id: Long
         private set
+    //TODO should this field be kept? Should it have a private set?
+    var version: Long = 0
+    @Transient private var previousValue: Entity? = null
 
+    //TODO getting NullPointerException on FetchGroup:292 when using lateinit
     protected var context: Context by notNull()
 
     constructor(context: Context) {
         id = context.identityGenerator.generate()
         this.context = context
+    }
+
+    interface EntityStateReader {
+        var Entity.previousValue: Entity?
+            get() = this.previousValue
+            set(value) {
+                this.previousValue = value
+            }
     }
 
     @Singleton
