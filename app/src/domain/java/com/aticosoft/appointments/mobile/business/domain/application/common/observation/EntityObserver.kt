@@ -68,8 +68,6 @@ import javax.inject.Inject
 
     //TODO inject entityContext at load time
 
-    //TODO EntityListeners do not need to be declared, they can be created at runtime per each entity type available
-
     //TODO take into account rollbacks during transactions???
 
     //TODO implement test-time command implementation (entities use EntityDelegate)
@@ -114,7 +112,7 @@ import javax.inject.Inject
 
     private inline fun EntityChangeEvent<*>.matchesAll(filters: Array<out EntityObservationFilter<*>>) = filters.all { filter -> filter(this) }
 
-    private data class FilterGroup(val type: Class<*>, val filters: Array<EntityObservationFilter<*>>)
+    private data class FilterGroup(val type: Class<out Entity>, val filters: Array<EntityObservationFilter<*>>)
 
     private data class FilterableEntityChangeEvent(val entityChange: EntityChangeEvent<*>, val filters: Array<out EntityObservationFilter<*>>)
 

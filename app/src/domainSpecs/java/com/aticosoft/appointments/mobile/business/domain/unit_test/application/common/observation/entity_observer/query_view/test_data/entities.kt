@@ -15,3 +15,5 @@ internal class TestDataChild(context: Entity.Context, value: Int, var grandChild
 
 @PersistenceCapable
 internal class TestDataGrandChild(context: Entity.Context, value: Int) : AbstractTestData(context, value)
+
+val entityTypes: Array<Class<out Entity>> = arrayOf(TestDataParent::class.java, TestDataChild::class.java, TestDataGrandChild::class.java)

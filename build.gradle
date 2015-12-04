@@ -36,7 +36,7 @@ subprojects {
         h2Version = '1.4.188'
         jsr250ApiVersion = '1.0'
         //kotlinVersion = '0.1-SNAPSHOT'
-        kotlinVersion = '1.0.0-beta-3593'
+        kotlinVersion = '1.0.0-beta-3595'
         groovyVersion = '2.4.5'
 
         //Testing

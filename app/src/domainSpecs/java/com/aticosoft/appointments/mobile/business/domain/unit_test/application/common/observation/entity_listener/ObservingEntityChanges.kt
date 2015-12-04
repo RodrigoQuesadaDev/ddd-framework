@@ -1,11 +1,11 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityChangeEvent
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListenersManager
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataListener
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.*
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
@@ -42,12 +42,13 @@ internal class ObservingEntityChanges : DomainStory() {
     class TestApplicationImpl : TestApplication(DaggerObservingEntityChanges_TestApplicationComponentImpl::class.java)
 
     class LocalSteps @Inject constructor(
-            private val testDataListener: TestDataListener,
+            private val entityListenersManager: EntityListenersManager,
             private val testDataRepositoryManager: TestDataRepositoryManager,
             private val testDataServices: TestDataServices,
             private val testScheduler: TestScheduler
     ) : SpecSteps() {
 
+        private val testDataListener = entityListenersManager.forType(TestData::class.java)
         private lateinit var testSubscriber: TestSubscriber<EntityChangeEvent<TestData>>
 
         @Given("no data")

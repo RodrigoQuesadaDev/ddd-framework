@@ -16,7 +16,7 @@ import javax.jdo.listener.*
 /**
  * Created by Rodrigo Quesada on 18/10/15.
  */
-/*internal*/ abstract class EntityListener<E : Entity>(
+/*internal*/ class EntityListener<E : Entity>(
         private val s: Services,
         val entityType: Class<E>
 ) : Entity.EntityStateReader, CreateLifecycleListener, StoreLifecycleListener, DeleteLifecycleListener, DirtyLifecycleListener {

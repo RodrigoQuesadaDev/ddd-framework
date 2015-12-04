@@ -1,50 +1,23 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence.observation
 
-import com.aticosoft.appointments.mobile.business.domain.application.appointment.AppointmentListener
-import com.aticosoft.appointments.mobile.business.domain.application.client.ClientListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.EntityTypes
 import dagger.Module
 import dagger.Provides
-import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
 
 /**
  * Created by Rodrigo Quesada on 27/10/15.
  */
 @Module
-/*internal*/ open class EntityListenersModule {
-
-    @Singleton
-    class EntityListenersContainer @Inject protected constructor() {
-
-        private val listenersList = arrayListOf<EntityListener<*>>();
-
-        private var appointmentListener: AppointmentListener by ListDelegate(listenersList)
-            @Inject protected set
-        private var clientListener: ClientListener by ListDelegate(listenersList)
-            @Inject protected set
-
-        fun asArray() = listenersList.toTypedArray()
-    }
+/*internal*/ class EntityListenersModule {
 
     @Provides @Singleton @EntityListeners
-    open fun provideEntityListeners(
-            entityListenersContainer: EntityListenersContainer
-    ): Array<EntityListener<*>> = entityListenersContainer.asArray()
+    fun provideEntityListeners(@EntityTypes entityTypes: Array<Class<out Entity>>, servicesProvider: Provider<EntityListener.Services>): Array<EntityListener<*>> {
+        return entityTypes.map { EntityListener(servicesProvider.get(), it) }.toTypedArray()
+    }
 }
 
 internal annotation class EntityListeners
-
-private class ListDelegate<T : Any>(private val list: MutableList<in T>) : ReadWriteProperty<Any, T> {
-
-    protected lateinit var value: T
-
-    override fun getValue(thisRef: Any, property: KProperty<*>): T = value
-
-    override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
-        this.value = value
-        list.add(value)
-    }
-}

@@ -9,8 +9,8 @@ class ApplicationComponentConfigurator {
         return applicationComponentBuilderClass.builder()
                 .applicationModule(applicationModule)
                 .persistenceModule(testModules.persistenceModule)
-                .entityListenersModule(testModules.entityListenersModule)
                 .queryViewsModule(testModules.queryViewsModule)
+                .domainModelModule(testModules.domainModelModule)
                 .domainCommonModule(testModules.domainCommonModule)
                 .build()
     }

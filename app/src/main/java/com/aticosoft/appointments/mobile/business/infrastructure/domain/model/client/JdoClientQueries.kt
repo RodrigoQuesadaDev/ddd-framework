@@ -11,7 +11,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 31/10/15.
  */
 @Singleton
-internal class JdoClientQueries @Inject constructor(private val context: PersistenceContext) : ClientQueries {
+/*internal*/ class JdoClientQueries @Inject constructor(private val context: PersistenceContext) : ClientQueries {
 
     override fun nameLike(name: String) = ListQuery {
         val c = QClient.client
