@@ -7,6 +7,6 @@ import javax.jdo.annotations.PersistenceCapable
  * Created by Rodrigo Quesada on 24/10/15.
  */
 @PersistenceCapable
-internal class TestData(context: Entity.Context, value: Int) : AbstractTestData(context, value)
+internal open class TestData(context: Entity.Context, value: Int) : AbstractTestData(context, value)
 
 internal abstract class AbstractTestData(context: Entity.Context, var value: Int) : Entity(context)

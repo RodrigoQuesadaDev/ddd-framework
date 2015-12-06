@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.rodrigodev.common.spec.story.converter
 
 import com.fasterxml.jackson.core.JsonParser
@@ -15,11 +17,12 @@ class JsonConverter : ParameterConverters.ParameterConverter {
 
     private val mapper = ObjectMapper()
             .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
+            .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
             .registerModule(ParanamerModule())
 
-    override fun accept(type: Type): Boolean = (type.typePathList.last() as? Class<*>)?.isAnnotationPresent(JsonData::class.java) ?: false
+    override fun accept(type: Type): Boolean = with(type.typePathList().last()) { this is Class<*> && isAnnotationPresent(JsonData::class.java) }
 
-    override fun convertValue(value: String, type: Type): Any = mapper.readValue(value, type.typePathList.toCollectionType())
+    override fun convertValue(value: String, type: Type): Any = mapper.readValue(value, type.typePathList().toCollectionType())
 
     private fun List<Type?>.toCollectionType(): JavaType = with(mapper.typeFactory) {
         var javaType = constructType(last())
@@ -30,21 +33,17 @@ class JsonConverter : ParameterConverters.ParameterConverter {
     }
 }
 
-private val Type.argumentType: Type
-    get() = (this as ParameterizedType).actualTypeArguments.first()
+private inline fun Type.argumentType(): Type = (this as ParameterizedType).actualTypeArguments.first()
 
-private val Class<*>.isList: Boolean
-    get() = isAssignableFrom(List::class.java)
+private inline fun Class<*>.isList(): Boolean = isAssignableFrom(List::class.java)
 
-private val Type.isList: Boolean
-    get() = this is ParameterizedType && (rawType as Class<*>).isList
+private inline fun Type.isList(): Boolean = this is ParameterizedType && (rawType as Class<*>).isList()
 
-private val Type.typePathList: List<Type?>
-    get() = calculateTypePathList(arrayListOf()).reversed()
+private inline fun Type.typePathList(): List<Type?> = calculateTypePathList(arrayListOf()).reversed()
 
 private fun Type.calculateTypePathList(pathList: MutableList<Type?>): List<Type?> {
     pathList.add(when {
-        isList -> this.apply { argumentType.calculateTypePathList(pathList) }
+        isList() -> this.apply { argumentType().calculateTypePathList(pathList) }
         this is Class<*> -> this
         else -> null
     })

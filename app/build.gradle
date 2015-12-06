@@ -116,4 +116,5 @@ dependencies {
     testCompile "org.apache.logging.log4j:log4j-api:$log4jVersion"
     testCompile "org.apache.logging.log4j:log4j-1.2-api:$log4jVersion"
     testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    testCompile "org.reflections:reflections:$reflectionsVersion"
 }

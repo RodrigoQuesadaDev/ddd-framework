@@ -14,15 +14,13 @@ import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataR
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.DetachedEntityChecking.TestApplicationImpl
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.UsageType.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.LocalTestDataServices
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.LocalTestDataServices.*
 import com.rodrigodev.common.spec.story.SpecSteps
+import com.rodrigodev.common.test.catchThrowable
 import com.rodrigodev.common.testing.firstEvent
 import com.rodrigodev.common.testing.testSubscribe
 import dagger.Component
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.catchThrowable
 import org.jbehave.core.annotations.BeforeScenario
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
@@ -50,14 +48,14 @@ internal class DetachedEntityChecking : DomainStory() {
 
     class LocalSteps @Inject constructor(
             private val testDataRepositoryManager: TestDataRepositoryManager,
-            private val testDataServices: LocalTestDataServices,
+            override val testDataServices: LocalTestDataServices,
             private val testDataObserver: TestDataObserver,
             private val testDataQueries: TestDataQueries,
             private val entityContext: Entity.Context
-    ) : SpecSteps() {
+    ) : SpecSteps(), UsageTypeSteps {
         private var throwable: Throwable? = null
 
-        override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(UsageTypeConverter())
+        override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(SimpleUsageTypeConverter(), CollectionUsageTypeConverter())
 
         @BeforeScenario
         fun beforeScenario() {
@@ -70,22 +68,14 @@ internal class DetachedEntityChecking : DomainStory() {
             values.forEach { testDataServices.execute(TestDataServices.AddData(it)) }
         }
 
-        @When("I create a new entity and pass it to an application service, using a simple field")
-        fun whenICreateANewEntityAndPassItToAnApplicationServiceUsingASimpleField() {
-            throwable = catchThrowable { testDataServices.execute(ModifyEntity(createNewEntity())) }
+        @When("I create a new entity and pass it to an application service, using \$usageType")
+        fun whenICreateANewEntityAndPassItToAnApplicationServiceUsing(usageType: SimpleUsageType) {
+            throwable = catchThrowable { createNewEntity().modify(usageType) }
         }
 
         @When("I create a new entity and pass it to an application service along entities [\$existingValues], using \$usageType")
-        fun whenICreateANewEntityAndPassItToAnApplicationServiceAlongEntities(existingValues: MutableList<Int>, usageType: UsageType) {
-            val passedEntities = listWithNewEntity(existingValues)
-            throwable = catchThrowable {
-                when (usageType) {
-                    LIST -> testDataServices.execute(ModifyEntitiesFromList(passedEntities))
-                    SET -> testDataServices.execute(ModifyEntitiesFromSet(passedEntities.toSet()))
-                    VALUES_OF_MAP -> testDataServices.execute(ModifyEntitiesFromMapAsValues(passedEntities.toMapBy { it.value }))
-                    KEYS_OF_MAP -> testDataServices.execute(ModifyEntitiesFromMapAsKeys(passedEntities.toMap({ it }, { it.value })))
-                }
-            }
+        fun whenICreateANewEntityAndPassItToAnApplicationServiceAlongEntities(existingValues: MutableList<Int>, usageType: CollectionUsageType) {
+            throwable = catchThrowable { listWithNewEntity(existingValues).modify(usageType) }
         }
 
         @Then("the system throws an exception indicating it's not detached")

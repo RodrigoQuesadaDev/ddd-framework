@@ -44,8 +44,9 @@ subprojects {
         jBehaveSiteVersion = '3.3'
         junitVersion = '4.12'
         robolectricVersion = '3.0'
-        assertjVersion = '3.2.0'
+        assertjVersion = '1.7.1'
         log4jVersion = '2.4.1'
+        reflectionsVersion = '0.9.10'
     }
 
     buildscript {

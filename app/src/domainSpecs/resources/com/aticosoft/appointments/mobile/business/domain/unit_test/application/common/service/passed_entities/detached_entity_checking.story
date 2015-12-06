@@ -7,8 +7,11 @@ So that they never mistakenly cause en new record to be created in the database 
 Scenario: a new entity is passed using a simple field
 
 Given entities [1, 5]
-When I create a new entity and pass it to an application service, using a simple field
+When I create a new entity and pass it to an application service, using <usageType>
 Then the system throws an exception indicating it's not detached
+
+Examples:
+com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/service/passed_entities/simple-usage-types.table
 
 Scenario: a new entity is passed using a collection field
 
@@ -16,4 +19,4 @@ When I create a new entity and pass it to an application service along entities 
 Then the system throws an exception indicating it's not detached
 
 Examples:
-com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/service/passed_entities/usage-types.table
+com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/service/passed_entities/collection-usage-types.table

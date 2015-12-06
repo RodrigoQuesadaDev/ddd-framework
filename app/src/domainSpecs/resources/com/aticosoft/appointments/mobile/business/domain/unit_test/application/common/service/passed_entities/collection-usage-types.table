@@ -1,0 +1,16 @@
+| usageType                                     |
+| a list                                        |
+| a nested list                                 |
+| a list of nested entities                     |
+| a set                                         |
+| a nested set                                  |
+| a set of nested entities                      |
+| a map with them as values                     |
+| a nested map with them as values              |
+| a map with nested entities as values          |
+| a map with them as keys                       |
+| a nested map with them as keys                |
+| a map with nested entities as keys            |
+| a map with them as values and keys            |
+| a nested map with them as values and keys     |
+| a map with nested entities as values and keys |

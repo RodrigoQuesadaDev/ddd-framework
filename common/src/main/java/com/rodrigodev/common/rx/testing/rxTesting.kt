@@ -12,7 +12,7 @@ fun <T> Observable<T>.testSubscribe() = TestSubscriber<T>().let { subscriber ->
 
     subscribe(subscriber)
 
-    (Schedulers.computation() as? TestScheduler)?.run { triggerActions() }
+    with(Schedulers.computation()) { if (this is TestScheduler) triggerActions() }
 
     subscriber.apply { assertNoErrors() }
 }

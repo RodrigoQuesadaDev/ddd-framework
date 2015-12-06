@@ -28,7 +28,7 @@ import kotlin.test.assertTrue
 
     private fun registerViews() {
         queryViewEnumDefinitions.asSequence()
-                .flatMap { definition -> definition.queryViews.asSequence() }
+                .flatMap { definition -> definition.queryViews().asSequence() }
                 .flatMap { queryView ->
                     queryView.fields.asSequence()
                             .checkFields()

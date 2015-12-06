@@ -19,26 +19,23 @@ import javax.jdo.FetchPlan
     val fields: Array<out Path<*>>
 
     val fetchGroupName: String
-        get() = if (fields.isNotEmpty()) nonDefaultFetchGroupName else FetchPlan.DEFAULT
+        get() = if (fields.isNotEmpty()) nonDefaultFetchGroupName() else FetchPlan.DEFAULT
 
-    private val nonDefaultFetchGroupName: String
-        get() = javaClass.simpleName + "." + ((this as Enum<*>)).name
+    private inline fun nonDefaultFetchGroupName(): String = javaClass.simpleName + "." + ((this as Enum<*>)).name
 
     fun defaultFiltersFor(filters: Array<out EntityObservationFilter<*>>): Array<out EntityObservationFilter<*>> {
-        return (fields.filterTypes - filters.toTypes())
+        return (fields.filterTypes() - filters.toTypes())
                 .map { EntityObservationFilter(it) }
                 .toTypedArray()
     }
 }
 
-private val Array<out Path<*>>.filterTypes: Sequence<Class<*>>
-    get() = asSequence().flatMap { sequenceOf(it.type, it.root.type) }.distinct()
+private inline fun Array<out Path<*>>.filterTypes(): Sequence<Class<*>> = asSequence().flatMap { sequenceOf(it.type, it.root.type) }.distinct()
 
 private inline fun Array<out EntityObservationFilter<*>>.toTypes() = asSequence().map { it.entityType }.distinct()
 
 @Suppress("UNCHECKED_CAST")
-internal val Class<out Enum<*>>.queryViews: Array<out QueryView>
-    get() = getMethod(QueryViewEnum.VALUES_METHOD).invoke(null) as Array<QueryView>
+internal inline fun Class<out Enum<*>>.queryViews(): Array<out QueryView> = getMethod(QueryViewEnum.VALUES_METHOD).invoke(null) as Array<QueryView>
 
 private object QueryViewEnum {
     val VALUES_METHOD = "values"

@@ -12,8 +12,11 @@ And I call an application service that modifies its value stored in the database
 
 Scenario: a stale entity is passed using a simple field
 
-When I pass that entity to an application service that uses it without modifying it, using a simple field
+When I pass that entity to an application service that uses it without modifying it, using <usageType>
 Then the system throws an exception indicating it's stale
+
+Examples:
+com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/service/passed_entities/simple-usage-types.table
 
 Scenario: a stale entity is passed using a collection field
 
@@ -21,7 +24,7 @@ When I pass that entity to an application service that uses it without modifying
 Then the system throws an exception indicating it's stale
 
 Examples:
-com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/service/passed_entities/usage-types.table
+com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/service/passed_entities/collection-usage-types.table
 
 Scenario: set-up removed entity
 
@@ -31,8 +34,11 @@ And I call an application service that removes it
 
 Scenario: a stale entity is passed using a simple field
 
-When I pass that entity to an application service that uses it without modifying it, using a simple field
+When I pass that entity to an application service that uses it without modifying it, using <usageType>
 Then the system throws an exception indicating that it doesn't exist anymore
+
+Examples:
+com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/service/passed_entities/simple-usage-types.table
 
 Scenario: a stale entity is passed using a collection field
 
@@ -40,4 +46,4 @@ When I pass that entity to an application service that uses it without modifying
 Then the system throws an exception indicating that it doesn't exist anymore
 
 Examples:
-com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/service/passed_entities/usage-types.table
+com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/service/passed_entities/collection-usage-types.table

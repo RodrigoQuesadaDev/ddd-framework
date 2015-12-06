@@ -1,14 +1,12 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.application.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.*
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataRepository
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.concurrent.thread
 
 /**
  * Created by Rodrigo Quesada on 25/10/15.

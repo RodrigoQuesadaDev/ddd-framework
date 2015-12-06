@@ -17,61 +17,85 @@ import kotlin.reflect.KProperty
 /**
  * Created by Rodrigo Quesada on 04/12/15.
  */
-class CommandEntity<E : Entity>(private val origEntity: E) : ReadOnlyProperty<Command, E> {
+abstract class CommandEntityDelegate<T>(private var value: T) : ReadOnlyProperty<Command, T> {
 
-    private var entity: E? = null
+    private var wasProcessed = false
 
-    override fun getValue(thisRef: Command, property: KProperty<*>): E = entity ?: with(this) {
-        entity = thisRef.persistenceManager().process(origEntity)
-        entity!!
+    override fun getValue(thisRef: Command, property: KProperty<*>): T {
+        if (!wasProcessed) {
+            value = value.processUsing(thisRef)
+            wasProcessed = true
+        }
+        return value
+    }
+
+    protected abstract fun T.processUsing(command: Command): T
+}
+
+/***************************************************************************************************
+ * Delegates
+ **************************************************************************************************/
+
+object CommandEntityDelegates {
+
+    private class CommandEntity<E : Entity>(entity: E) : CommandEntityDelegate<E>(entity) {
+
+        override fun E.processUsing(command: Command) = processEntityUsing(command)
+    }
+
+    fun <E : Entity> E.delegate(): CommandEntityDelegate<E> = CommandEntity(this)
+
+    object Lists {
+        private class CommandEntityList<E : Entity>(entities: List<E>) : CommandEntityDelegate<List<E>>(entities) {
+
+            override fun List<E>.processUsing(command: Command) = map { it.processEntityUsing(command) }
+        }
+
+        fun <E : Entity> List<E>.delegate(): CommandEntityDelegate<List<E>> = CommandEntityList(this)
+    }
+
+    object Sets {
+        private class CommandEntitySet<E : Entity>(entities: Set<E>) : CommandEntityDelegate<Set<E>>(entities) {
+
+            override fun Set<E>.processUsing(command: Command) = asSequence().map { it.processEntityUsing(command) }.toHashSet()
+        }
+
+        fun <E : Entity> Set<E>.delegate(): CommandEntityDelegate<Set<E>> = CommandEntitySet(this)
+    }
+
+    object Maps {
+        private class CommandEntityMap<E1 : Entity, E2 : Entity>(entityMap: Map<E1, E2>) : CommandEntityDelegate<Map<E1, E2>>(entityMap) {
+
+            override fun Map<E1, E2>.processUsing(command: Command) = asSequence().toMap({ it.key.processEntityUsing(command) }, { it.value.processEntityUsing(command) })
+        }
+
+        fun <E1 : Entity, E2 : Entity> Map<E1, E2>.delegate(): CommandEntityDelegate<Map<E1, E2>> = CommandEntityMap(this)
+
+        object Values {
+            private class CommandEntityMapValues<K, E : Entity>(entityMap: Map<K, E>) : CommandEntityDelegate<Map<K, E>>(entityMap) {
+
+                override fun Map<K, E>.processUsing(command: Command) = mapValues { it.value.processEntityUsing(command) }
+            }
+
+            fun <K, E : Entity> Map<K, E>.delegateValues(): CommandEntityDelegate<Map<K, E>> = CommandEntityMapValues(this)
+        }
+
+        object Keys {
+            private class CommandEntityMapKeys<E : Entity, V>(entityMap: Map<E, V>) : CommandEntityDelegate<Map<E, V>>(entityMap) {
+
+                override fun Map<E, V>.processUsing(command: Command) = mapKeys { it.key.processEntityUsing(command) }
+            }
+
+            fun <E : Entity, V> Map<E, V>.delegateKeys(): CommandEntityDelegate<Map<E, V>> = CommandEntityMapKeys(this)
+        }
     }
 }
 
-class CommandEntityList<E : Entity>(private val origEntities: Collection<E>) : ReadOnlyProperty<Command, List<E>> {
-
-    private var entityList: List<E>? = null
-
-    override fun getValue(thisRef: Command, property: KProperty<*>): List<E> = entityList ?: with(this) {
-        entityList = origEntities.map { thisRef.persistenceManager().process(it) }
-        entityList!!
-    }
-}
-
-class CommandEntitySet<E : Entity>(private val origEntities: Collection<E>) : ReadOnlyProperty<Command, Set<E>> {
-
-    private var entitySet: Set<E>? = null
-
-    override fun getValue(thisRef: Command, property: KProperty<*>): Set<E> = entitySet ?: with(this) {
-        entitySet = origEntities.asSequence().map { thisRef.persistenceManager().process(it) }.toHashSet()
-        entitySet!!
-    }
-}
-
-class CommandEntityMap<K, E : Entity>(private val origEntities: Map<K, E>) : ReadOnlyProperty<Command, Map<K, E>> {
-
-    private var entityMap: Map<K, E>? = null
-
-    override fun getValue(thisRef: Command, property: KProperty<*>): Map<K, E> = entityMap ?: with(this) {
-        entityMap = origEntities.mapValues { thisRef.persistenceManager().process(it.value) }
-        entityMap!!
-    }
-}
-
-class CommandEntityKeyMap<E : Entity, V>(private val origEntities: Map<E, V>) : ReadOnlyProperty<Command, Map<E, V>> {
-
-    private var entityMap: Map<E, V>? = null
-
-    override fun getValue(thisRef: Command, property: KProperty<*>): Map<E, V> = entityMap ?: with(this) {
-        entityMap = origEntities.mapKeys { thisRef.persistenceManager().process(it.key) }
-        entityMap!!
-    }
-}
+private inline fun <E : Entity> E.processEntityUsing(command: Command) = command.persistenceManager.process(this)
 
 /***************************************************************************************************
  * Core Logic
  **************************************************************************************************/
-
-private inline fun Command.persistenceManager() = context.persistenceContext.persistenceManager
 
 private inline fun <E : Entity> PersistenceManager.process(entity: E): E {
     with(entity) {

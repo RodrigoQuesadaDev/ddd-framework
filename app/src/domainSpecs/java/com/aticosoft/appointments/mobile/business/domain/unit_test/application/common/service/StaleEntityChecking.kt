@@ -14,17 +14,14 @@ import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataR
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.StaleEntityChecking.TestApplicationImpl
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.UsageType
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.UsageType.*
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.UsageTypeConverter
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.LocalTestDataServices
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.LocalTestDataServices.*
 import com.rodrigodev.common.spec.story.SpecSteps
+import com.rodrigodev.common.test.catchThrowable
 import com.rodrigodev.common.testing.firstEvent
 import com.rodrigodev.common.testing.testSubscribe
 import dagger.Component
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.catchThrowable
 import org.jbehave.core.annotations.BeforeScenario
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
@@ -52,14 +49,14 @@ internal class StaleEntityChecking : DomainStory() {
 
     class LocalSteps @Inject constructor(
             private val testDataRepositoryManager: TestDataRepositoryManager,
-            private val testDataServices: LocalTestDataServices,
+            override val testDataServices: LocalTestDataServices,
             private val testDataObserver: TestDataObserver,
             private val testDataQueries: TestDataQueries
-    ) : SpecSteps() {
+    ) : SpecSteps(), UsageTypeSteps {
         private lateinit var keptEntity: TestData
         private var throwable: Throwable? = null
 
-        override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(UsageTypeConverter())
+        override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(SimpleUsageTypeConverter(), CollectionUsageTypeConverter())
 
         @BeforeScenario
         fun beforeScenario() {
@@ -87,22 +84,14 @@ internal class StaleEntityChecking : DomainStory() {
             testDataServices.execute(RemoveData(keptEntity.value))
         }
 
-        @When("I pass that entity to an application service that uses it without modifying it, using a simple field")
-        fun whenIPassThatEntityToAnApplicationServiceThatUsesItWithoutModifyingItUsingASimpleField() {
-            throwable = catchThrowable { testDataServices.execute(OnlyUseEntity(keptEntity)) }
+        @When("I pass that entity to an application service that uses it without modifying it, using \$usageType")
+        fun whenIPassThatEntityToAnApplicationServiceThatUsesItWithoutModifyingItUsingASimpleField(usageType: SimpleUsageType) {
+            throwable = catchThrowable { keptEntity.onlyUse(usageType) }
         }
 
         @When("I pass that entity to an application service that uses it without modifying it, along entities [\$existingValues] and using \$usageType")
-        fun whenIPassThatEntityToAnApplicationServiceThatUsesItWithoutModifyingItAlongEntities(existingValues: MutableList<Int>, usageType: UsageType) {
-            val passedEntities = listWithKeptEntity(existingValues)
-            throwable = catchThrowable {
-                when (usageType) {
-                    LIST -> testDataServices.execute(OnlyUseEntitiesFromList(passedEntities))
-                    SET -> testDataServices.execute(OnlyUseEntitiesFromSet(passedEntities.toSet()))
-                    VALUES_OF_MAP -> testDataServices.execute(OnlyUseEntitiesFromMapAsValues(passedEntities.toMapBy { it.value }))
-                    KEYS_OF_MAP -> testDataServices.execute(OnlyUseEntitiesFromMapAsKeys(passedEntities.toMap({ it }, { it.value })))
-                }
-            }
+        fun whenIPassThatEntityToAnApplicationServiceThatUsesItWithoutModifyingItAlongEntities(existingValues: MutableList<Int>, usageType: CollectionUsageType) {
+            throwable = catchThrowable { listWithKeptEntity(existingValues).onlyUseEntities(usageType) }
         }
 
         @Then("the system throws an exception indicating it's stale")
