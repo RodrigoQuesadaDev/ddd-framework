@@ -8,7 +8,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentServices.ChangeData
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentServices.RemoveData
 import com.rodrigodev.common.rx.advanceTimeBy
-import com.rodrigodev.common.spec.story.SpecSteps
+import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.spec.story.converter.JsonData
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given

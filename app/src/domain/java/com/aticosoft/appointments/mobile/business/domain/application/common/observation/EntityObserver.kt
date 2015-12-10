@@ -70,7 +70,7 @@ import javax.inject.Inject
 
     //TODO take into account rollbacks during transactions???
 
-    //TODO check command is not being reused!!!
+    //TODO change entity creation to factory stuff...
 
     private inline fun <R> entityObservable(queryView: QueryView, query: Query<*>, crossinline queryExecution: () -> R): Observable<R> = entityObservable(queryView, query.filters, queryExecution)
 

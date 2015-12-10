@@ -1,4 +1,4 @@
-package com.rodrigodev.common.spec.story
+package com.rodrigodev.common.spec.story.steps
 
 import org.jbehave.core.steps.ParameterConverters
 

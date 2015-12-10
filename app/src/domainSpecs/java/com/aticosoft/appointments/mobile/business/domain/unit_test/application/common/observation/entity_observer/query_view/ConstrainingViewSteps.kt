@@ -5,7 +5,7 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.AbstractConstrainingViewSteps.Services
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.*
 import com.rodrigodev.common.rx.advanceTimeBy
-import com.rodrigodev.common.spec.story.SpecSteps
+import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.spec.story.converter.JsonData
 import com.rodrigodev.common.testing.firstEvent
 import org.assertj.core.api.Assertions.assertThat

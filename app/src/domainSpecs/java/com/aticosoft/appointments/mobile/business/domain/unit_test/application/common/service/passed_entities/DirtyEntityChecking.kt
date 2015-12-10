@@ -13,14 +13,14 @@ import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataR
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.DirtyEntityChecking.TestApplicationImpl
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.LocalTestDataServices
-import com.rodrigodev.common.spec.story.SpecSteps
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.CommandTestDataServices
+import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
+import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.test.catchThrowable
 import com.rodrigodev.common.testing.firstEvent
 import com.rodrigodev.common.testing.testSubscribe
 import dagger.Component
 import org.assertj.core.api.Assertions.assertThat
-import org.jbehave.core.annotations.BeforeScenario
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.jbehave.core.annotations.When
@@ -47,19 +47,15 @@ internal class DirtyEntityChecking : DomainStory() {
 
     class LocalSteps @Inject constructor(
             private val testDataRepositoryManager: TestDataRepositoryManager,
-            override val testDataServices: LocalTestDataServices,
+            override val testDataServices: CommandTestDataServices,
             private val testDataObserver: TestDataObserver,
             private val testDataQueries: TestDataQueries
-    ) : SpecSteps(), UsageTypeSteps {
+    ) : SpecSteps(), UsageTypeSteps, ExceptionThrowingSteps {
+
         private lateinit var keptEntity: TestData
-        private var throwable: Throwable? = null
+        override var throwable: Throwable? = null
 
         override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(SimpleUsageTypeConverter(), CollectionUsageTypeConverter())
-
-        @BeforeScenario
-        fun beforeScenario() {
-            throwable = null
-        }
 
         @Given("entities [\$values]")
         fun givenEntities(values: MutableList<Int>) {

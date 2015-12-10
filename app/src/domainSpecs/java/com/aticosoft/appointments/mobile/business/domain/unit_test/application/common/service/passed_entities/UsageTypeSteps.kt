@@ -6,15 +6,15 @@ import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.CollectionUsageType.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.SimpleUsageType.NESTED_FIELD
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.SimpleUsageType.SIMPLE_FIELD
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.LocalTestDataServices
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.LocalTestDataServices.*
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.CommandTestDataServices
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.CommandTestDataServices.*
 
 /**
  * Created by Rodrigo Quesada on 07/12/15.
  */
 internal interface UsageTypeSteps {
 
-    val testDataServices: LocalTestDataServices
+    val testDataServices: CommandTestDataServices
 
     fun TestData.modify(usageType: SimpleUsageType) = let { entity ->
         with(testDataServices) {

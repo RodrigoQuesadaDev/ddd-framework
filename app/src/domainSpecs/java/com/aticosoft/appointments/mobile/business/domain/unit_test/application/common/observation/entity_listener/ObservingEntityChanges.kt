@@ -11,7 +11,7 @@ import com.aticosoft.appointments.mobile.business.domain.testing.application.tes
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.ObservingEntityChanges.TestApplicationImpl
-import com.rodrigodev.common.spec.story.SpecSteps
+import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.testing.testSubscribe
 import dagger.Component
 import org.assertj.core.api.Assertions.assertThat

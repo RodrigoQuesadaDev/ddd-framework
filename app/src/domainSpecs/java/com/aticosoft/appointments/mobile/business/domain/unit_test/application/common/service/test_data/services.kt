@@ -15,7 +15,7 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.serv
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandEntityDelegates.delegate
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.LocalTestDataServices.NestedValue
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.CommandTestDataServices.NestedValue
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,7 +25,7 @@ import kotlin.concurrent.thread
  * Created by Rodrigo Quesada on 05/12/15.
  */
 @Singleton
-internal class LocalTestDataServices @Inject constructor(private val c: TestDataServices.Context) : TestDataServices(c) {
+internal class CommandTestDataServices @Inject constructor(private val c: TestDataServices.Context) : TestDataServices(c) {
 
     /***********************************************************************************************
      * Only Use Entity

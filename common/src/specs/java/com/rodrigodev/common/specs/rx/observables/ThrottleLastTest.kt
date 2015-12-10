@@ -3,7 +3,7 @@ package com.rodrigodev.common.specs.rx.observables
 import com.rodrigodev.common.rx.advanceTimeBy
 import com.rodrigodev.common.rx.testing.RxSpec
 import com.rodrigodev.common.rx.throttleLast
-import com.rodrigodev.common.spec.story.SpecSteps
+import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.spec.story.converter.DurationConverter
 import com.rodrigodev.common.testing.testSubscribe
 import org.jbehave.core.annotations.Given

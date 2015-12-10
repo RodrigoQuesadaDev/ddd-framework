@@ -2,6 +2,7 @@ package com.aticosoft.appointments.mobile.business.domain.testing.application.te
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.Context
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataRepository
@@ -12,7 +13,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 25/10/15.
  */
 @Singleton
-internal open class TestDataServices @Inject constructor(private val c: TestDataServices.Context) : ApplicationServices(c.superContext) {
+internal open class TestDataServices @Inject constructor(private val c: Context) : ApplicationServices(c.superContext) {
 
     class AddData(val value: Int) : Command()
 
@@ -36,7 +37,6 @@ internal open class TestDataServices @Inject constructor(private val c: TestData
         }
     }
 
-    @Singleton
     class Context @Inject protected constructor(
             val superContext: ApplicationServices.Context,
             val entityContext: Entity.Context,

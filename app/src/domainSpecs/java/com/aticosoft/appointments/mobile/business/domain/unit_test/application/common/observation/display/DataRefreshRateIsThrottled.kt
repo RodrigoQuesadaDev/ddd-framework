@@ -11,7 +11,7 @@ import com.aticosoft.appointments.mobile.business.domain.testing.common.time.Tes
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.display.DataRefreshRateIsThrottled.TestApplicationImpl
 import com.rodrigodev.common.rx.advanceTimeBy
-import com.rodrigodev.common.spec.story.SpecSteps
+import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.spec.story.converter.DurationConverter
 import com.rodrigodev.common.testing.testSubscribe
 import dagger.Component
