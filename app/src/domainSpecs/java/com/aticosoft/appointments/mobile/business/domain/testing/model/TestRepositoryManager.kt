@@ -6,6 +6,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.ap
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client.JdoClientRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.JdoRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
+import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext.PersistenceManagerFactoryAccessor
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.TransactionManager
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,10 +17,14 @@ import javax.inject.Singleton
 internal abstract class TestRepositoryManager<R : JdoRepository<*>>(
         private val s: Services,
         private val repository: R
-) {
+) : PersistenceManagerFactoryAccessor {
 
     fun clear() {
         s.tm.transactional { s.context.queryFactory.delete(repository.queryEntity).execute() }
+    }
+
+    fun clearCache() {
+        s.context.pmf.dataStoreCache.evictAll(true, repository.queryEntity.type)
     }
 
     class Services @Inject constructor(

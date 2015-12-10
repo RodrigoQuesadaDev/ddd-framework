@@ -1,13 +1,16 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.querydsl.jdo.JDOQueryFactory
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
 import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
+import java.io.Closeable
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.jdo.PersistenceManager
 import javax.jdo.PersistenceManagerFactory
+import javax.jdo.listener.InstanceLifecycleListener
 
 /**
  * Created by Rodrigo Quesada on 23/09/15.
@@ -15,7 +18,7 @@ import javax.jdo.PersistenceManagerFactory
 @Singleton
 /*internal*/ class PersistenceContext @Inject constructor(
         private val pmf: PersistenceManagerFactory
-) {
+) : Closeable {
 
     private val threadLocalCleaner = ThreadLocalCleaner()
 
@@ -28,26 +31,26 @@ import javax.jdo.PersistenceManagerFactory
     private val entityListeners: List<EntityListener<*>> by lazy { entityListenerListBuilder.build() }
 
     fun registerEntityListener(entityListener: EntityListener<*>) {
-        pmf.addInstanceLifecycleListener(entityListener, arrayOf(entityListener.entityType))
+        registerLifecycleListener(entityListener, entityListener.entityType)
         entityListenerListBuilder.add(entityListener)
+    }
+
+    fun registerLifecycleListener(lifecycleListener: InstanceLifecycleListener, instanceType: Class<out Entity>) {
+        pmf.addInstanceLifecycleListener(lifecycleListener, arrayOf(instanceType))
     }
 
     fun onTransactionCommitted() {
         entityListeners.forEach { it.onTransactionCommitted() }
     }
 
-    fun close() {
+    override fun close() {
         threadLocalCleaner.cleanUpThreadLocalInstances()
         entityListeners.forEach { it.resetLocalState() }
     }
 
-    inline fun <R> useThenClose(call: () -> R): R {
-        return try {
-            call()
-        }
-        finally {
-            close()
-        }
+    interface PersistenceManagerFactoryAccessor {
+        val PersistenceContext.pmf: PersistenceManagerFactory
+            get() = this.pmf
     }
 }
 

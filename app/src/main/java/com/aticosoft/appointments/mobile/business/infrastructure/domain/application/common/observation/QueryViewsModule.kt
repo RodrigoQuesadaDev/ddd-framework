@@ -1,4 +1,4 @@
-package com.aticosoft.appointments.mobile.business.infrastructure.persistence.observation
+package com.aticosoft.appointments.mobile.business.infrastructure.domain.application.common.observation
 
 import dagger.Module
 import dagger.Provides

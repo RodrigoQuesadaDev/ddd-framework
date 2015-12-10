@@ -10,7 +10,7 @@ interface ExceptionThrowingSteps {
     var throwable: Throwable?
 
     @BeforeScenario
-    fun beforeScenario() {
+    fun resetThrowable() {
         throwable = null
     }
 }

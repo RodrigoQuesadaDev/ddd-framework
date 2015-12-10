@@ -1,6 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.model.client
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.google.auto.factory.Provided
 import org.joda.time.LocalDate
 import javax.jdo.annotations.PersistenceCapable
 
@@ -8,14 +9,15 @@ import javax.jdo.annotations.PersistenceCapable
  * Created by Rodrigo Quesada on 27/09/15.
  */
 @PersistenceCapable
-class Client(
-        context: Entity.Context,
+//@AutoFactory
+class Client protected constructor(
+        @Provided context: Entity.Context,
         name: String,
         birthDate: LocalDate
 ) : Entity(context) {
 
-    var name: String = name
+    var name = name
         private set
-    var birthDate: LocalDate = birthDate
+    var birthDate = birthDate
         private set
 }

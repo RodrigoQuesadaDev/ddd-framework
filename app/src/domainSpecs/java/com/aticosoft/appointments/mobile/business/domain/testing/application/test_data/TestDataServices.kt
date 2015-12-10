@@ -1,9 +1,8 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.application.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.Context
-import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataFactory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataRepository
 import javax.inject.Inject
@@ -18,7 +17,7 @@ internal open class TestDataServices @Inject constructor(private val c: Context)
     class AddData(val value: Int) : Command()
 
     fun execute(command: AddData) = command.execute {
-        c.testDataRepository.add(TestData(c.entityContext, value))
+        c.testDataRepository.add(c.testDataFactory.create(value))
     }
 
     class RemoveData(val value: Int) : Command()
@@ -37,9 +36,17 @@ internal open class TestDataServices @Inject constructor(private val c: Context)
         }
     }
 
+    class UseDependency(val value: Int) : Command()
+
+    fun execute(command: UseDependency) = command.execute {
+        c.testDataRepository.find(c.testDataQueries.valueIs(value))!!.let { data ->
+            data.useDependency()
+        }
+    }
+
     class Context @Inject protected constructor(
             val superContext: ApplicationServices.Context,
-            val entityContext: Entity.Context,
+            val testDataFactory: TestDataFactory,
             val testDataRepository: TestDataRepository,
             val testDataQueries: TestDataQueries
     )

@@ -1,5 +1,7 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model
 
+import com.aticosoft.appointments.mobile.business.ApplicationComponent
+import com.aticosoft.appointments.mobile.business.ModulePostInitializer
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentRepository
@@ -11,8 +13,12 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.ap
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment.JdoAppointmentRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client.JdoClientQueries
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client.JdoClientRepository
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInjector
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInjectors
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInjectorsManager
 import dagger.Module
 import dagger.Provides
+import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
@@ -35,6 +41,32 @@ import javax.inject.Singleton
 
     @Provides @Singleton
     fun provideClientQueries(clientQueries: JdoClientQueries): ClientQueries = clientQueries
+
+    @Provides @Singleton @EntityInjectors
+    open fun provideEntityInjectors(entityInjectorFactory: EntityInjector.Factory): Array<out EntityInjector<*, *>> = with(entityInjectorFactory) {
+        arrayOf(
+                create<Appointment> { inject(it) },
+                create<Client> { inject(it) }
+        )
+    }
+
+    @Singleton
+    class PostInitializer @Inject protected constructor(private val entityInjectorsManager: EntityInjectorsManager) : ModulePostInitializer {
+
+        override fun init() = entityInjectorsManager.registerInjectors()
+    }
+}
+
+/*internal*/ interface EntityInjection {
+
+    fun inject(entity: Appointment)
+    fun inject(entity: Client)
 }
 
 internal annotation class EntityTypes
+
+/***************************************************************************************************
+ * Extensions
+ **************************************************************************************************/
+
+private inline fun <reified E : Entity> EntityInjector.Factory.create(noinline injectCall: ApplicationComponent.(E) -> Unit) = create(E::class.java, injectCall)

@@ -88,7 +88,7 @@ import javax.jdo.listener.*
         // Do nothing!
     }
 
-    class Services @Inject constructor(
+    class Services @Inject protected constructor(
             val persistenceContext: PersistenceContext
     )
 }

@@ -32,7 +32,7 @@ import javax.jdo.PersistenceManager
         }
     }
 
-    inline fun <R> transactional(call: () -> R): R = context.useThenClose {
+    inline fun <R> transactional(call: () -> R): R = context.use {
         val result: R
         val pm = context.persistenceManager
         pm.doNotReadFromCache()

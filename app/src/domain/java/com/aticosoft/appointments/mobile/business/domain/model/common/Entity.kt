@@ -4,7 +4,6 @@ import com.aticosoft.appointments.mobile.business.domain.model.IdentityGenerator
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity.Context
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.properties.Delegates.notNull
 
 /**
  * Created by Rodrigo Quesada on 22/09/15.
@@ -13,18 +12,15 @@ import kotlin.properties.Delegates.notNull
 
     var id: Long
         private set
-    //TODO should this field be kept? Should it have a private set?
     var version: Long = 0
+        private set
     @Transient private var previousValue: Entity? = null
 
-    //TODO getting NullPointerException on FetchGroup:292 when using lateinit
-    protected var context: Context by notNull()
-
-    constructor(context: Context) {
-        id = context.identityGenerator.generate()
-        this.context = context
+    constructor(entityContext: Context) {
+        id = entityContext.identityGenerator.generate()
     }
 
+    //TODO making previousValue internal should be enough (problem is right now this class is not on a separate module)
     interface EntityStateReader {
         var Entity.previousValue: Entity?
             get() = this.previousValue
@@ -34,5 +30,7 @@ import kotlin.properties.Delegates.notNull
     }
 
     @Singleton
-    /*internal*/ class Context @Inject constructor(val identityGenerator: IdentityGenerator)
+    /*internal*/ class Context @Inject protected constructor(
+            val identityGenerator: IdentityGenerator
+    )
 }

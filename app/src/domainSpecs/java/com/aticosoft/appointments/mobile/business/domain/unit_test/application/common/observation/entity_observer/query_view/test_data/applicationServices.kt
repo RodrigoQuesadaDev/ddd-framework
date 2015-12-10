@@ -1,7 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,23 +16,20 @@ internal class TestDataParentServices @Inject constructor(private val c: TestDat
     }
 
     fun execute(command: AddData) = command.execute {
-        c.testDataRepository.add(TestDataParent(
-                c.entityContext,
+        c.testDataRepository.add(c.testDataParentFactory.create(
                 parentValue,
                 child1?.let { child ->
-                    TestDataChild(
-                            c.entityContext,
+                    c.testDataChildFactory.create(
                             child.value,
-                            child.grandChild1?.let { TestDataGrandChild(c.entityContext, it) },
-                            child.grandChild2?.let { TestDataGrandChild(c.entityContext, it) }
+                            child.grandChild1?.let { c.testDataGrandChildFactory.create(it) },
+                            child.grandChild2?.let { c.testDataGrandChildFactory.create(it) }
                     )
                 },
                 child2?.let { child ->
-                    TestDataChild(
-                            c.entityContext,
+                    c.testDataChildFactory.create(
                             child.value,
-                            child.grandChild1?.let { TestDataGrandChild(c.entityContext, it) },
-                            child.grandChild2?.let { TestDataGrandChild(c.entityContext, it) }
+                            child.grandChild1?.let { c.testDataGrandChildFactory.create(it) },
+                            child.grandChild2?.let { c.testDataGrandChildFactory.create(it) }
                     )
                 }
         ))
@@ -62,8 +58,10 @@ internal class TestDataParentServices @Inject constructor(private val c: TestDat
     @Singleton
     class Context @Inject protected constructor(
             val superContext: ApplicationServices.Context,
-            val entityContext: Entity.Context,
+            val testDataParentFactory: TestDataParentFactory,
             val testDataRepository: TestDataParentRepository,
+            val testDataChildFactory: TestDataChildFactory,
+            val testDataGrandChildFactory: TestDataGrandChildFactory,
             val testDataQueries: TestDataParentQueries
     )
 }

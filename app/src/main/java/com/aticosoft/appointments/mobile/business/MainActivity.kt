@@ -4,9 +4,8 @@ package com.aticosoft.appointments.mobile.business
 import android.app.Activity
 import android.os.Bundle
 import android.widget.TextView
-import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
+import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentFactory
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.QAppointment
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.querydsl.jdo.JDOQueryFactory
 import org.joda.time.DateTime
 import javax.inject.Inject
@@ -20,20 +19,20 @@ import javax.jdo.PersistenceManagerFactory
 /*internal*/ class MainActivity : Activity() {
 
     private lateinit var textView: TextView
-    @Inject protected lateinit var entityContext: Entity.Context
+    @Inject protected lateinit var appointmentFactory: AppointmentFactory
     @Inject protected lateinit var pmf: PersistenceManagerFactory
 
     override protected fun onCreate(savedInstanceState: Bundle) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.test_layout)
         textView = findViewById(R.id.textView) as TextView
-        (applicationContext as Application).applicationComponent.inject(this)
+        (applicationContext as ApplicationImpl).component.inject(this)
         renderStuff()
     }
 
     private fun renderStuff() {
 
-        var appointment = Appointment(entityContext, 1, DateTime.now())
+        var appointment = appointmentFactory.create(1, DateTime.now())
 
         val pm = pmf.persistenceManager
         val tx = pm.currentTransaction()

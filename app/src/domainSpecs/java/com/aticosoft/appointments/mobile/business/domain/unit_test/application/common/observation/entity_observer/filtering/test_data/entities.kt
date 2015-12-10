@@ -1,20 +1,47 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.create
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParent.Context
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInjector
+import com.google.auto.factory.Provided
+import javax.inject.Inject
+import javax.inject.Singleton
 import javax.jdo.annotations.PersistenceCapable
 
 /**
  * Created by Rodrigo Quesada on 06/11/15.
  */
 @PersistenceCapable
-internal class TestDataParent(context: Entity.Context, value: Int, childValue: Int) : AbstractTestData(context, value) {
+//@AutoFactory
+internal class TestDataParent protected constructor(@Provided c: Context, value: Int, childValue: Int) : AbstractTestData(c.entityContext, value) {
 
-    var child: TestDataChild = TestDataChild(context, childValue)
+    var child: TestDataChild = c.testDataChildFactory.create(childValue)
         private set
+
+    @Singleton
+    class Context @Inject protected constructor(
+            val entityContext: Entity.Context,
+            val testDataChildFactory: TestDataChildFactory
+    )
 }
 
 @PersistenceCapable
-internal class TestDataChild(context: Entity.Context, value: Int) : AbstractTestData(context, value)
+//@AutoFactory
+internal class TestDataChild protected constructor(@Provided context: Entity.Context, value: Int) : AbstractTestData(context, value)
 
 val entityTypes: Array<Class<out Entity>> = arrayOf(TestDataParent::class.java, TestDataChild::class.java)
+
+internal fun provideEntityInjectors(entityInjectorFactory: EntityInjector.Factory) = with(entityInjectorFactory) {
+    arrayOf(
+            create<TestDataParent> { inject(it) },
+            create<TestDataChild> { inject(it) }
+    )
+}
+
+internal interface TestEntityInjection {
+
+    fun inject(entity: TestDataParent)
+    fun inject(entity: TestDataChild)
+}

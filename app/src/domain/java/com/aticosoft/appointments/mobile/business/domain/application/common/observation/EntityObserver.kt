@@ -35,7 +35,7 @@ import javax.inject.Inject
     protected open val defaultQueryView = QueryView.DEFAULT
 
     //TODO handle errors? Add Crashlytics for handling them (use RxJavaErrorHandler?)
-
+    //TODO take into account rollbacks during transactions???
     //TODO use retryWhen to add exponential back-off retry (starts at 0.5s to a max of 5s),
     //TODO for this probably a custom operator is necessary since RxJava retry*/CATCH*??? operators do not reset after a successful emission? (Use composition for this custom operator?)
 
@@ -45,7 +45,6 @@ import javax.inject.Inject
 
     protected open fun entityByIdFilters(id: Long): Array<EntityObservationFilter<*>> = arrayOf(EntityObservationFilter(entityType) { it.id == id })
 
-    //TODO test/implement filter for get(id)
     fun observe(id: Long, queryView: QueryView = defaultQueryView) = entityObservable(queryView, entityByIdFilters(id)) { entityRepository.get(id) }
 
     fun observe(query: UniqueQuery<E>, queryView: QueryView = defaultQueryView) = entityObservable(queryView, query) { entityRepository.find(query) }
@@ -55,22 +54,6 @@ import javax.inject.Inject
     fun observe(query: CountQuery<E>) = entityObservable(QueryView.DEFAULT, query) { entityRepository.count(query) }
 
     fun observeTotalCount() = entityObservable(QueryView.DEFAULT, totalCountFilters) { entityRepository.size() }
-
-    //TODO queryView
-
-    //TODO think carefully about detach process, where should it occur? (after service call? after query for observation?)
-
-    //TODO default filters based on query views
-
-    //TODO test all observation methods?
-
-    //TODO use defaultOrEmpty? -->Nothing
-
-    //TODO inject entityContext at load time
-
-    //TODO take into account rollbacks during transactions???
-
-    //TODO change entity creation to factory stuff...
 
     private inline fun <R> entityObservable(queryView: QueryView, query: Query<*>, crossinline queryExecution: () -> R): Observable<R> = entityObservable(queryView, query.filters, queryExecution)
 

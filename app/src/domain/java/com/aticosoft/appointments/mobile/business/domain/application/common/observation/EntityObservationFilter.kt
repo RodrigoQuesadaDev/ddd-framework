@@ -9,11 +9,11 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 @Suppress("NOTHING_TO_INLINE")
 /*internal*/ class EntityObservationFilter<E : Entity>(
         val entityType: Class<E>,
-        vararg eventTypes: EventType = EventType.values,
+        vararg eventTypes: EventType = EventType.values(),
         private val criteria: (E) -> Boolean = { true }
 ) : (EntityChangeEvent<*>) -> Boolean {
 
-    private val eventTypes: Array<out EventType>? = if (eventTypes.distinct().size == EventType.values.size) null else eventTypes
+    private val eventTypes: Array<out EventType>? = if (eventTypes.distinct().size == EventType.values().size) null else eventTypes
 
     override fun invoke(entityChange: EntityChangeEvent<*>) = with(entityChange) {
         hasSameEntityType() && matchesEventTypes() && (currentValue.matchesCriteria() || previousValue.matchesCriteria())

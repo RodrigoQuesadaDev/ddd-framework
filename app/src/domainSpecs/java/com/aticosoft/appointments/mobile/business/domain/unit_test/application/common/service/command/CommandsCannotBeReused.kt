@@ -46,7 +46,7 @@ internal class CommandsCannotBeReused : DomainStory() {
 
         @Given("I create a command object and pass it to an application service")
         fun givenICreateACommandObjectAndPassItToAnApplicationService() {
-            command = AddNestedData(AddData(99))
+            command = AddNestedData(AddData(123))
             testDataServices.execute(command)
         }
 

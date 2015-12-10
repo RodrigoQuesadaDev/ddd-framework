@@ -12,10 +12,6 @@ import javax.inject.Singleton
  */
 @Singleton
 internal class TestDataParentQueries @Inject constructor(private val context: PersistenceContext) {
-    private companion object {
-        //TODO remove when https://github.com/querydsl/querydsl/issues/1665 is fixed
-        val ODD_NUMBERS_UP_TO_100 = (1..99 step 2).toArrayList()
-    }
 
     fun valueIs(value: Int) = UniqueQuery(EntityObservationFilter(TestDataParent::class.java) { it.value == value }) {
         val d = QTestDataParent.testDataParent
@@ -24,9 +20,7 @@ internal class TestDataParentQueries @Inject constructor(private val context: Pe
 
     fun isOdd(vararg filters: EntityObservationFilter<*>) = ListQuery(*filters) {
         val d = QTestDataParent.testDataParent
-        //TODO replace with commented code when https://github.com/querydsl/querydsl/issues/1665 is fixed
-        context.queryFactory.selectFrom(d).where(d.value.`in`(ODD_NUMBERS_UP_TO_100)).fetch()
-        //context.queryFactory.selectFrom(d).where(d.value.mod(2).eq(1)).fetch()
+        context.queryFactory.selectFrom(d).where(d.value.mod(2).eq(1)).fetch()
     }
 
     fun all() = ListQuery { context.queryFactory.selectFrom(QTestDataParent.testDataParent).fetch() }

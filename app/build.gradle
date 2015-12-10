@@ -72,6 +72,8 @@ dependencies {
     //TODO check http://blog.joda.org/2009/11/why-jsr-310-isn-joda-time_4941.html
     compile "joda-time:joda-time:$jodaTimeVersion"
     compile "com.googlecode.libphonenumber:libphonenumber:$libphonenumberVersion"
+    compile "com.google.auto.factory:auto-factory:$autoFactoryVersion"
+    kapt "com.google.auto.factory:auto-factory:$autoFactoryVersion"
     compile "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     compile "javax.annotation:jsr250-api:$jsr250ApiVersion" // needed for Dagger
@@ -109,6 +111,7 @@ dependencies {
     testCompile "com.fasterxml.jackson.module:jackson-module-paranamer:$jacksonVersion"
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.robolectric:robolectric:$robolectricVersion"
+    kaptTest "com.google.auto.factory:auto-factory:$autoFactoryVersion"
     kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptTest "com.querydsl:querydsl-apt:$queryDslVersion:jdo"
     kaptTest "org.datanucleus:javax.jdo:$jdoApiVersion"

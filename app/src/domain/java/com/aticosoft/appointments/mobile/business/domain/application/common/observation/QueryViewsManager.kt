@@ -3,7 +3,7 @@
 package com.aticosoft.appointments.mobile.business.domain.application.common.observation
 
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
-import com.aticosoft.appointments.mobile.business.infrastructure.persistence.observation.QueryViews
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.application.common.observation.QueryViews
 import com.querydsl.core.types.Path
 import com.rodrigodev.common.collection.toTypedArray
 import javax.inject.Inject

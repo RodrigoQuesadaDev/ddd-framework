@@ -3,7 +3,6 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.NonDetachedEntityException
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
@@ -11,7 +10,7 @@ import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataObserver
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
-import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataFactory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.DetachedEntityChecking.TestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.CommandTestDataServices
@@ -48,10 +47,10 @@ internal class DetachedEntityChecking : DomainStory() {
 
     class LocalSteps @Inject constructor(
             private val testDataRepositoryManager: TestDataRepositoryManager,
+            private val testDataFactory: TestDataFactory,
             override val testDataServices: CommandTestDataServices,
             private val testDataObserver: TestDataObserver,
-            private val testDataQueries: TestDataQueries,
-            private val entityContext: Entity.Context
+            private val testDataQueries: TestDataQueries
     ) : SpecSteps(), UsageTypeSteps, ExceptionThrowingSteps {
 
         override var throwable: Throwable? = null
@@ -81,7 +80,7 @@ internal class DetachedEntityChecking : DomainStory() {
 
         private inline fun listWithNewEntity(existingValues: MutableList<Int>) = existingValues.queryEntities() + createNewEntity()
 
-        private inline fun createNewEntity() = TestData(entityContext, 123)
+        private inline fun createNewEntity() = testDataFactory.create(123)
 
         private inline fun Iterable<Int>.queryEntities() = map {
             testDataObserver.observe(testDataQueries.valueIs(it)).testSubscribe().firstEvent()!!

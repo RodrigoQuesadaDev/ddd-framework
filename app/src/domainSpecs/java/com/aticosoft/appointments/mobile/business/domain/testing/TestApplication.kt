@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.testing
 
-import com.aticosoft.appointments.mobile.business.AbstractApplication
+import com.aticosoft.appointments.mobile.business.Application
 import com.aticosoft.appointments.mobile.business.ApplicationModule
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.test.common.ApplicationComponentConfigurator
@@ -15,7 +15,7 @@ import javax.inject.Inject
 internal abstract class TestApplication(
         private val testApplicationComponent: Class<*>,
         private val testModules: TestApplicationModules = TestApplicationModules()
-) : AbstractApplication<TestApplicationComponent<DomainStory>>(), TestLifecycleApplication {
+) : Application<TestApplicationComponent<DomainStory>>(), TestLifecycleApplication {
 
     @Inject protected lateinit var rxConfigurator: RxConfigurator
 
@@ -39,7 +39,7 @@ internal abstract class TestApplication(
     override fun prepareTest(test: Any) {
         @Suppress("UNCHECKED_CAST")
         test as DomainStory
-        applicationComponent.inject(test)
+        component.inject(test)
     }
 
     override fun afterTest(method: Method) {

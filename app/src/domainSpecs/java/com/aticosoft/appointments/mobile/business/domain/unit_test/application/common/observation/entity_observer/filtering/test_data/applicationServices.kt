@@ -1,7 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,7 +13,7 @@ internal class TestDataParentServices @Inject constructor(private val c: TestDat
     class AddData(val parentValue: Int, val childValue: Int) : Command()
 
     fun execute(command: AddData) = command.execute {
-        c.testDataRepository.add(TestDataParent(c.entityContext, parentValue, childValue))
+        c.testDataRepository.add(c.testDataParentFactory.create(parentValue, childValue))
     }
 
     class RemoveData(val value: Int) : Command()
@@ -43,7 +42,7 @@ internal class TestDataParentServices @Inject constructor(private val c: TestDat
     @Singleton
     class Context @Inject protected constructor(
             val superContext: ApplicationServices.Context,
-            val entityContext: Entity.Context,
+            val testDataParentFactory: TestDataParentFactory,
             val testDataRepository: TestDataParentRepository,
             val testDataQueries: TestDataParentQueries
     )

@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.aticosoft.appointments.mobile.business.domain.application.common.service
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices.Context
@@ -10,12 +12,16 @@ import javax.jdo.PersistenceManager
 /**
  * Created by Rodrigo Quesada on 23/09/15.
  */
-/*internal*/ abstract class ApplicationServices(protected val s: Context) {
+/*internal*/ abstract class ApplicationServices(private val c: Context) {
 
     protected fun <C : Command> C.execute(call: C.() -> Unit) {
+        checkIfReused()
+        init(c)
+        c.tm.transactional { call() }
+    }
+
+    private inline fun <C : Command> C.checkIfReused() {
         if (wasUsed) throw ReusedCommandException()
-        init(s)
-        s.tm.transactional { call() }
     }
 
     abstract class Command {
@@ -37,7 +43,7 @@ import javax.jdo.PersistenceManager
         }
     }
 
-    class Context @Inject constructor(
+    class Context @Inject protected constructor(
             val tm: TransactionManager,
             val persistenceContext: PersistenceContext
     )
