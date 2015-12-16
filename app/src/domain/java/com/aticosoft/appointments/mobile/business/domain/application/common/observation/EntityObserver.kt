@@ -5,7 +5,7 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver.Services
 import com.aticosoft.appointments.mobile.business.domain.common.time.TimeService
 import com.aticosoft.appointments.mobile.business.domain.model.common.*
-import com.aticosoft.appointments.mobile.business.infrastructure.persistence.TransactionManager
+import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.rodrigodev.common.collection.plus
 import com.rodrigodev.common.rx.Observables
 import com.rodrigodev.common.rx.firstOrNull
@@ -35,11 +35,9 @@ import javax.inject.Inject
     protected open val defaultQueryView = QueryView.DEFAULT
 
     //TODO handle errors? Add Crashlytics for handling them (use RxJavaErrorHandler?)
-    //TODO take into account rollbacks during transactions???
+    //TODO take into account rollbacks during transactions??? (that would be for application services, though, because observation is now non-transactional)
     //TODO use retryWhen to add exponential back-off retry (starts at 0.5s to a max of 5s),
     //TODO for this probably a custom operator is necessary since RxJava retry*/CATCH*??? operators do not reset after a successful emission? (Use composition for this custom operator?)
-
-    //TODO add consistent (?) parameter that indicates if the underlying db operation should be transactional (thinking about it this is probably not necessary + observation should be non-transactional)
 
     private val totalCountFilters = arrayOf(EntityObservationFilter(entityType, ADD, REMOVE))
 
@@ -72,9 +70,7 @@ import javax.inject.Inject
 
     protected open fun Array<out EntityObservationFilter<*>>.plusDefaultFiltersFrom(queryView: QueryView) = this + queryView.defaultFiltersFor(this)
 
-    private inline fun <R> executeQuery(queryView: QueryView, queryExecution: () -> R): R = s.tm.transactional {
-        s.queryViewsManager.withView(queryView, queryExecution)
-    }
+    private inline fun <R> executeQuery(queryView: QueryView, queryExecution: () -> R): R = s.persistenceContext.execute(false) { s.queryViewsManager.withView(queryView, queryExecution) }
 
     private inline fun Observable<FilterableEntityChangeEvent>.throttleFirstChange(initialIntervalDuration: Duration, intervalDuration: Duration): Observable<FilterableEntityChangeEvent> {
         val ticks = Observables.interval(initialIntervalDuration, intervalDuration).share()
@@ -101,8 +97,8 @@ import javax.inject.Inject
 
     class Services @Inject constructor(
             val entityListenersManager: EntityListenersManager,
-            val tm: TransactionManager,
             val queryViewsManager: QueryViewsManager,
+            val persistenceContext: PersistenceContext,
             val timeService: TimeService
     )
 }

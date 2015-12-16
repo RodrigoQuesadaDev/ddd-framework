@@ -15,9 +15,13 @@ import javax.jdo.PersistenceManager
  * Created by Rodrigo Quesada on 23/09/15.
  */
 @Singleton
-/*internal*/ class TransactionManager @Inject constructor(
-        val context: PersistenceContext
-) {
+/*internal*/ class TransactionManager @Inject protected constructor() {
+
+    lateinit var context: PersistenceContext;
+
+    fun init(context: PersistenceContext) {
+        this.context = context
+    }
 
     val transactionListener = object : Synchronization {
 
@@ -32,7 +36,7 @@ import javax.jdo.PersistenceManager
         }
     }
 
-    inline fun <R> transactional(call: () -> R): R = context.use {
+    inline fun <R> withinTransactional(call: () -> R): R {
         val result: R
         val pm = context.persistenceManager
         pm.doNotReadFromCache()
@@ -52,9 +56,8 @@ import javax.jdo.PersistenceManager
             if (tx.isActive) {
                 tx.rollback()
             }
-            pm.close()
         }
-        result
+        return result
     }
 
     fun PersistenceManager.doNotReadFromCache() = setProperty(PropertyNames.PROPERTY_CACHE_L2_RETRIEVE_MODE, "bypass")

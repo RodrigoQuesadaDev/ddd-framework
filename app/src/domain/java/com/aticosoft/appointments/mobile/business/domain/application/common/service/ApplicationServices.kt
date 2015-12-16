@@ -17,7 +17,7 @@ import javax.jdo.PersistenceManager
     protected fun <C : Command> C.execute(call: C.() -> Unit) {
         checkIfReused()
         init(c)
-        c.tm.transactional { call() }
+        c.persistenceContext.execute { call() }
     }
 
     private inline fun <C : Command> C.checkIfReused() {

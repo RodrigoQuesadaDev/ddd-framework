@@ -20,7 +20,7 @@ internal abstract class TestRepositoryManager<R : JdoRepository<*>>(
 ) : PersistenceManagerFactoryAccessor {
 
     fun clear() {
-        s.tm.transactional { s.context.queryFactory.delete(repository.queryEntity).execute() }
+        s.context.execute { s.context.queryFactory.delete(repository.queryEntity).execute() }
     }
 
     fun clearCache() {

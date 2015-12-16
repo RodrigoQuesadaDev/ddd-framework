@@ -17,8 +17,13 @@ import javax.jdo.listener.InstanceLifecycleListener
  */
 @Singleton
 /*internal*/ class PersistenceContext @Inject constructor(
-        private val pmf: PersistenceManagerFactory
+        private val pmf: PersistenceManagerFactory,
+        val tm: TransactionManager
 ) : Closeable {
+
+    init {
+        tm.init(this)
+    }
 
     private val threadLocalCleaner = ThreadLocalCleaner()
 
@@ -43,7 +48,15 @@ import javax.jdo.listener.InstanceLifecycleListener
         entityListeners.forEach { it.onTransactionCommitted() }
     }
 
+    inline fun <R> execute(transactional: Boolean = true, block: () -> R): R = if (transactional) {
+        executeWithinContext { tm.withinTransactional { block() } }
+    }
+    else executeWithinContext { block() }
+
+    inline fun<R> executeWithinContext(block: () -> R): R = use { block() }
+
     override fun close() {
+        persistenceManager.close()
         threadLocalCleaner.cleanUpThreadLocalInstances()
         entityListeners.forEach { it.resetLocalState() }
     }
