@@ -13,13 +13,13 @@ import javax.inject.Singleton
 @Singleton
 /*internal*/ class AppointmentServices @Inject protected constructor(
         context: ApplicationServices.Context,
-        private val appointmentFactory: AppointmentFactory,
-        private val appointmentRepository: AppointmentRepository
+        private val factory: AppointmentFactory,
+        private val repository: AppointmentRepository
 ) : ApplicationServices(context) {
 
     class ScheduleAppointment(val clientId: Long, val time: DateTime) : Command()
 
     fun execute(command: ScheduleAppointment) = command.execute {
-        appointmentRepository.add(appointmentFactory.create(clientId, time))
+        repository.add(factory.create(clientId, time))
     }
 }

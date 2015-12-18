@@ -12,4 +12,4 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 27/09/15.
  */
 @Singleton
-/*internal*/ class JdoClientRepository @Inject constructor(context: PersistenceContext) : JdoRepositoryBase<Client>(context, QClient.client), ClientRepository
+/*internal*/ class JdoClientRepository @Inject protected constructor(context: PersistenceContext) : JdoRepositoryBase<Client>(context, QClient.client), ClientRepository

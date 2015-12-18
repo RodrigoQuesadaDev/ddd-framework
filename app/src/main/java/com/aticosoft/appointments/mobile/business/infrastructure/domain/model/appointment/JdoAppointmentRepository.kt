@@ -12,4 +12,4 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 25/09/15.
  */
 @Singleton
-/*internal*/ class JdoAppointmentRepository @Inject constructor(context: PersistenceContext) : JdoRepositoryBase<Appointment>(context, QAppointment.appointment), AppointmentRepository
+/*internal*/ class JdoAppointmentRepository @Inject protected constructor(context: PersistenceContext) : JdoRepositoryBase<Appointment>(context, QAppointment.appointment), AppointmentRepository

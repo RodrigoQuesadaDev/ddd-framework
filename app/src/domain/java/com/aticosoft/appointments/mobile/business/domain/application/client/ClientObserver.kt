@@ -10,4 +10,4 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 19/10/15.
  */
 @Singleton
-class ClientObserver @Inject constructor(services: EntityObserver.Services, clientRepository: ClientRepository) : EntityObserver<Client>(services, clientRepository, Client::class.java)
+class ClientObserver @Inject protected constructor(services: EntityObserver.Services, clientRepository: ClientRepository) : EntityObserver<Client>(services, clientRepository, Client::class.java)

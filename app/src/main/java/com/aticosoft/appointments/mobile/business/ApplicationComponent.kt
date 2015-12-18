@@ -11,6 +11,7 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(ApplicationModule::class))
 interface ApplicationComponent : EntityInjection {
 
+    fun inject(application: Application.Context)
     fun inject(mainActivity: MainActivity)
     fun inject(applicationConfigurator: Application.Configurator)
 }

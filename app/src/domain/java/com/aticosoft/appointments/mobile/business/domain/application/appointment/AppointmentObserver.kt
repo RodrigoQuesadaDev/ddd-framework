@@ -10,4 +10,4 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 18/10/15.
  */
 @Singleton
-class AppointmentObserver @Inject constructor(services: EntityObserver.Services, entityRepository: AppointmentRepository) : EntityObserver<Appointment>(services, entityRepository, Appointment::class.java)
+class AppointmentObserver @Inject protected constructor(services: EntityObserver.Services, entityRepository: AppointmentRepository) : EntityObserver<Appointment>(services, entityRepository, Appointment::class.java)
