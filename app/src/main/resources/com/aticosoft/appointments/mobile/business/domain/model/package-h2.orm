@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_2.dtd">
 <orm>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.common">
         <class name="Entity">
@@ -11,7 +11,7 @@
     <package name="com.aticosoft.appointments.mobile.business.domain.model.appointment">
         <class name="Appointment" table="APPOINTMENT">
             <field name="scheduledTime">
-                <column name="SCHEDULED_TIME"/>
+                <column name="SCHEDULED_TIME" jdbc-type="VARCHAR"/>
             </field>
         </class>
     </package>

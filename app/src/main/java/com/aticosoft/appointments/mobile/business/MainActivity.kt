@@ -8,6 +8,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appoi
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.QAppointment
 import com.querydsl.jdo.JDOQueryFactory
 import org.joda.time.DateTime
+import org.joda.time.Interval
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.jdo.PersistenceManager
@@ -32,7 +33,7 @@ import javax.jdo.PersistenceManagerFactory
 
     private fun renderStuff() {
 
-        var appointment = appointmentFactory.create(1, DateTime.now())
+        var appointment = appointmentFactory.create(1, Interval(DateTime.now(), DateTime.now().plusHours(1)))
 
         val pm = pmf.persistenceManager
         val tx = pm.currentTransaction()

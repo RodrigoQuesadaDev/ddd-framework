@@ -5,5 +5,5 @@ import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appoint
 /**
  * Created by Rodrigo Quesada on 17/12/15.
  */
-internal class SchedulingIsBasedOnBlocks : AppointmentStory() {
+internal class SchedulingIsBasedOnSlots : AppointmentStory() {
 }

@@ -2,9 +2,9 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.a
 
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.QAppointment
-import com.aticosoft.appointments.mobile.business.domain.model.common.UniqueQuery
+import com.aticosoft.appointments.mobile.business.domain.model.common.ListQuery
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
-import org.joda.time.DateTime
+import org.joda.time.Interval
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,8 +14,8 @@ import javax.inject.Singleton
 @Singleton
 /*internal*/ class JdoAppointmentQueries @Inject protected constructor(private val context: PersistenceContext) : AppointmentQueries {
 
-    override fun dateIs(date: DateTime) = UniqueQuery {
+    override fun timeIs(time: Interval) = ListQuery {
         val a = QAppointment.appointment
-        context.queryFactory.selectFrom(a).where(a.scheduledTime.eq(date)).fetchOne()
+        context.queryFactory.selectFrom(a).where(a.scheduledTime.eq(time.toString())).fetch()
     }
 }

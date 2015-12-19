@@ -2,7 +2,9 @@ package com.aticosoft.appointments.mobile.business.domain.model.appointment
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.google.auto.factory.Provided
-import org.joda.time.DateTime
+import com.querydsl.core.annotations.PropertyType
+import com.querydsl.core.annotations.QueryType
+import org.joda.time.Interval
 import javax.jdo.annotations.PersistenceCapable
 
 /**
@@ -13,11 +15,12 @@ import javax.jdo.annotations.PersistenceCapable
 class Appointment protected constructor(
         @Provided context: Entity.Context,
         clientId: Long,
-        scheduledTime: DateTime
+        scheduledTime: Interval
 ) : Entity(context) {
 
     var clientId = clientId
         private set
+    @QueryType(PropertyType.STRING)
     var scheduledTime = scheduledTime
         private set
 }
