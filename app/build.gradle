@@ -67,6 +67,7 @@ dependencies {
     compile(project(':common')) {
         transitive = false
     }
+    //TODO try to remove Guava dependency (the app code mostly uses it for guard checking)
     compile "com.google.guava:guava:$guavaVersion"
     //TODO use https://github.com/dlew/joda-time-android#why-this-library or https://github.com/JakeWharton/ThreeTenABP?
     //TODO check http://blog.joda.org/2009/11/why-jsr-310-isn-joda-time_4941.html
@@ -101,6 +102,7 @@ dependencies {
     compile "io.reactivex:rxjava-joins:$rxJavaJoinsVersion"
     compile "io.reactivex:rxjava-async-util:$rxJavaAsyncVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
 
     testCompile project(':testingCommon')
     testCompile "org.jbehave:jbehave-core:$jBehaveVersion"

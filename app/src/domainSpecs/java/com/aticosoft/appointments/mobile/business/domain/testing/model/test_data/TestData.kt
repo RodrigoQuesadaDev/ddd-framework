@@ -11,7 +11,7 @@ import javax.jdo.annotations.PersistenceCapable
  */
 @PersistenceCapable
 //@AutoFactory
-internal class TestData protected constructor(@Provided c: TestData.Context, value: Int) : AbstractTestData(c.entityContext, value) {
+internal open class TestData protected constructor(@Provided c: TestData.Context, value: Int) : AbstractTestData(c.entityContext, value) {
 
     @Transient var c: Context? = c
         @Inject protected set

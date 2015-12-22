@@ -4,8 +4,6 @@ In order to schedule an appointment for a given client
 As a business owner
 I want to be able to manually schedule appointments
 
-!--TODO change examples when end-time is added  (schedules should be ranges and not just instants of time)
-
 GivenStories: com/aticosoft/appointments/mobile/business/domain/specs/use_cases/client/given_stories/given_some_existing_clients.story
 
 Scenario: set-up initial appointments
@@ -14,7 +12,8 @@ Given no appointments scheduled
 
 Scenario: successful booking
 
-Given a maximum number of concurrent appointments equal to <max_conc>
+Given a default configuration
+And a maximum number of concurrent appointments equal to <max_conc>
 When the owner schedules an appointment for <client> on <time>
 Then an appointment is scheduled for <client> on <time>
 

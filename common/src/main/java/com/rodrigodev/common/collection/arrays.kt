@@ -1,5 +1,7 @@
 package com.rodrigodev.common.collection
 
+import kotlin.collections.plus
+
 /**
  * Created by Rodrigo Quesada on 23/11/15.
  */

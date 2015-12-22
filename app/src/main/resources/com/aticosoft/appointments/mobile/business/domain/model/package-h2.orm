@@ -22,4 +22,14 @@
             </field>
         </class>
     </package>
+    <package name="com.aticosoft.appointments.mobile.business.domain.model.configuration">
+        <class name="Configuration">
+            <field name="maxConcurrentAppointments">
+                <column name="MAX_CONCURRENT_APPOINTMENTS"/>
+            </field>
+            <field name="timeSlotDuration">
+                <column name="TIME_SLOT_DURATION"/>
+            </field>
+        </class>
+    </package>
 </orm>

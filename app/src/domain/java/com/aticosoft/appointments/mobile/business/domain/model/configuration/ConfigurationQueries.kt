@@ -7,5 +7,5 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.UniqueQuer
  */
 interface ConfigurationQueries {
 
-    fun retrieve(): UniqueQuery<Configuration>
+    val RETRIEVE: UniqueQuery<Configuration>
 }

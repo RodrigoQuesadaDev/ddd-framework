@@ -6,6 +6,7 @@ import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.DomainModelModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInjector
 import com.rodrigodev.common.collection.plus
+import kotlin.collections.plus
 
 /**
  * Created by Rodrigo Quesada on 04/12/15.

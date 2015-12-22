@@ -13,5 +13,5 @@ import javax.inject.Singleton
 @Singleton
 /*internal*/ class JdoConfigurationQueries @Inject protected constructor(private val context: PersistenceContext) : ConfigurationQueries {
 
-    override fun retrieve() = UniqueQuery { context.queryFactory.selectFrom(QConfiguration.configuration).fetchFirst() }
+    override val RETRIEVE = UniqueQuery { context.queryFactory.selectFrom(QConfiguration.configuration).fetchFirst() }
 }

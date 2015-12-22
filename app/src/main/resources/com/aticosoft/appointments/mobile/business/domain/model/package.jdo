@@ -5,7 +5,7 @@
         <class name="Entity">
             <inheritance strategy="subclass-table"/>
             <version strategy="version-number">
-                <extension vendor-name="datanucleus" key="field-name" value="version"/>
+                <extension key="field-name" value="version" vendor-name="datanucleus"/>
             </version>
             <field name="id" primary-key="true"/>
             <field name="version">
@@ -21,6 +21,12 @@
     <package name="com.aticosoft.appointments.mobile.business.domain.model.client">
         <class name="Client">
             <field name="name"/>
+        </class>
+    </package>
+    <package name="com.aticosoft.appointments.mobile.business.domain.model.configuration">
+        <class name="Configuration">
+            <field name="maxConcurrentAppointments"/>
+            <field name="timeSlotDuration"/>
         </class>
     </package>
 </jdo>

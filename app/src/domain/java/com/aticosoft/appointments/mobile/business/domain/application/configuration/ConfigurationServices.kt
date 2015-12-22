@@ -1,8 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.application.configuration
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
-import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationQueries
-import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationRepository
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServicesBase
+import org.joda.time.Duration
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -11,16 +10,24 @@ import javax.inject.Singleton
  */
 @Singleton
 /*internal*/ class ConfigurationServices @Inject protected constructor(
-        context: ApplicationServices.Context,
-        private val repository: ConfigurationRepository,
-        private val queries: ConfigurationQueries
-) : ApplicationServices(context) {
+        context: ApplicationServicesBase.Context
+) : ApplicationServicesBase(context) {
+
+    class ResetConfiguration : Command()
+
+    fun execute(command: ResetConfiguration) = command.execute {
+        retrieveConfiguration().reset()
+    }
 
     class ChangeMaxConcurrentAppointments(val value: Int) : Command()
 
     fun execute(command: ChangeMaxConcurrentAppointments) = command.execute {
-        repository.find(queries.retrieve())!!.let { configuration ->
-            configuration.maxConcurrentAppointments = value
-        }
+        retrieveConfiguration().maxConcurrentAppointments = value
+    }
+
+    class ChangeTimeSlotDuration(val value: Duration) : Command()
+
+    fun execute(command: ChangeTimeSlotDuration) = command.execute {
+        retrieveConfiguration().timeSlotDuration = value
     }
 }

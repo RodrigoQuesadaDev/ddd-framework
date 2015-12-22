@@ -36,6 +36,7 @@ abstract class SpecStory : JUnitStory() {
             JsonConverter(),
             ListConverter(parameterConverters),
             LocalDateConverter(),
+            DurationConverter(),
             CustomNumberListConverter(),
             CustomNumberConverter()
     );

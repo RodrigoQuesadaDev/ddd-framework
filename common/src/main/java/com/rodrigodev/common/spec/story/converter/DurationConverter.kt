@@ -1,40 +1,39 @@
 package com.rodrigodev.common.spec.story.converter
 
+import com.rodrigodev.common.concurrent.minsToMillis
 import com.rodrigodev.common.concurrent.secsToMillis
+import com.rodrigodev.common.spec.story.converter.DurationConverter.TimeUnitPatterns.MINUTES
+import com.rodrigodev.common.spec.story.converter.DurationConverter.TimeUnitPatterns.SECONDS
 import org.jbehave.core.steps.ParameterConverters.NumberConverter
 import org.jbehave.core.steps.ParameterConverters.ParameterConvertionFailed
 import org.joda.time.Duration
-import org.joda.time.Duration.millis
 import java.lang.reflect.Type
-import kotlin.text.Regex
 
 /**
-* Created by Rodrigo Quesada on 29/10/15.
-*/
+ * Created by Rodrigo Quesada on 29/10/15.
+ */
 class DurationConverter : ParameterConverterBase<Duration>(Duration::class.java) {
     private companion object {
-        val TIME_PATTERN = Regex("(\\d+(?:\\.\\d+)?)\\s?(.+)")
+        val DURATION_PATTERN = Regex("(\\d+(?:\\.\\d+)?)\\s?(.+)", RegexOption.IGNORE_CASE)
         val NUMBER_CONVERTER = NumberConverter()
     }
 
-    private object TimeUnitPatterns {
-        val SECONDS = Regex("(?:secs?)|s")
+    protected object TimeUnitPatterns {
+        val SECONDS = Regex("s(?:ec(?:ond)?s?)?", RegexOption.IGNORE_CASE)
+        val MINUTES = Regex("m(?:in(?:ute)?s?)?", RegexOption.IGNORE_CASE)
     }
 
     override fun convertValue(value: String, type: Type): Duration {
         try {
-            val matchResult = TIME_PATTERN.matchEntire(value)
-            val timeValueString = matchResult!!.groups[1]!!.value
-            val timeUnit = matchResult.groups[2]!!.value
-
-            val timeValue: Double = NUMBER_CONVERTER.convertValue(timeValueString, Double::class.java) as Double
-            return when {
-                timeUnit.matches(TimeUnitPatterns.SECONDS) -> {
-                    millis(timeValue.secsToMillis())
-                }
-                else -> {
-                    throw IllegalArgumentException("Time unit doesn't match any of the patterns.")
-                }
+            val matchResult = DURATION_PATTERN.matchEntire(value)
+            with(matchResult!!) {
+                val timeValue: Double = NUMBER_CONVERTER.convertValue(groups[1]!!.value, Double::class.java) as Double
+                val timeUnit = groups[2]!!.value
+                return Duration.millis(when {
+                    timeUnit.matches(SECONDS) -> timeValue.secsToMillis()
+                    timeUnit.matches(MINUTES) -> timeValue.minsToMillis()
+                    else -> throw IllegalArgumentException("Invalid time unit value: \"$timeUnit\"")
+                })
             }
         }
         catch(e: Exception) {

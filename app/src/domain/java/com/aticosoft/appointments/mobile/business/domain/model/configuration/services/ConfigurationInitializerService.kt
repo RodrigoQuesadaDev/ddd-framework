@@ -17,7 +17,7 @@ import javax.inject.Singleton
 ) {
 
     fun run() {
-        var configuration = configurationRepository.find(configurationQueries.retrieve())
+        var configuration = configurationRepository.find(configurationQueries.RETRIEVE)
         if (configuration == null) {
             configuration = configurationFactory.create()
             configurationRepository.add(configuration)
