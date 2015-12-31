@@ -5,13 +5,13 @@ package com.aticosoft.appointments.mobile.business.domain.application.common.obs
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.application.common.observation.QueryViews
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.querydsl.core.types.Path
+import com.rodrigodev.common.collection.peek
 import com.rodrigodev.common.collection.toTypedArray
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.jdo.FetchGroup
 import javax.jdo.FetchPlan
 import javax.jdo.PersistenceManagerFactory
-import kotlin.test.assertTrue
 
 /**
  * Created by Rodrigo Quesada on 17/11/15.
@@ -52,7 +52,7 @@ import kotlin.test.assertTrue
  * Register Views
  **************************************************************************************************/
 
-private inline fun Sequence<Path<*>>.checkFields() = map { it.apply { assertTrue(metadata.parent?.metadata!!.isRoot, "Specified fields for QueryView must be direct fields of root element.") } }
+private inline fun Sequence<Path<*>>.checkFields() = peek { check(it.metadata.parent?.metadata?.isRoot ?: false, { "Specified fields for QueryView must be direct fields of root element." }) }
 
 private inline fun PersistenceManagerFactory.addFetchGroupForRoot(info: FetchGroupInfo) = with(info) {
     val fetchGroup = getFetchGroup(field.root.type, name)

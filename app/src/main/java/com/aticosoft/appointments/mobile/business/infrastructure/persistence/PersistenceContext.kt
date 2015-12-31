@@ -2,6 +2,7 @@ package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.model.common.EntityLifecycleListener
 import com.querydsl.jdo.JDOQueryFactory
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
 import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
@@ -36,8 +37,12 @@ import javax.jdo.listener.InstanceLifecycleListener
     private val entityListeners: List<EntityListener<*>> by lazy { entityListenerListBuilder.build() }
 
     fun registerEntityListener(entityListener: EntityListener<*>) {
-        registerLifecycleListener(entityListener, entityListener.entityType)
+        registerEntityLifecycleListener(entityListener)
         entityListenerListBuilder.add(entityListener)
+    }
+
+    fun registerEntityLifecycleListener(entityLifecycleListener: EntityLifecycleListener<*>) {
+        registerLifecycleListener(entityLifecycleListener, entityLifecycleListener.entityType)
     }
 
     fun registerLifecycleListener(lifecycleListener: InstanceLifecycleListener, instanceType: Class<out Entity>) {

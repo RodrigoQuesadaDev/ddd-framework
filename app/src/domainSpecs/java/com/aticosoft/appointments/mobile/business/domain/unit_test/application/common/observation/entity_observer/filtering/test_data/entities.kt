@@ -4,7 +4,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.create
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParent.Context
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInjector
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInitializer
 import com.google.auto.factory.Provided
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,7 +33,7 @@ internal class TestDataChild protected constructor(@Provided context: Entity.Con
 
 val entityTypes: Array<Class<out Entity>> = arrayOf(TestDataParent::class.java, TestDataChild::class.java)
 
-internal fun provideEntityInjectors(entityInjectorFactory: EntityInjector.Factory) = with(entityInjectorFactory) {
+internal fun provideEntityInitializers(entityInitializerFactory: EntityInitializer.Factory) = with(entityInitializerFactory) {
     arrayOf(
             create<TestDataParent> { inject(it) },
             create<TestDataChild> { inject(it) }

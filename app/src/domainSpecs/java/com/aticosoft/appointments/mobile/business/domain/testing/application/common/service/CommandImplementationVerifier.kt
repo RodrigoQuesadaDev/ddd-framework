@@ -17,7 +17,6 @@ import java.lang.reflect.Field
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.lang.reflect.TypeVariable
-import kotlin.jvm.internal.KotlinClass
 import kotlin.properties.Delegates.notNull
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
@@ -66,7 +65,9 @@ private inline fun KProperty1<*, *>.isValid(): Boolean = returnType.javaType.let
  * Classes
  **************************************************************************************************/
 
-private inline fun Class<*>.isKotlinClass() = isAnnotationPresent(KotlinClass::class.java)
+private val KOTLIN_METADATA_ANNOTATION_NAME = "kotlin.Metadata"
+
+private inline fun Class<*>.isKotlinClass() = declaredAnnotations.any { it.annotationClass.java.name == KOTLIN_METADATA_ANNOTATION_NAME }
 
 private inline fun KClass<*>.nonCommandMemberProperties() = Command::class.let { memberPropertiesNotIn(it) }
 

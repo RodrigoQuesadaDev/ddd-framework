@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
+<orm>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data">
+        <class name="OddValueAndEmailValidatedTestData">
+            <field name="email">
+                <column name="EMAIL"/>
+            </field>
+        </class>
+        <class name="OddValueAndEmailParent" table="ODD_VALUE_AND_EMAIL_PARENT">
+            <field name="number">
+                <column name="NUMBER"/>
+            </field>
+            <field name="child">
+                <column name="CHILD_ID"/>
+            </field>
+        </class>
+        <class name="OddValueAndEmailChild" table="ODD_VALUE_AND_EMAIL_CHILD">
+            <field name="number">
+                <column name="NUMBER"/>
+            </field>
+        </class>
+        <class name="PrimeNumberAndGmailValidatedTestData">
+            <field name="number">
+                <column name="NUMBER"/>
+            </field>
+            <field name="email">
+                <column name="EMAIL"/>
+            </field>
+            <field name="extraValue">
+                <column name="EXTRA_VALUE"/>
+            </field>
+        </class>
+        <class name="PrimeNumberAndGmailParent" table="PRIME_NUMBER_AND_GMAIL_PARENT">
+            <field name="child">
+                <column name="CHILD_ID"/>
+            </field>
+        </class>
+        <class name="PrimeNumberAndGmailChild" table="PRIME_NUMBER_AND_GMAIL_CHILD"/>
+    </package>
+</orm>

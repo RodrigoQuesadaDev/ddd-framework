@@ -56,7 +56,7 @@ internal interface UsageType {
     val text: String
 
     open class CompanionDefinition<out U : UsageType>(values: Array<U>) {
-        private val typeMap: Map<String, U> = values.toMapBy { it.text }
+        private val typeMap: Map<String, U> = values.associateBy { it.text }
 
         fun from(text: String): U = typeMap[text] ?: error("Unrecognized usage: \"$text\"")
     }

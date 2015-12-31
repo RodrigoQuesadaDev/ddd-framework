@@ -9,14 +9,9 @@ import com.querydsl.core.types.dsl.NumberPath
 /**
  * Created by Rodrigo Quesada on 21/09/15.
  */
-/*internal*/ interface JdoRepository<E : Entity> : Repository<E> {
+/*internal*/ abstract class JdoRepository<E : Entity>(protected val context: PersistenceContext, entityPath: EntityPath<E>) : Repository<E> {
 
-    val queryEntity: QueryEntity<E>
-}
-
-/*internal*/ abstract class JdoRepositoryBase<E : Entity>(protected val context: PersistenceContext, entityPath: EntityPath<E>) : JdoRepository<E> {
-
-    override val queryEntity = QueryEntity(entityPath)
+    val queryEntity: QueryEntity<E> = QueryEntity(entityPath)
 
     override fun add(entity: E) {
         context.persistenceManager.makePersistent(entity)
@@ -37,5 +32,5 @@ import com.querydsl.core.types.dsl.NumberPath
     }
 
     @Suppress("UNCHECKED_CAST")
-    val id: NumberPath<Long> = entityPath.javaClass.getField(ID_FIELD).get(entityPath) as NumberPath<Long>
+    val id: NumberPath<Long> by lazy { entityPath.javaClass.getField(ID_FIELD).get(entityPath) as NumberPath<Long> }
 }

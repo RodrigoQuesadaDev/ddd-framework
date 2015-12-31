@@ -6,11 +6,15 @@ import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.*
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
-import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.EntityType.CHILD
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.EntityType.PARENT
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.ObservingEntityChanges.TestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataChild
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParent
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentServices
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentServices.*
 import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.testing.testSubscribe
 import dagger.Component
@@ -43,27 +47,31 @@ internal class ObservingEntityChanges : DomainStory() {
 
     class LocalSteps @Inject constructor(
             private val entityListenersManager: EntityListenersManager,
-            private val testDataRepositoryManager: TestDataRepositoryManager,
-            private val testDataServices: TestDataServices,
+            private val testDataRepositoryManager: TestDataParentRepositoryManager,
+            private val testDataServices: TestDataParentServices,
             private val testScheduler: TestScheduler
     ) : SpecSteps() {
 
-        private val testDataListener = entityListenersManager.forType(TestData::class.java)
-        private lateinit var testSubscriber: TestSubscriber<EntityChangeEvent<TestData>>
+        private val testDataParentListener = entityListenersManager.forType(TestDataParent::class.java)
+        private val testDataChildListener = entityListenersManager.forType(TestDataChild::class.java)
+        private lateinit var testSubscriber: TestSubscriber<out EntityChangeEvent<out AbstractTestData>>
 
         @Given("no data")
         fun givenNoData() {
             testDataRepositoryManager.clear()
         }
 
-        @Given("I subscribe to the EntityListener")
-        fun givenISubscribeToTheEntityListener() {
-            testSubscriber = testDataListener.changes.testSubscribe()
+        @Given("I subscribe to the EntityListener of a \$entityType entity")
+        fun givenISubscribeToTheEntityListener(entityType: EntityType) {
+            testSubscriber = when (entityType) {
+                PARENT -> testDataParentListener.changes.testSubscribe()
+                CHILD -> testDataChildListener.changes.testSubscribe()
+            }
         }
 
         @When("{after that |}I insert [\$values]")
         fun whenAfterThatIInsert(values: MutableList<Int>) {
-            values.forEach { testDataServices.execute(AddData(it)) }
+            values.forEach { testDataServices.execute(AddData(it, it)) }
         }
 
         @When("{after that |}I delete [\$values]")
@@ -84,7 +92,7 @@ internal class ObservingEntityChanges : DomainStory() {
     }
 }
 
-private fun EntityChangeEvent<TestData>.toExample() = ChangeEventExample(type, previous = previousValue?.value, current = currentValue?.value)
+private fun EntityChangeEvent<out AbstractTestData>.toExample() = ChangeEventExample(type, previous = previousValue?.value, current = currentValue?.value)
 
 @AsParameters
 internal data class ChangeEventExample(
@@ -94,3 +102,5 @@ internal data class ChangeEventExample(
 ) {
     constructor() : this(null, null, null)
 }
+
+internal enum class EntityType {PARENT, CHILD }

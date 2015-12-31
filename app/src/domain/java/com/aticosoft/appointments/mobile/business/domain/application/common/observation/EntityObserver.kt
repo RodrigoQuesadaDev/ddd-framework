@@ -21,7 +21,6 @@ import javax.inject.Inject
 /**
  * Created by Rodrigo Quesada on 15/10/15.
  */
-//TODO this should be abstract?
 @Suppress("NOTHING_TO_INLINE")
 /*internal*/ abstract class EntityObserver<E : Entity>(
         private val s: Services,
@@ -33,11 +32,6 @@ import javax.inject.Inject
     }
 
     protected open val defaultQueryView = QueryView.DEFAULT
-
-    //TODO handle errors? Add Crashlytics for handling them (use RxJavaErrorHandler?)
-    //TODO take into account rollbacks during transactions??? (that would be for application services, though, because observation is now non-transactional)
-    //TODO use retryWhen to add exponential back-off retry (starts at 0.5s to a max of 5s),
-    //TODO for this probably a custom operator is necessary since RxJava retry*/CATCH*??? operators do not reset after a successful emission? (Use composition for this custom operator?)
 
     private val totalCountFilters = arrayOf(EntityObservationFilter(entityType, ADD, REMOVE))
 

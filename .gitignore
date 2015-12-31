@@ -2,7 +2,8 @@
 .gradle
 *~
 /build
-/**/build
+/*/build
+/buildSrc/*/build
 /local.properties
 buildSrc/local.properties
 /.idea

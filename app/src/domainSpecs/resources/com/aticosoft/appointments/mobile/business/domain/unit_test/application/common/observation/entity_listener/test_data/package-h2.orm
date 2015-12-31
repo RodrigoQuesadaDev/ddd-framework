@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
+<orm>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data">
+        <class name="TestDataParent" table="TEST_DATA_PARENT1">
+            <field name="child">
+                <column name="CHILD_ID"/>
+            </field>
+        </class>
+        <class name="TestDataChild" table="TEST_DATA_CHILD1"/>
+    </package>
+</orm>

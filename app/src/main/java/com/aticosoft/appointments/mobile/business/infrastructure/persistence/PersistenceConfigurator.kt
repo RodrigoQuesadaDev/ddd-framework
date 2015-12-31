@@ -23,8 +23,7 @@ import javax.jdo.JDOHelper
         val CONNECTION_URL_PARAM_FORMAT = ";%s=%s"
     }
 
-    //TODO this object should be protected but it doesnt work right now
-    /*protected*/ object ConnectionUrlParameters {
+    protected object ConnectionUrlParameters {
         val MV_STORE = "MV_STORE"
         val FILE_LOCK = "FILE_LOCK"
         val PAGE_SIZE = "PAGE_SIZE"

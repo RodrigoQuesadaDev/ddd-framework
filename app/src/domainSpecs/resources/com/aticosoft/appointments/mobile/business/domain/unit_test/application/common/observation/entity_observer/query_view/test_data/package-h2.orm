@@ -2,7 +2,7 @@
 <!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
 <orm>
     <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data">
-        <class name="TestDataParent" table="TEST_DATA_PARENT2">
+        <class name="TestDataParent" table="TEST_DATA_PARENT3">
             <field name="child1">
                 <column name="CHILD1_ID"/>
             </field>
@@ -10,7 +10,7 @@
                 <column name="CHILD2_ID"/>
             </field>
         </class>
-        <class name="TestDataChild" table="TEST_DATA_CHILD2">
+        <class name="TestDataChild" table="TEST_DATA_CHILD3">
             <field name="grandChild1">
                 <column name="GRAND_CHILD1_ID"/>
             </field>
@@ -18,6 +18,6 @@
                 <column name="GRAND_CHILD2_ID"/>
             </field>
         </class>
-        <class name="TestDataGrandChild" table="TEST_DATA_GRAND_CHILD2"/>
+        <class name="TestDataGrandChild" table="TEST_DATA_GRAND_CHILD3"/>
     </package>
 </orm>

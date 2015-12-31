@@ -3,7 +3,7 @@
 <jdo>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.common">
         <class name="Entity">
-            <inheritance strategy="subclass-table"/>
+            <inheritance strategy="complete-table"/>
             <version strategy="version-number">
                 <extension key="field-name" value="version" vendor-name="datanucleus"/>
             </version>
@@ -27,6 +27,7 @@
         <class name="Configuration">
             <field name="maxConcurrentAppointments"/>
             <field name="timeSlotDuration"/>
+            <extension key="cache-pin" value="true" vendor-name="datanucleus"/>
         </class>
     </package>
 </jdo>

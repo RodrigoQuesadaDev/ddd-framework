@@ -3,6 +3,8 @@ package com.rodrigodev.common.spec.story
 import com.rodrigodev.common.spec.story.converter.*
 import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.spec.story.transformer.MultilineTableTransformer
+import com.thoughtworks.paranamer.BytecodeReadingParanamer
+import com.thoughtworks.paranamer.CachingParanamer
 import org.jbehave.core.configuration.MostUsefulConfiguration
 import org.jbehave.core.io.LoadFromClasspath
 import org.jbehave.core.junit.JUnitStory
@@ -63,6 +65,7 @@ abstract class SpecStory : JUnitStory() {
     override fun configuration() = MostUsefulConfiguration()
             .useParameterConverters(parameterConverters.addConverters(converters))
             .useParameterControls(ParameterControls().useDelimiterNamedParameters(true))
+            .useParanamer(CachingParanamer(BytecodeReadingParanamer()))
             .useStoryParser(RegexStoryParser(tableFactory))
             .useStoryLoader(LoadFromClasspath(this.javaClass))
             .useStoryReporterBuilder(

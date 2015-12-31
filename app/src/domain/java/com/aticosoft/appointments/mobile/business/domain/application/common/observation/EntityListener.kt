@@ -1,8 +1,8 @@
 package com.aticosoft.appointments.mobile.business.domain.application.common.observation
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityChangeEvent.EventType
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener.Services
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.model.common.EntityLifecycleListener
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
 import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
@@ -18,8 +18,8 @@ import javax.jdo.listener.*
  */
 /*internal*/ class EntityListener<E : Entity>(
         private val s: Services,
-        val entityType: Class<E>
-) : Entity.EntityStateReader, CreateLifecycleListener, StoreLifecycleListener, DeleteLifecycleListener, DirtyLifecycleListener {
+        override val entityType: Class<E>
+) : EntityLifecycleListener<E>, Entity.EntityStateAccess, CreateLifecycleListener, StoreLifecycleListener, DeleteLifecycleListener, DirtyLifecycleListener {
 
     //TODO create JdoEntityListenerBase on infrastructure stuff??? (this class pertains to domain)
     //TODO create JdoEntityChangeEvent on infrastructure stuff??? (this class pertains to domain)
@@ -63,7 +63,7 @@ import javax.jdo.listener.*
 
     override fun postStore(event: InstanceLifecycleEvent) {
         //only updates
-        if (!JDOHelper.isNew(event.persistentInstance)) {
+        if (!JDOHelper.isNew(event.source)) {
             @Suppress("UNCHECKED_CAST")
             (event.source as E).let { entity ->
                 entityChanges.add(EntityChangeEvent(EventType.from(event.eventType), previousValue = entity.previousValue as E, currentValue = entity))

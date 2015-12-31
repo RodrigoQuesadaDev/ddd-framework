@@ -19,8 +19,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
         hasSameEntityType() && matchesEventTypes() && (currentValue.matchesCriteria() || previousValue.matchesCriteria())
     }
 
-    //TODO wrong warning says "Unnecessary safe call on a non-null receiver..." KT-9893
-    private inline fun EntityChangeEvent<*>.hasSameEntityType() = currentValue?.javaClass ?: previousValue.javaClass == entityType
+    private inline fun EntityChangeEvent<*>.hasSameEntityType() = (currentValue?.javaClass ?: previousValue?.javaClass) == entityType
 
     private inline fun EntityChangeEvent<*>.matchesEventTypes() = eventTypes?.any { it == type } ?: true
 

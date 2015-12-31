@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.aticosoft.appointments.mobile.business.domain.application.appointment.checking
+package com.aticosoft.appointments.mobile.business.domain.model.appointment.validation
 
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.Configuration
 import com.rodrigodev.common.preconditions.checkArgument

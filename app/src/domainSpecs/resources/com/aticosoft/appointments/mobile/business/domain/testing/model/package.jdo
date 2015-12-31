@@ -3,7 +3,7 @@
 <jdo>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.common">
         <class name="Entity">
-            <inheritance strategy="subclass-table"/>
+            <inheritance strategy="complete-table"/>
             <version strategy="version-number">
                 <extension vendor-name="datanucleus" key="field-name" value="version"/>
             </version>
@@ -15,10 +15,6 @@
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.testing.model.test_data">
         <class name="AbstractTestData">
-            <inheritance strategy="subclass-table"/>
-            <version strategy="version-number">
-                <extension vendor-name="datanucleus" key="field-name" value="version"/>
-            </version>
             <field name="value"/>
         </class>
         <class name="TestData"/>

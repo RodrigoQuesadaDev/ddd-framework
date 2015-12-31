@@ -2,11 +2,11 @@
 <!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
 <orm>
     <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data">
-        <class name="TestDataParent" table="TEST_DATA_PARENT1">
+        <class name="TestDataParent" table="TEST_DATA_PARENT2">
             <field name="child">
                 <column name="CHILD_ID"/>
             </field>
         </class>
-        <class name="TestDataChild" table="TEST_DATA_CHILD1"/>
+        <class name="TestDataChild" table="TEST_DATA_CHILD2"/>
     </package>
 </orm>

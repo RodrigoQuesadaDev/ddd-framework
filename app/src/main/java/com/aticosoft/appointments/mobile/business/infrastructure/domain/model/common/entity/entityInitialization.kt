@@ -15,16 +15,16 @@ import javax.jdo.listener.LoadLifecycleListener
  * Created by Rodrigo Quesada on 11/12/15.
  */
 @Singleton
-/*internal*/ class EntityInjectorsManager @Inject protected constructor(
-        @EntityInjectors private val entityInjectors: Array<EntityInjector<*, *>>
+/*internal*/ class EntityInitializersManager @Inject protected constructor(
+        @EntityInitializers private val entityInitializers: Array<EntityInitializer<*, *>>
 ) {
-    fun registerInjectors() {
-        entityInjectors.forEach { it.register() }
+    fun registerInitializers() {
+        entityInitializers.forEach { it.register() }
     }
 }
 
-/*internal*/ class EntityInjector<E : Entity, C : ApplicationComponent> private constructor(
-        @Provided private val c: EntityInjector.Context,
+/*internal*/ class EntityInitializer<E : Entity, C : ApplicationComponent> private constructor(
+        @Provided private val c: EntityInitializer.Context,
         private val entityType: Class<E>,
         private val injectCall: C.(E) -> Unit
 ) : LoadLifecycleListener {
@@ -43,12 +43,12 @@ import javax.jdo.listener.LoadLifecycleListener
             val application: Application<*>
     )
 
-    class Factory @Inject protected constructor(private val contextProvider: Provider<EntityInjector.Context>) {
+    class Factory @Inject protected constructor(private val contextProvider: Provider<EntityInitializer.Context>) {
 
-        fun <E : Entity, C : ApplicationComponent> create(entityType: Class<E>, injectCall: C.(E) -> Unit): EntityInjector<E, C> {
-            return EntityInjector(contextProvider.get(), entityType, injectCall)
+        fun <E : Entity, C : ApplicationComponent> create(entityType: Class<E>, injectCall: C.(E) -> Unit): EntityInitializer<E, C> {
+            return EntityInitializer(contextProvider.get(), entityType, injectCall)
         }
     }
 }
 
-internal annotation class EntityInjectors
+internal annotation class EntityInitializers

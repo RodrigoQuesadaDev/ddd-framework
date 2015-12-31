@@ -79,8 +79,8 @@ internal interface UsageTypeSteps {
     }
 }
 
-private inline fun List<TestData>.toMapAsValues() = toMapBy { it.value }
+private inline fun List<TestData>.toMapAsValues() = associateBy { it.value }
 
-private inline fun List<TestData>.toMapAsKeys() = toMapBy({ it }, { it.value })
+private inline fun List<TestData>.toMapAsKeys() = associateBy({ it }, { it.value })
 
-private inline fun List<TestData>.toMapAsValuesAndKeys() = toMapBy({ it }, { it })
+private inline fun List<TestData>.toMapAsValuesAndKeys() = associateBy({ it }, { it })

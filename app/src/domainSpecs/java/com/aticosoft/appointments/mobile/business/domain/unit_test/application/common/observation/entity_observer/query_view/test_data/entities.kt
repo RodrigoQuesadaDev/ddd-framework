@@ -3,7 +3,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.create
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInjector
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInitializer
 import com.google.auto.factory.Provided
 import javax.jdo.annotations.PersistenceCapable
 
@@ -24,7 +24,7 @@ internal class TestDataGrandChild protected constructor(@Provided context: Entit
 
 val entityTypes: Array<Class<out Entity>> = arrayOf(TestDataParent::class.java, TestDataChild::class.java, TestDataGrandChild::class.java)
 
-internal fun provideEntityInjectors(entityInjectorFactory: EntityInjector.Factory) = with(entityInjectorFactory) {
+internal fun provideEntityInitializers(entityInitializerFactory: EntityInitializer.Factory) = with(entityInitializerFactory) {
     arrayOf(
             create<TestDataParent> { inject(it) },
             create<TestDataChild> { inject(it) },

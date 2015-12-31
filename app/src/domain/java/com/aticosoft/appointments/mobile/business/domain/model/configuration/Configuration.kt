@@ -23,9 +23,3 @@ import javax.jdo.annotations.PersistenceCapable
         timeSlotDuration = Duration.standardMinutes(15)
     }
 }
-
-//TODO test default values when first created (that is when the app is first used)
-
-//TODO add validation for values (such as value range for max concurrent appointments)
-
-//TODO pin configuration to L2 cache

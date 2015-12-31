@@ -66,7 +66,7 @@ object CommandEntityDelegates {
     object Maps {
         private class CommandEntityMap<E1 : Entity, E2 : Entity>(entityMap: Map<E1, E2>) : CommandEntityDelegate<Map<E1, E2>>(entityMap) {
 
-            override fun Map<E1, E2>.processUsing(command: Command) = asSequence().toMapBy({ it.key.processEntityUsing(command) }, { it.value.processEntityUsing(command) })
+            override fun Map<E1, E2>.processUsing(command: Command) = asSequence().associateBy({ it.key.processEntityUsing(command) }, { it.value.processEntityUsing(command) })
         }
 
         fun <E1 : Entity, E2 : Entity> Map<E1, E2>.delegate(): CommandEntityDelegate<Map<E1, E2>> = CommandEntityMap(this)

@@ -10,6 +10,8 @@ internal class TestQueryViewsModule : QueryViewsModule() {
 
     override fun provideQueryViews(): Array<Class<out Enum<*>>> = arrayOf(
             TestDataParentQueryView::class.java,
-            com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParentQueryView::class.java
+            com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParentQueryView::class.java,
+            com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.OddValueAndEmailParentQueryView::class.java,
+            com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.PrimeNumberAndGmailParentQueryView::class.java
     )
 }

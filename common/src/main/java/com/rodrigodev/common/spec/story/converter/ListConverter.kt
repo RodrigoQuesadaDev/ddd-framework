@@ -1,5 +1,6 @@
 package com.rodrigodev.common.spec.story.converter
 
+import com.rodrigodev.common.collection.toArrayList
 import org.jbehave.core.annotations.AsParameters
 import org.jbehave.core.steps.ParameterConverters
 import java.lang.reflect.ParameterizedType

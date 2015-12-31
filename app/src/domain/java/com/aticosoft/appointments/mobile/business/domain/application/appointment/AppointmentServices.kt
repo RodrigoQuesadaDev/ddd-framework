@@ -1,6 +1,5 @@
 package com.aticosoft.appointments.mobile.business.domain.application.appointment
 
-import com.aticosoft.appointments.mobile.business.domain.application.appointment.checking.checkIntervalMatchesTimeSlots
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServicesBase
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentFactory
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentRepository
@@ -21,7 +20,6 @@ import javax.inject.Singleton
     class ScheduleAppointment(val clientId: Long, val time: Interval) : Command()
 
     fun execute(command: ScheduleAppointment) = command.execute {
-        checkIntervalMatchesTimeSlots(time, retrieveConfiguration())
         repository.add(factory.create(clientId, time))
     }
 }

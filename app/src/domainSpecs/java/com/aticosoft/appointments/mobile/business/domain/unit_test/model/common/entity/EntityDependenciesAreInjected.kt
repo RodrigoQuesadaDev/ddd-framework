@@ -19,10 +19,7 @@ import com.rodrigodev.common.testing.firstEvent
 import com.rodrigodev.common.testing.testSubscribe
 import dagger.Component
 import org.assertj.core.api.Assertions.assertThat
-import org.jbehave.core.annotations.BeforeScenario
-import org.jbehave.core.annotations.Given
-import org.jbehave.core.annotations.Then
-import org.jbehave.core.annotations.When
+import org.jbehave.core.annotations.*
 import org.robolectric.annotation.Config
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -54,7 +51,7 @@ internal class EntityDependenciesAreInjected : DomainStory() {
         private var entity: TestData? = null
         override var throwable: Throwable? = null
 
-        @BeforeScenario
+        @BeforeScenario(uponType = ScenarioType.ANY)
         fun resetEntity() {
             entity = null
         }

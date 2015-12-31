@@ -1,0 +1,9 @@
+| entityType | validationType         | testDataValues                                | errorMessage                                                                | validationExceptionType |
+| PARENT     | ODD_VALUE_AND_EMAIL    | {number: 2, email: 'test@email.com'}          | number 2 is not odd                                                         | CONSTRAINT_VIOLATION    |
+| PARENT     | ODD_VALUE_AND_EMAIL    | {number: 3, email: 'invalid_email_at_domain'} | value 'invalid_email_at_domain' is not a valid email                        | CONSTRAINT_VIOLATION    |
+| PARENT     | PRIME_NUMBER_AND_GMAIL | {number: 7, email: 'joe@hotmail.com'}         | either number '7' is not prime or email 'joe@hotmail.com' is not from gmail | VALIDATION_EXCEPTION    |
+| PARENT     | PRIME_NUMBER_AND_GMAIL | {number: 9, email: 'joe@gmail.com'}           | either number '9' is not prime or email 'joe@gmail.com' is not from gmail   | VALIDATION_EXCEPTION    |
+| CHILD      | ODD_VALUE_AND_EMAIL    | {number: 2, email: 'test@email.com'}          | number 2 is not odd                                                         | CONSTRAINT_VIOLATION    |
+| CHILD      | ODD_VALUE_AND_EMAIL    | {number: 3, email: 'invalid_email_at_domain'} | value 'invalid_email_at_domain' is not a valid email                        | CONSTRAINT_VIOLATION    |
+| CHILD      | PRIME_NUMBER_AND_GMAIL | {number: 7, email: 'joe@hotmail.com'}         | either number '7' is not prime or email 'joe@hotmail.com' is not from gmail | VALIDATION_EXCEPTION    |
+| CHILD      | PRIME_NUMBER_AND_GMAIL | {number: 9, email: 'joe@gmail.com'}           | either number '9' is not prime or email 'joe@gmail.com' is not from gmail   | VALIDATION_EXCEPTION    |

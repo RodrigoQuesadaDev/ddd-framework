@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
+<jdo>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data">
+        <class name="OddValueAndEmailValidatedTestData">
+            <field name="email"/>
+        </class>
+        <class name="OddValueAndEmailParent">
+            <field name="number"/>
+            <field name="child" dependent="true"/>
+        </class>
+        <class name="OddValueAndEmailChild">
+            <field name="number"/>
+        </class>
+        <class name="PrimeNumberAndGmailValidatedTestData">
+            <field name="number"/>
+            <field name="email"/>
+            <field name="extraValue"/>
+        </class>
+        <class name="PrimeNumberAndGmailParent">
+            <field name="child" dependent="true"/>
+        </class>
+        <class name="PrimeNumberAndGmailChild"/>
+    </package>
+</jdo>

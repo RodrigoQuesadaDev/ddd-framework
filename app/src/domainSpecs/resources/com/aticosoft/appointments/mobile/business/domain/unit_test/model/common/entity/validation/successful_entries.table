@@ -1,0 +1,5 @@
+| entityType | validationType         | testDataValues                       |
+| PARENT     | ODD_VALUE_AND_EMAIL    | {number: 3, email: 'test@email.com'} |
+| PARENT     | PRIME_NUMBER_AND_GMAIL | {number: 7, email: 'joe@gmail.com'}  |
+| CHILD      | ODD_VALUE_AND_EMAIL    | {number: 3, email: 'test@email.com'} |
+| CHILD      | PRIME_NUMBER_AND_GMAIL | {number: 7, email: 'joe@gmail.com'}  |

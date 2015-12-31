@@ -12,7 +12,7 @@ import javax.inject.Singleton
 /*internal*/ class EntityListenersManager @Inject protected constructor(
         @EntityListeners private val entityListeners: Array<EntityListener<*>>
 ) {
-    private val entityListenerMap: Map<Class<*>, EntityListener<*>> = entityListeners.toMapBy { it.entityType }
+    private val entityListenerMap: Map<Class<*>, EntityListener<*>> = entityListeners.associateBy { it.entityType }
 
     @Suppress("UNCHECKED_CAST")
     fun <E : Entity> forType(type: Class<E>): EntityListener<E> = entityListenerMap[type]!! as EntityListener<E>

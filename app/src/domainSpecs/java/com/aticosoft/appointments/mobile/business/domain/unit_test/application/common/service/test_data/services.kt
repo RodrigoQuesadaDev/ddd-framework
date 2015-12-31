@@ -351,4 +351,4 @@ private inline fun Map<Int, TestData>.mapValuesToNestedEntities(): Map<Int, Nest
 
 private inline fun Map<TestData, Int>.mapKeysToNestedEntities(): Map<NestedValue, Int> = mapKeys { NestedValue(it.key) }
 
-private inline fun Map<TestData, TestData>.toNestedEntities(): Map<NestedValue, NestedValue> = asSequence().toMapBy({ NestedValue(it.key) }, { NestedValue(it.value) })
+private inline fun Map<TestData, TestData>.toNestedEntities(): Map<NestedValue, NestedValue> = asSequence().associateBy({ NestedValue(it.key) }, { NestedValue(it.value) })

@@ -57,8 +57,10 @@ kapt {
 datanucleus {
     entitiesDirs = ['com/aticosoft/appointments/mobile/business/domain/model',
                     'com/aticosoft/appointments/mobile/business/domain/testing/model',
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_listener/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/filtering/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/query_view/test_data']
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/query_view/test_data',
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/entity/validation/test_data']
     alwaysDetachable true
 }
 
@@ -67,8 +69,6 @@ dependencies {
     compile(project(':common')) {
         transitive = false
     }
-    //TODO try to remove Guava dependency (the app code mostly uses it for guard checking)
-    compile "com.google.guava:guava:$guavaVersion"
     //TODO use https://github.com/dlew/joda-time-android#why-this-library or https://github.com/JakeWharton/ThreeTenABP?
     //TODO check http://blog.joda.org/2009/11/why-jsr-310-isn-joda-time_4941.html
     compile "joda-time:joda-time:$jodaTimeVersion"
@@ -85,6 +85,11 @@ dependencies {
     datanucleus "org.datanucleus:datanucleus-rdbms:$datanucleusRdbmsVersion"
     datanucleus "org.datanucleus:datanucleus-jodatime:$datanucleusJodatimeVersion"
     datanucleus "org.datanucleus:javax.jdo:$jdoApiVersion"
+    compile "javax.validation:validation-api:$jsr303ApiVersion"
+    compile "org.hibernate:hibernate-validator:$hibernateValidatorVersion"
+    kapt "org.hibernate:hibernate-validator-annotation-processor:$hibernateValidatorVersion"
+    compile "javax.el:javax.el-api:$javaxElVersion" // needed for hibernate validation
+    compile "org.glassfish.web:javax.el:$glassfishElVersion"
     compile("com.querydsl:querydsl-jdo:$queryDslVersion") {
         exclude module: 'jdo-api'
     }
@@ -102,7 +107,7 @@ dependencies {
     compile "io.reactivex:rxjava-joins:$rxJavaJoinsVersion"
     compile "io.reactivex:rxjava-async-util:$rxJavaAsyncVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    compile "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
     testCompile project(':testingCommon')
     testCompile "org.jbehave:jbehave-core:$jBehaveVersion"
@@ -117,9 +122,10 @@ dependencies {
     kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptTest "com.querydsl:querydsl-apt:$queryDslVersion:jdo"
     kaptTest "org.datanucleus:javax.jdo:$jdoApiVersion"
+    kaptTest "org.hibernate:hibernate-validator-annotation-processor:$hibernateValidatorVersion"
     testCompile "org.apache.logging.log4j:log4j-core:$log4jVersion"
     testCompile "org.apache.logging.log4j:log4j-api:$log4jVersion"
     testCompile "org.apache.logging.log4j:log4j-1.2-api:$log4jVersion"
-    testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     testCompile "org.reflections:reflections:$reflectionsVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
 }

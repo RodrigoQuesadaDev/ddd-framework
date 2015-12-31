@@ -1,7 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.model.common
 
 import com.aticosoft.appointments.mobile.business.domain.model.IdentityGenerator
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity.Context
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,7 +20,7 @@ import javax.inject.Singleton
     }
 
     //TODO making previousValue internal should be enough (problem is right now this class is not on a separate module)
-    interface EntityStateReader {
+    interface EntityStateAccess {
         var Entity.previousValue: Entity?
             get() = this.previousValue
             set(value) {
