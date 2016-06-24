@@ -33,7 +33,7 @@ import javax.jdo.PersistenceManagerFactory
 
     private fun renderStuff() {
 
-        var appointment = appointmentFactory.create(1, Interval(DateTime.now(), DateTime.now().plusHours(1)))
+        var appointment = appointmentFactory.create("1", Interval(DateTime.now(), DateTime.now().plusHours(1)))
 
         val pm = pmf.persistenceManager
         val tx = pm.currentTransaction()

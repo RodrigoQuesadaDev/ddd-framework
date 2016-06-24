@@ -4,7 +4,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.querydsl.core.types.EntityPath
-import com.querydsl.core.types.dsl.NumberPath
+import com.querydsl.core.types.dsl.StringPath
 
 /**
  * Created by Rodrigo Quesada on 21/09/15.
@@ -17,7 +17,7 @@ import com.querydsl.core.types.dsl.NumberPath
         context.persistenceManager.makePersistent(entity)
     }
 
-    override fun get(id: Long) = context.queryFactory.selectFrom(queryEntity).where(queryEntity.id.eq(id)).fetchOne()
+    override fun get(id: String) = context.queryFactory.selectFrom(queryEntity).where(queryEntity.id.eq(id)).fetchOne()
 
     override fun remove(entity: E) {
         context.persistenceManager.deletePersistent(entity)
@@ -32,5 +32,5 @@ import com.querydsl.core.types.dsl.NumberPath
     }
 
     @Suppress("UNCHECKED_CAST")
-    val id: NumberPath<Long> by lazy { entityPath.javaClass.getField(ID_FIELD).get(entityPath) as NumberPath<Long> }
+    val id: StringPath by lazy { entityPath.javaClass.getField(ID_FIELD).get(entityPath) as StringPath }
 }

@@ -37,19 +37,19 @@ enum class TestParentFilter {
 
 enum class TestByIdFilter() {
     DEFAULT {
-        override fun get(id: Long) = null
+        override fun get(id: String) = null
     },
     ODD_CHILD {
-        override fun get(id: Long) = TestChildFilter.ODD_CHILD.get()
+        override fun get(id: String) = TestChildFilter.ODD_CHILD.get()
     },
     ODD_CHILD_REMOVED {
-        override fun get(id: Long) = TestChildFilter.ODD_CHILD_REMOVED.get()
+        override fun get(id: String) = TestChildFilter.ODD_CHILD_REMOVED.get()
     },
     ODD_AND_DIVISIBLE_BY_THREE_CHILD {
-        override fun get(id: Long) = TestChildFilter.ODD_AND_DIVISIBLE_BY_THREE_CHILD.get()
+        override fun get(id: String) = TestChildFilter.ODD_AND_DIVISIBLE_BY_THREE_CHILD.get()
     };
 
-    abstract fun get(id: Long): Array<EntityObservationFilter<*>>?
+    abstract fun get(id: String): Array<EntityObservationFilter<*>>?
 }
 
 enum class TestValueIsFilter {

@@ -14,7 +14,7 @@ import javax.jdo.annotations.PersistenceCapable
 //@AutoFactory
 class Appointment protected constructor(
         @Provided context: Entity.Context,
-        clientId: Long,
+        clientId: String,
         scheduledTime: Interval
 ) : Entity(context) {
 

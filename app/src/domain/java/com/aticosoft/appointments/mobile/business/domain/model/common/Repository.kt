@@ -7,7 +7,7 @@ package com.aticosoft.appointments.mobile.business.domain.model.common
 
     fun add(entity: E)
 
-    fun get(id: Long): E?
+    fun get(id: String): E?
 
     fun remove(entity: E)
 

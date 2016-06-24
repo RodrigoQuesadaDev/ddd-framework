@@ -17,7 +17,7 @@ import javax.inject.Singleton
         private val repository: AppointmentRepository
 ) : ApplicationServicesBase(context) {
 
-    class ScheduleAppointment(val clientId: Long, val time: Interval) : Command()
+    class ScheduleAppointment(val clientId: String, val time: Interval) : Command()
 
     fun execute(command: ScheduleAppointment) = command.execute {
         repository.add(factory.create(clientId, time))

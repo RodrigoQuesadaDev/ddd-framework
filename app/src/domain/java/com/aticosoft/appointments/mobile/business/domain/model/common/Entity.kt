@@ -9,7 +9,7 @@ import javax.inject.Singleton
  */
 /*internal*/ abstract class Entity {
 
-    var id: Long
+    var id: String
         private set
     var version: Long = 0
         private set

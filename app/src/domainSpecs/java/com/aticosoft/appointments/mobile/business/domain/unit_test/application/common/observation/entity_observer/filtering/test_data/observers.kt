@@ -18,7 +18,7 @@ internal class TestDataParentObserver @Inject constructor(services: EntityObserv
 
     var byIdFilter: TestByIdFilter = DEFAULT
 
-    override fun entityByIdFilters(id: Long) = byIdFilter.get(id) ?: super.entityByIdFilters(id)
+    override fun entityByIdFilters(id: String) = byIdFilter.get(id) ?: super.entityByIdFilters(id)
 
     override fun Array<out EntityObservationFilter<*>>.plusDefaultFiltersFrom(queryView: QueryView) = this
 }

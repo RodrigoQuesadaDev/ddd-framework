@@ -13,7 +13,7 @@ public final class AppointmentFactory {
         this.arg0Provider = arg0Provider;
     }
 
-    public Appointment create(long arg1, org.joda.time.Interval arg2) {
+    public Appointment create(String arg1, org.joda.time.Interval arg2) {
         return new Appointment(arg0Provider.get(), arg1, arg2);
     }
 }

@@ -35,9 +35,9 @@ import javax.inject.Inject
 
     private val totalCountFilters = arrayOf(EntityObservationFilter(entityType, ADD, REMOVE))
 
-    protected open fun entityByIdFilters(id: Long): Array<EntityObservationFilter<*>> = arrayOf(EntityObservationFilter(entityType) { it.id == id })
+    protected open fun entityByIdFilters(id: String): Array<EntityObservationFilter<*>> = arrayOf(EntityObservationFilter(entityType) { it.id == id })
 
-    fun observe(id: Long, queryView: QueryView = defaultQueryView) = entityObservable(queryView, entityByIdFilters(id)) { entityRepository.get(id) }
+    fun observe(id: String, queryView: QueryView = defaultQueryView) = entityObservable(queryView, entityByIdFilters(id)) { entityRepository.get(id) }
 
     fun observe(query: UniqueQuery<E>, queryView: QueryView = defaultQueryView) = entityObservable(queryView, query) { entityRepository.find(query) }
 
