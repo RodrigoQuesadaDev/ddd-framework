@@ -1,8 +1,9 @@
 package com.aticosoft.appointments.mobile.business.domain.application.client
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
+import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientFactory
-import com.aticosoft.appointments.mobile.business.domain.model.client.ClientRepository
+import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
 import org.joda.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,7 +15,7 @@ import javax.inject.Singleton
 /*internal*/ class ClientServices @Inject protected constructor(
         context: ApplicationServices.Context,
         private val clientFactory: ClientFactory,
-        private val clientRepository: ClientRepository
+        private val clientRepository: Repository<Client>
 ) : ApplicationServices(context) {
 
     class AddClient(val name: String, val birthDate: LocalDate) : Command()

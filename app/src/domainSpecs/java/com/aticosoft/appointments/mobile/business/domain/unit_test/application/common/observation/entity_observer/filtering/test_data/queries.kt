@@ -1,6 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.CountQuery
+import com.aticosoft.appointments.mobile.business.domain.model.common.EntityQueries
 import com.aticosoft.appointments.mobile.business.domain.model.common.ListQuery
 import com.aticosoft.appointments.mobile.business.domain.model.common.UniqueQuery
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
@@ -12,7 +13,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 14/11/15.
  */
 @Singleton
-internal class TestDataParentQueries @Inject constructor(private val context: PersistenceContext) {
+internal class TestDataParentQueries @Inject constructor(private val context: PersistenceContext) : EntityQueries<TestDataParent> {
     private companion object {
         val PRIME_NUMBERS_UP_TO_100 = primeNumbersUpTo(100)
     }

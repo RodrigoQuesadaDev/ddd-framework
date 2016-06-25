@@ -1,6 +1,5 @@
 package com.aticosoft.appointments.mobile.business.domain.application.common.observation
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityChangeEvent.EventType
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import javax.jdo.listener.InstanceLifecycleEvent
 

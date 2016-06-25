@@ -5,6 +5,8 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 /**
  * Created by Rodrigo Quesada on 04/11/15.
  */
+/*internal*/ interface EntityQueries<E : Entity>
+
 /*internal*/ abstract class Query<R>(
         val filters: Array<out EntityObservationFilter<*>>,
         private val body: () -> R

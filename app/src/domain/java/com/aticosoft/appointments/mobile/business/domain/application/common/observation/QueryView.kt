@@ -31,14 +31,18 @@ import javax.jdo.FetchPlan
     }
 }
 
+//region Filters
 @Suppress("UNCHECKED_CAST")
 private inline fun Array<out Path<*>>.filterTypes() = asSequence().flatMap { sequenceOf(it.type, it.root.type) }.distinct() as Sequence<Class<out Entity>>
 
 private inline fun Array<out EntityObservationFilter<*>>.toTypes() = asSequence().map { it.entityType }.distinct()
+//endregion
 
+//region Published Extensions
 @Suppress("UNCHECKED_CAST")
 internal fun Class<out Enum<*>>.queryViews(): Array<out QueryView> = getMethod(QueryViewEnum.VALUES_METHOD).invoke(null) as Array<QueryView>
 
 private object QueryViewEnum {
     val VALUES_METHOD = "values"
 }
+//endregion

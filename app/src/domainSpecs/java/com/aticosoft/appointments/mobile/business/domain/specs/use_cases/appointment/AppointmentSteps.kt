@@ -2,7 +2,8 @@ package com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appoin
 
 import com.aticosoft.appointments.mobile.business.domain.application.appointment.AppointmentServices
 import com.aticosoft.appointments.mobile.business.domain.application.appointment.AppointmentServices.ScheduleAppointment
-import com.aticosoft.appointments.mobile.business.domain.application.client.ClientObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
 import com.aticosoft.appointments.mobile.business.domain.testing.model.AppointmentRepositoryManager
 import com.rodrigodev.common.testing.firstEvent
@@ -18,7 +19,7 @@ import javax.inject.Inject
 internal class AppointmentSteps @Inject constructor(
         private val appointmentRepositoryManager: AppointmentRepositoryManager,
         private val appointmentServices: AppointmentServices,
-        private val clientObserver: ClientObserver,
+        private val clientObserver: EntityObserver<Client>,
         private val clientQueries: ClientQueries
 ) {
 

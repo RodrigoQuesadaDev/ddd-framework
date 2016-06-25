@@ -4,6 +4,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.validation.EntityValidator
+import com.aticosoft.appointments.mobile.business.domain.model.common.validation.ValidationException
 import com.querydsl.core.types.Path
 import com.rodrigodev.common.testing.number.isPrime
 import java.util.concurrent.ConcurrentHashMap
@@ -55,10 +56,11 @@ internal class OddValueValidator : ConstraintValidatorWithRunInfo<OddValue, Int>
 
 internal abstract class PrimeNumberAndGmailValidator<E : PrimeNumberAndGmailValidatedTestData>(
         entityType: KClass<E>
-) : EntityValidatorWithRunInfo<E>(validatorIdFor(entityType), arrayOf<Path<*>>(
+) : EntityValidatorWithRunInfo<E, PrimeNumberAndGmailValidationException>(validatorIdFor(entityType),
+        ::PrimeNumberAndGmailValidationException,
         QPrimeNumberAndGmailValidatedTestData.primeNumberAndGmailValidatedTestData.number,
         QPrimeNumberAndGmailValidatedTestData.primeNumberAndGmailValidatedTestData.email
-)) {
+) {
     companion object {
         fun <E : PrimeNumberAndGmailValidatedTestData> validatorIdFor(entityType: KClass<E>) = ValidatorId(PrimeNumberAndGmailValidator::class.java, entityType.java)
     }
@@ -67,6 +69,8 @@ internal abstract class PrimeNumberAndGmailValidator<E : PrimeNumberAndGmailVali
 
     override fun E.doIsValid() = number.isPrime() && email.endsWith("gmail.com", true);
 }
+
+internal class PrimeNumberAndGmailValidationException(message: String) : ValidationException(message)
 
 internal class PrimeNumberAndGmailParentValidator : PrimeNumberAndGmailValidator<PrimeNumberAndGmailParent>(PrimeNumberAndGmailParent::class) {
 
@@ -120,7 +124,9 @@ internal abstract class ConstraintValidatorWithRunInfo<A : Annotation, T> : Cons
     abstract fun doIsValid(value: T, context: ConstraintValidatorContext): Boolean
 }
 
-internal abstract class EntityValidatorWithRunInfo<E : Entity>(val validatorId: ValidatorId<*, E>, validatedFields: Array<Path<*>>) : EntityValidator<E>(validatedFields) {
+internal abstract class EntityValidatorWithRunInfo<E : Entity, X : ValidationException>(
+        val validatorId: ValidatorId<*, E>, createException: (String) -> X, vararg validatedFields: Path<*>
+) : EntityValidator<E, X>(createException, *validatedFields) {
 
     private val validatorRunInfo: ValidatorRunInfo = ValidatorRunInfo(validatorId)
 

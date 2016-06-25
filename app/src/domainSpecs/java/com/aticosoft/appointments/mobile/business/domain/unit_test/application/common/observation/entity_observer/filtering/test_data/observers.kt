@@ -12,7 +12,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 09/11/15.
  */
 @Singleton
-internal class TestDataParentObserver @Inject constructor(services: EntityObserver.Services, testDataParentRepository: TestDataParentRepository) : EntityObserver<TestDataParent>(services, testDataParentRepository, TestDataParent::class.java) {
+internal class TestDataParentObserver @Inject constructor() : EntityObserver<TestDataParent>() {
 
     override val defaultQueryView: QueryView = TestDataParentQueryView.DEFAULT
 

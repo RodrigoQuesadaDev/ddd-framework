@@ -1,6 +1,5 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.model
 
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager.Services
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment.JdoAppointmentRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client.JdoClientRepository

@@ -1,11 +1,11 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation
 
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.model.common.validation.ValidationException
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
-import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
-import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
-import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.EntitiesAreValidated.TestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
+import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.EntitiesAreValidated.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.EntityType.CHILD
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.EntityType.PARENT
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.ValidationExceptionType.CONSTRAINT_VIOLATION
@@ -19,36 +19,30 @@ import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
 import com.rodrigodev.common.test.catchThrowable
 import com.rodrigodev.common.testing.firstEvent
 import com.rodrigodev.common.testing.testSubscribe
-import dagger.Component
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.*
 import org.robolectric.annotation.Config
 import javax.inject.Inject
-import javax.inject.Singleton
 import javax.validation.ConstraintViolationException
 
 /**
  * Created by Rodrigo Quesada on 11/12/15.
  */
-@Config(application = TestApplicationImpl::class)
+@Config(application = UnitTestApplicationImpl::class)
 internal class EntitiesAreValidated : DomainStory() {
+
+    class UnitTestApplicationImpl : UnitTestApplication<EntitiesAreValidated>(UnitTestApplicationComponent::inject)
 
     @Inject protected lateinit var localSteps: LocalSteps
 
     override val steps by lazy { arrayOf(localSteps) }
 
-    @Singleton
-    @Component(modules = arrayOf(TestApplicationModule::class))
-    interface TestApplicationComponentImpl : TestApplicationComponent<EntitiesAreValidated>
-
-    class TestApplicationImpl : TestApplication(DaggerEntitiesAreValidated_TestApplicationComponentImpl::class.java)
-
     class LocalSteps @Inject constructor(
             private val oddValueAndEmailParentRepositoryManager: OddValueAndEmailParentRepositoryManager,
-            private val oddValueAndEmailParentObserver: OddValueAndEmailParentObserver,
+            private val oddValueAndEmailParentObserver: EntityObserver<OddValueAndEmailParent>,
             private val oddValueAndEmailParentQueries: OddValueAndEmailParentQueries,
             private val primeNumberAndGmailParentRepositoryManager: PrimeNumberAndGmailParentRepositoryManager,
-            private val primeNumberAndGmailParentObserver: PrimeNumberAndGmailParentObserver,
+            private val primeNumberAndGmailParentObserver: EntityObserver<PrimeNumberAndGmailParent>,
             private val primeNumberAndGmailParentQueries: PrimeNumberAndGmailParentQueries,
             private val testDataServices: TestDataServices
     ) : ExceptionThrowingSteps {
@@ -154,7 +148,7 @@ internal class EntitiesAreValidated : DomainStory() {
                     assertThat((throwable as ConstraintViolationException).constraintViolations.first().message).isEqualTo(errorMessage)
                 }
                 VALIDATION_EXCEPTION -> {
-                    assertThat(throwable).isInstanceOf(ValidationException::class.java)
+                    assertThat(throwable).isInstanceOf(PrimeNumberAndGmailValidationException::class.java)
                     assertThat((throwable as ValidationException).message).isEqualTo(errorMessage)
                 }
             }

@@ -11,14 +11,8 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 10/09/15.
  */
-@Module(includes = arrayOf(DomainModule::class, PersistenceModule::class))
-/*internal*/ class ApplicationModule(private val application: Application<*>) {
-
-    @Provides @Singleton fun provideApplication(): Application<*> = application
-
-    @Provides fun provideApplicationInfo() = application.applicationInfo
-
-    @Provides fun provideAssetManager() = application.assets
+@Module(includes = arrayOf(ApplicationBaseModule::class, DomainModule::class, PersistenceModule::class))
+/*internal*/ class ApplicationModule {
 
     @Singleton
     class PostInitializer @Inject protected constructor(
@@ -30,6 +24,16 @@ import javax.inject.Singleton
             arrayOf(persistencePostInitializer, domainModelPostInitializer).forEach { it.init() }
         }
     }
+}
+
+@Module
+/*internal*/ class ApplicationBaseModule(private val application: Application<*, *>) {
+
+    @Provides @Singleton fun provideApplication(): Application<*, *> = application
+
+    @Provides fun provideApplicationInfo() = application.getApplicationInfo()
+
+    @Provides fun provideAssetManager() = application.getAssets()
 }
 
 interface ModulePostInitializer {

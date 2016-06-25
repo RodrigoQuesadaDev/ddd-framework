@@ -4,15 +4,13 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.serv
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandDelegates.delegate
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.ReusedCommandException
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
-import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
-import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
-import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
+import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
+import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command.CommandsCannotBeReused.LocalTestDataServices.AddData
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command.CommandsCannotBeReused.LocalTestDataServices.AddNestedData
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command.CommandsCannotBeReused.TestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command.CommandsCannotBeReused.UnitTestApplicationImpl
 import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
 import com.rodrigodev.common.test.catchThrowable
-import dagger.Component
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
@@ -24,18 +22,14 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 09/12/15.
  */
-@Config(application = TestApplicationImpl::class)
+@Config(application = UnitTestApplicationImpl::class)
 internal class CommandsCannotBeReused : DomainStory() {
+
+    class UnitTestApplicationImpl : UnitTestApplication<CommandsCannotBeReused>(UnitTestApplicationComponent::inject)
 
     @Inject protected lateinit var localSteps: LocalSteps
 
     override val steps by lazy { arrayOf(localSteps) }
-
-    @Singleton
-    @Component(modules = arrayOf(TestApplicationModule::class))
-    interface TestApplicationComponentImpl : TestApplicationComponent<CommandsCannotBeReused>
-
-    class TestApplicationImpl : TestApplication(DaggerCommandsCannotBeReused_TestApplicationComponentImpl::class.java)
 
     class LocalSteps @Inject constructor(
             private val testDataServices: LocalTestDataServices

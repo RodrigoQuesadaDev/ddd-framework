@@ -3,13 +3,12 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityChangeEvent
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListenersManager
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
-import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
-import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
-import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
+import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
+import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.EntityType.CHILD
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.EntityType.PARENT
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.ObservingEntityChanges.TestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.ObservingEntityChanges.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataChild
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentRepositoryManager
@@ -17,7 +16,6 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentServices.*
 import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.testing.testSubscribe
-import dagger.Component
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.AsParameters
 import org.jbehave.core.annotations.Given
@@ -27,23 +25,18 @@ import org.robolectric.annotation.Config
 import rx.observers.TestSubscriber
 import rx.schedulers.TestScheduler
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by Rodrigo Quesada on 31/10/15.
  */
-@Config(application = TestApplicationImpl::class)
+@Config(application = UnitTestApplicationImpl::class)
 internal class ObservingEntityChanges : DomainStory() {
+
+    class UnitTestApplicationImpl : UnitTestApplication<ObservingEntityChanges>(UnitTestApplicationComponent::inject)
 
     @Inject protected lateinit var localSteps: LocalSteps
 
     override val steps by lazy { arrayOf(localSteps) }
-
-    @Singleton
-    @Component(modules = arrayOf(TestApplicationModule::class))
-    interface TestApplicationComponentImpl : TestApplicationComponent<ObservingEntityChanges>
-
-    class TestApplicationImpl : TestApplication(DaggerObservingEntityChanges_TestApplicationComponentImpl::class.java)
 
     class LocalSteps @Inject constructor(
             private val entityListenersManager: EntityListenersManager,

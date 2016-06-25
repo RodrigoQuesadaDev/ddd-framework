@@ -2,7 +2,6 @@
 
 package com.aticosoft.appointments.mobile.business.domain.application.common.service
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices.Context
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.ReusedCommandException
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.TransactionManager

@@ -1,8 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
-import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.create
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInitializer
 import com.google.auto.factory.Provided
 import org.hibernate.validator.constraints.Email
 import javax.inject.Inject
@@ -60,7 +58,7 @@ internal abstract class PrimeNumberAndGmailValidatedTestData(context: Entity.Con
 //@AutoFactory
 internal class PrimeNumberAndGmailParent protected constructor(
         @Provided c: Context, primeNumber: Int, email: String, extraValue: Int, childPrimeValue: Int, childEmail: String, childExtraValue: Int
-        ) : PrimeNumberAndGmailValidatedTestData(c.entityContext, primeNumber, email, extraValue), NumberAndEmailTestDataParent<PrimeNumberAndGmailChild> {
+) : PrimeNumberAndGmailValidatedTestData(c.entityContext, primeNumber, email, extraValue), NumberAndEmailTestDataParent<PrimeNumberAndGmailChild> {
 
     override var child = c.primeNumberAndGmailChildFactory.create(childPrimeValue, childEmail, childExtraValue)
 
@@ -74,24 +72,3 @@ internal class PrimeNumberAndGmailParent protected constructor(
 @PersistenceCapable
 //@AutoFactory
 internal class PrimeNumberAndGmailChild constructor(@Provided context: Entity.Context, primeNumber: Int, email: String, extraValue: Int) : PrimeNumberAndGmailValidatedTestData(context, primeNumber, email, extraValue)
-
-val entityTypes: Array<Class<out Entity>> = arrayOf(OddValueAndEmailParent::class.java, OddValueAndEmailChild::class.java, PrimeNumberAndGmailParent::class.java, PrimeNumberAndGmailChild::class.java)
-
-internal fun provideValidators() = arrayOf(PrimeNumberAndGmailParentValidator(), PrimeNumberAndGmailChildValidator())
-
-internal fun provideEntityInitializers(entityInitializerFactory: EntityInitializer.Factory) = with(entityInitializerFactory) {
-    arrayOf(
-            create<OddValueAndEmailParent> { inject(it) },
-            create<OddValueAndEmailChild> { inject(it) },
-            create<PrimeNumberAndGmailParent> { inject(it) },
-            create<PrimeNumberAndGmailChild> { inject(it) }
-    )
-}
-
-internal interface TestEntityInjection {
-
-    fun inject(entity: OddValueAndEmailParent)
-    fun inject(entity: OddValueAndEmailChild)
-    fun inject(entity: PrimeNumberAndGmailParent)
-    fun inject(entity: PrimeNumberAndGmailChild)
-}

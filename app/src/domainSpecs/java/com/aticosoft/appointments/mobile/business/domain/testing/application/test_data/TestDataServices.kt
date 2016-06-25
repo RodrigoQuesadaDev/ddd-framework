@@ -1,7 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.application.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
-import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.Context
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataFactory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataRepository
@@ -28,7 +27,7 @@ internal open class TestDataServices @Inject constructor(private val c: Context)
         }
     }
 
-    class ChangeData(val currentValue: Int, val  targetValue: Int) : Command()
+    class ChangeData(val currentValue: Int, val targetValue: Int) : Command()
 
     fun execute(command: ChangeData) = command.execute {
         c.testDataRepository.find(c.testDataQueries.valueIs(currentValue))!!.let { data ->

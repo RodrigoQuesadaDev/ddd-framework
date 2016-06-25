@@ -7,4 +7,4 @@ import dagger.Module
  * Created by Rodrigo Quesada on 11/12/15.
  */
 @Module(includes = arrayOf(ObservationModule::class))
-internal class DomainApplicationModule
+/*internal*/ class DomainApplicationModule

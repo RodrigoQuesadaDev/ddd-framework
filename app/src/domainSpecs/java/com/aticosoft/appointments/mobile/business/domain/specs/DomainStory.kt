@@ -7,8 +7,8 @@ import org.robolectric.RobolectricGradleTestRunner
 import org.robolectric.annotation.Config
 
 /**
-* Created by Rodrigo Quesada on 17/09/15.
-*/
+ * Created by Rodrigo Quesada on 17/09/15.
+ */
 @RunWith(RobolectricGradleTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(19))
 internal abstract class DomainStory : SpecStory()

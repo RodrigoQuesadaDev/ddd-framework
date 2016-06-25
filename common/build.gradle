@@ -27,7 +27,6 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     compile "com.fasterxml.jackson.module:jackson-module-paranamer:$jacksonVersion"
 
-    testCompile project(':testingCommon')
     testCompile "org.jbehave:jbehave-core:$jBehaveVersion"
     jbehaveSiteResources "org.jbehave:jbehave-core:$jBehaveVersion"
     jbehaveSiteResources "org.jbehave.site:jbehave-site-resources:$jBehaveSiteVersion:@zip"

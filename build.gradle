@@ -14,7 +14,7 @@ subprojects {
 
         guavaVersion = '18.0'
         jacksonVersion = '2.6.3'
-        daggerVersion = '2.0.2'
+        daggerVersion = '2.5'
         autoFactoryVersion = '1.0-beta3'
         jodaTimeVersion = '2.8.2'
         libphonenumberVersion = '7.0.9'

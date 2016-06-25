@@ -4,9 +4,6 @@ In order to schedule an appointment for a given client
 As a business owner
 I want to be able to manually schedule appointments
 
-!-- TODO use "after scenario steps" for validation-related stuff?, so that it can be externalized and reused? (so that sh*t is not repeated for creation AND modification)
-!-- ... thinking about it maybe validation-related concerns should be separated into a different story and specify creation AND modification scenarios...
-
 GivenStories: com/aticosoft/appointments/mobile/business/domain/specs/use_cases/client/given_stories/given_some_existing_clients.story
 
 Scenario: set-up initial appointments

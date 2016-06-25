@@ -12,6 +12,7 @@ import javax.inject.Singleton
 @Singleton
 /*internal*/ class IdentityGenerator @Inject protected constructor() {
 
+    //TODO there shouldn't be DN code here because this is a class of the Domain
     private val valueGenerator: ValueGenerator<String> = AUIDGenerator("AUIDGenerator", Properties())
 
     fun generate(): String = valueGenerator.next()

@@ -4,6 +4,7 @@ package com.aticosoft.appointments.mobile.business.domain.model.common.validatio
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.EntityLifecycleListener
+import com.aticosoft.appointments.mobile.business.domain.model.configuration.services.ConfigurationManager
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.querydsl.core.types.Path
 import org.datanucleus.api.jdo.NucleusJDOHelper
@@ -15,8 +16,9 @@ import javax.jdo.listener.StoreLifecycleListener
 /**
  * Created by Rodrigo Quesada on 10/01/16.
  */
-/*internal*/ abstract class EntityValidator<E : Entity>(private val validatedFields: Array<out Path<*>>) : EntityLifecycleListener<E>, StoreLifecycleListener {
-
+/*internal*/ abstract class EntityValidator<E : Entity, X : ValidationException>(
+        private val createException: (String) -> X, private vararg val validatedFields: Path<*>
+) : EntityLifecycleListener<E>, StoreLifecycleListener {
 
     lateinit private var c: Context
 
@@ -30,30 +32,30 @@ import javax.jdo.listener.StoreLifecycleListener
     abstract fun E.isValid(): Boolean
 
     private inline fun validate(entity: E) {
-        if (!entity.isValid()) throw ValidationException(createErrorMessage(entity))
+        if (!entity.isValid()) throw createException(entity.errorMessage())
     }
 
-    fun createErrorMessage(entity: E) = entity.errorMessage()
+    protected fun retrieveConfiguration() = c.configurationManager.retrieve()
 
+    class Context protected @Inject constructor(
+            var persistenceContext: PersistenceContext,
+            var configurationManager: ConfigurationManager
+    )
+
+    //region Lifecycle Methods
     override fun preStore(event: InstanceLifecycleEvent) {
         @Suppress("UNCHECKED_CAST")
         (event.source as E).let { entity ->
-            if (JDOHelper.isNew(entity) || entity.validatedFieldIsDirty()) validate(entity)
+            if (JDOHelper.isNew(entity) || entity.anyValidatedFieldIsDirty()) validate(entity)
         }
     }
 
     override fun postStore(event: InstanceLifecycleEvent) {
         // Do nothing!
     }
+    //endregion
 
-    class Context protected @Inject constructor(
-            var persistenceContext: PersistenceContext
-    )
-
-    /***********************************************************************************************
-     * Definition Checks
-     **********************************************************************************************/
-
+    //region Definition Checks
     private inline fun Array<out Path<*>>.check() = forEach {
         it.metadata.parent.let { parent ->
             check(parent != null, { "Incorrectly specified fields for EntityValidator." })
@@ -61,12 +63,11 @@ import javax.jdo.listener.StoreLifecycleListener
             check(parent.type.isAssignableFrom(entityType), { "Specified fields for EntityValidator must belong to the entity being validated." })
         }
     }
+    //endregion
 
-    /***********************************************************************************************
-     * Fields
-     **********************************************************************************************/
-
-    private inline fun E.validatedFieldIsDirty() = validatedFields.any { it.isDirty(this) }
+    //region Fields
+    private inline fun E.anyValidatedFieldIsDirty() = validatedFields.any { it.isDirty(this) }
 
     private inline fun Path<*>.isDirty(entity: E) = NucleusJDOHelper.isDirty(entity, metadata.name, c.persistenceContext.persistenceManager)
+    //endregion
 }

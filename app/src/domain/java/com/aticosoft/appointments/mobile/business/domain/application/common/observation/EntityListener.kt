@@ -10,13 +10,15 @@ import rx.Observable
 import rx.lang.kotlin.PublishSubject
 import rx.schedulers.Schedulers
 import javax.inject.Inject
+import javax.inject.Singleton
 import javax.jdo.JDOHelper
 import javax.jdo.listener.*
 
 /**
  * Created by Rodrigo Quesada on 18/10/15.
  */
-/*internal*/ class EntityListener<E : Entity>(
+@Singleton
+/*internal*/ class EntityListener<E : Entity> @Inject protected constructor(
         private val s: Services,
         override val entityType: Class<E>
 ) : EntityLifecycleListener<E>, Entity.EntityStateAccess, CreateLifecycleListener, StoreLifecycleListener, DeleteLifecycleListener, DirtyLifecycleListener {

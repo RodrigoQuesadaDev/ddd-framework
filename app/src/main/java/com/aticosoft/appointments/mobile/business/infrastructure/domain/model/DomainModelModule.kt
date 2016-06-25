@@ -1,6 +1,5 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model
 
-import com.aticosoft.appointments.mobile.business.ApplicationComponent
 import com.aticosoft.appointments.mobile.business.ModulePostInitializer
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.validation.EntityValidator
@@ -8,36 +7,35 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.validation
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment.AppointmentModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client.ClientModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInitializer
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInitializers
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInitializersManager
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.configuration.ConfigurationModule
 import dagger.Module
 import dagger.Provides
+import dagger.multibindings.ElementsIntoSet
 import javax.inject.Inject
+import javax.inject.Qualifier
 import javax.inject.Singleton
-import kotlin.reflect.KClass
+import kotlin.annotation.AnnotationRetention.RUNTIME
 
 /**
  * Created by Rodrigo Quesada on 26/09/15.
  */
 @Module(includes = arrayOf(ConfigurationModule::class, AppointmentModule::class, ClientModule::class))
-/*internal*/ open class DomainModelModule {
+/*internal*/ class DomainModelModule {
 
-    val entityModuleObjects: List<EntityModule.CompanionObject> = DomainModelModule::class
-            .entityModuleClasses()
-            .companionObjects()
+    @Provides @ElementsIntoSet
+    fun provideEntityTypes(): Set<Class<out Entity>> = emptySet()
 
-    @Provides @Singleton @EntityTypes
-    open fun provideEntityTypes(): Array<Class<out Entity>> = entityModuleObjects.map { it.entityType }.toTypedArray()
+    @Provides @ElementsIntoSet
+    fun provideValidators(): Set<EntityValidator<*, *>> = emptySet()
 
-    @Provides @Singleton @EntityValidators
-    open fun provideValidators(): Array<EntityValidator<*>> = entityModuleObjects.flatMap { it.validators.asList() }.toTypedArray()
+    @Provides @ElementsIntoSet @QueryViews
+    fun provideQueryViews(): Set<Class<out Enum<*>>> = setOf()
 
-    @Provides @Singleton @EntityInitializers
-    open fun provideEntityInitializers(entityInitializerFactory: EntityInitializer.Factory): Array<out EntityInitializer<*, *>> = with(entityInitializerFactory) {
-        entityModuleObjects.map { it.createEntityInitializer(this) }.toTypedArray()
-    }
+    @Provides @ElementsIntoSet
+    fun provideEntityInitializers(): Set<EntityInitializer<*>> = emptySet()
 
+    //TODO get rid of this post initializer stuff...
     @Singleton
     class PostInitializer @Inject protected constructor(
             private val entityValidatorsManager: EntityValidatorsManager,
@@ -51,36 +49,6 @@ import kotlin.reflect.KClass
     }
 }
 
-/***************************************************************************************************
- * Public Extensions
- **************************************************************************************************/
-
-internal inline fun <reified E : Entity> EntityInitializer.Factory.create(noinline injectCall: ApplicationComponent.(E) -> Unit) = create(E::class.java, injectCall)
-
-/***************************************************************************************************
- * Private Code
- **************************************************************************************************/
-
-/*internal*/ interface EntityInjection : AppointmentModule.EntityInjection, ClientModule.EntityInjection, ConfigurationModule.EntityInjection
-
-internal annotation class EntityTypes
-
-internal annotation class EntityValidators
-
-/*internal*/ interface EntityModule {
-    interface CompanionObject {
-        val entityType: Class<out Entity>
-
-        val validators: Array<out EntityValidator<*>>
-
-        fun createEntityInitializer(entityInitializerFactory: EntityInitializer.Factory): EntityInitializer<*, *> = entityInitializerFactory.create()
-
-        fun EntityInitializer.Factory.create(): EntityInitializer<*, *>
-    }
-}
-
-fun KClass<*>.entityModuleClasses() = annotations.mapNotNull { it as? Module }.first().includes
-
-//TODO It shouldn't be necessary to suppress this warning because it shouldn't even occur (as? is being used, which is safe)
-@Suppress("UNCHECKED_CAST")
-fun Array<KClass<*>>.companionObjects() = mapNotNull { it.nestedClasses.mapNotNull { it as? KClass<EntityModule.CompanionObject> }.first().objectInstance }
+@Qualifier
+@Retention(RUNTIME)
+/*internal*/ annotation class QueryViews

@@ -2,7 +2,7 @@
 
 package com.aticosoft.appointments.mobile.business.domain.application.common.observation
 
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.application.common.observation.QueryViews
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.querydsl.core.types.Path
 import com.rodrigodev.common.collection.peek
@@ -18,7 +18,7 @@ import javax.jdo.PersistenceManagerFactory
  */
 @Singleton
 /*internal*/ class QueryViewsManager @Inject constructor(
-        @QueryViews private val queryViewEnumDefinitions: Array<Class<out Enum<*>>>,
+        @QueryViews private val queryViewEnumDefinitions: MutableSet<Class<out Enum<*>>>,
         private val pmf: PersistenceManagerFactory,
         private val context: PersistenceContext
 ) {
@@ -48,10 +48,7 @@ import javax.jdo.PersistenceManagerFactory
     }
 }
 
-/***************************************************************************************************
- * Register Views
- **************************************************************************************************/
-
+//region Register Views
 private inline fun Sequence<Path<*>>.checkFields() = peek { check(it.metadata.parent?.metadata?.isRoot ?: false, { "Specified fields for QueryView must be direct fields of root element." }) }
 
 private inline fun PersistenceManagerFactory.addFetchGroupForRoot(info: FetchGroupInfo) = with(info) {
@@ -73,11 +70,9 @@ private inline fun PersistenceManagerFactory.addBasicMembersToFetchGroups() {
 private inline fun Sequence<Path<*>>.toFetchGroupInfo(view: QueryView) = map { FetchGroupInfo(view.fetchGroupName, it) }
 
 private class FetchGroupInfo(val name: String, val field: Path<*>)
+//endregion
 
-/***************************************************************************************************
- * General
- **************************************************************************************************/
-
+//region General
 private inline fun FetchPlan.setNoLimitFetchDepth() {
     setMaxFetchDepth(FetchDepth.NO_LIMIT)
 }
@@ -85,5 +80,4 @@ private inline fun FetchPlan.setNoLimitFetchDepth() {
 private object FetchDepth {
     val NO_LIMIT = -1
 }
-
-/**************************************************************************************************/
+//endregion

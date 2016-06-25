@@ -1,37 +1,50 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.configuration
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.validation.EntityValidator
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener
+import com.aticosoft.appointments.mobile.business.domain.model.client.validation.ConfigurationValidator
+import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.Configuration
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationQueries
-import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationRepository
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.EntityModule
+import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationQueryView
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.RootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInitializer
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.create
 import dagger.Module
 import dagger.Provides
+import dagger.multibindings.IntoSet
 import javax.inject.Singleton
 
 /**
  * Created by Rodrigo Quesada on 10/01/16.
  */
 @Module
-/*internal*/ class ConfigurationModule : EntityModule {
-    companion object : EntityModule.CompanionObject {
+/*internal*/ class ConfigurationModule : RootEntityModule<Configuration,
+        ConfigurationQueries, JdoConfigurationQueries,
+        ConfigurationQueryView,
+        JdoConfigurationRepository,
+        ConfigurationValidator<*>,
+        EntityInitializer<Configuration>,
+        EntityListener<Configuration>> {
 
-        override val entityType = Configuration::class.java
+    @Provides
+    override fun provideEntityType(): Class<Configuration> = Configuration::class.java
 
-        override val validators = emptyArray<EntityValidator<*>>()
-
-        override fun EntityInitializer.Factory.create() = create<Configuration> { inject(it) }
-    }
+    @Provides @IntoSet
+    override fun provideEntityTypeIntoSet(): Class<out Entity> = provideEntityType()
 
     @Provides @Singleton
-    fun provideConfigurationQueries(configurationQueries: JdoConfigurationQueries): ConfigurationQueries = configurationQueries
+    override fun provideQueries(queries: JdoConfigurationQueries): ConfigurationQueries = queries
+
+    @Provides @IntoSet @QueryViews
+    override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = ConfigurationQueryView::class.java
 
     @Provides @Singleton
-    fun provideConfigurationRepository(configurationRepository: JdoConfigurationRepository): ConfigurationRepository = configurationRepository
+    override fun provideRepository(repository: JdoConfigurationRepository): Repository<Configuration> = repository
 
-    interface EntityInjection {
-        fun inject(entity: Configuration)
-    }
+    @Provides @IntoSet
+    override fun provideEntityInitializerIntoSet(initializer: EntityInitializer<Configuration>): EntityInitializer<*> = initializer
+
+    @Provides @IntoSet
+    override fun provideEntityListenerIntoSet(listener: EntityListener<Configuration>): EntityListener<*> = listener
 }

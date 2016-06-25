@@ -1,8 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.application.common.service
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServicesBase.Context
-import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationQueries
-import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationRepository
+import com.aticosoft.appointments.mobile.business.domain.model.configuration.services.ConfigurationManager
 import javax.inject.Inject
 
 /**
@@ -12,11 +10,10 @@ import javax.inject.Inject
         private val c: Context
 ) : ApplicationServices(c.superContext) {
 
-    protected fun retrieveConfiguration() = c.configurationRepository.find(c.configurationQueries.RETRIEVE)!!
+    protected fun retrieveConfiguration() = c.configurationManager.retrieve()
 
     class Context @Inject protected constructor(
             val superContext: ApplicationServices.Context,
-            val configurationRepository: ConfigurationRepository,
-            val configurationQueries: ConfigurationQueries
+            val configurationManager: ConfigurationManager
     )
 }

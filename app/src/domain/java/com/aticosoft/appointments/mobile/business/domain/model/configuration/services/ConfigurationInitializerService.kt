@@ -1,8 +1,9 @@
 package com.aticosoft.appointments.mobile.business.domain.model.configuration.services
 
+import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
+import com.aticosoft.appointments.mobile.business.domain.model.configuration.Configuration
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationFactory
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationQueries
-import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,7 +13,7 @@ import javax.inject.Singleton
 @Singleton
 /*internal*/ class ConfigurationInitializerService @Inject protected constructor(
         private val configurationFactory: ConfigurationFactory,
-        private val configurationRepository: ConfigurationRepository,
+        private val configurationRepository: Repository<Configuration>,
         private val configurationQueries: ConfigurationQueries
 ) {
 

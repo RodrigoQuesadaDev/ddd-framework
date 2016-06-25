@@ -3,4 +3,4 @@ package com.aticosoft.appointments.mobile.business.domain.model.common.validatio
 /**
  * Created by Rodrigo Quesada on 10/01/16.
  */
-/*internal*/ class ValidationException(message: String) : RuntimeException(message)
+/*internal*/ open class ValidationException(message: String) : RuntimeException(message)

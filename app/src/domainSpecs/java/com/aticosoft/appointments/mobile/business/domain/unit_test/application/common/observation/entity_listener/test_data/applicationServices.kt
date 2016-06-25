@@ -24,7 +24,7 @@ internal class TestDataParentServices @Inject constructor(private val c: TestDat
         }
     }
 
-    class ChangeData(val currentValue: Int, val  targetValue: Int) : Command()
+    class ChangeData(val currentValue: Int, val targetValue: Int) : Command()
 
     fun execute(command: ChangeData) = command.execute {
         c.testDataParentRepository.find(c.testDataParentQueries.valueIs(currentValue))!!.let { data ->

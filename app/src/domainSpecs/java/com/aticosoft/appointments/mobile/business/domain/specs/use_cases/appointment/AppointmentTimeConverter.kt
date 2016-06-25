@@ -9,9 +9,6 @@ import org.joda.time.format.DateTimeFormat
 import java.lang.reflect.Type
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.text.MatchGroup
-import kotlin.text.Regex
-import kotlin.text.RegexOption
 
 /**
  * Created by Rodrigo Quesada on 21/09/15.

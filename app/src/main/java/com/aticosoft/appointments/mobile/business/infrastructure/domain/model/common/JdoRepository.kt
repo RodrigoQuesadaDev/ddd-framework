@@ -5,25 +5,38 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.querydsl.core.types.EntityPath
 import com.querydsl.core.types.dsl.StringPath
+import javax.inject.Inject
 
 /**
  * Created by Rodrigo Quesada on 21/09/15.
  */
-/*internal*/ abstract class JdoRepository<E : Entity>(protected val context: PersistenceContext, entityPath: EntityPath<E>) : Repository<E> {
+/*internal*/ abstract class JdoRepository<E : Entity> protected constructor(entityPath: EntityPath<E>) : Repository<E> {
+
+    private lateinit var m: InjectedMembers
 
     val queryEntity: QueryEntity<E> = QueryEntity(entityPath)
 
     override fun add(entity: E) {
-        context.persistenceManager.makePersistent(entity)
+        m.context.persistenceManager.makePersistent(entity)
     }
 
-    override fun get(id: String) = context.queryFactory.selectFrom(queryEntity).where(queryEntity.id.eq(id)).fetchOne()
+    override fun get(id: String) = m.context.queryFactory.selectFrom(queryEntity).where(queryEntity.id.eq(id)).fetchOne()
 
     override fun remove(entity: E) {
-        context.persistenceManager.deletePersistent(entity)
+        m.context.persistenceManager.deletePersistent(entity)
     }
 
-    override fun size() = context.queryFactory.selectFrom(queryEntity).fetchCount()
+    override fun size() = m.context.queryFactory.selectFrom(queryEntity).fetchCount()
+
+    //region Injection
+    protected @Inject fun inject(injectedFields: InjectedMembers) {
+        m = injectedFields
+    }
+
+    protected class InjectedMembers @Inject constructor(
+            val context: PersistenceContext
+    )
+    //endregion
 }
 
 /*internal*/ class QueryEntity<E : Entity>(entityPath: EntityPath<E>) : EntityPath<E> by entityPath {

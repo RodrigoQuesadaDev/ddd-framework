@@ -1,9 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.testing
 
 import com.aticosoft.appointments.mobile.business.Application
-import com.aticosoft.appointments.mobile.business.ApplicationModule
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
-import com.aticosoft.appointments.mobile.business.domain.test.common.ApplicationComponentConfigurator
 import com.rodrigodev.common.rx.testing.RxConfigurator
 import org.robolectric.TestLifecycleApplication
 import java.lang.reflect.Method
@@ -12,36 +10,36 @@ import javax.inject.Inject
 /**
  * Created by Rodrigo Quesada on 23/10/15.
  */
-internal abstract class TestApplication(
-        private val testApplicationComponent: Class<*>,
-        private val testModules: TestApplicationModules = TestApplicationModules()
-) : Application<TestApplicationComponent<DomainStory>>(), TestLifecycleApplication {
+internal abstract class TestApplication<S : DomainStory, C : TestApplicationComponent, B : TestApplicationComponent.Builder<C, B>>(
+        private val createBuilder: () -> B,
+        private val injectTest: C.(S) -> Unit
+) : Application<C, B>(), TestLifecycleApplication {
 
-    @Inject protected lateinit var rxConfigurator: RxConfigurator
+    private val c: Context = Context()
 
-    override protected fun createApplicationComponent(): TestApplicationComponent<DomainStory> {
-        val configurator = ApplicationComponentConfigurator()
+    @Suppress("UNCHECKED_CAST")
+    override protected fun createApplicationComponentBuilder(): B = createBuilder()
 
-        @Suppress("UNCHECKED_CAST")
-        val component = configurator.configure(testApplicationComponent, ApplicationModule(this),
-                testModules
-        ) as TestApplicationComponent<DomainStory>
-        component.inject(this)
-
-        rxConfigurator.configure()
-        testModules.injectUsing(component)
-        return component
+    override fun C.afterBuild() {
+        component.inject(c)
+        c.rxConfigurator.configure()
     }
 
+    class Context() {
+        @Inject lateinit var rxConfigurator: RxConfigurator
+    }
+
+    //region Test Lifecycle
     override fun beforeTest(method: Method) {
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun prepareTest(test: Any) {
-        @Suppress("UNCHECKED_CAST")
-        test as DomainStory
-        component.inject(test)
+        test as S
+        component.injectTest(test)
     }
 
     override fun afterTest(method: Method) {
     }
+    //endregion
 }

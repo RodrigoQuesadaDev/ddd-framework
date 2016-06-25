@@ -21,9 +21,7 @@ class DataNucleusPlugin implements Plugin<Project> {
 
         project.afterEvaluate {
 
-            if (!isAndroidProject()) {
-                throw new GradleException("This plugin may only be applied to Android projects.")
-            }
+            if (!isAndroidProject()) throw new GradleException("This plugin may only be applied to Android projects.")
 
             CopyPluginFiles.setUp(project, pluginConfiguration.copyPluginFilesConfiguration)
             EnhanceJdoEntities.setUp(project, pluginConfiguration.enhanceJdoEntitiesConfiguration)

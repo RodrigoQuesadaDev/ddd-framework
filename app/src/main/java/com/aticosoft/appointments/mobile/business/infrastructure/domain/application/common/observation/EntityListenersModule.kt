@@ -2,7 +2,6 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.applica
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.EntityTypes
 import dagger.Module
 import dagger.Provides
 import javax.inject.Provider
@@ -14,10 +13,10 @@ import javax.inject.Singleton
 @Module
 /*internal*/ class EntityListenersModule {
 
-    @Provides @Singleton @EntityListeners
-    fun provideEntityListeners(@EntityTypes entityTypes: Array<Class<out Entity>>, servicesProvider: Provider<EntityListener.Services>): Array<EntityListener<*>> {
+    //TODO change this (use multibinding)
+    //TODO change servicesPROVIDER stuff?? (is it really needed???)
+    /*@Provides @Singleton
+    fun provideEntityListeners(entityTypes: MutableSet<Class<out Entity>>, servicesProvider: Provider<EntityListener.Services>): Array<EntityListener<*>> {
         return entityTypes.map { EntityListener(servicesProvider.get(), it) }.toTypedArray()
-    }
+    }*/
 }
-
-internal annotation class EntityListeners

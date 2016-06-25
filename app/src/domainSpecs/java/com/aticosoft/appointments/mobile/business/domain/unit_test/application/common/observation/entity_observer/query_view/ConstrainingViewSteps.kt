@@ -2,11 +2,10 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.AbstractConstrainingViewSteps.Services
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.*
 import com.rodrigodev.common.rx.advanceTimeBy
-import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.spec.story.converter.JsonData
+import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.testing.firstEvent
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
@@ -62,7 +61,7 @@ internal abstract class AbstractConstrainingViewSteps(protected val s: Services)
     class Services @Inject constructor(
             val testDataParentRepositoryManager: TestDataParentRepositoryManager,
             val testDataParentServices: TestDataParentServices,
-            val testDataParentObserver: TestDataParentObserver,
+            val testDataParentObserver: EntityObserver<TestDataParent>,
             val testDataParentQueries: TestDataParentQueries,
             val testScheduler: TestScheduler
     )

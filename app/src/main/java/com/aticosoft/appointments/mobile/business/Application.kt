@@ -9,7 +9,7 @@ import kotlin.properties.Delegates.notNull
 /**
  * Created by Rodrigo Quesada on 10/09/15.
  */
-/*internal*/ abstract class Application<C : ApplicationComponent> : Application() {
+/*internal*/ abstract class Application<C : ApplicationComponent, B : ApplicationComponent.Builder<C, B>> : Application() {
 
     private val c: Context = Context()
 
@@ -18,7 +18,11 @@ import kotlin.properties.Delegates.notNull
 
     override fun onCreate() {
         super.onCreate()
-        component = createApplicationComponent()
+        component = createApplicationComponentBuilder()
+                .applicationBaseModule(ApplicationBaseModule(this))
+                .build()
+
+        component.afterBuild()
 
         Configurator().let { configurator ->
             component.inject(configurator)
@@ -29,7 +33,11 @@ import kotlin.properties.Delegates.notNull
         c.modelServices.execute(InitializeModel())
     }
 
-    protected abstract fun createApplicationComponent(): C
+    //TODO change this (maybe create own class again?)
+    protected abstract fun createApplicationComponentBuilder(): B
+
+    protected open fun C.afterBuild() {
+    }
 
     class Configurator {
 
@@ -43,4 +51,9 @@ import kotlin.properties.Delegates.notNull
     class Context {
         @Inject lateinit var modelServices: ModelServices
     }
+}
+
+/*internal*/ class ApplicationImpl : com.aticosoft.appointments.mobile.business.Application<ApplicationComponent, ApplicationComponent.BuilderImpl>() {
+
+    override protected fun createApplicationComponentBuilder() = DaggerApplicationComponent.builder()
 }

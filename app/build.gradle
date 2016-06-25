@@ -61,7 +61,7 @@ datanucleus {
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/filtering/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/query_view/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/entity/validation/test_data']
-    alwaysDetachable true
+    alwaysDetachable = true
 }
 
 dependencies {
@@ -85,6 +85,7 @@ dependencies {
     datanucleus "org.datanucleus:datanucleus-rdbms:$datanucleusRdbmsVersion"
     datanucleus "org.datanucleus:datanucleus-jodatime:$datanucleusJodatimeVersion"
     datanucleus "org.datanucleus:javax.jdo:$jdoApiVersion"
+
     compile "javax.validation:validation-api:$jsr303ApiVersion"
     compile "org.hibernate:hibernate-validator:$hibernateValidatorVersion"
     kapt "org.hibernate:hibernate-validator-annotation-processor:$hibernateValidatorVersion"
@@ -109,7 +110,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
-    testCompile project(':testingCommon')
     testCompile "org.jbehave:jbehave-core:$jBehaveVersion"
     jbehaveSiteResources "org.jbehave:jbehave-core:$jBehaveVersion"
     jbehaveSiteResources "org.jbehave.site:jbehave-site-resources:$jBehaveSiteVersion:@zip"

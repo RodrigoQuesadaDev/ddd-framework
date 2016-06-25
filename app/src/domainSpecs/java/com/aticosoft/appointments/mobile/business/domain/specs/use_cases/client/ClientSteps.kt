@@ -1,8 +1,9 @@
 package com.aticosoft.appointments.mobile.business.domain.specs.use_cases.client
 
-import com.aticosoft.appointments.mobile.business.domain.application.client.ClientObserver
 import com.aticosoft.appointments.mobile.business.domain.application.client.ClientServices
 import com.aticosoft.appointments.mobile.business.domain.application.client.ClientServices.AddClient
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
 import com.aticosoft.appointments.mobile.business.domain.testing.model.ClientRepositoryManager
 import com.rodrigodev.common.testing.firstEvent
@@ -21,7 +22,7 @@ import javax.inject.Inject
 internal class ClientSteps @Inject constructor(
         private val clientRepositoryManager: ClientRepositoryManager,
         private val clientServices: ClientServices,
-        private val clientObserver: ClientObserver,
+        private val clientObserver: EntityObserver<Client>,
         private val clientQueries: ClientQueries
 ) {
     @Given("no clients")
