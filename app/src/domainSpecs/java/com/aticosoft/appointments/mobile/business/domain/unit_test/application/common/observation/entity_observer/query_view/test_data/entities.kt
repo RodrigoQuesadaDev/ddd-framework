@@ -3,6 +3,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
 import com.google.auto.factory.Provided
+import javax.jdo.annotations.EmbeddedOnly
 import javax.jdo.annotations.PersistenceCapable
 
 /**
@@ -10,12 +11,40 @@ import javax.jdo.annotations.PersistenceCapable
  */
 @PersistenceCapable
 //@AutoFactory
-internal class TestDataParent protected constructor(@Provided context: Entity.Context, value: Int, var child1: TestDataChild? = null, var child2: TestDataChild? = null) : AbstractTestData(context, value)
+internal class TestDataParent protected constructor(
+        @Provided context: Entity.Context,
+        value: Int,
+        var embedded1: TestDataSimpleEmbedded? = null,
+        var embedded2: TestDataComplexEmbedded? = null,
+        var child1: TestDataChild? = null,
+        var child2: TestDataChild? = null
+) : AbstractTestData(context, value)
 
 @PersistenceCapable
 //@AutoFactory
-internal class TestDataChild protected constructor(@Provided context: Entity.Context, value: Int, var grandChild1: TestDataGrandChild? = null, var grandChild2: TestDataGrandChild? = null) : AbstractTestData(context, value)
+internal class TestDataChild protected constructor(
+        @Provided context: Entity.Context,
+        value: Int,
+        var grandChild1: TestDataGrandChild? = null,
+        var grandChild2: TestDataGrandChild? = null
+) : AbstractTestData(context, value)
 
 @PersistenceCapable
 //@AutoFactory
-internal class TestDataGrandChild protected constructor(@Provided context: Entity.Context, value: Int) : AbstractTestData(context, value)
+internal class TestDataGrandChild protected constructor(
+        @Provided context: Entity.Context,
+        value: Int,
+        var embedded1: TestDataSimpleEmbedded? = null,
+        var embedded2: TestDataComplexEmbedded? = null
+) : AbstractTestData(context, value)
+
+@EmbeddedOnly
+internal class TestDataComplexEmbedded(
+        var value: Int,
+        var nestedEmbedded: TestDataSimpleEmbedded? = null
+)
+
+@EmbeddedOnly
+internal class TestDataSimpleEmbedded(
+        var value: Int
+)

@@ -7,27 +7,38 @@
             <version strategy="version-number">
                 <extension key="field-name" value="version" vendor-name="datanucleus"/>
             </version>
-            <field name="id" primary-key="true"/>
+            <field name="id" primary-key="true" column="_ID"/>
             <field name="version">
                 <column name="VERSION"/>
             </field>
         </class>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.appointment">
-        <class name="Appointment">
-            <field name="scheduledTime"/>
+        <class name="Appointment"  table="APPOINTMENT">
+            <field name="_scheduledTime">
+                <embedded>
+                    <field name="start" column="START"/>
+                    <field name="end" column="END"/>
+                </embedded>
+            </field>
         </class>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.client">
-        <class name="Client">
-            <field name="name"/>
+        <class name="Client" table="CLIENT">
+            <field name="name" column="NAME"/>
         </class>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.configuration">
-        <class name="Configuration">
-            <field name="maxConcurrentAppointments"/>
-            <field name="timeSlotDuration"/>
+        <class name="Configuration" table="CONFIGURATION">
+            <field name="maxConcurrentAppointments" column="MAX_CONCURRENT_APPOINTMENTS"/>
+            <field name="timeSlotDuration" column="TIME_SLOT_DURATION"/>
             <extension key="cache-pin" value="true" vendor-name="datanucleus"/>
+        </class>
+    </package>
+    <package name="com.aticosoft.appointments.mobile.business.domain.model.common.embedded">
+        <class name="EmbeddedInterval" embedded-only="true">
+            <field name="start"/>
+            <field name="end"/>
         </class>
     </package>
 </jdo>

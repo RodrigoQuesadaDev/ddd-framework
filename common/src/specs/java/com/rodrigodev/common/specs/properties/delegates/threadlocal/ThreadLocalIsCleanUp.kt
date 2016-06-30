@@ -13,7 +13,9 @@ import org.jbehave.core.annotations.When
  */
 internal class ThreadLocalIsCleanUp : SpecStory() {
 
-    override val steps = arrayOf(LocalSteps())
+    init {
+        steps { listOf(LocalSteps()) }
+    }
 
     class LocalSteps {
 

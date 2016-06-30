@@ -33,7 +33,6 @@ import kotlin.properties.Delegates.notNull
         c.modelServices.execute(InitializeModel())
     }
 
-    //TODO change this (maybe create own class again?)
     protected abstract fun createApplicationComponentBuilder(): B
 
     protected open fun C.afterBuild() {
@@ -55,5 +54,5 @@ import kotlin.properties.Delegates.notNull
 
 /*internal*/ class ApplicationImpl : com.aticosoft.appointments.mobile.business.Application<ApplicationComponent, ApplicationComponent.BuilderImpl>() {
 
-    override protected fun createApplicationComponentBuilder() = DaggerApplicationComponent.builder()
+    override fun createApplicationComponentBuilder() = DaggerApplicationComponent.builder()
 }

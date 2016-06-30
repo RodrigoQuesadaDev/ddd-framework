@@ -1,5 +1,6 @@
+Default data for use case stories.
 
-Scenario: given some existing clients
+Scenario: clients
 
 Given no clients
 When the next clients are added:
@@ -14,4 +15,12 @@ When the next clients are added:
 | Jesse Kim         | 1987-01-07 |
 | Judith Cook       | 1988-02-14 |
 | Jeremy Berry      | 1953-06-21 |
-Then 10 clients were added
+
+Scenario: appointments
+
+Given no appointments scheduled
+
+Scenario: configuration
+
+Given 1 concurrent appointment at max
+Given 15 minutes time slots

@@ -36,7 +36,9 @@ internal class DirtyEntityChecking : DomainStory() {
 
     @Inject protected lateinit var localSteps: LocalSteps
 
-    override val steps by lazy { arrayOf(localSteps) }
+    init {
+        steps { listOf(localSteps) }
+    }
 
     class LocalSteps @Inject constructor(
             private val testDataRepositoryManager: TestDataRepositoryManager,

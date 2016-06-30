@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.rodrigodev.common.spec.story
 
 import com.rodrigodev.common.spec.story.converter.*
@@ -7,7 +9,7 @@ import com.thoughtworks.paranamer.BytecodeReadingParanamer
 import com.thoughtworks.paranamer.CachingParanamer
 import org.jbehave.core.configuration.MostUsefulConfiguration
 import org.jbehave.core.io.LoadFromClasspath
-import org.jbehave.core.junit.JUnitStory
+import org.jbehave.core.junit.JUnitStories
 import org.jbehave.core.model.ExamplesTableFactory
 import org.jbehave.core.model.TableTransformers
 import org.jbehave.core.parsers.RegexStoryParser
@@ -23,9 +25,15 @@ import org.junit.Before
 /**
  * Created by Rodrigo Quesada on 26/10/15.
  */
-abstract class SpecStory : JUnitStory() {
+abstract class SpecStory : JUnitStories() {
 
-    protected open val steps: Array<*> = arrayOf<Any>()
+    private val setUpClosures: MutableList<() -> Unit> = mutableListOf()
+
+    private val preStories: MutableList<String> = mutableListOf()
+    private val postStories: MutableList<String> = mutableListOf()
+
+    private val steps: MutableList<Any> = mutableListOf()
+    private val stepsClosures: MutableList<() -> List<Any>> = mutableListOf()
 
     private val tableTransformers = TableTransformers().apply {
         useTransformer(MultilineTableTransformer.NAME, MultilineTableTransformer())
@@ -56,11 +64,29 @@ abstract class SpecStory : JUnitStory() {
     }
 
     @Before
-    open fun setUp() {
+    fun setUpAll() {
+        setUpClosures.forEach { it() }
+        configureSteps()
         configuredEmbedder().embedderControls().doIgnoreFailureInStories(true)
     }
 
-    override fun stepsFactory() = InstanceStepsFactory(configuration(), *steps)
+    fun setUp(closure: () -> Unit) {
+        setUpClosures.add(closure)
+    }
+
+    protected fun preStories(vararg paths: String) {
+        preStories.addAll(paths)
+    }
+
+    protected fun postStories(vararg paths: String) {
+        postStories.addAll(paths)
+    }
+
+    protected fun steps(closure: () -> List<Any>) {
+        stepsClosures.add(closure)
+    }
+
+    override fun stepsFactory() = InstanceStepsFactory(configuration(), steps)
 
     override fun configuration() = MostUsefulConfiguration()
             .useParameterConverters(parameterConverters.addConverters(converters))
@@ -74,4 +100,19 @@ abstract class SpecStory : JUnitStory() {
                             .withFormats(Format.CONSOLE, Format.HTML_TEMPLATE)
                             .withFailureTrace(true)
                             .withRelativeDirectory("../build/jbehave"))
+
+    //region Stories Configuration
+    override fun storyPaths(): List<String> {
+        val pathResolver = configuredEmbedder().configuration().storyPathResolver()
+        return preStories + listOf(pathResolver.resolve(this.javaClass)) + postStories
+    }
+    //endregion
+
+    //region Steps Configuration
+    private inline fun configureSteps() {
+        steps.addAll(stepsClosures.toStepsList())
+    }
+
+    private inline fun List<() -> List<Any>>.toStepsList(): Collection<Any> = flatMap { it() }
+    //endregion
 }

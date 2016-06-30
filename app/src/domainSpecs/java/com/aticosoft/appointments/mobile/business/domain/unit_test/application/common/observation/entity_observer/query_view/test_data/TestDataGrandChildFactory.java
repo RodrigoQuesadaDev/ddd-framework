@@ -13,7 +13,7 @@ public final class TestDataGrandChildFactory {
         this.arg0Provider = arg0Provider;
     }
 
-    public TestDataGrandChild create(int arg1) {
-        return new TestDataGrandChild(arg0Provider.get(), arg1);
+    public TestDataGrandChild create(int arg1, TestDataSimpleEmbedded arg2, TestDataComplexEmbedded arg3) {
+        return new TestDataGrandChild(arg0Provider.get(), arg1, arg2, arg3);
     }
 }

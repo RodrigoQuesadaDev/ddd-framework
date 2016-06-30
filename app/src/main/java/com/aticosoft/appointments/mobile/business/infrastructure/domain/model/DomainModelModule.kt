@@ -35,7 +35,6 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
     @Provides @ElementsIntoSet
     fun provideEntityInitializers(): Set<EntityInitializer<*>> = emptySet()
 
-    //TODO get rid of this post initializer stuff...
     @Singleton
     class PostInitializer @Inject protected constructor(
             private val entityValidatorsManager: EntityValidatorsManager,

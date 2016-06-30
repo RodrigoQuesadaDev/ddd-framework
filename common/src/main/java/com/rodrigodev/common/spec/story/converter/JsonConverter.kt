@@ -5,7 +5,7 @@ package com.rodrigodev.common.spec.story.converter
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.paranamer.ParanamerModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.jbehave.core.steps.ParameterConverters
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
@@ -18,7 +18,7 @@ class JsonConverter : ParameterConverters.ParameterConverter {
     private val mapper = ObjectMapper()
             .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
             .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
-            .registerModule(ParanamerModule())
+            .registerKotlinModule()
 
     override fun accept(type: Type): Boolean = with(type.typePathList().last()) { this is Class<*> && isAnnotationPresent(JsonData::class.java) }
 

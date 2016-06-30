@@ -1,8 +1,8 @@
-package com.aticosoft.appointments.mobile.business.domain.specs
+package com.aticosoft.appointments.mobile.business.domain.specs.use_cases
 
 import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appointment.scheduling.OwnerSchedulesAppointment
 import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appointment.scheduling.constrains.TimeSlotsAlignment
-import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.client.ClientStory
+import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appointment.scheduling.constrains.TimeSlotsSpace
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
@@ -14,16 +14,16 @@ import javax.inject.Singleton
  */
 @Singleton
 @Component(modules = arrayOf(TestApplicationModule::class))
-internal interface SpecApplicationComponent : TestApplicationComponent {
+internal interface UseCaseApplicationComponent : TestApplicationComponent {
 
     fun inject(test: OwnerSchedulesAppointment)
     fun inject(test: TimeSlotsAlignment)
-    fun inject(test: ClientStory)
+    fun inject(test: TimeSlotsSpace)
 
     @Component.Builder
-    interface Builder : TestApplicationComponent.Builder<SpecApplicationComponent, Builder>
+    interface Builder : TestApplicationComponent.Builder<UseCaseApplicationComponent, Builder>
 }
 
-internal abstract class SpecApplication<S : DomainStory>(
-        injectTest: SpecApplicationComponent.(S) -> Unit
-) : TestApplication<S, SpecApplicationComponent, SpecApplicationComponent.Builder>({ DaggerSpecApplicationComponent.builder() }, injectTest)
+internal abstract class UseCaseApplication<S : UseCaseStory>(
+        injectTest: UseCaseApplicationComponent.(S) -> Unit
+) : TestApplication<S, UseCaseApplicationComponent, UseCaseApplicationComponent.Builder>({ DaggerUseCaseApplicationComponent.builder() }, injectTest)

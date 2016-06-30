@@ -7,18 +7,19 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
-* Created by Rodrigo Quesada on 31/10/15.
-*/
+ * Created by Rodrigo Quesada on 31/10/15.
+ */
 abstract class RxSpec : SpecStory() {
 
     @Inject protected lateinit var testScheduler: TestScheduler
 
-    override fun setUp() {
-        super.setUp()
-        val component = DaggerRxSpec_TestComponent.create()
-        val rxConfigurator = component.rxConfigurator()
-        rxConfigurator.configure()
-        component.inject(this)
+    init {
+        setUp {
+            val component = DaggerRxSpec_TestComponent.create()
+            val rxConfigurator = component.rxConfigurator()
+            rxConfigurator.configure()
+            component.inject(this)
+        }
     }
 
     @Singleton

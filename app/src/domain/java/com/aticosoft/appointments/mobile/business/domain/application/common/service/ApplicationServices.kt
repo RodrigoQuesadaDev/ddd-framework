@@ -42,6 +42,7 @@ import javax.jdo.PersistenceManager
         }
     }
 
+    //TODO use InjectedMembers pattern
     class Context @Inject protected constructor(
             val tm: TransactionManager,
             val persistenceContext: PersistenceContext

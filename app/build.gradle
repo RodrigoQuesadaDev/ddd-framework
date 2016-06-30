@@ -115,7 +115,6 @@ dependencies {
     jbehaveSiteResources "org.jbehave.site:jbehave-site-resources:$jBehaveSiteVersion:@zip"
     testCompile "junit:junit:$junitVersion"
     testCompile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-    testCompile "com.fasterxml.jackson.module:jackson-module-paranamer:$jacksonVersion"
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.robolectric:robolectric:$robolectricVersion"
     kaptTest "com.google.auto.factory:auto-factory:$autoFactoryVersion"

@@ -1,20 +1,10 @@
-Narrative:
-
-In order to schedule an appointment
-As an user
-I want to be able to only choose a schedule date that correspond with predetermined time slots
-
-GivenStories: com/aticosoft/appointments/mobile/business/domain/specs/use_cases/client/given_stories/given_some_existing_clients.story
-
-Scenario: set-up time slot of 15 minutes
-
-Given no appointments scheduled
-Given a configured time slot of 15 minutes
+Scheduled assignments must comply with the time slot configuration (that is, they can't be unaligned).
 
 Scenario: successful booking with time slot of 15 minutes
 
+Given 15 minutes time slots
 When the owner schedules an appointment for <client> on <time>
-Then the appointment is successfully scheduled
+Then an appointment is scheduled for <client> on <time>
 
 Examples:
 | client            | time                           |
@@ -26,7 +16,7 @@ Examples:
 Scenario: unsuccessful booking with time slot of 15 minutes
 
 When the owner schedules an appointment for <client> on <time>
-Then the system throws a TimeSlotValidationException indicating the schedule time doesn't comply with the time slot configuration
+Then the system throws an Exception indicating the schedule time doesn't align to the configured time slots
 
 Examples:
 | client            | time                           |
@@ -40,15 +30,11 @@ Examples:
 | Marie Austin      | 2015-12-21 from 15:03 to 15:33 |
 | Marie Austin      | 2015-12-21 from 15:03 to 16:03 |
 
-Scenario: set-up time slot of 30 minutes
-
-Given no appointments scheduled
-Given a configured time slot of 30 minutes
-
 Scenario: successful booking with time slot of 30 minutes
 
+Given 30 minutes time slots
 When the owner schedules an appointment for <client> on <time>
-Then the appointment is successfully scheduled
+Then an appointment is scheduled for <client> on <time>
 
 Examples:
 | client            | time                           |
@@ -60,7 +46,7 @@ Examples:
 Scenario: unsuccessful booking with time slot of 30 minutes
 
 When the owner schedules an appointment for <client> on <time>
-Then the system throws a TimeSlotValidationException indicating the schedule time doesn't comply with the time slot configuration
+Then the system throws an Exception indicating the schedule time doesn't align to the configured time slots
 
 Examples:
 | client            | time                           |

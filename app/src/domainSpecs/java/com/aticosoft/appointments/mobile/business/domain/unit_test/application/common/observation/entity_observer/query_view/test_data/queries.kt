@@ -24,5 +24,10 @@ internal class TestDataParentQueries @Inject constructor(private val context: Pe
         context.queryFactory.selectFrom(d).where(d.value.mod(2).eq(1)).fetch()
     }
 
+    fun isLessThan(max: Int, vararg filters: EntityObservationFilter<*>) = ListQuery(*filters) {
+        val d = QTestDataParent.testDataParent
+        context.queryFactory.selectFrom(d).where(d.value.lt(max)).fetch()
+    }
+
     fun all() = ListQuery { context.queryFactory.selectFrom(QTestDataParent.testDataParent).fetch() }
 }

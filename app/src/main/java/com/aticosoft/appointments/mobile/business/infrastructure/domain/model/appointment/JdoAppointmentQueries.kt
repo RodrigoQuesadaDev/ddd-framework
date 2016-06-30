@@ -3,6 +3,7 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.a
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.QAppointment
 import com.aticosoft.appointments.mobile.business.domain.model.common.ListQuery
+import com.aticosoft.appointments.mobile.business.domain.model.common.embedded.eq
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import org.joda.time.Interval
 import javax.inject.Inject
@@ -16,6 +17,11 @@ import javax.inject.Singleton
 
     override fun timeIs(time: Interval) = ListQuery {
         val a = QAppointment.appointment
-        context.queryFactory.selectFrom(a).where(a.scheduledTime.eq(time.toString())).fetch()
+        context.queryFactory.selectFrom(a).where(a._scheduledTime.eq(time)).fetch()
     }
+
+    /*override fun timeIn(range: Interval): ListQuery {
+        val a = QAppointment.appointment
+        context.queryFactory.selectFrom(a).where(a.scheduledTime.e)
+    }*/
 }

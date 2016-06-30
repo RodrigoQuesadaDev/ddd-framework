@@ -3,6 +3,8 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.*
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParentServices.AddData
+import com.rodrigodev.common.nullability.nullOr
 import com.rodrigodev.common.rx.advanceTimeBy
 import com.rodrigodev.common.spec.story.converter.JsonData
 import com.rodrigodev.common.spec.story.steps.SpecSteps
@@ -27,12 +29,22 @@ internal abstract class AbstractConstrainingViewSteps(protected val s: Services)
 
     @Given("data:\$values")
     fun givenData(values: MutableList<TestDataParentExample>) {
+        //region Utils
+        fun createComplexEmbedded(e: TestDataEmbeddedExample?) = e.nullOr { AddData.ComplexEmbedded(it.v, it.n) }
+
+        fun createGrandChild(g: TestDataGrandChildExample?) = g.nullOr { AddData.GrandChild(it.v, it.e1, createComplexEmbedded(it.e2)) }
+
+        fun createChild(c: TestDataChildExample?) = c.nullOr { AddData.Child(it.v, createGrandChild(it.g1), createGrandChild(it.g2)) }
+        //endregion
+
         s.testDataParentRepositoryManager.clear()
         values.forEach { parent ->
-            s.testDataParentServices.execute(TestDataParentServices.AddData(
+            s.testDataParentServices.execute(AddData(
                     parent.v,
-                    parent.c1?.let { c -> TestDataParentServices.AddData.Child(c.v, c.g1, c.g2) },
-                    parent.c2?.let { c -> TestDataParentServices.AddData.Child(c.v, c.g1, c.g2) }
+                    parent.e1,
+                    createComplexEmbedded(parent.e2),
+                    createChild(parent.c1),
+                    createChild(parent.c2)
             ))
         }
     }
@@ -98,28 +110,58 @@ internal abstract class ConstrainingViewOfSingleEntitySteps(s: Services) : Abstr
     }
 }
 
-internal fun TestDataParent.toExample() = TestDataParentExample(
-        value,
-        readField { child1 }?.let { c -> TestDataChildExample(c.value, readField { c.grandChild1 }?.value, readField { c.grandChild2 }?.value) },
-        readField { child2 }?.let { c -> TestDataChildExample(c.value, readField { c.grandChild1 }?.value, readField { c.grandChild2 }?.value) }
-)
+//region Examples
+internal fun TestDataParent.toExample(): TestDataParentExample {
 
-internal inline fun <T : Any> readField(body: () -> T?): T? = try {
-    body()
-}
-catch(e: JDODetachedFieldAccessException) {
-    null
+    //region Utils
+    fun <F : Any, R : Any> readField(fieldClosure: () -> F?, body: (F) -> R): R? = try {
+        fieldClosure()
+    }
+    catch(e: JDODetachedFieldAccessException) {
+        null
+    }.nullOr(body)
+
+    fun <E : TestDataSimpleEmbedded> readSimpleEmbedded(closure: () -> E?) = readField(closure) { it.value }
+
+    fun <E : TestDataComplexEmbedded> readComplexEmbedded(closure: () -> E?) = readField(closure) { e -> TestDataEmbeddedExample(e.value, readSimpleEmbedded { e.nestedEmbedded }) }
+
+    fun <G : TestDataGrandChild> readGrandChild(closure: () -> G?) = readField(closure) { g -> TestDataGrandChildExample(g.value, readSimpleEmbedded { g.embedded1 }, readComplexEmbedded { g.embedded2 }) }
+
+    fun <C : TestDataChild> readChild(closure: () -> C?) = readField(closure) { c -> TestDataChildExample(c.value, readGrandChild { c.grandChild1 }, readGrandChild { c.grandChild2 }) }
+    //endregion
+
+    return TestDataParentExample(
+            value,
+            readSimpleEmbedded { embedded1 },
+            readComplexEmbedded { embedded2 },
+            readChild { child1 },
+            readChild { child2 }
+    )
 }
 
 @JsonData
 internal data class TestDataParentExample(
         val v: Int,
+        val e1: Int? = null,
+        val e2: TestDataEmbeddedExample? = null,
         val c1: TestDataChildExample?,
         val c2: TestDataChildExample?
 )
 
 internal data class TestDataChildExample(
         val v: Int,
-        val g1: Int?,
-        val g2: Int?
+        val g1: TestDataGrandChildExample?,
+        val g2: TestDataGrandChildExample?
 )
+
+internal data class TestDataGrandChildExample(
+        val v: Int,
+        val e1: Int? = null,
+        val e2: TestDataEmbeddedExample? = null
+)
+
+internal data class TestDataEmbeddedExample(
+        val v: Int,
+        val n: Int?
+)
+//endregion

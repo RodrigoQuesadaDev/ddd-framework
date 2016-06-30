@@ -2,6 +2,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.model.common.ListQuery
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
@@ -30,7 +31,9 @@ internal class ConstrainingViewOfListQuery : DomainStory() {
 
     @Inject protected lateinit var localSteps: LocalSteps
 
-    override val steps by lazy { arrayOf(localSteps) }
+    init {
+        steps { listOf(localSteps) }
+    }
 
     class LocalSteps @Inject constructor(
             private val services: AbstractConstrainingViewSteps.Services,
@@ -45,17 +48,26 @@ internal class ConstrainingViewOfListQuery : DomainStory() {
             filter = EntityObservationFilter(TestDataParent::class.java) { it.value.isOdd() }
         }
 
-        @When("I'm observing the parents with odd value")
-        fun whenImObservingTheParentsWithOddValue() {
+        private fun whenImObservingTheParents(query: TestDataParentQueries.(Array<EntityObservationFilter<*>>) -> ListQuery<TestDataParent>) {
             testSubscriber = testDataParentObserver.observe(
-                    testDataParentQueries.isOdd(*filter?.let { arrayOf(it) } ?: emptyArray()),
+                    testDataParentQueries.query(filter?.let { arrayOf(it) } ?: emptyArray()),
                     queryView
             ).testSubscribe()
         }
 
+        @When("I'm observing the parents with odd value")
+        fun whenImObservingTheParentsWithOddValue() {
+            whenImObservingTheParents(TestDataParentQueries::isOdd)
+        }
+
+        @When("I'm observing the parents with value less than \$max")
+        fun whenImObservingTheParentsWithPrimeValue(max: Int) {
+            whenImObservingTheParents { isLessThan(max, *it) }
+        }
+
         @Then("the observed value is \$result")
         fun thenTheObservedValueIs(result: MutableList<TestDataParentExample>) {
-            assertThat(testSubscriber.firstEvent().map (TestDataParent::toExample)).isEqualTo(result)
+            assertThat(testSubscriber.firstEvent().map(TestDataParent::toExample)).isEqualTo(result)
         }
 
         @Then("later the observed values were \$result")

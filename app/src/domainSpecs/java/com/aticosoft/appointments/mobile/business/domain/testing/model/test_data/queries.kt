@@ -1,6 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.QueryView
+import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.EntityQueries
 import com.aticosoft.appointments.mobile.business.domain.model.common.UniqueQuery
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
@@ -19,4 +20,9 @@ internal class TestDataQueries @Inject constructor(private val context: Persiste
     }
 }
 
-internal enum class TestDataQueryView : QueryView
+internal enum class TestDataQueryView : QueryView {
+    ;
+
+    override lateinit var _filterTypes: Sequence<Class<out Entity>>
+    override lateinit var fetchGroupName: String
+}

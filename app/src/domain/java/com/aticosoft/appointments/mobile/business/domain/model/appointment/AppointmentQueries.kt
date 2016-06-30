@@ -10,4 +10,6 @@ import org.joda.time.Interval
 interface AppointmentQueries : EntityQueries<Appointment> {
 
     fun timeIs(time: Interval): ListQuery<Appointment>
+
+    //fun timeIn(range: Interval): ListQuery<Appointment>
 }

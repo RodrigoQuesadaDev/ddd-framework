@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
 <orm>
-    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data">
+    <package
+        name="com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data">
         <class name="TestDataParent" table="TEST_DATA_PARENT3">
+            <field name="embedded1">
+                <embedded null-indicator-column="EMBEDDED1_VALUE">
+                    <field name="value">
+                        <column name="EMBEDDED1_VALUE" allows-null="true"/>
+                    </field>
+                </embedded>
+            </field>
+            <field name="embedded2">
+                <embedded null-indicator-column="EMBEDDED2_VALUE">
+                    <field name="value">
+                        <column name="EMBEDDED2_VALUE" allows-null="true"/>
+                    </field>
+                    <field name="nestedEmbedded">
+                        <embedded null-indicator-column="NESTED_EMBEDDED_VALUE">
+                            <field name="value">
+                                <column name="NESTED_EMBEDDED_VALUE" allows-null="true"/>
+                            </field>
+                        </embedded>
+                    </field>
+                </embedded>
+            </field>
             <field name="child1">
                 <column name="CHILD1_ID"/>
             </field>
@@ -18,6 +40,28 @@
                 <column name="GRAND_CHILD2_ID"/>
             </field>
         </class>
-        <class name="TestDataGrandChild" table="TEST_DATA_GRAND_CHILD3"/>
+        <class name="TestDataGrandChild" table="TEST_DATA_GRAND_CHILD3">
+            <field name="embedded1">
+                <embedded null-indicator-column="EMBEDDED1_VALUE">
+                    <field name="value">
+                        <column name="EMBEDDED1_VALUE" allows-null="true"/>
+                    </field>
+                </embedded>
+            </field>
+            <field name="embedded2">
+                <embedded null-indicator-column="EMBEDDED2_VALUE">
+                    <field name="value">
+                        <column name="EMBEDDED2_VALUE" allows-null="true"/>
+                    </field>
+                    <field name="nestedEmbedded">
+                        <embedded null-indicator-column="NESTED_EMBEDDED_VALUE">
+                            <field name="value">
+                                <column name="NESTED_EMBEDDED_VALUE" allows-null="true"/>
+                            </field>
+                        </embedded>
+                    </field>
+                </embedded>
+            </field>
+        </class>
     </package>
 </orm>

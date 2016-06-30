@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
 <jdo>
-    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data">
+    <package
+        name="com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data">
         <class name="TestDataParent">
+            <field name="embedded1">
+                <embedded>
+                    <field name="value"/>
+                </embedded>
+            </field>
+            <field name="embedded2">
+                <embedded>
+                    <field name="value"/>
+                    <field name="nestedEmbedded">
+                        <embedded>
+                            <field name="value"/>
+                        </embedded>
+                    </field>
+                </embedded>
+            </field>
             <field name="child1" dependent="true"/>
             <field name="child2" dependent="true"/>
         </class>
@@ -10,6 +26,29 @@
             <field name="grandChild1" dependent="true"/>
             <field name="grandChild2" dependent="true"/>
         </class>
-        <class name="TestDataGrandChild"/>
+        <class name="TestDataGrandChild">
+            <field name="embedded1">
+                <embedded>
+                    <field name="value"/>
+                </embedded>
+            </field>
+            <field name="embedded2">
+                <embedded>
+                    <field name="value"/>
+                    <field name="nestedEmbedded">
+                        <embedded>
+                            <field name="value"/>
+                        </embedded>
+                    </field>
+                </embedded>
+            </field>
+        </class>
+        <class name="TestDataComplexEmbedded" embedded-only="true">
+            <field name="value"/>
+            <field name="nestedEmbedded"/>
+        </class>
+        <class name="TestDataSimpleEmbedded" embedded-only="true">
+            <field name="value"/>
+        </class>
     </package>
 </jdo>

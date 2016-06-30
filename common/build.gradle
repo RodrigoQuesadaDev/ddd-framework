@@ -16,6 +16,7 @@ kapt {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     compile "commons-io:commons-io:$commonsIoVersion"
     compile "joda-time:joda-time:$jodaTimeVersion"
     compile "io.reactivex:rxjava:$rxJavaVersion"
@@ -25,7 +26,7 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     compile "javax.annotation:jsr250-api:$jsr250ApiVersion" // needed for Dagger
     compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-    compile "com.fasterxml.jackson.module:jackson-module-paranamer:$jacksonVersion"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
 
     testCompile "org.jbehave:jbehave-core:$jBehaveVersion"
     jbehaveSiteResources "org.jbehave:jbehave-core:$jBehaveVersion"

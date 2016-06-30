@@ -11,10 +11,10 @@ import javax.inject.Singleton
 interface ApplicationComponent {
 
     fun inject(application: Application.Context)
-    //TODO this is not necessary anymore because you can inject MembersInjectors
+
+    //TODO probably use subcomponents for injecting activities
     fun inject(mainActivity: MainActivity)
 
-    //TODO this is part of what needs to be changed for removing PostInitializers
     fun inject(applicationConfigurator: Application.Configurator)
 
     interface Builder<C : ApplicationComponent, B : Builder<C, B>> {

@@ -1,6 +1,7 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueryView
@@ -55,4 +56,7 @@ import javax.inject.Singleton
 
     @Provides @IntoSet
     override fun provideEntityListenerIntoSet(listener: EntityListener<Appointment>): EntityListener<*> = listener
+
+    @Provides @Singleton
+    fun provideEntityObserver(observer: AppointmentObserver): EntityObserver<Appointment> = observer
 }

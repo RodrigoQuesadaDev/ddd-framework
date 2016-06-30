@@ -13,7 +13,9 @@ import org.jbehave.core.annotations.When
  */
 internal class ThreadLocalDelegateSetsAndGetsValues : SpecStory() {
 
-    override val steps = arrayOf(LocalSteps())
+    init {
+        steps { listOf(LocalSteps()) }
+    }
 
     class LocalSteps {
         private class TestProxy<T>(initialValueCall: () -> T) {

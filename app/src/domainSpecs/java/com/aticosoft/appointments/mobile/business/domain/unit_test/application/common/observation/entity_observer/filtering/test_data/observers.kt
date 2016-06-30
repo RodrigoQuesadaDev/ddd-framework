@@ -3,6 +3,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.QueryView
+import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestByIdFilter.DEFAULT
 import com.querydsl.core.types.Path
 import javax.inject.Inject
@@ -24,5 +25,8 @@ internal class TestDataParentObserver @Inject constructor() : EntityObserver<Tes
 }
 
 internal enum class TestDataParentQueryView(override vararg val fields: Path<*>) : QueryView {
-    DEFAULT(QTestDataParent.testDataParent.child)
+    DEFAULT(QTestDataParent.testDataParent.child);
+
+    override lateinit var _filterTypes: Sequence<Class<out Entity>>
+    override lateinit var fetchGroupName: String
 }
