@@ -15,8 +15,8 @@ import javax.inject.Singleton
         private set
     @Transient private var previousValue: Entity? = null
 
-    constructor(entityContext: Context) {
-        id = entityContext.identityGenerator.generate()
+    constructor(entityContext: Context?) {
+        id = entityContext?.identityGenerator?.generate() ?: ""
     }
 
     //TODO making previousValue internal should be enough (problem is right now this class is not on a separate module)

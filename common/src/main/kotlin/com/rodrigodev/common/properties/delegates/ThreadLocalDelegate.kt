@@ -4,9 +4,9 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 /**
-* Created by Rodrigo Quesada on 26/10/15.
-*/
-class ThreadLocalDelegate<T>(val cleaner: ThreadLocalCleaner, initialValueCall: () -> T) : ReadWriteProperty<Any, T> {
+ * Created by Rodrigo Quesada on 26/10/15.
+ */
+class ThreadLocalDelegate<T>(cleaner: ThreadLocalCleaner, initialValueCall: () -> T) : ReadWriteProperty<Any, T> {
 
     private val localValue = object : ThreadLocal<T>() {
         override fun initialValue(): T {

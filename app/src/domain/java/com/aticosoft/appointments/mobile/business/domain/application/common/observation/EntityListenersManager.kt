@@ -16,7 +16,5 @@ import javax.inject.Singleton
     @Suppress("UNCHECKED_CAST")
     fun <E : Entity> forType(type: Class<E>): EntityListener<E> = entityListenerMap[type]!! as EntityListener<E>
 
-    fun registerListeners() {
-        entityListeners.forEach { it.register() }
-    }
+    fun registerListeners(): Unit = entityListeners.forEach { it.register() }
 }

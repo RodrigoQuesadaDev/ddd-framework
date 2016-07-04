@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appointment.scheduling.constrains
 
-import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.TimeSlotValidationException
+import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.timeslot.TimeSlotsAlignmentException
 import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.UseCaseApplication
 import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.UseCaseApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appointment.AppointmentGlobalSteps
@@ -23,7 +23,7 @@ internal class TimeSlotsAlignment : AppointmentStory() {
 
     init {
         steps { listOf(localSteps) }
-        setUp { appointmentSteps.catchScheduleExceptionsOfType(TimeSlotValidationException::class.java) }
+        setUp { appointmentSteps.catchScheduleExceptionsOfType(TimeSlotsAlignmentException::class.java) }
     }
 
     class LocalSteps @Inject protected constructor(
@@ -31,7 +31,7 @@ internal class TimeSlotsAlignment : AppointmentStory() {
     ) {
         @Then("the system throws an Exception indicating the schedule time doesn't align to the configured time slots")
         fun thenTheSystemThrowsAnExceptionIndicatingTheScheduleTimeDoesNotAlignToTheConfiguredTimeSlots() {
-            assertThat(appointmentSteps.thrownScheduleException).isInstanceOf(TimeSlotValidationException::class.java)
+            assertThat(appointmentSteps.thrownScheduleException).isInstanceOf(TimeSlotsAlignmentException::class.java)
         }
     }
 }

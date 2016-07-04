@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appointment.scheduling.constrains
 
-import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.TimeSlotValidationException
+import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.timeslot.TimeSlotsSpaceException
 import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.UseCaseApplication
 import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.UseCaseApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appointment.AppointmentGlobalSteps
@@ -23,7 +23,7 @@ internal class TimeSlotsSpace : AppointmentStory() {
 
     init {
         steps { listOf(localSteps) }
-        setUp { appointmentSteps.catchScheduleExceptionsOfType(TimeSlotValidationException::class.java) }
+        setUp { appointmentSteps.catchScheduleExceptionsOfType(TimeSlotsSpaceException::class.java) }
     }
 
     class LocalSteps @Inject protected constructor(
@@ -31,7 +31,7 @@ internal class TimeSlotsSpace : AppointmentStory() {
     ) {
         @Then("the system throws an Exception indicating there is not enough space available for scheduling the appointment at the given time")
         fun thenTheSystemThrowsAnExceptionIndicatingThereIsNotEnoughSpaceAvailableForSchedulingTheAppointmentAtTheGivenTime() {
-            assertThat(appointmentSteps.thrownScheduleException).isInstanceOf(TimeSlotValidationException::class.java)
+            assertThat(appointmentSteps.thrownScheduleException).isInstanceOf(TimeSlotsSpaceException::class.java)
         }
     }
 }

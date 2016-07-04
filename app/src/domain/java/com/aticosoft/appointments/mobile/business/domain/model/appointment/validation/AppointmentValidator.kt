@@ -8,9 +8,9 @@ import com.querydsl.core.types.Path
 /**
  * Created by Rodrigo Quesada on 24/06/16.
  */
-/*internal*/ abstract class AppointmentValidator<X : AppointmentValidationException>(
-        createException: (String) -> X, vararg validatedFields: Path<*>
-) : EntityValidator<Appointment, X>(createException, *validatedFields) {
+/*internal*/ abstract class AppointmentValidator(
+        createException: (String) -> AppointmentValidationException, vararg validatedFields: Path<*>
+) : EntityValidator<Appointment, AppointmentValidationException>(createException, *validatedFields) {
 
     override val entityType = Appointment::class.java
 }

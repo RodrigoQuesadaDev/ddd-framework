@@ -121,13 +121,13 @@ internal fun TestDataParent.toExample(): TestDataParentExample {
         null
     }.nullOr(body)
 
-    fun <E : TestDataSimpleEmbedded> readSimpleEmbedded(closure: () -> E?) = readField(closure) { it.value }
+    fun readSimpleEmbedded(closure: () -> TestDataSimpleEmbedded?) = readField(closure) { it.value }
 
-    fun <E : TestDataComplexEmbedded> readComplexEmbedded(closure: () -> E?) = readField(closure) { e -> TestDataEmbeddedExample(e.value, readSimpleEmbedded { e.nestedEmbedded }) }
+    fun readComplexEmbedded(closure: () -> TestDataComplexEmbedded?) = readField(closure) { e -> TestDataEmbeddedExample(e.value, readSimpleEmbedded { e.nestedEmbedded }) }
 
-    fun <G : TestDataGrandChild> readGrandChild(closure: () -> G?) = readField(closure) { g -> TestDataGrandChildExample(g.value, readSimpleEmbedded { g.embedded1 }, readComplexEmbedded { g.embedded2 }) }
+    fun readGrandChild(closure: () -> TestDataGrandChild?) = readField(closure) { g -> TestDataGrandChildExample(g.value, readSimpleEmbedded { g.embedded1 }, readComplexEmbedded { g.embedded2 }) }
 
-    fun <C : TestDataChild> readChild(closure: () -> C?) = readField(closure) { c -> TestDataChildExample(c.value, readGrandChild { c.grandChild1 }, readGrandChild { c.grandChild2 }) }
+    fun readChild(closure: () -> TestDataChild?) = readField(closure) { c -> TestDataChildExample(c.value, readGrandChild { c.grandChild1 }, readGrandChild { c.grandChild2 }) }
     //endregion
 
     return TestDataParentExample(

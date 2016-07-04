@@ -6,7 +6,8 @@ import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appoi
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueryView
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.AppointmentValidator
-import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.TimeSlotsValidation
+import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.timeslot.TimeSlotsAlignmentValidator
+import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.timeslot.TimeSlotsSpaceValidator
 import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
 import com.aticosoft.appointments.mobile.business.domain.model.common.validation.EntityValidator
@@ -27,7 +28,7 @@ import javax.inject.Singleton
         AppointmentQueries, JdoAppointmentQueries,
         AppointmentQueryView,
         JdoAppointmentRepository,
-        AppointmentValidator<*>,
+        AppointmentValidator,
         EntityInitializer<Appointment>,
         EntityListener<Appointment>> {
 
@@ -47,7 +48,11 @@ import javax.inject.Singleton
     override fun provideRepository(repository: JdoAppointmentRepository): Repository<Appointment> = repository
 
     @Provides @ElementsIntoSet
-    fun provideValidators(timeSlotsValidation: TimeSlotsValidation): Set<EntityValidator<*, *>> = timeSlotsValidation.validators
+    fun provideValidators(
+            timeSlotsAlignmentValidator: TimeSlotsAlignmentValidator, timeSlotsSpaceValidator: TimeSlotsSpaceValidator
+    ): Set<EntityValidator<*, *>> {
+        return setOf(timeSlotsAlignmentValidator, timeSlotsSpaceValidator)
+    }
 
     //TODO change/refactor code so that the programmer doesn't need to define these methods (provideEntityInitializerIntoSet & provideEntityListenerIntoSet)
     //TODO also move provideEntityInitializerIntoSet to own module like EntityListenersModule (module that is commented right now)

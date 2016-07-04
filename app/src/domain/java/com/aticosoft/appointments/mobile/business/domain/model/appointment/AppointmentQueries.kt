@@ -11,5 +11,5 @@ interface AppointmentQueries : EntityQueries<Appointment> {
 
     fun timeIs(time: Interval): ListQuery<Appointment>
 
-    //fun timeIn(range: Interval): ListQuery<Appointment>
+    fun timeOverlaps(range: Interval): ListQuery<Appointment>
 }

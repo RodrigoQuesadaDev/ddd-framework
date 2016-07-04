@@ -9,3 +9,5 @@ import kotlin.collections.plus
  */
 @Suppress("UNCHECKED_CAST")
 inline operator fun <T> Array<out T>.plus(array: Array<out T>): Array<out T> = (this as Array<T>) + array
+
+inline fun arrayOfZeros(size: Int): Array<Int> = Array(size, { 0 })

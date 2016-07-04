@@ -2,7 +2,8 @@ Scheduled assignments must comply with the time slot configuration (that is, the
 
 Scenario: successful booking with time slot of 15 minutes
 
-Given 15 minutes time slots
+Given 2 concurrent appointment at max
+And 15 minutes time slots
 When the owner schedules an appointment for <client> on <time>
 Then an appointment is scheduled for <client> on <time>
 
@@ -32,7 +33,8 @@ Examples:
 
 Scenario: successful booking with time slot of 30 minutes
 
-Given 30 minutes time slots
+Given no appointments scheduled
+And 30 minutes time slots
 When the owner schedules an appointment for <client> on <time>
 Then an appointment is scheduled for <client> on <time>
 

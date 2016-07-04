@@ -191,7 +191,7 @@ internal class EntitiesAreValidated : DomainStory() {
             }
 
             with(validatedEntityInfo!!) {
-                @Suppress("IMPLICIT_CAST_TO_UNIT_OR_ANY")
+                @Suppress("IMPLICIT_CAST_TO_ANY")
                 (when (validationType) {
                     ODD_VALUE_AND_EMAIL -> oddValueAndEmailParentObserver.observe(oddValueAndEmailParentQueries.first(), OddValueAndEmailParentQueryView.ALL).testSubscribe().firstEvent()
                     PRIME_NUMBER_AND_GMAIL -> primeNumberAndGmailParentObserver.observe(primeNumberAndGmailParentQueries.first(), PrimeNumberAndGmailParentQueryView.ALL).testSubscribe().firstEvent()
