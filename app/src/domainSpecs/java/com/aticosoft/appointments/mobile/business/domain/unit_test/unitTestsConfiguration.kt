@@ -22,6 +22,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.PassedEntityInstancesNotModified
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.EntityDependenciesAreInjected
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.EntitiesAreValidated
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.EventSubscription
 import dagger.Component
 import javax.inject.Singleton
 
@@ -50,6 +51,7 @@ internal interface UnitTestApplicationComponent : TestApplicationComponent {
     fun inject(test: PassedEntityInstancesNotModified)
     fun inject(test: CommandsCannotBeReused)
     fun inject(test: CommandImplementationVerification)
+    fun inject(test: EventSubscription)
 
     @Component.Builder
     interface Builder : TestApplicationComponent.Builder<UnitTestApplicationComponent, Builder>
