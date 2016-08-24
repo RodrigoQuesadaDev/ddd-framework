@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.model.common.validation.ValidationException
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidationException
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
@@ -151,7 +151,7 @@ internal class EntitiesAreValidated : DomainStory() {
                 }
                 VALIDATION_EXCEPTION -> {
                     assertThat(throwable).isInstanceOf(PrimeNumberAndGmailValidationException::class.java)
-                    assertThat((throwable as ValidationException).message).isEqualTo(errorMessage)
+                    assertThat((throwable as PersistableObjectValidationException).message).isEqualTo(errorMessage)
                 }
             }
             throwable = null

@@ -2,7 +2,7 @@ package com.aticosoft.appointments.mobile.business.domain.specs.use_cases.client
 
 import com.aticosoft.appointments.mobile.business.domain.application.client.ClientServices
 import com.aticosoft.appointments.mobile.business.domain.application.client.ClientServices.AddClient
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
 import com.aticosoft.appointments.mobile.business.domain.testing.model.ClientRepositoryManager

@@ -1,12 +1,12 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command.correct_implementations
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices.Command
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandEntityDelegates.Lists.delegate
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandEntityDelegates.Maps.Keys.delegateKeys
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandEntityDelegates.Maps.Values.delegateValues
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandEntityDelegates.Maps.delegate
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandEntityDelegates.Sets.delegate
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandEntityDelegates.delegate
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegates.Lists.delegate
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegates.Maps.Keys.delegateKeys
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegates.Maps.Values.delegateValues
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegates.Maps.delegate
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegates.Sets.delegate
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegates.delegate
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 
 /**

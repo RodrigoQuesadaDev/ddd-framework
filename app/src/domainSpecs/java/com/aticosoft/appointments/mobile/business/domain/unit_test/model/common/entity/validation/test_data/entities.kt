@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.google.auto.factory.Provided
 import org.hibernate.validator.constraints.Email
 import javax.inject.Inject

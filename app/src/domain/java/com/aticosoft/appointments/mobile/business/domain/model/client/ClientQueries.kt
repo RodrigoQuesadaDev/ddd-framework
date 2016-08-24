@@ -1,12 +1,12 @@
 package com.aticosoft.appointments.mobile.business.domain.model.client
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.EntityQueries
-import com.aticosoft.appointments.mobile.business.domain.model.common.ListQuery
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.Queries
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.ListQuery
 
 /**
  * Created by Rodrigo Quesada on 19/10/15.
  */
-interface ClientQueries : EntityQueries<Client> {
+interface ClientQueries : Queries<Client> {
 
     fun nameLike(name: String): ListQuery<Client>
 }

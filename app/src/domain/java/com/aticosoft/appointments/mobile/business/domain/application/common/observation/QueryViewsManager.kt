@@ -76,8 +76,8 @@ private class FetchGroupInfo(val name: String, val field: Path<*>)
 //endregion
 
 //region General
-private inline fun FetchPlan.setNoLimitFetchDepth() {
-    setMaxFetchDepth(FetchDepth.NO_LIMIT)
+private fun FetchPlan.setNoLimitFetchDepth() {
+    maxFetchDepth = FetchDepth.NO_LIMIT
 }
 
 private object FetchDepth {

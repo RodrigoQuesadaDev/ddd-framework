@@ -3,7 +3,7 @@ package com.aticosoft.appointments.mobile.business.domain.application.appointmen
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServicesBase
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentFactory
-import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
 import org.joda.time.Interval
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,7 +15,7 @@ import javax.inject.Singleton
 /*internal*/ class AppointmentServices @Inject protected constructor(
         context: ApplicationServicesBase.Context,
         private val factory: AppointmentFactory,
-        private val repository: Repository<Appointment>
+        private val repository: EntityRepository<Appointment>
 ) : ApplicationServicesBase(context) {
 
     class ScheduleAppointment(val clientId: String, val time: Interval) : Command()

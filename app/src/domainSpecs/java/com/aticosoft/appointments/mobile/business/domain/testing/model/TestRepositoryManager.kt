@@ -3,7 +3,7 @@ package com.aticosoft.appointments.mobile.business.domain.testing.model
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment.JdoAppointmentRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client.JdoClientRepository
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.JdoRepository
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.JdoEntityRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext.PersistenceManagerFactoryAccessor
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.TransactionManager
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 24/09/15.
  */
-internal abstract class TestRepositoryManager<R : JdoRepository<*>>(
+internal abstract class TestRepositoryManager<R : JdoEntityRepository<*>>(
         private val s: Services,
         private val repository: R
 ) : PersistenceManagerFactoryAccessor {

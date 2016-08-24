@@ -2,7 +2,7 @@
 
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager

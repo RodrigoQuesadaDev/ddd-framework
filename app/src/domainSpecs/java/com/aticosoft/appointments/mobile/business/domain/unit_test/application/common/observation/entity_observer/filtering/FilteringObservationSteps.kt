@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObserver
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentServices
@@ -58,7 +58,7 @@ internal abstract class AbstractFilteringObservationSteps(private val s: Service
     }
 
     protected fun advanceTime() {
-        s.testScheduler.advanceTimeBy(EntityObserver.DATA_REFRESH_RATE_TIME)
+        s.testScheduler.advanceTimeBy(PersistableObjectObserver.DATA_REFRESH_RATE_TIME)
     }
 
     private fun addValues(values: MutableList<TestDataParentExample>) {

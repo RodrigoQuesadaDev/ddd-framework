@@ -1,8 +1,8 @@
 package com.aticosoft.appointments.mobile.business.domain.model.appointment.validation
 
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
-import com.aticosoft.appointments.mobile.business.domain.model.common.validation.EntityValidator
-import com.aticosoft.appointments.mobile.business.domain.model.common.validation.ValidationException
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidationException
 import com.querydsl.core.types.Path
 
 /**
@@ -10,9 +10,9 @@ import com.querydsl.core.types.Path
  */
 /*internal*/ abstract class AppointmentValidator(
         createException: (String) -> AppointmentValidationException, vararg validatedFields: Path<*>
-) : EntityValidator<Appointment, AppointmentValidationException>(createException, *validatedFields) {
+) : PersistableObjectValidator<Appointment, AppointmentValidationException>(createException, *validatedFields) {
 
-    override val entityType = Appointment::class.java
+    override val objectType = Appointment::class.java
 }
 
-/*internal*/ open class AppointmentValidationException(message: String) : ValidationException(message)
+/*internal*/ open class AppointmentValidationException(message: String) : PersistableObjectValidationException(message)

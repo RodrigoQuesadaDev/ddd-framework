@@ -1,15 +1,17 @@
 package com.aticosoft.appointments.mobile.business.domain.model.appointment;
 
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity;
+
 import javax.annotation.Generated;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
 @Generated("com.google.auto.factory.processor.AutoFactoryProcessor")
 public final class AppointmentFactory {
-    private final Provider<com.aticosoft.appointments.mobile.business.domain.model.common.Entity.Context> arg0Provider;
+    private final Provider<Entity.Context> arg0Provider;
 
     @Inject
-    public AppointmentFactory(Provider<com.aticosoft.appointments.mobile.business.domain.model.common.Entity.Context> arg0Provider) {
+    public AppointmentFactory(Provider<Entity.Context> arg0Provider) {
         this.arg0Provider = arg0Provider;
     }
 

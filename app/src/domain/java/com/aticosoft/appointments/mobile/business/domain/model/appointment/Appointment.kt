@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.model.appointment
 
 import com.aticosoft.appointments.mobile.business.domain.common.values.Absent
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.embedded.EmbeddedDelegate
 import com.aticosoft.appointments.mobile.business.domain.model.common.embedded.EmbeddedDelegate.EmbeddedProperty
 import com.aticosoft.appointments.mobile.business.domain.model.common.embedded.EmbeddedInterval

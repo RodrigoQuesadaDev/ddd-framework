@@ -2,7 +2,7 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.a
 
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.QAppointment
-import com.aticosoft.appointments.mobile.business.domain.model.common.ListQuery
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.ListQuery
 import com.aticosoft.appointments.mobile.business.domain.model.common.embedded.eq
 import com.aticosoft.appointments.mobile.business.domain.model.common.embedded.overlaps
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext

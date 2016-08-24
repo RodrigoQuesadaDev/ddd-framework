@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.google.auto.factory.Provided
 import javax.inject.Inject
 import javax.inject.Singleton

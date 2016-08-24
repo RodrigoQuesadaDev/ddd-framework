@@ -1,8 +1,8 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObservationFilter
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.model.common.ListQuery
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.ListQuery
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
@@ -45,10 +45,10 @@ internal class ConstrainingViewOfListQuery : DomainStory() {
 
         @Given("an odd-parent filter that only filters parents is being used for the observation")
         fun givenAnOddParentFilterIsBeingUsedForTheObservation() {
-            filter = EntityObservationFilter(TestDataParent::class.java) { it.value.isOdd() }
+            filter = PersistableObjectObservationFilter(TestDataParent::class.java) { it.value.isOdd() }
         }
 
-        private fun whenImObservingTheParents(query: TestDataParentQueries.(Array<EntityObservationFilter<*>>) -> ListQuery<TestDataParent>) {
+        private fun whenImObservingTheParents(query: TestDataParentQueries.(Array<PersistableObjectObservationFilter<*>>) -> ListQuery<TestDataParent>) {
             testSubscriber = testDataParentObserver.observe(
                     testDataParentQueries.query(filter?.let { arrayOf(it) } ?: emptyArray()),
                     queryView

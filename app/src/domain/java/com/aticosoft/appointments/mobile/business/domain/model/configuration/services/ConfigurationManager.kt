@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.model.configuration.services
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.Configuration
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationQueries
 import javax.inject.Inject
@@ -11,7 +11,7 @@ import javax.inject.Singleton
  */
 @Singleton
 /*internal*/ class ConfigurationManager @Inject protected constructor(
-        val configurationRepository: Repository<Configuration>,
+        val configurationRepository: EntityRepository<Configuration>,
         val configurationQueries: ConfigurationQueries
 ) {
 

@@ -2,9 +2,9 @@
 
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.NonExistingStaleEntityException
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.StaleEntityException
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.NonExistingStalePersistableObjectException
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.StalePersistableObjectException
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.*
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
@@ -87,12 +87,12 @@ internal class StaleEntityChecking : DomainStory() {
 
         @Then("the system throws an exception indicating it's stale")
         fun thenTheSystemThrowsAnExceptionIndicatingItsStale() {
-            assertThat(throwable).isInstanceOf(StaleEntityException::class.java)
+            assertThat(throwable).isInstanceOf(StalePersistableObjectException::class.java)
         }
 
         @Then("the system throws an exception indicating that it doesn't exist anymore")
         fun thenTheSystemThrowsAnExceptionIndicatingThatItDoesNotExistAnymore() {
-            assertThat(throwable).isInstanceOf(NonExistingStaleEntityException::class.java)
+            assertThat(throwable).isInstanceOf(NonExistingStalePersistableObjectException::class.java)
         }
 
         private inline fun listWithKeptEntity(existingValues: MutableList<Int>) = existingValues.queryEntities() + keptEntity

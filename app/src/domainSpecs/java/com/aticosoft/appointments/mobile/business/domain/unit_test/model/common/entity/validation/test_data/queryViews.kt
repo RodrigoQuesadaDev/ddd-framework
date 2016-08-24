@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.QueryView
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.querydsl.core.types.Path
 
 /**
@@ -10,13 +10,13 @@ import com.querydsl.core.types.Path
 internal enum class OddValueAndEmailParentQueryView(override vararg val fields: Path<*>) : QueryView {
     ALL(QOddValueAndEmailParent.oddValueAndEmailParent.child);
 
-    override lateinit var _filterTypes: Sequence<Class<out Entity>>
+    override lateinit var _filterTypes: Sequence<Class<out PersistableObject<*>>>
     override lateinit var fetchGroupName: String
 }
 
 internal enum class PrimeNumberAndGmailParentQueryView(override vararg val fields: Path<*>) : QueryView {
     ALL(QPrimeNumberAndGmailParent.primeNumberAndGmailParent.child);
 
-    override lateinit var _filterTypes: Sequence<Class<out Entity>>
+    override lateinit var _filterTypes: Sequence<Class<out PersistableObject<*>>>
     override lateinit var fetchGroupName: String
 }

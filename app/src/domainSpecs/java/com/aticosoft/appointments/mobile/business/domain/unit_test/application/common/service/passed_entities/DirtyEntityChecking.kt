@@ -2,8 +2,8 @@
 
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.DirtyEntityException
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.DirtyPersistableObjectException
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.AddData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
@@ -77,7 +77,7 @@ internal class DirtyEntityChecking : DomainStory() {
 
         @Then("the system throws an exception indicating it's dirty")
         fun thenTheSystemThrowsAnExceptionIndicatingItSDirty() {
-            assertThat(throwable).isInstanceOf(DirtyEntityException::class.java)
+            assertThat(throwable).isInstanceOf(DirtyPersistableObjectException::class.java)
         }
 
         private inline fun listWithKeptEntity(existingValues: MutableList<Int>) = existingValues.queryEntities() + keptEntity

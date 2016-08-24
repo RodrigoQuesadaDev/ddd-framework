@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.QueryView
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.querydsl.core.types.Path
 
 /**
@@ -24,7 +24,7 @@ internal enum class TestDataParentQueryView(override vararg val fields: Path<*>)
     PARENT_EMBEDDEDS_CHILD_2_AND_GRANDCHILD_1_EMBEDDEDS(p.embedded1, p.embedded2, p.child2, c.grandChild1, g.embedded1, g.embedded2),
     PARENT_CHILD_2_AND_GRANDCHILD_2(p.child2, c.grandChild2);
 
-    override lateinit var _filterTypes: Sequence<Class<out Entity>>
+    override lateinit var _filterTypes: Sequence<Class<out PersistableObject<*>>>
     override lateinit var fetchGroupName: String
 }
 

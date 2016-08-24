@@ -2,7 +2,7 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.c
 
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
 import com.aticosoft.appointments.mobile.business.domain.model.client.QClient
-import com.aticosoft.appointments.mobile.business.domain.model.common.ListQuery
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.ListQuery
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import javax.inject.Inject
 import javax.inject.Singleton

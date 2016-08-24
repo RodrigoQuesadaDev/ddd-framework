@@ -2,9 +2,9 @@
 
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
-import com.aticosoft.appointments.mobile.business.domain.model.common.validation.EntityValidator
-import com.aticosoft.appointments.mobile.business.domain.model.common.validation.ValidationException
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidationException
 import com.querydsl.core.types.Path
 import com.rodrigodev.common.testing.number.isPrime
 import java.util.concurrent.ConcurrentHashMap
@@ -56,7 +56,7 @@ internal class OddValueValidator : ConstraintValidatorWithRunInfo<OddValue, Int>
 
 internal abstract class PrimeNumberAndGmailValidator<E : PrimeNumberAndGmailValidatedTestData>(
         entityType: KClass<E>
-) : EntityValidatorWithRunInfo<E, PrimeNumberAndGmailValidationException>(validatorIdFor(entityType),
+) : PersistableObjectValidatorWithRunInfo<E, PrimeNumberAndGmailValidationException>(validatorIdFor(entityType),
         ::PrimeNumberAndGmailValidationException,
         QPrimeNumberAndGmailValidatedTestData.primeNumberAndGmailValidatedTestData.number,
         QPrimeNumberAndGmailValidatedTestData.primeNumberAndGmailValidatedTestData.email
@@ -70,16 +70,16 @@ internal abstract class PrimeNumberAndGmailValidator<E : PrimeNumberAndGmailVali
     override fun E.doIsValid() = number.isPrime() && email.endsWith("gmail.com", true);
 }
 
-internal class PrimeNumberAndGmailValidationException(message: String) : ValidationException(message)
+internal class PrimeNumberAndGmailValidationException(message: String) : PersistableObjectValidationException(message)
 
 internal class PrimeNumberAndGmailParentValidator : PrimeNumberAndGmailValidator<PrimeNumberAndGmailParent>(PrimeNumberAndGmailParent::class) {
 
-    override val entityType = PrimeNumberAndGmailParent::class.java
+    override val objectType = PrimeNumberAndGmailParent::class.java
 }
 
 internal class PrimeNumberAndGmailChildValidator : PrimeNumberAndGmailValidator<PrimeNumberAndGmailChild>(PrimeNumberAndGmailChild::class) {
 
-    override val entityType = PrimeNumberAndGmailChild::class.java
+    override val objectType = PrimeNumberAndGmailChild::class.java
 }
 
 /***************************************************************************************************
@@ -124,9 +124,9 @@ internal abstract class ConstraintValidatorWithRunInfo<A : Annotation, T> : Cons
     abstract fun doIsValid(value: T, context: ConstraintValidatorContext): Boolean
 }
 
-internal abstract class EntityValidatorWithRunInfo<E : Entity, X : ValidationException>(
+internal abstract class PersistableObjectValidatorWithRunInfo<E : Entity, X : PersistableObjectValidationException>(
         val validatorId: ValidatorId<*, E>, createException: (String) -> X, vararg validatedFields: Path<*>
-) : EntityValidator<E, X>(createException, *validatedFields) {
+) : PersistableObjectValidator<E, X>(createException, *validatedFields) {
 
     private val validatorRunInfo: ValidatorRunInfo = ValidatorRunInfo(validatorId)
 

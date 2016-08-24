@@ -1,8 +1,8 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
-import com.aticosoft.appointments.mobile.business.domain.model.common.EntityLifecycleListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObjectLifecycleListener
 import com.querydsl.jdo.JDOQueryFactory
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
 import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
@@ -32,25 +32,25 @@ import javax.jdo.listener.InstanceLifecycleListener
 
     val queryFactory: JDOQueryFactory by ThreadLocalDelegate(threadLocalCleaner) { JDOQueryFactory { persistenceManager } }
 
-    private val entityListenerListBuilder = EntityListenerListBuilder()
+    private val persistableObjectListenerListBuilder = PersistableObjectListenerListBuilder()
 
-    private val entityListeners: List<EntityListener<*>> by lazy { entityListenerListBuilder.build() }
+    private val persistableObjectListeners: List<PersistableObjectListener<*, *>> by lazy { persistableObjectListenerListBuilder.build() }
 
-    fun registerEntityListener(entityListener: EntityListener<*>) {
-        registerEntityLifecycleListener(entityListener)
-        entityListenerListBuilder.add(entityListener)
+    fun registerPersistableObjectListener(persistableObjectListener: PersistableObjectListener<*, *>) {
+        registerPersistableObjectLifecycleListener(persistableObjectListener)
+        persistableObjectListenerListBuilder.add(persistableObjectListener)
     }
 
-    fun registerEntityLifecycleListener(entityLifecycleListener: EntityLifecycleListener<*>) {
-        registerLifecycleListener(entityLifecycleListener, entityLifecycleListener.entityType)
+    fun registerPersistableObjectLifecycleListener(persistableObjectLifecycleListener: PersistableObjectLifecycleListener<*>) {
+        registerLifecycleListener(persistableObjectLifecycleListener, persistableObjectLifecycleListener.objectType)
     }
 
-    fun registerLifecycleListener(lifecycleListener: InstanceLifecycleListener, instanceType: Class<out Entity>) {
+    fun registerLifecycleListener(lifecycleListener: InstanceLifecycleListener, instanceType: Class<out PersistableObject<*>>) {
         pmf.addInstanceLifecycleListener(lifecycleListener, arrayOf(instanceType))
     }
 
     fun onTransactionCommitted() {
-        entityListeners.forEach { it.onTransactionCommitted() }
+        persistableObjectListeners.forEach { it.onTransactionCommitted() }
     }
 
     inline fun <R> execute(transactional: Boolean = true, block: () -> R): R = if (transactional) {
@@ -58,12 +58,12 @@ import javax.jdo.listener.InstanceLifecycleListener
     }
     else executeWithinContext { block() }
 
-    inline fun<R> executeWithinContext(block: () -> R): R = use { block() }
+    inline fun <R> executeWithinContext(block: () -> R): R = use { block() }
 
     override fun close() {
         persistenceManager.close()
         threadLocalCleaner.cleanUpThreadLocalInstances()
-        entityListeners.forEach { it.resetLocalState() }
+        persistableObjectListeners.forEach { it.resetLocalState() }
     }
 
     interface PersistenceManagerFactoryAccessor {
@@ -72,11 +72,11 @@ import javax.jdo.listener.InstanceLifecycleListener
     }
 }
 
-private class EntityListenerListBuilder {
+private class PersistableObjectListenerListBuilder {
 
-    private val listeners: MutableList<EntityListener<*>> = arrayListOf()
+    private val listeners: MutableList<PersistableObjectListener<*, *>> = arrayListOf()
 
-    fun add(listener: EntityListener<*>) {
+    fun add(listener: PersistableObjectListener<*, *>) {
         listeners.add(listener)
     }
 

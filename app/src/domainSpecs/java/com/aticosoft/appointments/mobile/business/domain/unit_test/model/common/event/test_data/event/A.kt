@@ -3,5 +3,5 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 /**
  * Created by Rodrigo Quesada on 12/08/16.
  */
-internal class A: Event {
+internal class A {
 }

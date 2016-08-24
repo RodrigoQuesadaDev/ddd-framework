@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueryView
 import javax.inject.Inject

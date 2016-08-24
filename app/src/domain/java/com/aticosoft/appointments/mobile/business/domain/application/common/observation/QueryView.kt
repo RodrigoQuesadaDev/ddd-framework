@@ -2,7 +2,8 @@
 
 package com.aticosoft.appointments.mobile.business.domain.application.common.observation
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.querydsl.core.types.Path
 import com.rodrigodev.common.collection.toTypedArray
 import javax.jdo.FetchPlan
@@ -14,12 +15,12 @@ import javax.jdo.FetchPlan
     companion object {
         val DEFAULT = object : QueryView {
             override val fields = emptyArray<Path<*>>()
-            override lateinit var _filterTypes: Sequence<Class<out Entity>>
+            override lateinit var _filterTypes: Sequence<Class<out PersistableObject<*>>>
             override lateinit var fetchGroupName: String
         }
     }
 
-    var _filterTypes: Sequence<Class<out Entity>>
+    var _filterTypes: Sequence<Class<out PersistableObject<*>>>
 
     val fields: Array<out Path<*>>
 
@@ -32,20 +33,20 @@ import javax.jdo.FetchPlan
 
     private inline fun nonDefaultFetchGroupName(): String = javaClass.simpleName + "." + ((this as Enum<*>)).name
 
-    fun defaultFiltersFor(filters: Array<out EntityObservationFilter<*>>): Array<out EntityObservationFilter<*>> {
+    fun defaultFiltersFor(filters: Array<out PersistableObjectObservationFilter<*>>): Array<out PersistableObjectObservationFilter<*>> {
         return (_filterTypes - filters.toTypes())
-                .map { EntityObservationFilter(it) }
+                .map { PersistableObjectObservationFilter(it) }
                 .toTypedArray()
     }
 }
 
 //region Filters
 @Suppress("UNCHECKED_CAST")
-private inline fun Array<out Path<*>>.filterTypes() = asSequence().flatMap { sequenceOf(it.type, it.root.type) }.filter { it.isEntityType() }.distinct() as Sequence<Class<out Entity>>
+private inline fun Array<out Path<*>>.filterTypes() = asSequence().flatMap { sequenceOf(it.type, it.root.type) }.filter { it.isPersistableObjectType() }.distinct() as Sequence<Class<out PersistableObject<*>>>
 
-private inline fun Array<out EntityObservationFilter<*>>.toTypes() = asSequence().map { it.entityType }.distinct()
+private inline fun Array<out PersistableObjectObservationFilter<*>>.toTypes() = asSequence().map { it.objectType }.distinct()
 
-private inline fun Class<*>.isEntityType() = Entity::class.java.isAssignableFrom(this)
+private inline fun Class<*>.isPersistableObjectType() = PersistableObject::class.java.isAssignableFrom(this)
 //endregion
 
 //region Published Extensions

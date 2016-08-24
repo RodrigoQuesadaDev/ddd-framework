@@ -2,7 +2,7 @@
 
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.StaleEntityException
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.StalePersistableObjectException
 import org.datanucleus.PropertyNames
 import org.datanucleus.javax.transaction.Status
 import org.datanucleus.javax.transaction.Synchronization
@@ -50,7 +50,7 @@ import javax.jdo.PersistenceManager
             tx.commit()
         }
         catch(e: JDOOptimisticVerificationException) {
-            throw StaleEntityException(e)
+            throw StalePersistableObjectException(e)
         }
         finally {
             if (tx.isActive) {

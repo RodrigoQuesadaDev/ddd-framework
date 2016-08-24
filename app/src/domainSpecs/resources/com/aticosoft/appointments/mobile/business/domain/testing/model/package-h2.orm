@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
 <orm>
-    <package name="com.aticosoft.appointments.mobile.business.domain.model.common">
-        <class name="Entity">
-            <field name="id">
-                <column name="_ID"/>
-            </field>
-        </class>
-    </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.testing.model.test_data">
         <class name="AbstractTestData">
             <field name="value">

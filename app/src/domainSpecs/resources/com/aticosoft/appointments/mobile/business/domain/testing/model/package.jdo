@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
 <jdo>
-    <package name="com.aticosoft.appointments.mobile.business.domain.model.common">
+    <package name="com.aticosoft.appointments.mobile.business.domain.model.common.entity">
         <class name="Entity">
             <inheritance strategy="complete-table"/>
             <version strategy="version-number">
-                <extension vendor-name="datanucleus" key="field-name" value="version"/>
+                <extension key="field-name" value="version" vendor-name="datanucleus"/>
             </version>
-            <field name="id" primary-key="true"/>
-            <field name="version">
-                <column name="VERSION"/>
-            </field>
+            <field name="version" column="VERSION"/>
+            <field name="id" primary-key="true" column="_ID"/>
         </class>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.testing.model.test_data">

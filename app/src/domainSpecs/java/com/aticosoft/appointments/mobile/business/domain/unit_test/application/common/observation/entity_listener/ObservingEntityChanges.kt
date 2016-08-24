@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityChangeEvent
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListenersManager
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListenersManager
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
@@ -41,15 +41,15 @@ internal class ObservingEntityChanges : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val entityListenersManager: EntityListenersManager,
+            private val persistableObjectListenersManager: PersistableObjectListenersManager,
             private val testDataRepositoryManager: TestDataParentRepositoryManager,
             private val testDataServices: TestDataParentServices,
             private val testScheduler: TestScheduler
     ) : SpecSteps() {
 
-        private val testDataParentListener = entityListenersManager.forType(TestDataParent::class.java)
-        private val testDataChildListener = entityListenersManager.forType(TestDataChild::class.java)
-        private lateinit var testSubscriber: TestSubscriber<out EntityChangeEvent<out AbstractTestData>>
+        private val testDataParentListener = persistableObjectListenersManager.forType(TestDataParent::class.java)
+        private val testDataChildListener = persistableObjectListenersManager.forType(TestDataChild::class.java)
+        private lateinit var testSubscriber: TestSubscriber<out PersistableObjectChangeEvent<AbstractTestData>>
 
         @Given("no data")
         fun givenNoData() {
@@ -87,11 +87,11 @@ internal class ObservingEntityChanges : DomainStory() {
     }
 }
 
-private fun EntityChangeEvent<out AbstractTestData>.toExample() = ChangeEventExample(type, previous = previousValue?.value, current = currentValue?.value)
+private fun PersistableObjectChangeEvent<AbstractTestData>.toExample() = ChangeEventExample(type, previous = previousValue?.value, current = currentValue?.value)
 
 @AsParameters
 internal data class ChangeEventExample(
-        var type: EntityChangeEvent.EventType?,
+        var type: PersistableObjectChangeEvent.EventType?,
         var previous: Int?,
         var current: Int?
 ) {

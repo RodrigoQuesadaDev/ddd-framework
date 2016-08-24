@@ -2,8 +2,8 @@
 
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.NonDetachedEntityException
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.NonDetachedPersistableObjectException
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
@@ -71,7 +71,7 @@ internal class DetachedEntityChecking : DomainStory() {
 
         @Then("the system throws an exception indicating it's not detached")
         fun thenTheSystemThrowsAnExceptionIndicatingItsNotDetached() {
-            assertThat(throwable).isInstanceOf(NonDetachedEntityException::class.java)
+            assertThat(throwable).isInstanceOf(NonDetachedPersistableObjectException::class.java)
         }
 
         private inline fun listWithNewEntity(existingValues: MutableList<Int>) = existingValues.queryEntities() + createNewEntity()

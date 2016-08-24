@@ -1,15 +1,16 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
 import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueryView
 import com.aticosoft.appointments.mobile.business.domain.model.client.validation.ClientValidator
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
-import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.RootEntityModule
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.EntityInitializer
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
@@ -24,14 +25,14 @@ import javax.inject.Singleton
         ClientQueryView,
         JdoClientRepository,
         ClientValidator<*>,
-        EntityInitializer<Client>,
+        PersistableObjectInitializer<Client>,
         EntityListener<Client>> {
 
     @Provides
-    override fun provideEntityType(): Class<Client> = Client::class.java
+    override fun provideType(): Class<Client> = Client::class.java
 
     @Provides @IntoSet
-    override fun provideEntityTypeIntoSet(): Class<out Entity> = provideEntityType()
+    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
 
     @Provides @Singleton
     override fun provideQueries(queries: JdoClientQueries): ClientQueries = queries
@@ -40,11 +41,11 @@ import javax.inject.Singleton
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = ClientQueryView::class.java
 
     @Provides @Singleton
-    override fun provideRepository(repository: JdoClientRepository): Repository<Client> = repository
+    override fun provideRepository(repository: JdoClientRepository): EntityRepository<Client> = repository
 
     @Provides @IntoSet
-    override fun provideEntityInitializerIntoSet(initializer: EntityInitializer<Client>): EntityInitializer<*> = initializer
+    override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<Client>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideEntityListenerIntoSet(listener: EntityListener<Client>): EntityListener<*> = listener
+    override fun provideListenerIntoSet(listener: EntityListener<Client>): PersistableObjectListener<*, *> = listener
 }

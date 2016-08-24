@@ -4,7 +4,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appoi
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.QAppointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.AppointmentValidator
-import com.aticosoft.appointments.mobile.business.domain.model.common.Repository
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
 import com.rodrigodev.common.collection.arrayOfZeros
 import org.joda.time.DateTime
 import javax.inject.Inject
@@ -15,13 +15,13 @@ import javax.inject.Singleton
  */
 @Singleton
 class TimeSlotsSpaceValidator @Inject protected constructor(
-        private val appointmentRepository: Repository<Appointment>,
+        private val appointmentRepository: EntityRepository<Appointment>,
         private val appointmentQueries: AppointmentQueries
 ) : AppointmentValidator(
         ::TimeSlotsSpaceException,
         QAppointment.appointment._scheduledTime
 ) {
-    override val entityType = Appointment::class.java
+    override val objectType = Appointment::class.java
 
     override fun Appointment.errorMessage() = "Not enough time slots available for scheduling appointment at time \"$scheduledTime\"."
 

@@ -1,7 +1,8 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObservationFilter
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObserver
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParentServices.AddData
 import com.rodrigodev.common.nullability.nullOr
@@ -25,7 +26,7 @@ import kotlin.properties.Delegates.notNull
 internal abstract class AbstractConstrainingViewSteps(protected val s: Services) : SpecSteps() {
 
     protected var queryView by notNull<TestDataParentQueryView>()
-    protected var filter: EntityObservationFilter<*>? = null
+    protected var filter: PersistableObjectObservationFilter<*>? = null
 
     @Given("data:\$values")
     fun givenData(values: MutableList<TestDataParentExample>) {
@@ -63,7 +64,7 @@ internal abstract class AbstractConstrainingViewSteps(protected val s: Services)
     }
 
     protected fun advanceTime() {
-        s.testScheduler.advanceTimeBy(EntityObserver.DATA_REFRESH_RATE_TIME)
+        s.testScheduler.advanceTimeBy(PersistableObjectObserver.DATA_REFRESH_RATE_TIME)
     }
 
     @Given("dummy")

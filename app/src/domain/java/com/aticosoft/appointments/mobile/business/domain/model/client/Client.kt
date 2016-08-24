@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.model.client
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.google.auto.factory.Provided
 import org.joda.time.LocalDate
 import javax.jdo.annotations.PersistenceCapable

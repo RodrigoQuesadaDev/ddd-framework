@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.configuration
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.UniqueQuery
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.UniqueQuery
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationQueries
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.QConfiguration
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext

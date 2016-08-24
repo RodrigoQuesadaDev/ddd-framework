@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.common.values
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import org.joda.time.Interval
 
 /**

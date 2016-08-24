@@ -3,8 +3,8 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.application.common.service
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices.Command
-import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandEntityDelegate
-import com.aticosoft.appointments.mobile.business.domain.model.common.Entity
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegate
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import org.reflections.Reflections
 import org.reflections.scanners.ResourcesScanner
 import org.reflections.scanners.SubTypesScanner
@@ -112,4 +112,4 @@ catch(e: NoSuchFieldException) {
     null
 }
 
-private inline fun Field.isCommandEntityDelegate() = CommandEntityDelegate::class.isAssignableFrom(this.type)
+private inline fun Field.isCommandEntityDelegate() = CommandPersistableObjectDelegate::class.isAssignableFrom(this.type)

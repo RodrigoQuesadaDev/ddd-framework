@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.EntityObservationFilter
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
@@ -32,7 +32,7 @@ internal class ConstrainingViewOfEntityById : DomainStory() {
 
         override fun useAParentOnlyFilter(value: Int) {
             val parent = observedParent(value)
-            filter = EntityObservationFilter(TestDataParent::class.java) { it.id == parent.id }
+            filter = PersistableObjectObservationFilter(TestDataParent::class.java) { it.id == parent.id }
         }
 
         override fun observeTheParentWithValue(value: Int): TestSubscriber<TestDataParent?> {
