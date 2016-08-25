@@ -1,1 +1,5 @@
-//TODO implement this story using Meta parametrization https://github.com/jbehave/jbehave-core/blob/master/examples/core/src/main/java/org/jbehave/examples/core/stories/given_stories_parametrised_by_meta.story
+Multiple event subscriptions.
+
+Meta: @subsNumber 5
+
+GivenStories: event_subscription.story
