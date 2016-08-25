@@ -3,6 +3,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListenersManager
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
@@ -11,7 +12,6 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.ObservingEntityChanges.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataChild
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentServices
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentServices.*
 import com.rodrigodev.common.spec.story.steps.SpecSteps
@@ -42,7 +42,7 @@ internal class ObservingEntityChanges : DomainStory() {
 
     class LocalSteps @Inject constructor(
             private val persistableObjectListenersManager: PersistableObjectListenersManager,
-            private val testDataRepositoryManager: TestDataParentRepositoryManager,
+            private val testDataRepositoryManager: TestRepositoryManager<TestDataParent>,
             private val testDataServices: TestDataParentServices,
             private val testScheduler: TestScheduler
     ) : SpecSteps() {

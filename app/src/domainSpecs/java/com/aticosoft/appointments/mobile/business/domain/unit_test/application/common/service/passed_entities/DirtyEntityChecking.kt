@@ -6,7 +6,7 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.DirtyPersistableObjectException
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.AddData
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
@@ -41,7 +41,7 @@ internal class DirtyEntityChecking : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val testDataRepositoryManager: TestDataRepositoryManager,
+            private val testDataRepositoryManager: TestRepositoryManager<TestData>,
             override val testDataServices: CommandTestDataServices,
             private val testDataObserver: EntityObserver<TestData>,
             private val testDataQueries: TestDataQueries

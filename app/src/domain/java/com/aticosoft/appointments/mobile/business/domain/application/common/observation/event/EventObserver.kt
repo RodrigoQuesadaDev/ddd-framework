@@ -10,4 +10,4 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 21/08/16.
  */
 @Singleton
-/*internal*/ open class EventObserver<E : Event> @Inject protected constructor() : PersistableObjectObserver<E, Long, EventRepository<E>>()
+/*internal*/ class EventObserver<E : Event> @Inject protected constructor() : PersistableObjectObserver<E, Long, EventRepository<E>>()

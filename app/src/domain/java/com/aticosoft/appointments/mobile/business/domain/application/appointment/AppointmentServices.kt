@@ -13,10 +13,9 @@ import javax.inject.Singleton
  */
 @Singleton
 /*internal*/ class AppointmentServices @Inject protected constructor(
-        context: ApplicationServicesBase.Context,
         private val factory: AppointmentFactory,
         private val repository: EntityRepository<Appointment>
-) : ApplicationServicesBase(context) {
+) : ApplicationServicesBase() {
 
     class ScheduleAppointment(val clientId: String, val time: Interval) : Command()
 

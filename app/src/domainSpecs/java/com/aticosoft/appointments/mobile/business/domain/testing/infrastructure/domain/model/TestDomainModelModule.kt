@@ -1,6 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model
 
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataModule
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.event.TestEventAModule
 import dagger.Module
 
 /**
@@ -18,6 +19,7 @@ import dagger.Module
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.OddValueAndEmailParentModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.OddValueAndEmailChildModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.PrimeNumberAndGmailParentModule::class,
-        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.PrimeNumberAndGmailChildModule::class
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.PrimeNumberAndGmailChildModule::class,
+        TestEventAModule::class
 ))
 internal class TestDomainModelModule

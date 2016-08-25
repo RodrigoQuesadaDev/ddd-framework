@@ -2,10 +2,8 @@ package com.aticosoft.appointments.mobile.business.domain.specs.use_cases.client
 
 import com.aticosoft.appointments.mobile.business.domain.application.client.ClientServices
 import com.aticosoft.appointments.mobile.business.domain.application.client.ClientServices.AddClient
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.model.client.Client
-import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
-import com.aticosoft.appointments.mobile.business.domain.testing.model.ClientRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
 import org.jbehave.core.annotations.AsParameters
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.When
@@ -18,10 +16,8 @@ import javax.inject.Singleton
  */
 @Singleton
 internal class ClientGlobalSteps @Inject constructor(
-        private val clientRepositoryManager: ClientRepositoryManager,
-        private val clientServices: ClientServices,
-        private val clientObserver: EntityObserver<Client>,
-        private val clientQueries: ClientQueries
+        private val clientRepositoryManager: TestRepositoryManager<Client>,
+        private val clientServices: ClientServices
 ) {
     @Given("no clients")
     fun givenNoClients() {

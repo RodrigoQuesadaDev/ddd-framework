@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
@@ -10,11 +12,11 @@ import javax.inject.Inject
 /**
  * Created by Rodrigo Quesada on 21/09/15.
  */
-/*internal*/ abstract class JdoRepository<P : PersistableObject<I>, I> protected constructor(entityPath: EntityPath<P>) : Repository<P, I> {
+/*internal*/ abstract class JdoRepository<P : PersistableObject<I>, I> protected constructor() : Repository<P, I> {
 
-    private lateinit var m: InjectedMembers
+    private lateinit var m: InjectedMembers<P>
 
-    val queryEntity: QueryEntity<P, I> = QueryEntity(entityPath)
+    val queryEntity: QueryEntity<P, I> by lazy { QueryEntity(m.objectType.entityPath()) }
 
     override fun add(obj: P) {
         m.context.persistenceManager.makePersistent(obj)
@@ -29,12 +31,13 @@ import javax.inject.Inject
     override fun size() = m.context.queryFactory.selectFrom(queryEntity).fetchCount()
 
     //region Injection
-    protected @Inject fun inject(injectedFields: InjectedMembers) {
+    protected @Inject fun inject(injectedFields: InjectedMembers<P>) {
         m = injectedFields
     }
 
-    protected class InjectedMembers @Inject constructor(
-            val context: PersistenceContext
+    protected class InjectedMembers<P : PersistableObject<*>> @Inject constructor(
+            val context: PersistenceContext,
+            val objectType: Class<P>
     )
     //endregion
 }
@@ -47,3 +50,12 @@ import javax.inject.Inject
     @Suppress("UNCHECKED_CAST")
     val id: SimpleExpression<I> by lazy { entityPath.javaClass.getField(ID_FIELD).get(entityPath) as SimpleExpression<I> }
 }
+
+//region Utils
+private inline fun <P : PersistableObject<*>> Class<P>.entityPath(): EntityPath<P> {
+    val entityPathClass = classLoader.loadClass("${`package`.name}.Q$simpleName")
+    val entityPathField = entityPathClass.getDeclaredField(simpleName.decapitalize())
+    @Suppress("UNCHECKED_CAST")
+    return entityPathField.get(null) as EntityPath<P>
+}
+//endregion

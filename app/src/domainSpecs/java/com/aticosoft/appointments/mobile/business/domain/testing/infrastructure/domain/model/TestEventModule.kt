@@ -1,23 +1,22 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityListener
-import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.Queries
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.JdoRootEntityModule
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.JdoEventModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 
 /**
  * Created by Rodrigo Quesada on 27/06/16.
  */
-internal abstract class TestRootEntityModule<E : Entity,
-        out QV : Enum<out QV>,
+internal abstract class TestEventModule<E : Event,
         V : PersistableObjectValidator<E, *>,
         I : PersistableObjectInitializer<E>,
-        L : EntityListener<E>> : JdoRootEntityModule<E, Queries<E>, Queries<E>, QV, V, I, L> {
+        L : EventListener<E>> : JdoEventModule<E, Queries<E>, Queries<E>, V, I, L> {
 
-    override fun provideQueries(queries: Queries<E>): Queries<E> {
-        // Do nothing! (test root entity modules do not need provide methods for queries)
+    override final fun provideQueries(queries: Queries<E>): Queries<E> {
+        // Do nothing! (test event modules do not need provide methods for queries)
         throw UnsupportedOperationException()
     }
 }

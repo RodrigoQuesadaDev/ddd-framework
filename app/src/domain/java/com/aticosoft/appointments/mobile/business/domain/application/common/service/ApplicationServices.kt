@@ -11,12 +11,14 @@ import javax.jdo.PersistenceManager
 /**
  * Created by Rodrigo Quesada on 23/09/15.
  */
-/*internal*/ abstract class ApplicationServices(private val c: Context) {
+/*internal*/ abstract class ApplicationServices protected constructor() {
+
+    private lateinit var m: InjectedMembers
 
     protected fun <C : Command> C.execute(call: C.() -> Unit) {
         checkIfReused()
-        init(c)
-        c.persistenceContext.execute { call() }
+        init(m)
+        m.persistenceContext.execute { call() }
     }
 
     private inline fun <C : Command> C.checkIfReused() {
@@ -25,26 +27,32 @@ import javax.jdo.PersistenceManager
 
     abstract class Command {
 
-        private var context: ApplicationServices.Context? = null
+        private var m: ApplicationServices.InjectedMembers? = null
 
         internal val wasUsed: Boolean
-            get() = context != null
+            get() = m != null
 
         internal val persistenceManager: PersistenceManager
-            get() = context!!.persistenceContext.persistenceManager
+            get() = m!!.persistenceContext.persistenceManager
 
-        internal fun init(context: Context) {
-            this.context = context
+        internal fun init(injectedMembers: InjectedMembers) {
+            this.m = injectedMembers
         }
 
         internal fun initUsing(parent: Command) {
-            context = parent.context
+            m = parent.m
         }
     }
 
-    //TODO use InjectedMembers pattern
-    class Context @Inject protected constructor(
+    //region Injection
+    @Inject
+    protected fun inject(injectedMembers: InjectedMembers) {
+        m = injectedMembers
+    }
+
+    class InjectedMembers @Inject protected constructor(
             val tm: TransactionManager,
             val persistenceContext: PersistenceContext
     )
+    //endregion
 }

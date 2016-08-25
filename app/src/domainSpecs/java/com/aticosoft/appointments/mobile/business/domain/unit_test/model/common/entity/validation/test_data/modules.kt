@@ -8,6 +8,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.persistabl
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.EntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.JdoEntityRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import dagger.Module
 import dagger.Provides
@@ -19,9 +20,7 @@ import javax.inject.Singleton
  */
 @Module
 internal class OddValueAndEmailParentModule : TestRootEntityModule<OddValueAndEmailParent,
-        OddValueAndEmailParentQueries, OddValueAndEmailParentQueries,
         OddValueAndEmailParentQueryView,
-        OddValueAndEmailParentRepository,
         PersistableObjectValidator<OddValueAndEmailParent, *>,
         PersistableObjectInitializer<OddValueAndEmailParent>,
         EntityListener<OddValueAndEmailParent>>() {
@@ -36,7 +35,7 @@ internal class OddValueAndEmailParentModule : TestRootEntityModule<OddValueAndEm
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = OddValueAndEmailParentQueryView::class.java
 
     @Provides @Singleton
-    override fun provideRepository(repository: OddValueAndEmailParentRepository): EntityRepository<OddValueAndEmailParent> = repository
+    override fun provideRepository(repository: JdoEntityRepository<OddValueAndEmailParent>): EntityRepository<OddValueAndEmailParent> = repository
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<OddValueAndEmailParent>): PersistableObjectInitializer<*> = initializer
@@ -66,9 +65,7 @@ internal class OddValueAndEmailChildModule : EntityModule<OddValueAndEmailChild,
 
 @Module
 internal class PrimeNumberAndGmailParentModule : TestRootEntityModule<PrimeNumberAndGmailParent,
-        PrimeNumberAndGmailParentQueries, PrimeNumberAndGmailParentQueries,
         PrimeNumberAndGmailParentQueryView,
-        PrimeNumberAndGmailParentRepository,
         PrimeNumberAndGmailParentValidator,
         PersistableObjectInitializer<PrimeNumberAndGmailParent>,
         EntityListener<PrimeNumberAndGmailParent>>() {
@@ -83,7 +80,7 @@ internal class PrimeNumberAndGmailParentModule : TestRootEntityModule<PrimeNumbe
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = PrimeNumberAndGmailParentQueryView::class.java
 
     @Provides @Singleton
-    override fun provideRepository(repository: PrimeNumberAndGmailParentRepository): EntityRepository<PrimeNumberAndGmailParent> = repository
+    override fun provideRepository(repository: JdoEntityRepository<PrimeNumberAndGmailParent>): EntityRepository<PrimeNumberAndGmailParent> = repository
 
     @Provides @IntoSet
     fun provideValidators(): PersistableObjectValidator<*, *> = PrimeNumberAndGmailParentValidator()

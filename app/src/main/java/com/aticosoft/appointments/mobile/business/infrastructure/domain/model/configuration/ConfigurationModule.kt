@@ -8,8 +8,9 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.persistabl
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.Configuration
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationQueries
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationQueryView
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.JdoRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.RootEntityModule
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.JdoEntityRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import dagger.Module
 import dagger.Provides
@@ -20,10 +21,9 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 10/01/16.
  */
 @Module
-/*internal*/ class ConfigurationModule : RootEntityModule<Configuration,
+/*internal*/ class ConfigurationModule : JdoRootEntityModule<Configuration,
         ConfigurationQueries, JdoConfigurationQueries,
         ConfigurationQueryView,
-        JdoConfigurationRepository,
         ConfigurationValidator<*>,
         PersistableObjectInitializer<Configuration>,
         EntityListener<Configuration>> {
@@ -41,7 +41,7 @@ import javax.inject.Singleton
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = ConfigurationQueryView::class.java
 
     @Provides @Singleton
-    override fun provideRepository(repository: JdoConfigurationRepository): EntityRepository<Configuration> = repository
+    override fun provideRepository(repository: JdoEntityRepository<Configuration>): EntityRepository<Configuration> = repository
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<Configuration>): PersistableObjectInitializer<*> = initializer

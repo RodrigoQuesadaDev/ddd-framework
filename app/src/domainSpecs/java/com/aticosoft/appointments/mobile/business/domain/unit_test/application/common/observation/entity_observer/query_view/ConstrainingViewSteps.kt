@@ -3,6 +3,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObserver
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParentServices.AddData
 import com.rodrigodev.common.nullability.nullOr
@@ -72,7 +73,7 @@ internal abstract class AbstractConstrainingViewSteps(protected val s: Services)
     }
 
     class Services @Inject constructor(
-            val testDataParentRepositoryManager: TestDataParentRepositoryManager,
+            val testDataParentRepositoryManager: TestRepositoryManager<TestDataParent>,
             val testDataParentServices: TestDataParentServices,
             val testDataParentObserver: EntityObserver<TestDataParent>,
             val testDataParentQueries: TestDataParentQueries,

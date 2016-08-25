@@ -25,12 +25,9 @@ import kotlin.concurrent.thread
  * Created by Rodrigo Quesada on 05/12/15.
  */
 @Singleton
-internal class CommandTestDataServices @Inject constructor(private val c: TestDataServices.Context) : TestDataServices(c) {
+internal class CommandTestDataServices @Inject protected constructor() : TestDataServices() {
 
-    /***********************************************************************************************
-     * Only Use Entity
-     **********************************************************************************************/
-
+    //region Only Use Entity
     class OnlyUseEntity(entity: TestData) : Command() {
         val entity by entity.delegate()
     }
@@ -132,11 +129,9 @@ internal class CommandTestDataServices @Inject constructor(private val c: TestDa
     }
 
     fun execute(command: OnlyUseNestedEntitiesFromMapAsValuesAndKeys) = command.execute { nestedEntityMap.useNested() }
+    //endregion
 
-    /***********************************************************************************************
-     * Modify Entity
-     **********************************************************************************************/
-
+    //region Modify Entity
     class ModifyEntity(entity: TestData) : Command() {
         val entity by entity.delegate()
     }
@@ -238,18 +233,16 @@ internal class CommandTestDataServices @Inject constructor(private val c: TestDa
     }
 
     fun execute(command: ModifyNestedEntitiesFromMapAsValuesAndKeys) = command.execute { nestedEntityMap.modifyNested() }
+    //endregion
 
-    /***********************************************************************************************
-     * Modify Entity Differently
-     **********************************************************************************************/
-
+    //region Modify Entity Differently
     class ModifyAnotherEntity(passedEntity: TestData, val anotherValue: Int) : Command() {
         val passedEntity by passedEntity.delegate()
     }
 
     fun execute(command: ModifyAnotherEntity) = command.execute {
         passedEntity //just reading the instance so that it is marked as part of the transaction
-        c.testDataRepository.find(c.testDataQueries.valueIs(anotherValue))!!.let { data ->
+        m.testDataRepository.find(m.testDataQueries.valueIs(anotherValue))!!.let { data ->
             data.modify()
         }
     }
@@ -261,15 +254,13 @@ internal class CommandTestDataServices @Inject constructor(private val c: TestDa
     fun execute(command: ConcurrentlyModifyPassedEntity) = command.execute {
         val passedEntityValue = passedEntity.value
         thread { execute(ChangeData(passedEntityValue, passedEntityValue + 10)) }.join(TimeUnit.SECONDS.toMillis(5))
-        c.testDataRepository.find(c.testDataQueries.valueIs(anotherValue))!!.let { data ->
+        m.testDataRepository.find(m.testDataQueries.valueIs(anotherValue))!!.let { data ->
             data.modify()
         }
     }
+    //endregion
 
-    /***********************************************************************************************
-     * Nested Classes
-     **********************************************************************************************/
-
+    //region Nested Classes
     class NestedValue(entity: TestData) : Command() {
         val entity by entity.delegate()
     }
@@ -293,12 +284,10 @@ internal class CommandTestDataServices @Inject constructor(private val c: TestDa
     class NestedMapAsValuesAndKeys(entityMap: Map<TestData, TestData>) : Command() {
         val entityMap by entityMap.delegate()
     }
+    //endregion
 }
 
-/***************************************************************************************************
- * Only Use Entity
- **************************************************************************************************/
-
+//region Only Use Entity
 private inline fun TestData.use() = toString()
 
 private inline fun NestedValue.use() = run { entity.use() }
@@ -316,11 +305,9 @@ private inline fun Map<NestedValue, NestedValue>.useNested() = forEach {
     it.key.use()
     it.value.use()
 }
+//endregion
 
-/***************************************************************************************************
- * Modify Entity
- **************************************************************************************************/
-
+//region Modify Entity
 private inline fun TestData.modify() = run { value += 10 }
 
 private inline fun NestedValue.modify() = run { entity.modify() }
@@ -338,11 +325,9 @@ private inline fun Map<NestedValue, NestedValue>.modifyNested() = forEach {
     it.key.modify()
     it.value.modify()
 }
+//endregion
 
-/***************************************************************************************************
- * Map to Nested Entity
- **************************************************************************************************/
-
+//region Map to Nested Entity
 private inline fun List<TestData>.toNestedEntities() = map { NestedValue(it) }
 
 private inline fun Set<TestData>.toNestedEntities() = map { NestedValue(it) }.toSet()
@@ -352,3 +337,4 @@ private inline fun Map<Int, TestData>.mapValuesToNestedEntities(): Map<Int, Nest
 private inline fun Map<TestData, Int>.mapKeysToNestedEntities(): Map<NestedValue, Int> = mapKeys { NestedValue(it.key) }
 
 private inline fun Map<TestData, TestData>.toNestedEntities(): Map<NestedValue, NestedValue> = asSequence().associateBy({ NestedValue(it.key) }, { NestedValue(it.value) })
+//endregion

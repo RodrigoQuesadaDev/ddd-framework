@@ -11,6 +11,16 @@
             <field name="id" primary-key="true" column="_ID"/>
         </class>
     </package>
+    <package name="com.aticosoft.appointments.mobile.business.domain.model.common.event">
+        <class name="Event">
+            <inheritance strategy="complete-table"/>
+            <version strategy="version-number">
+                <extension key="field-name" value="version" vendor-name="datanucleus"/>
+            </version>
+            <field name="version" column="VERSION"/>
+            <field name="id" primary-key="true" column="_ID" value-strategy="increment"/>
+        </class>
+    </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.appointment">
         <class name="Appointment"  table="APPOINTMENT">
             <field name="_scheduledTime">

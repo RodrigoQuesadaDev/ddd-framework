@@ -8,6 +8,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.persistabl
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.EntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.JdoEntityRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import dagger.Module
 import dagger.Provides
@@ -19,9 +20,7 @@ import javax.inject.Singleton
  */
 @Module
 internal class TestDataParentModule : TestRootEntityModule<TestDataParent,
-        TestDataParentQueries, TestDataParentQueries,
         TestDataParentQueryView,
-        TestDataParentRepository,
         PersistableObjectValidator<TestDataParent, *>,
         PersistableObjectInitializer<TestDataParent>,
         EntityListener<TestDataParent>>() {
@@ -36,7 +35,7 @@ internal class TestDataParentModule : TestRootEntityModule<TestDataParent,
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = TestDataParentQueryView::class.java
 
     @Provides @Singleton
-    override fun provideRepository(repository: TestDataParentRepository): EntityRepository<TestDataParent> = repository
+    override fun provideRepository(repository: JdoEntityRepository<TestDataParent>): EntityRepository<TestDataParent> = repository
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<TestDataParent>): PersistableObjectInitializer<*> = initializer

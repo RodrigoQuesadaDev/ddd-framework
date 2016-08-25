@@ -1,6 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
 import com.rodrigodev.common.nullability.nullOr
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -9,14 +10,13 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 15/11/15.
  */
 @Singleton
-internal class TestDataParentServices @Inject constructor(
-        val context: ApplicationServices.Context,
-        val testDataParentFactory: TestDataParentFactory,
-        val testDataRepository: TestDataParentRepository,
-        val testDataChildFactory: TestDataChildFactory,
-        val testDataGrandChildFactory: TestDataGrandChildFactory,
-        val testDataQueries: TestDataParentQueries
-) : ApplicationServices(context) {
+internal class TestDataParentServices @Inject protected constructor(
+        private val testDataParentFactory: TestDataParentFactory,
+        private val testDataRepository: EntityRepository<TestDataParent>,
+        private val testDataChildFactory: TestDataChildFactory,
+        private val testDataGrandChildFactory: TestDataGrandChildFactory,
+        private val testDataQueries: TestDataParentQueries
+) : ApplicationServices() {
 
     class AddData(val parentValue: Int, val embedded1: Int?, val embedded2: ComplexEmbedded?, val child1: Child?, val child2: Child?
     ) : Command() {

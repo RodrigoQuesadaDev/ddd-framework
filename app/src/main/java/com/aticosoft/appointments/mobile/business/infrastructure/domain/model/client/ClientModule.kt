@@ -8,8 +8,9 @@ import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQuer
 import com.aticosoft.appointments.mobile.business.domain.model.client.validation.ClientValidator
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.JdoRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.RootEntityModule
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.JdoEntityRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import dagger.Module
 import dagger.Provides
@@ -20,10 +21,9 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 10/01/16.
  */
 @Module
-/*internal*/ class ClientModule : RootEntityModule<Client,
+/*internal*/ class ClientModule : JdoRootEntityModule<Client,
         ClientQueries, JdoClientQueries,
         ClientQueryView,
-        JdoClientRepository,
         ClientValidator<*>,
         PersistableObjectInitializer<Client>,
         EntityListener<Client>> {
@@ -41,7 +41,7 @@ import javax.inject.Singleton
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = ClientQueryView::class.java
 
     @Provides @Singleton
-    override fun provideRepository(repository: JdoClientRepository): EntityRepository<Client> = repository
+    override fun provideRepository(repository: JdoEntityRepository<Client>): EntityRepository<Client> = repository
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<Client>): PersistableObjectInitializer<*> = initializer

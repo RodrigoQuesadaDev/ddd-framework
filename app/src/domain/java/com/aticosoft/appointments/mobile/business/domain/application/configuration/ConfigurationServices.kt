@@ -9,9 +9,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 17/12/15.
  */
 @Singleton
-/*internal*/ class ConfigurationServices @Inject protected constructor(
-        context: ApplicationServicesBase.Context
-) : ApplicationServicesBase(context) {
+/*internal*/ class ConfigurationServices @Inject protected constructor() : ApplicationServicesBase() {
 
     class ResetConfiguration : Command()
 

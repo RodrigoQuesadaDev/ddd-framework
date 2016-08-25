@@ -10,9 +10,8 @@ import javax.inject.Singleton
  */
 @Singleton
 /*internal*/ class ModelServices @Inject protected constructor(
-        context: ApplicationServices.Context,
         private val modelInitializerService: ModelInitializerService
-) : ApplicationServices(context) {
+) : ApplicationServices() {
 
     class InitializeModel() : Command()
 

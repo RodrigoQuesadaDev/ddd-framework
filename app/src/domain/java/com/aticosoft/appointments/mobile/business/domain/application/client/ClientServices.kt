@@ -13,10 +13,9 @@ import javax.inject.Singleton
  */
 @Singleton
 /*internal*/ class ClientServices @Inject protected constructor(
-        context: ApplicationServices.Context,
         private val clientFactory: ClientFactory,
         private val clientRepository: EntityRepository<Client>
-) : ApplicationServices(context) {
+) : ApplicationServices() {
 
     class AddClient(val name: String, val birthDate: LocalDate) : Command()
 

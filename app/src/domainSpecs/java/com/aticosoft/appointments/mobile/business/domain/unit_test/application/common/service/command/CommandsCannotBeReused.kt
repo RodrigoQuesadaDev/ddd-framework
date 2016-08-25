@@ -63,7 +63,7 @@ internal class CommandsCannotBeReused : DomainStory() {
     }
 
     @Singleton
-    class LocalTestDataServices @Inject constructor(private val c: LocalTestDataServices.Context) : ApplicationServices(c.superContext) {
+    class LocalTestDataServices @Inject protected constructor() : ApplicationServices() {
 
         class AddNestedData(nested: AddData) : Command() {
             val nested by nested.delegate()
@@ -78,7 +78,5 @@ internal class CommandsCannotBeReused : DomainStory() {
         fun execute(command: AddData) = command.execute {
             // Do nothing!
         }
-
-        class Context @Inject constructor(val superContext: ApplicationServices.Context)
     }
 }

@@ -3,9 +3,10 @@ package com.aticosoft.appointments.mobile.business.domain.specs.use_cases.appoin
 import com.aticosoft.appointments.mobile.business.domain.application.appointment.AppointmentServices
 import com.aticosoft.appointments.mobile.business.domain.application.appointment.AppointmentServices.ScheduleAppointment
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
-import com.aticosoft.appointments.mobile.business.domain.testing.model.AppointmentRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
 import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.test.catchThrowable
 import com.rodrigodev.common.testing.firstEvent
@@ -22,7 +23,7 @@ import javax.inject.Singleton
  */
 @Singleton
 internal class AppointmentGlobalSteps @Inject protected constructor(
-        private val appointmentRepositoryManager: AppointmentRepositoryManager,
+        private val appointmentRepositoryManager: TestRepositoryManager<Appointment>,
         private val appointmentServices: AppointmentServices,
         private val clientObserver: EntityObserver<Client>,
         private val clientQueries: ClientQueries

@@ -25,9 +25,9 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
 }
 
 /*internal*/ interface RootPersistableObjectModule<P : PersistableObject<*>,
-        Q : Queries<P>, QI : Q,
-        QV : Enum<out QV>,
-        R : Repository<P, *>,
+        out Q : Queries<P>, in QI : Q,
+        out QV : Enum<out QV>,
+        in R : Repository<P, *>,
         V : PersistableObjectValidator<P, *>,
         I : PersistableObjectInitializer<P>,
         L : PersistableObjectListener<P, *>> : PersistableObjectModule<P, V, I, L> {

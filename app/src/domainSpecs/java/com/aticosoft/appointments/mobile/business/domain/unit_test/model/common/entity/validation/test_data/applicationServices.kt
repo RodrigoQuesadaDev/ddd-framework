@@ -3,6 +3,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,7 +11,14 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 15/11/15.
  */
 @Singleton
-internal class TestDataServices @Inject constructor(private val c: TestDataServices.Context) : ApplicationServices(c.superContext) {
+internal class TestDataServices @Inject protected constructor(
+        private val oddValueAndEmailParentFactory: OddValueAndEmailParentFactory,
+        private val oddValueAndEmailParentRepository: EntityRepository<OddValueAndEmailParent>,
+        private val oddValueAndEmailParentQueries: OddValueAndEmailParentQueries,
+        private val primeNumberAndGmailParentFactory: PrimeNumberAndGmailParentFactory,
+        private val primeNumberAndGmailParentRepository: EntityRepository<PrimeNumberAndGmailParent>,
+        private val primeNumberAndGmailParentQueries: PrimeNumberAndGmailParentQueries
+) : ApplicationServices() {
 
     /***********************************************************************************************
      * Add entities
@@ -19,13 +27,13 @@ internal class TestDataServices @Inject constructor(private val c: TestDataServi
     class AddOddValueAndEmailParent(val oddValue: Int, val email: String, val childOddValue: Int, val childEmail: String) : Command()
 
     fun execute(command: AddOddValueAndEmailParent) = command.execute {
-        c.oddValueAndEmailParentRepository.add(c.oddValueAndEmailParentFactory.create(oddValue, email, childOddValue, childEmail))
+        oddValueAndEmailParentRepository.add(oddValueAndEmailParentFactory.create(oddValue, email, childOddValue, childEmail))
     }
 
     class AddPrimeNumberAndGmailParent(val primeNumber: Int, val email: String, val extraValue: Int, val childPrimeValue: Int, val childEmail: String, val childExtraValue: Int) : Command()
 
     fun execute(command: AddPrimeNumberAndGmailParent) = command.execute {
-        c.primeNumberAndGmailParentRepository.add(c.primeNumberAndGmailParentFactory.create(primeNumber, email, extraValue, childPrimeValue, childEmail, childExtraValue))
+        primeNumberAndGmailParentRepository.add(primeNumberAndGmailParentFactory.create(primeNumber, email, extraValue, childPrimeValue, childEmail, childExtraValue))
     }
 
     /***********************************************************************************************
@@ -40,7 +48,7 @@ internal class TestDataServices @Inject constructor(private val c: TestDataServi
 
     fun execute(command: UpdateOddValueAndEmailChild) = command.updateChild { firstOddValueAndEmailParent() }
 
-    private inline fun firstOddValueAndEmailParent(): OddValueAndEmailParent = c.oddValueAndEmailParentRepository.find(c.oddValueAndEmailParentQueries.first())!!
+    private inline fun firstOddValueAndEmailParent(): OddValueAndEmailParent = oddValueAndEmailParentRepository.find(oddValueAndEmailParentQueries.first())!!
 
     /***********************************************************************************************
      * Update PrimeNumberAndGmail entities
@@ -62,7 +70,7 @@ internal class TestDataServices @Inject constructor(private val c: TestDataServi
 
     fun execute(command: UpdateExtraValueForPrimeNumberAndGmailChild) = command.updateChild { firstPrimeNumberAndGmailParent() }
 
-    private inline fun firstPrimeNumberAndGmailParent(): PrimeNumberAndGmailParent = c.primeNumberAndGmailParentRepository.find(c.primeNumberAndGmailParentQueries.first())!!
+    private inline fun firstPrimeNumberAndGmailParent(): PrimeNumberAndGmailParent = primeNumberAndGmailParentRepository.find(primeNumberAndGmailParentQueries.first())!!
 
     /***************************************************************************************************
      * Update Entities Code
@@ -101,15 +109,4 @@ internal class TestDataServices @Inject constructor(private val c: TestDataServi
     private inline fun <T : NumberAndEmailTestData> UpdateExtraValue.updateUsing(crossinline firstEntityCall: () -> T, crossinline updateCall: (T) -> Unit) = execute {
         updateCall(firstEntityCall())
     }
-
-    @Singleton
-    class Context @Inject protected constructor(
-            val superContext: ApplicationServices.Context,
-            val oddValueAndEmailParentFactory: OddValueAndEmailParentFactory,
-            val oddValueAndEmailParentRepository: OddValueAndEmailParentRepository,
-            val oddValueAndEmailParentQueries: OddValueAndEmailParentQueries,
-            val primeNumberAndGmailParentFactory: PrimeNumberAndGmailParentFactory,
-            val primeNumberAndGmailParentRepository: PrimeNumberAndGmailParentRepository,
-            val primeNumberAndGmailParentQueries: PrimeNumberAndGmailParentQueries
-    )
 }

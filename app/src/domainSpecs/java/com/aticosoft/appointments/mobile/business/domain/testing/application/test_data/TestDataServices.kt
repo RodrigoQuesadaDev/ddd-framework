@@ -1,9 +1,10 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.application.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataFactory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
-import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -11,26 +12,28 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 25/10/15.
  */
 @Singleton
-internal open class TestDataServices @Inject constructor(private val c: Context) : ApplicationServices(c.superContext) {
+internal open class TestDataServices @Inject protected constructor() : ApplicationServices() {
+
+    protected lateinit var m: InjectedMembers
 
     class AddData(val value: Int) : Command()
 
     fun execute(command: AddData) = command.execute {
-        c.testDataRepository.add(c.testDataFactory.create(value))
+        m.testDataRepository.add(m.testDataFactory.create(value))
     }
 
     class RemoveData(val value: Int) : Command()
 
     fun execute(command: RemoveData) = command.execute {
-        c.testDataRepository.find(c.testDataQueries.valueIs(value))!!.let { data ->
-            c.testDataRepository.remove(data)
+        m.testDataRepository.find(m.testDataQueries.valueIs(value))!!.let { data ->
+            m.testDataRepository.remove(data)
         }
     }
 
     class ChangeData(val currentValue: Int, val targetValue: Int) : Command()
 
     fun execute(command: ChangeData) = command.execute {
-        c.testDataRepository.find(c.testDataQueries.valueIs(currentValue))!!.let { data ->
+        m.testDataRepository.find(m.testDataQueries.valueIs(currentValue))!!.let { data ->
             data.value = targetValue
         }
     }
@@ -38,15 +41,21 @@ internal open class TestDataServices @Inject constructor(private val c: Context)
     class UseDependency(val value: Int) : Command()
 
     fun execute(command: UseDependency) = command.execute {
-        c.testDataRepository.find(c.testDataQueries.valueIs(value))!!.let { data ->
+        m.testDataRepository.find(m.testDataQueries.valueIs(value))!!.let { data ->
             data.useDependency()
         }
     }
 
-    class Context @Inject protected constructor(
-            val superContext: ApplicationServices.Context,
+    //region Injection
+    @Inject
+    protected fun inject(injectedMembers: InjectedMembers) {
+        m = injectedMembers
+    }
+
+    protected class InjectedMembers @Inject protected constructor(
             val testDataFactory: TestDataFactory,
-            val testDataRepository: TestDataRepository,
+            val testDataRepository: EntityRepository<TestData>,
             val testDataQueries: TestDataQueries
     )
+    //endregion
 }

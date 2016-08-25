@@ -5,7 +5,7 @@ import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.AddData
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.UseDependency
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestDataRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataFactory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
@@ -37,7 +37,7 @@ internal class EntityDependenciesAreInjected : DomainStory() {
 
     class LocalSteps @Inject constructor(
             private val testDataFactory: TestDataFactory,
-            private val testDataRepositoryManager: TestDataRepositoryManager,
+            private val testDataRepositoryManager: TestRepositoryManager<TestData>,
             private val testDataServices: TestDataServices,
             private val testDataObserver: EntityObserver<TestData>,
             private val testDataQueries: TestDataQueries

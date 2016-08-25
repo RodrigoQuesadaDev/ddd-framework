@@ -6,14 +6,20 @@ import javax.inject.Inject
 /**
  * Created by Rodrigo Quesada on 21/12/15.
  */
-/*internal*/ abstract class ApplicationServicesBase(
-        private val c: Context
-) : ApplicationServices(c.superContext) {
+/*internal*/ abstract class ApplicationServicesBase protected constructor() : ApplicationServices() {
 
-    protected fun retrieveConfiguration() = c.configurationManager.retrieve()
+    private lateinit var m: InjectedMembers
 
-    class Context @Inject protected constructor(
-            val superContext: ApplicationServices.Context,
+    protected fun retrieveConfiguration() = m.configurationManager.retrieve()
+
+    //region Injection
+    @Inject
+    protected fun inject(injectedMembers: InjectedMembers) {
+        m = injectedMembers
+    }
+
+    protected class InjectedMembers @Inject protected constructor(
             val configurationManager: ConfigurationManager
     )
+    //endregion
 }
