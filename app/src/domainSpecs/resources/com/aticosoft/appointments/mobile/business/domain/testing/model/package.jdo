@@ -4,21 +4,21 @@
     <package name="com.aticosoft.appointments.mobile.business.domain.model.common.entity">
         <class name="Entity">
             <inheritance strategy="complete-table"/>
-            <version strategy="version-number">
+            <version strategy="version-number" column="VERSION">
                 <extension key="field-name" value="version" vendor-name="datanucleus"/>
             </version>
-            <field name="version" column="VERSION"/>
-            <field name="id" primary-key="true" column="_ID"/>
+            <field name="version"/>
+            <field name="id" primary-key="true"/>
         </class>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.common.event">
         <class name="Event">
             <inheritance strategy="complete-table"/>
-            <version strategy="version-number">
+            <version strategy="version-number" column="VERSION">
                 <extension key="field-name" value="version" vendor-name="datanucleus"/>
             </version>
-            <field name="version" column="VERSION"/>
-            <field name="id" primary-key="true" column="_ID" value-strategy="increment"/>
+            <field name="version"/>
+            <field name="id" primary-key="true" value-strategy="increment"/>
         </class>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.testing.model.test_data">

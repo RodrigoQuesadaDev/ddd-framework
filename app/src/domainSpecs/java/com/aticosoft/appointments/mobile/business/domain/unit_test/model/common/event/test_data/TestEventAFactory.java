@@ -1,4 +1,4 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.event;
+package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data;
 
 import javax.annotation.Generated;
 import javax.inject.Inject;
@@ -7,7 +7,7 @@ public final class TestEventAFactory {
   @Inject
   public TestEventAFactory() {
   }
-  public TestEventA create() {
-    return new TestEventA();
+  public TestEventA create(int value) {
+    return new TestEventA(value);
   }
 }

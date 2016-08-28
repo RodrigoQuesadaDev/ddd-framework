@@ -51,7 +51,8 @@ import javax.jdo.PersistenceManagerFactory
 
         val props = hashMapOf<Any, Any>(
                 PropertyNames.PROPERTY_CONNECTION_URL to connectionUrl(),
-                PropertyNames.PROPERTY_CLASSLOADER_PRIMARY to customDataNucleusClassLoader
+                PropertyNames.PROPERTY_CLASSLOADER_PRIMARY to customDataNucleusClassLoader,
+                PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL to true
         )
         props.putAll(PersistenceUtils.setPropertiesUsingFile(PROPERTIES_FILE))
 

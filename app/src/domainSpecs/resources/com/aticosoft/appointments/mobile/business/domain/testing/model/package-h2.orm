@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
 <orm>
+    <package name="com.aticosoft.appointments.mobile.business.domain.model.common.entity">
+        <class name="Entity">
+            <field name="id">
+                <column name="_ID"/>
+            </field>
+        </class>
+    </package>
+    <package name="com.aticosoft.appointments.mobile.business.domain.model.common.event">
+        <class name="Event">
+            <field name="id">
+                <column name="_ID"/>
+                <extension vendor-name="datanucleus" key="key-cache-size" value="10"/>
+                <extension vendor-name="datanucleus" key="key-initial-value" value="1"/>
+                <extension vendor-name="datanucleus" key="sequence-table-name" value="SEQTABLE"/>
+                <extension vendor-name="datanucleus" key="sequence-name-column-name" value="SEQNAME"/>
+                <extension vendor-name="datanucleus" key="sequence-nextval-column-name" value="NEXTSEQ"/>
+            </field>
+        </class>
+    </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.testing.model.test_data">
         <class name="AbstractTestData">
             <field name="value">

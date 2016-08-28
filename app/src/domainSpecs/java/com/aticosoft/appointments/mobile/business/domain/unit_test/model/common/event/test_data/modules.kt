@@ -1,4 +1,4 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.event
+package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
@@ -41,4 +41,29 @@ internal class TestEventAModule : TestEventModule<TestEventA,
 
     @Provides @IntoSet
     override fun provideListenerIntoSet(listener: EventListener<TestEventA>): PersistableObjectListener<*, *> = listener
+}
+
+@Module
+internal class TestEventBModule : TestEventModule<TestEventB,
+        PersistableObjectValidator<TestEventB, *>,
+        PersistableObjectInitializer<TestEventB>,
+        EventListener<TestEventB>>() {
+
+    @Provides @Singleton
+    override fun provideType(): Class<TestEventB> = TestEventB::class.java
+
+    @Provides @IntoSet
+    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+
+    @Provides @Singleton
+    override fun provideRepository(repository: JdoEventRepository<TestEventB>): EventRepository<TestEventB> = repository
+
+    @Provides @Singleton
+    override fun provideEventStore(eventStore: JdoEventStore<TestEventB>): EventStore<TestEventB> = eventStore
+
+    @Provides @IntoSet
+    override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<TestEventB>): PersistableObjectInitializer<*> = initializer
+
+    @Provides @IntoSet
+    override fun provideListenerIntoSet(listener: EventListener<TestEventB>): PersistableObjectListener<*, *> = listener
 }

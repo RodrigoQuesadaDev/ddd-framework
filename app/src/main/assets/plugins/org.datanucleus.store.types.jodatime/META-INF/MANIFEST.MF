@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Archiver-Version: Plexus Archiver
 Created-By: Apache Maven Bundle Plugin
 Built-By: andy
-Build-Jdk: 1.8.0_60
-Bnd-LastModified: 1444204901754
+Build-Jdk: 1.8.0_65
+Bnd-LastModified: 1453107085658
 Bundle-Description: Plugin providing DataNucleus support for Jodatime 
  types.
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -11,20 +11,20 @@ Bundle-ManifestVersion: 2
 Bundle-Name: DataNucleus Jodatime plugin
 Bundle-SymbolicName: org.datanucleus.store.types.jodatime;singleton:=t
  rue
-Bundle-Version: 4.1.1
+Bundle-Version: 4.1.2
 Export-Package: org.datanucleus.store.types.jodatime.rdbms.mapping;use
  s:="org.datanucleus,org.datanucleus.metadata,org.datanucleus.store.rd
  bms,org.datanucleus.store.rdbms.mapping.java,org.datanucleus.store.rd
- bms.table";version="4.1.1",org.datanucleus.store.types.jodatime.rdbms
+ bms.table";version="4.1.2",org.datanucleus.store.types.jodatime.rdbms
  .sql.expression;uses:="org.datanucleus.store.rdbms.mapping.java,org.d
  atanucleus.store.rdbms.sql,org.datanucleus.store.rdbms.sql.expression
- ,org.joda.time";version="4.1.1",org.datanucleus.store.types.jodatime.
+ ,org.joda.time";version="4.1.2",org.datanucleus.store.types.jodatime.
  rdbms.sql.method;uses:="org.datanucleus.store.rdbms.sql.expression,or
- g.datanucleus.store.rdbms.sql.method";version="4.1.1",org.datanucleus
+ g.datanucleus.store.rdbms.sql.method";version="4.1.2",org.datanucleus
  .store.types.jodatime.query.inmemory;uses:="org.datanucleus.query.exp
- ression,org.datanucleus.query.inmemory";version="4.1.1",org.datanucle
+ ression,org.datanucleus.query.inmemory";version="4.1.2",org.datanucle
  us.store.types.jodatime.converters;uses:="org.datanucleus.store.types
- .converters,org.joda.time";version="4.1.1"
+ .converters,org.joda.time";version="4.1.2"
 Import-Package: org.joda.time;version="2.0",org.joda.time.format;versi
  on="2.0",org.datanucleus.store.rdbms;version="4.1.0.release";resoluti
  on:=optional,org.datanucleus.store.rdbms.mapping;version="4.1.0.relea
