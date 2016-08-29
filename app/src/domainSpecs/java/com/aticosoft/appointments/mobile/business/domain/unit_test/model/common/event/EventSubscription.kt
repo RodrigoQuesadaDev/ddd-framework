@@ -7,9 +7,12 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.EventSubscription.EventType.B
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.EventSubscription.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.TestEventAServices
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.TestEventAServices.AddEventA
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.TestEventBServices
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.TestEventBServices.AddEventB
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.TestEventServices
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.TestEventServices.AddEvent
+import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
+import com.rodrigodev.common.test.catchThrowable
+import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Pending
 import org.jbehave.core.annotations.Then
@@ -34,22 +37,22 @@ internal class EventSubscription : DomainStory() {
     class LocalSteps @Inject constructor(
             private val eventAServices: TestEventAServices,
             private val eventBServices: TestEventBServices
-    ) {
+    ) : ExceptionThrowingSteps {
+
+        override var throwable: Throwable? = null
+
         private companion object {
             val DEFAULT_EVENT_VALUE = 0
         }
 
         @When("event \$eventType occurs")
         fun whenAnEventOccurs(eventType: EventType) {
-            when (eventType) {
-                A -> eventAServices.execute(AddEventA(DEFAULT_EVENT_VALUE))
-                B -> eventBServices.execute(AddEventB(DEFAULT_EVENT_VALUE))
-            }
+            throwable = catchThrowable { eventType.eventServices.execute(AddEvent(DEFAULT_EVENT_VALUE)) }
         }
 
         @Then("no exception is thrown")
-        @Pending
         fun thenNoExceptionIsThrown() {
+            assertThat(throwable).isNull()
         }
 
         @Given("event \$eventType gets subscribed \$subsNumber times")
@@ -143,6 +146,14 @@ internal class EventSubscription : DomainStory() {
         @Pending
         fun thenIfMoreThanActionIsSubscribedToEventTheyGetTriggeredXTimesInTotal(eventType: EventType, times: Int) {
         }
+
+        //region Utils
+        private val EventType.eventServices: TestEventServices<*>
+            get() = when (this) {
+                A -> eventAServices
+                B -> eventBServices
+            }
+        //endregion
     }
 
     //region Other Classes
