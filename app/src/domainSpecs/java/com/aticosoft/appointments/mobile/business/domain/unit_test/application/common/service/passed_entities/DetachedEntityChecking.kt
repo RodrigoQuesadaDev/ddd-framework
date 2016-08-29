@@ -6,7 +6,7 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.NonDetachedPersistableObjectException
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataFactory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
@@ -42,7 +42,7 @@ internal class DetachedEntityChecking : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val testDataRepositoryManager: TestRepositoryManager<TestData>,
+            private val testDataRepositoryManager: TestEntityRepositoryManager<TestData>,
             private val testDataFactory: TestDataFactory,
             override val testDataServices: CommandTestDataServices,
             private val testDataObserver: EntityObserver<TestData>,

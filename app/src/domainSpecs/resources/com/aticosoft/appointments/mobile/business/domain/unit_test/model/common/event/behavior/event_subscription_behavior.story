@@ -1,4 +1,4 @@
-Event subscription.
+Event subscription behavior.
 
 Meta: @subsNumber 1
 

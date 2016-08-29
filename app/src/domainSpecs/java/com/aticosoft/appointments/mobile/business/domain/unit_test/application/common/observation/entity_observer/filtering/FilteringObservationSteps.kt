@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObserver
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentServices
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentServices.ChangeData
@@ -66,7 +66,7 @@ internal abstract class AbstractFilteringObservationSteps(private val s: Service
     }
 
     class Services @Inject protected constructor(
-            val testDataParentRepositoryManager: TestRepositoryManager<TestDataParent>,
+            val testDataParentRepositoryManager: TestEntityRepositoryManager<TestDataParent>,
             val testDataParentServices: TestDataParentServices,
             val testScheduler: TestScheduler
     )

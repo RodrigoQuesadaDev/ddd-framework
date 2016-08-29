@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
+<orm>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data">
+        <class name="TestEvent" table="TEST_EVENT">
+            <field name="value">
+                <column name="VALUE"/>
+            </field>
+        </class>
+    </package>
+</orm>

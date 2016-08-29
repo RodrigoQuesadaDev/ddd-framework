@@ -1,15 +1,15 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event
+package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior
 
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.EventSubscription.EventType.A
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.EventSubscription.EventType.B
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.EventSubscription.UnitTestApplicationImpl
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.TestEventAServices
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.TestEventBServices
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.TestEventServices
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data.TestEventServices.AddEvent
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.EventSubscriptionBehavior.EventType.A
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.EventSubscriptionBehavior.EventType.B
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.EventSubscriptionBehavior.UnitTestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.test_data.TestEventAServices
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.test_data.TestEventBServices
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices.AddEvent
 import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
 import com.rodrigodev.common.test.catchThrowable
 import org.assertj.core.api.Assertions.assertThat
@@ -24,9 +24,9 @@ import javax.inject.Inject
  * Created by Rodrigo Quesada on 11/08/16.
  */
 @Config(application = UnitTestApplicationImpl::class)
-internal class EventSubscription : DomainStory() {
+internal class EventSubscriptionBehavior : DomainStory() {
 
-    class UnitTestApplicationImpl : UnitTestApplication<EventSubscription>(UnitTestApplicationComponent::inject)
+    class UnitTestApplicationImpl : UnitTestApplication<EventSubscriptionBehavior>(UnitTestApplicationComponent::inject)
 
     @Inject protected lateinit var localSteps: LocalSteps
 

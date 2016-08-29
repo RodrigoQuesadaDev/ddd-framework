@@ -5,7 +5,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataQueries
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
@@ -40,7 +40,7 @@ internal class PassedEntityInstancesNotModified : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val testDataRepositoryManager: TestRepositoryManager<TestData>,
+            private val testDataRepositoryManager: TestEntityRepositoryManager<TestData>,
             override val testDataServices: CommandTestDataServices,
             private val testDataObserver: EntityObserver<TestData>,
             private val testDataQueries: TestDataQueries

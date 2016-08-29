@@ -1,4 +1,4 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.test_data;
+package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.test_data;
 
 import javax.annotation.Generated;
 import javax.inject.Inject;

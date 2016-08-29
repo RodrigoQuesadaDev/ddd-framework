@@ -1,26 +1,35 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.model
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.JdoEntityRepository
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.JdoRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext.PersistenceManagerFactoryAccessor
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by Rodrigo Quesada on 24/09/15.
  */
-@Singleton
-internal class TestRepositoryManager<E : Entity> @Inject protected constructor(
-        private val context: PersistenceContext,
-        private val repository: JdoEntityRepository<E>
-) : PersistenceManagerFactoryAccessor {
+internal abstract class TestRepositoryManager<P : PersistableObject<I>, I, R : JdoRepository<P, I>> protected constructor() : PersistenceManagerFactoryAccessor {
 
-    fun clear() {
+    private lateinit var m: InjectedMembers<P, I, R>
+
+    fun clear() = with(m) {
         context.execute { context.queryFactory.delete(repository.queryEntity).execute() }
     }
 
-    fun clearCache() {
+    fun clearCache() = with(m) {
         context.pmf.dataStoreCache.evictAll(true, repository.queryEntity.type)
     }
+
+    //region Injection
+    @Inject
+    protected fun inject(injectedMembers: InjectedMembers<P, I, R>) {
+        m = injectedMembers
+    }
+
+    protected class InjectedMembers<P : PersistableObject<I>, I, R : JdoRepository<P, I>> @Inject protected constructor(
+            val context: PersistenceContext,
+            val repository: R
+    )
+    //endregion
 }

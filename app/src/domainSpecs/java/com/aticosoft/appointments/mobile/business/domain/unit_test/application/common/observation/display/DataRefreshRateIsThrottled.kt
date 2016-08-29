@@ -5,7 +5,7 @@ import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.AddData
 import com.aticosoft.appointments.mobile.business.domain.testing.common.time.TestTimeServiceImpl
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestData
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
@@ -40,7 +40,7 @@ internal class DataRefreshRateIsThrottled : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val testDataRepositoryManager: TestRepositoryManager<TestData>,
+            private val testDataRepositoryManager: TestEntityRepositoryManager<TestData>,
             private val testDataServices: TestDataServices,
             private val testDataObserver: EntityObserver<TestData>,
             private val testScheduler: TestScheduler,

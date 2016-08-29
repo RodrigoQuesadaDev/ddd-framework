@@ -3,7 +3,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidationException
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.EntitiesAreValidated.UnitTestApplicationImpl
@@ -41,10 +41,10 @@ internal class EntitiesAreValidated : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val oddValueAndEmailParentRepositoryManager: TestRepositoryManager<OddValueAndEmailParent>,
+            private val oddValueAndEmailParentRepositoryManager: TestEntityRepositoryManager<OddValueAndEmailParent>,
             private val oddValueAndEmailParentObserver: EntityObserver<OddValueAndEmailParent>,
             private val oddValueAndEmailParentQueries: OddValueAndEmailParentQueries,
-            private val primeNumberAndGmailParentRepositoryManager: TestRepositoryManager<PrimeNumberAndGmailParent>,
+            private val primeNumberAndGmailParentRepositoryManager: TestEntityRepositoryManager<PrimeNumberAndGmailParent>,
             private val primeNumberAndGmailParentObserver: EntityObserver<PrimeNumberAndGmailParent>,
             private val primeNumberAndGmailParentQueries: PrimeNumberAndGmailParentQueries,
             private val testDataServices: TestDataServices

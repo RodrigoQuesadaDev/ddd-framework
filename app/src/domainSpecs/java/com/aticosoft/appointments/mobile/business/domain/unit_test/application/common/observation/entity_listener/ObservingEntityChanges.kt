@@ -3,7 +3,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListenersManager
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestRepositoryManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
@@ -42,7 +42,7 @@ internal class ObservingEntityChanges : DomainStory() {
 
     class LocalSteps @Inject constructor(
             private val persistableObjectListenersManager: PersistableObjectListenersManager,
-            private val testDataRepositoryManager: TestRepositoryManager<TestDataParent>,
+            private val testDataRepositoryManager: TestEntityRepositoryManager<TestDataParent>,
             private val testDataServices: TestDataParentServices,
             private val testScheduler: TestScheduler
     ) : SpecSteps() {
