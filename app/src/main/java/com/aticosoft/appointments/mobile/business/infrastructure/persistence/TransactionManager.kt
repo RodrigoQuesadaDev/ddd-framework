@@ -2,14 +2,17 @@
 
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
+//TODO uncomment to run DN on Android
+/*import org.datanucleus.javax.transaction.Status
+import org.datanucleus.javax.transaction.Synchronization*/
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.StalePersistableObjectException
 import org.datanucleus.PropertyNames
-import org.datanucleus.javax.transaction.Status
-import org.datanucleus.javax.transaction.Synchronization
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.jdo.JDOOptimisticVerificationException
 import javax.jdo.PersistenceManager
+import javax.transaction.Status
+import javax.transaction.Synchronization
 
 /**
  * Created by Rodrigo Quesada on 23/09/15.
@@ -17,7 +20,7 @@ import javax.jdo.PersistenceManager
 @Singleton
 /*internal*/ class TransactionManager @Inject protected constructor() {
 
-    lateinit var context: PersistenceContext;
+    lateinit var context: PersistenceContext
 
     fun init(context: PersistenceContext) {
         this.context = context

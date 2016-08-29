@@ -50,9 +50,9 @@ import javax.jdo.PersistenceManagerFactory
     private fun properties(): Map<Any, Any> {
 
         val props = hashMapOf<Any, Any>(
-                PropertyNames.PROPERTY_CONNECTION_URL to connectionUrl(),
-                PropertyNames.PROPERTY_CLASSLOADER_PRIMARY to customDataNucleusClassLoader,
-                PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL to true
+                PropertyNames.PROPERTY_CONNECTION_URL to connectionUrl()
+                //TODO uncomment to run DN on Android
+                //PropertyNames.PROPERTY_CLASSLOADER_PRIMARY to customDataNucleusClassLoader
         )
         props.putAll(PersistenceUtils.setPropertiesUsingFile(PROPERTIES_FILE))
 

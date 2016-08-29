@@ -6,7 +6,10 @@ buildscript {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.rodrigodev.datanucleus-android'
+//TODO uncomment to run DN on Android
+//apply plugin: 'com.rodrigodev.datanucleus-android'
+//TODO remove to run DN on Android
+apply plugin: 'com.rodrigodev.datanucleus'
 apply plugin: 'com.rodrigodev.jbehave'
 
 android {
@@ -54,6 +57,7 @@ kapt {
     generateStubs = true
 }
 
+//TODO uncomment to run DN on Android
 datanucleus {
     entitiesDirs = ['com/aticosoft/appointments/mobile/business/domain/model',
                     'com/aticosoft/appointments/mobile/business/domain/testing/model',
@@ -86,6 +90,12 @@ dependencies {
     datanucleus "org.datanucleus:datanucleus-rdbms:$datanucleusRdbmsVersion"
     datanucleus "org.datanucleus:datanucleus-jodatime:$datanucleusJodatimeVersion"
     datanucleus "org.datanucleus:javax.jdo:$jdoApiVersion"
+    //TODO remove to run DN on Android
+    compile "org.datanucleus:datanucleus-core:$datanucleusCoreVersion"
+    compile "org.datanucleus:datanucleus-api-jdo:$datanucleusApiJdoVersion"
+    compile "org.datanucleus:datanucleus-rdbms:$datanucleusRdbmsVersion"
+    compile "org.datanucleus:datanucleus-jodatime:$datanucleusJodatimeVersion"
+    compile "org.datanucleus:javax.jdo:$jdoApiVersion"
 
     compile "javax.validation:validation-api:$jsr303ApiVersion"
     compile "org.hibernate:hibernate-validator:$hibernateValidatorVersion"
@@ -97,8 +107,9 @@ dependencies {
     }
     kapt "com.querydsl:querydsl-apt:$queryDslVersion:jdo"
     kapt "org.datanucleus:javax.jdo:$jdoApiVersion"
-    jdkClasses files('jdk-files/harmony-javax-jndi.jar')
-    jarjar files("$buildSystemPath/jarjar/jarjar-1.4.jar")
+    //TODO uncomment to run DN on Android
+    //jdkClasses files('jdk-files/harmony-javax-jndi.jar')
+    //jarjar files("$buildSystemPath/jarjar/jarjar-1.4.jar")
     compile "com.h2database:h2:$h2Version"
     compile "io.reactivex:rxjava:$rxJavaVersion"
     compile "io.reactivex:rxkotlin:$rxKotlinVersion"
