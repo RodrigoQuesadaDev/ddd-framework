@@ -21,8 +21,6 @@ class TimeSlotsSpaceValidator @Inject protected constructor(
         ::TimeSlotsSpaceException,
         QAppointment.appointment._scheduledTime
 ) {
-    override val objectType = Appointment::class.java
-
     override fun Appointment.errorMessage() = "Not enough time slots available for scheduling appointment at time \"$scheduledTime\"."
 
     override fun Appointment.isValid(): Boolean {

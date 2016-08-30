@@ -27,6 +27,7 @@ dependencies {
     compile "javax.annotation:jsr250-api:$jsr250ApiVersion" // needed for Dagger
     compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+    compile "org.reflections:reflections:$reflectionsVersion"
 
     testCompile "org.jbehave:jbehave-core:$jBehaveVersion"
     jbehaveSiteResources "org.jbehave:jbehave-core:$jBehaveVersion"

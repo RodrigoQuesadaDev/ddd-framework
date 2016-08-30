@@ -6,7 +6,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.persistabl
 /**
  * Created by Rodrigo Quesada on 26/06/16.
  */
-internal enum class ClientQueryView : QueryView {
+enum class ClientQueryView : QueryView {
     ;
 
     override lateinit var _filterTypes: Sequence<Class<out PersistableObject<*>>>

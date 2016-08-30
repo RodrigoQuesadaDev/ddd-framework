@@ -6,6 +6,7 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.querydsl.core.types.Path
 import com.rodrigodev.common.collection.toTypedArray
+import com.rodrigodev.common.reflection.isSubOfOrSameAs
 import javax.jdo.FetchPlan
 
 /**
@@ -46,7 +47,7 @@ private inline fun Array<out Path<*>>.filterTypes() = asSequence().flatMap { seq
 
 private inline fun Array<out PersistableObjectObservationFilter<*>>.toTypes() = asSequence().map { it.objectType }.distinct()
 
-private inline fun Class<*>.isPersistableObjectType() = PersistableObject::class.java.isAssignableFrom(this)
+private inline fun Class<*>.isPersistableObjectType() = isSubOfOrSameAs(PersistableObject::class.java)
 //endregion
 
 //region Published Extensions

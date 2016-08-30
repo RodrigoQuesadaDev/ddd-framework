@@ -21,6 +21,7 @@ import javax.jdo.listener.LoadLifecycleListener
     }
 }
 
+@Singleton
 /*internal*/ class PersistableObjectInitializer<P : PersistableObject<*>> @Inject protected constructor(
         private val c: Context,
         private val objectType: Class<P>,

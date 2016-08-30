@@ -8,7 +8,7 @@ Then no actions are subscribed to NO_SUBSCRIPTIONS event
 Scenario: 1 subscription
 
 Given ONE_SUBSCRIPTION event actions with the next ids are declared: [1]
-Then only 1 action is subscribed to ONE_SUBSCRIPTION event and it has the id 1
+Then only 1 action is subscribed to ONE_SUBSCRIPTION event and it has the id 1.
 
 Scenario: multiple subscriptions
 

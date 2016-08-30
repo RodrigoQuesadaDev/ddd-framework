@@ -4,7 +4,6 @@ package com.aticosoft.appointments.mobile.business.domain.model.common.persistab
 
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import javax.inject.Inject
-import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -13,12 +12,9 @@ import javax.inject.Singleton
 @Singleton
 /*internal*/ class PersistableObjectValidatorsManager @Inject protected constructor(
         private val validators: MutableSet<PersistableObjectValidator<*, *>>,
-        private val persistenceContext: PersistenceContext,
-        private val validatorContextProvider: Provider<PersistableObjectValidator.Context>
+        private val persistenceContext: PersistenceContext
 ) {
-
     fun registerValidators() = validators.forEach {
-        it.initialize(validatorContextProvider.get())
         persistenceContext.registerPersistableObjectLifecycleListener(it)
     }
 }

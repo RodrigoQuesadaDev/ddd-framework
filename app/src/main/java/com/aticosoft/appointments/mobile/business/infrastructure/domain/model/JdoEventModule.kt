@@ -2,10 +2,11 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.Queries
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventStoreBase
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.JdoEventRepository
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.JdoEventStore
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 
 /**
@@ -13,6 +14,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
  */
 /*internal*/ interface JdoEventModule<E : Event,
         out Q : Queries<E>, in QI : Q,
+        A : EventAction<E>,
         V : PersistableObjectValidator<E, *>,
         I : PersistableObjectInitializer<E>,
-        L : EventListener<E>> : EventModule<E, Q, QI, JdoEventRepository<E>, JdoEventStore<E>, V, I, L>
+        L : EventListener<E>> : EventModule<E, Q, QI, JdoEventRepository<E>, EventStoreBase<E>, A, V, I, L>

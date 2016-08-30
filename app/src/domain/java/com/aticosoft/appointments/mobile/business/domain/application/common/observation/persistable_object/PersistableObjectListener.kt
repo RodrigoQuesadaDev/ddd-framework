@@ -18,13 +18,16 @@ import javax.jdo.listener.*
  * Created by Rodrigo Quesada on 18/10/15.
  */
 @Singleton
-/*internal*/ abstract class PersistableObjectListener<P : PersistableObject<I>, I> protected constructor(
-        private val s: Services,
-        override val objectType: Class<P>
-) : PersistableObjectLifecycleListener<P>, PersistableObject.PersistableObjectStateAccess<I>, CreateLifecycleListener, StoreLifecycleListener, DeleteLifecycleListener, DirtyLifecycleListener {
+/*internal*/ abstract class PersistableObjectListener<P : PersistableObject<I>, I> protected constructor()
+: PersistableObjectLifecycleListener<P>, PersistableObject.PersistableObjectStateAccess<I>, CreateLifecycleListener, StoreLifecycleListener, DeleteLifecycleListener, DirtyLifecycleListener {
 
     //TODO create JdoPersistableObjectListenerBase on infrastructure stuff??? (this class pertains to domain)
     //TODO create JdoPersistableObjectChangeEvent on infrastructure stuff??? (this class pertains to domain)
+
+    private lateinit var m: InjectedMembers<P>
+
+    override val objectType: Class<P>
+        get() = m.objectType
 
     private val threadLocalCleaner = ThreadLocalCleaner()
     private val publisher = PublishSubject<PersistableObjectChangeEvent<P>>()
@@ -37,7 +40,7 @@ import javax.jdo.listener.*
     }
 
     fun register() {
-        s.persistenceContext.registerPersistableObjectListener(this)
+        m.persistenceContext.registerPersistableObjectListener(this)
     }
 
     fun resetLocalState() = threadLocalCleaner.cleanUpThreadLocalInstances()
@@ -54,7 +57,7 @@ import javax.jdo.listener.*
     override fun preDirty(event: InstanceLifecycleEvent) {
         @Suppress("UNCHECKED_CAST")
         (event.source as P).let { obj ->
-            obj.previousValue = s.persistenceContext.persistenceManager.detachCopy(obj)
+            obj.previousValue = m.persistenceContext.persistenceManager.detachCopy(obj)
         }
     }
 
@@ -90,7 +93,15 @@ import javax.jdo.listener.*
         // Do nothing!
     }
 
-    class Services @Inject protected constructor(
-            val persistenceContext: PersistenceContext
+    //region Injection
+    @Inject
+    protected fun inject(injectedMembers: InjectedMembers<P>) {
+        m = injectedMembers
+    }
+
+    protected class InjectedMembers<P : PersistableObject<*>> @Inject protected constructor(
+            val persistenceContext: PersistenceContext,
+            val objectType: Class<P>
     )
+    //endregion
 }

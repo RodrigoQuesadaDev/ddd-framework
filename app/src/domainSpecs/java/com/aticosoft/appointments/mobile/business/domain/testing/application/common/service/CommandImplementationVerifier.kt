@@ -5,18 +5,13 @@ package com.aticosoft.appointments.mobile.business.domain.testing.application.co
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices.Command
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegate
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
+import com.rodrigodev.common.reflection.createReflections
+import com.rodrigodev.common.reflection.isCollectionOf
+import com.rodrigodev.common.reflection.isKotlinClass
+import com.rodrigodev.common.reflection.isSubOfOrSameAs
 import org.reflections.Reflections
-import org.reflections.scanners.ResourcesScanner
-import org.reflections.scanners.SubTypesScanner
-import org.reflections.util.ClasspathHelper
-import org.reflections.util.ClasspathHelper.contextClassLoader
-import org.reflections.util.ClasspathHelper.staticClassLoader
-import org.reflections.util.ConfigurationBuilder
-import org.reflections.util.FilterBuilder
 import java.lang.reflect.Field
-import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
-import java.lang.reflect.TypeVariable
 import kotlin.properties.Delegates.notNull
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
@@ -30,17 +25,7 @@ import kotlin.reflect.memberProperties
  */
 internal class CommandImplementationVerifier(packagePaths: Array<String>) {
 
-    private val reflections: Reflections
-
-    init {
-        val classLoaders: Array<ClassLoader> = arrayOf(contextClassLoader(), staticClassLoader())
-
-        reflections = Reflections(ConfigurationBuilder()
-                .setScanners(SubTypesScanner(), ResourcesScanner())
-                .setUrls(ClasspathHelper.forClassLoader(*classLoaders))
-                .filterInputsBy(FilterBuilder().includePackage(*packagePaths))
-        )
-    }
+    private val reflections: Reflections = createReflections(*packagePaths)
 
     var results: List<CommandImplementation> by notNull()
         private set
@@ -51,24 +36,15 @@ internal class CommandImplementationVerifier(packagePaths: Array<String>) {
     }
 }
 
-/***************************************************************************************************
- * Validation
- **************************************************************************************************/
-
+//region Validation
 private fun Class<*>.isValid() = !isKotlinClass() || kotlin.nonCommandMemberProperties().asSequence().all { it.isValid() }
 
 private inline fun KProperty1<*, *>.isValid(): Boolean = returnType.javaType.let { type ->
     if (type.isEntity() || type.isCollectionOfEntities()) usesCommandEntityDelegate() else true
 }
+//endregion
 
-/***************************************************************************************************
- * Classes
- **************************************************************************************************/
-
-private val KOTLIN_METADATA_ANNOTATION_NAME = "kotlin.Metadata"
-
-private inline fun Class<*>.isKotlinClass() = declaredAnnotations.any { it.annotationClass.java.name == KOTLIN_METADATA_ANNOTATION_NAME }
-
+//region Classes
 private inline fun KClass<*>.nonCommandMemberProperties() = Command::class.let { memberPropertiesNotIn(it) }
 
 private inline fun KClass<*>.memberPropertiesNotIn(anotherClass: KClass<*>): Collection<KProperty1<*, *>> {
@@ -76,33 +52,12 @@ private inline fun KClass<*>.memberPropertiesNotIn(anotherClass: KClass<*>): Col
     return memberProperties.filter { it.name !in anotherMemberPropertyNames }
 }
 
-private inline fun KClass<*>.isAssignableFrom(anotherClass: Class<*>) = this.java.isAssignableFrom(anotherClass)
+private inline fun Type.isEntity() = isSubOfOrSameAs(Entity::class.java)
 
-private inline fun Array<out KClass<*>>.anyIsAssignableFrom(anotherClass: Class<*>) = any { it.isAssignableFrom(anotherClass) }
+private inline fun Type.isCollectionOfEntities() = isCollectionOf(Entity::class.java)
+//endregion
 
-private inline fun Array<out KClass<*>>.anyIsAssignableFromAny(otherClasses: List<Class<*>>) = otherClasses.any { this.anyIsAssignableFrom(it) }
-
-private inline fun Type.isEntity() = classes().any { Entity::class.isAssignableFrom(it) }
-
-private inline fun Type.isCollectionOfEntities() = this is ParameterizedType && isCollection() && isParameterizedWithEntity()
-
-private val collectionClasses = arrayOf(List::class, Set::class, Map::class)
-
-private inline fun ParameterizedType.isCollection() = collectionClasses.anyIsAssignableFromAny(classes())
-
-private inline fun ParameterizedType.isParameterizedWithEntity() = actualTypeArguments.any { it.isEntity() }
-
-private fun Type.classes(): List<Class<*>> = when (this) {
-    is Class<*> -> listOf(this)
-    is ParameterizedType -> rawType.classes()
-    is TypeVariable<*> -> this.bounds.flatMap { it.classes() }
-    else -> emptyList()
-}
-
-/***************************************************************************************************
- * Properties
- **************************************************************************************************/
-
+//region Properties
 private inline fun <T, R> KProperty1<T, R>.usesCommandEntityDelegate(): Boolean = delegate()?.isCommandEntityDelegate() ?: false
 
 private inline fun <T> KProperty<T>.delegate(): Field? = try {
@@ -112,4 +67,5 @@ catch(e: NoSuchFieldException) {
     null
 }
 
-private inline fun Field.isCommandEntityDelegate() = CommandPersistableObjectDelegate::class.isAssignableFrom(this.type)
+private inline fun Field.isCommandEntityDelegate() = this.type.isSubOfOrSameAs(CommandPersistableObjectDelegate::class.java)
+//endregion

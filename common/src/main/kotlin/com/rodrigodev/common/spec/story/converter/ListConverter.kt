@@ -1,6 +1,7 @@
 package com.rodrigodev.common.spec.story.converter
 
 import com.rodrigodev.common.collection.toArrayList
+import com.rodrigodev.common.reflection.isSubOfOrSameAs
 import org.jbehave.core.annotations.AsParameters
 import org.jbehave.core.steps.ParameterConverters
 import java.lang.reflect.ParameterizedType
@@ -30,7 +31,7 @@ private val Type.argumentType: Class<*>
     get() = (this as ParameterizedType).actualTypeArguments.first() as Class<*>
 
 private val Class<*>.isList: Boolean
-    get() = isAssignableFrom(List::class.java)
+    get() = isSubOfOrSameAs(List::class.java)
 
 private val Type.isList: Boolean
     get() = this is ParameterizedType && rawType.let { it is Class<*> && it.isList }

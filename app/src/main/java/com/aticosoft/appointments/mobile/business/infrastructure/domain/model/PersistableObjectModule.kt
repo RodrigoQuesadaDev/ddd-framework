@@ -15,6 +15,8 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
         I : PersistableObjectInitializer<P>,
         L : PersistableObjectListener<P, *>> {
 
+    //TODO change *Module stuff to use PersistableObjectModuleProvider (that way *Module implementations get way easier and this interface can define provideValidatorsIntoSet method and similiar ones)
+
     fun provideType(): Class<P>
 
     fun provideTypeIntoSet(): Class<out PersistableObject<*>>

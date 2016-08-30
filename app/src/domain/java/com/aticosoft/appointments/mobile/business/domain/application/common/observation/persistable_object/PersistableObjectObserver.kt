@@ -20,10 +20,12 @@ import rx.lang.kotlin.toObservable
 import rx.schedulers.Schedulers
 import rx.util.async.Async.fromCallable
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by Rodrigo Quesada on 15/10/15.
  */
+@Singleton
 /*internal*/ abstract class PersistableObjectObserver<P : PersistableObject<I>, I, R : Repository<P, I>> protected constructor() {
     companion object {
         val DATA_REFRESH_RATE_TIME = millis(500)

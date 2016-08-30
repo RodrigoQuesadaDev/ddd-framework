@@ -2,16 +2,18 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventStore
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestEventModule
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventStoreBase
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.JdoEventRepository
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.JdoEventStore
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import dagger.Module
 import dagger.Provides
+import dagger.multibindings.ElementsIntoSet
 import dagger.multibindings.IntoSet
 import javax.inject.Singleton
 
@@ -20,6 +22,7 @@ import javax.inject.Singleton
  */
 @Module
 internal class TestEventAModule : TestEventModule<TestEventA,
+        EventAction<TestEventA>,
         PersistableObjectValidator<TestEventA, *>,
         PersistableObjectInitializer<TestEventA>,
         EventListener<TestEventA>>() {
@@ -34,7 +37,10 @@ internal class TestEventAModule : TestEventModule<TestEventA,
     override fun provideRepository(repository: JdoEventRepository<TestEventA>): EventRepository<TestEventA> = repository
 
     @Provides @Singleton
-    override fun provideEventStore(eventStore: JdoEventStore<TestEventA>): EventStore<TestEventA> = eventStore
+    override fun provideEventStore(eventStore: EventStoreBase<TestEventA>): EventStore<TestEventA> = eventStore
+
+    @Provides @ElementsIntoSet
+    fun provideEventActions(): Set<EventAction<TestEventA>> = emptySet()
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<TestEventA>): PersistableObjectInitializer<*> = initializer
@@ -45,6 +51,7 @@ internal class TestEventAModule : TestEventModule<TestEventA,
 
 @Module
 internal class TestEventBModule : TestEventModule<TestEventB,
+        EventAction<TestEventB>,
         PersistableObjectValidator<TestEventB, *>,
         PersistableObjectInitializer<TestEventB>,
         EventListener<TestEventB>>() {
@@ -59,7 +66,10 @@ internal class TestEventBModule : TestEventModule<TestEventB,
     override fun provideRepository(repository: JdoEventRepository<TestEventB>): EventRepository<TestEventB> = repository
 
     @Provides @Singleton
-    override fun provideEventStore(eventStore: JdoEventStore<TestEventB>): EventStore<TestEventB> = eventStore
+    override fun provideEventStore(eventStore: EventStoreBase<TestEventB>): EventStore<TestEventB> = eventStore
+
+    @Provides @ElementsIntoSet
+    fun provideEventActions(): Set<EventAction<TestEventB>> = emptySet()
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<TestEventB>): PersistableObjectInitializer<*> = initializer

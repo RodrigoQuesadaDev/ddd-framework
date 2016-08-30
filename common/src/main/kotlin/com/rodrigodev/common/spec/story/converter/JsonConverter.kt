@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.rodrigodev.common.reflection.isSubOfOrSameAs
 import org.jbehave.core.steps.ParameterConverters
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
@@ -35,7 +36,7 @@ class JsonConverter : ParameterConverters.ParameterConverter {
 
 private inline fun Type.argumentType(): Type = (this as ParameterizedType).actualTypeArguments.first()
 
-private inline fun Class<*>.isList(): Boolean = isAssignableFrom(List::class.java)
+private inline fun Class<*>.isList(): Boolean = isSubOfOrSameAs(List::class.java)
 
 private inline fun Type.isList(): Boolean = this is ParameterizedType && (rawType as Class<*>).isList()
 

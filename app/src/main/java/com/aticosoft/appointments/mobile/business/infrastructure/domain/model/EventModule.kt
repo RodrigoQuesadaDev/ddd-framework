@@ -2,6 +2,7 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventStore
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.Queries
@@ -15,6 +16,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
         out Q : Queries<E>, in QI : Q,
         in R : EventRepository<E>,
         in S : EventStore<E>,
+        A : EventAction<E>,
         V : PersistableObjectValidator<E, *>,
         I : PersistableObjectInitializer<E>,
         L : EventListener<E>> : RootPersistableObjectModule<E, Q, QI, Enum<*>, R, V, I, L> {

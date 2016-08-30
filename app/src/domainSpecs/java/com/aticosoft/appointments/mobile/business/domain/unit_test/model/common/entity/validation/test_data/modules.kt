@@ -83,7 +83,7 @@ internal class PrimeNumberAndGmailParentModule : TestRootEntityModule<PrimeNumbe
     override fun provideRepository(repository: JdoEntityRepository<PrimeNumberAndGmailParent>): EntityRepository<PrimeNumberAndGmailParent> = repository
 
     @Provides @IntoSet
-    fun provideValidators(): PersistableObjectValidator<*, *> = PrimeNumberAndGmailParentValidator()
+    fun provideValidators(primeNumberAndGmailParentValidator: PrimeNumberAndGmailParentValidator): PersistableObjectValidator<*, *> = primeNumberAndGmailParentValidator
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<PrimeNumberAndGmailParent>): PersistableObjectInitializer<*> = initializer
@@ -105,7 +105,7 @@ internal class PrimeNumberAndGmailChildModule : EntityModule<PrimeNumberAndGmail
     override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
 
     @Provides @IntoSet
-    fun provideValidators(): PersistableObjectValidator<*, *> = PrimeNumberAndGmailChildValidator()
+    fun provideValidators(primeNumberAndGmailChildValidator: PrimeNumberAndGmailChildValidator): PersistableObjectValidator<*, *> = primeNumberAndGmailChildValidator
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<PrimeNumberAndGmailChild>): PersistableObjectInitializer<*> = initializer

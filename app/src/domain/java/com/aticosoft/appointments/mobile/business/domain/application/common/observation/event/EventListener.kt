@@ -9,7 +9,4 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 18/10/15.
  */
 @Singleton
-/*internal*/ class EventListener<E : Event> @Inject protected constructor(
-        s: Services,
-        objectType: Class<E>
-) : PersistableObjectListener<E, Long>(s, objectType)
+/*internal*/ class EventListener<E : Event> @Inject protected constructor() : PersistableObjectListener<E, Long>()

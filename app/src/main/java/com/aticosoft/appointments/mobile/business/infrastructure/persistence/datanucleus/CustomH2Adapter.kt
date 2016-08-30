@@ -9,6 +9,7 @@ import java.sql.DatabaseMetaData
 internal class CustomH2Adapter(metadata: DatabaseMetaData) : H2Adapter(metadata) {
 
     init {
+        // fixes error occurring when using increment value generator
         supportedOptions.remove(CATALOGS_IN_TABLE_DEFINITIONS)
     }
 }

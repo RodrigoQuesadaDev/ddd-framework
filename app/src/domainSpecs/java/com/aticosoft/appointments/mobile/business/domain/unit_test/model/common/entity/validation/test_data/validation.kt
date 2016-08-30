@@ -3,12 +3,14 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidationException
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
 import com.querydsl.core.types.Path
 import com.rodrigodev.common.testing.number.isPrime
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
+import javax.inject.Inject
+import javax.inject.Singleton
 import javax.validation.Constraint
 import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext
@@ -72,15 +74,11 @@ internal abstract class PrimeNumberAndGmailValidator<E : PrimeNumberAndGmailVali
 
 internal class PrimeNumberAndGmailValidationException(message: String) : PersistableObjectValidationException(message)
 
-internal class PrimeNumberAndGmailParentValidator : PrimeNumberAndGmailValidator<PrimeNumberAndGmailParent>(PrimeNumberAndGmailParent::class) {
+@Singleton
+internal class PrimeNumberAndGmailParentValidator @Inject protected constructor() : PrimeNumberAndGmailValidator<PrimeNumberAndGmailParent>(PrimeNumberAndGmailParent::class)
 
-    override val objectType = PrimeNumberAndGmailParent::class.java
-}
-
-internal class PrimeNumberAndGmailChildValidator : PrimeNumberAndGmailValidator<PrimeNumberAndGmailChild>(PrimeNumberAndGmailChild::class) {
-
-    override val objectType = PrimeNumberAndGmailChild::class.java
-}
+@Singleton
+internal class PrimeNumberAndGmailChildValidator @Inject protected constructor() : PrimeNumberAndGmailValidator<PrimeNumberAndGmailChild>(PrimeNumberAndGmailChild::class)
 
 /***************************************************************************************************
  * Other Classes

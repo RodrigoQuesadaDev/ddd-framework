@@ -7,6 +7,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.persistabl
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.services.ConfigurationManager
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.querydsl.core.types.Path
+import com.rodrigodev.common.reflection.isSuperOfOrSameAs
 import org.datanucleus.api.jdo.NucleusJDOHelper
 import javax.inject.Inject
 import javax.jdo.JDOHelper
@@ -20,10 +21,12 @@ import javax.jdo.listener.StoreLifecycleListener
         private val createException: (String) -> X, private vararg val validatedFields: Path<*>
 ) : PersistableObjectLifecycleListener<P>, StoreLifecycleListener {
 
-    lateinit private var c: Context
+    private lateinit var m: InjectedMembers<P>
 
-    fun initialize(context: Context) {
-        c = context
+    override final val objectType: Class<P>
+        get() = m.objectType
+
+    private fun init() {
         validatedFields.check()
     }
 
@@ -35,12 +38,21 @@ import javax.jdo.listener.StoreLifecycleListener
         if (!obj.isValid()) throw createException(obj.errorMessage())
     }
 
-    protected fun retrieveConfiguration() = c.configurationManager.retrieve()
+    protected fun retrieveConfiguration() = m.configurationManager.retrieve()
 
-    class Context protected @Inject constructor(
-            var persistenceContext: PersistenceContext,
-            var configurationManager: ConfigurationManager
+    //region Injection
+    @Inject
+    protected fun inject(injectedMembers: InjectedMembers<P>) {
+        m = injectedMembers
+        init()
+    }
+
+    protected class InjectedMembers<P : PersistableObject<*>> @Inject protected constructor(
+            val objectType: Class<P>,
+            val persistenceContext: PersistenceContext,
+            val configurationManager: ConfigurationManager
     )
+    //endregion
 
     //region Lifecycle Methods
     override fun preStore(event: InstanceLifecycleEvent) {
@@ -60,7 +72,7 @@ import javax.jdo.listener.StoreLifecycleListener
         it.metadata.parent.let { parent ->
             check(parent != null, { "Incorrectly specified fields for PersistableObjectValidator." })
             check(parent!!.metadata.isRoot, { "Specified fields for PersistableObjectValidator must be direct fields of root element." })
-            check(parent.type.isAssignableFrom(objectType), { "Specified fields for PersistableObjectValidator must belong to the object being validated." })
+            check(parent.type.isSuperOfOrSameAs(m.objectType), { "Specified fields for PersistableObjectValidator must belong to the object being validated." })
         }
     }
     //endregion
@@ -68,6 +80,6 @@ import javax.jdo.listener.StoreLifecycleListener
     //region Fields
     private inline fun P.anyValidatedFieldIsDirty() = validatedFields.any { it.isDirty(this) }
 
-    private inline fun Path<*>.isDirty(obj: P) = NucleusJDOHelper.isDirty(obj, metadata.name, c.persistenceContext.persistenceManager)
+    private inline fun Path<*>.isDirty(obj: P) = NucleusJDOHelper.isDirty(obj, metadata.name, m.persistenceContext.persistenceManager)
     //endregion
 }

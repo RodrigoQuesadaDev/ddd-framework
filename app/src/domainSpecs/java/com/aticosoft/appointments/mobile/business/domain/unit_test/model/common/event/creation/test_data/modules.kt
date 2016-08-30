@@ -2,16 +2,18 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventStore
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestEventModule
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventStoreBase
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.JdoEventRepository
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.JdoEventStore
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import dagger.Module
 import dagger.Provides
+import dagger.multibindings.ElementsIntoSet
 import dagger.multibindings.IntoSet
 import javax.inject.Singleton
 
@@ -20,6 +22,7 @@ import javax.inject.Singleton
  */
 @Module
 internal class NoSubscriptionsEventModule : TestEventModule<NoSubscriptionsEvent,
+        EventAction<NoSubscriptionsEvent>,
         PersistableObjectValidator<NoSubscriptionsEvent, *>,
         PersistableObjectInitializer<NoSubscriptionsEvent>,
         EventListener<NoSubscriptionsEvent>>() {
@@ -34,7 +37,10 @@ internal class NoSubscriptionsEventModule : TestEventModule<NoSubscriptionsEvent
     override fun provideRepository(repository: JdoEventRepository<NoSubscriptionsEvent>): EventRepository<NoSubscriptionsEvent> = repository
 
     @Provides @Singleton
-    override fun provideEventStore(eventStore: JdoEventStore<NoSubscriptionsEvent>): EventStore<NoSubscriptionsEvent> = eventStore
+    override fun provideEventStore(eventStore: EventStoreBase<NoSubscriptionsEvent>): EventStore<NoSubscriptionsEvent> = eventStore
+
+    @Provides @ElementsIntoSet
+    fun provideEventActions(): Set<EventAction<NoSubscriptionsEvent>> = emptySet()
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<NoSubscriptionsEvent>): PersistableObjectInitializer<*> = initializer
@@ -45,6 +51,7 @@ internal class NoSubscriptionsEventModule : TestEventModule<NoSubscriptionsEvent
 
 @Module
 internal class OneSubscriptionEventModule : TestEventModule<OneSubscriptionEvent,
+        EventAction<OneSubscriptionEvent>,
         PersistableObjectValidator<OneSubscriptionEvent, *>,
         PersistableObjectInitializer<OneSubscriptionEvent>,
         EventListener<OneSubscriptionEvent>>() {
@@ -59,7 +66,10 @@ internal class OneSubscriptionEventModule : TestEventModule<OneSubscriptionEvent
     override fun provideRepository(repository: JdoEventRepository<OneSubscriptionEvent>): EventRepository<OneSubscriptionEvent> = repository
 
     @Provides @Singleton
-    override fun provideEventStore(eventStore: JdoEventStore<OneSubscriptionEvent>): EventStore<OneSubscriptionEvent> = eventStore
+    override fun provideEventStore(eventStore: EventStoreBase<OneSubscriptionEvent>): EventStore<OneSubscriptionEvent> = eventStore
+
+    @Provides @IntoSet
+    fun provideEventActions(eventAction: OneSubscriptionEventAction1): EventAction<OneSubscriptionEvent> = eventAction
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<OneSubscriptionEvent>): PersistableObjectInitializer<*> = initializer
@@ -70,6 +80,7 @@ internal class OneSubscriptionEventModule : TestEventModule<OneSubscriptionEvent
 
 @Module
 internal class FiveSubscriptionsEventModule : TestEventModule<FiveSubscriptionsEvent,
+        EventAction<FiveSubscriptionsEvent>,
         PersistableObjectValidator<FiveSubscriptionsEvent, *>,
         PersistableObjectInitializer<FiveSubscriptionsEvent>,
         EventListener<FiveSubscriptionsEvent>>() {
@@ -84,7 +95,18 @@ internal class FiveSubscriptionsEventModule : TestEventModule<FiveSubscriptionsE
     override fun provideRepository(repository: JdoEventRepository<FiveSubscriptionsEvent>): EventRepository<FiveSubscriptionsEvent> = repository
 
     @Provides @Singleton
-    override fun provideEventStore(eventStore: JdoEventStore<FiveSubscriptionsEvent>): EventStore<FiveSubscriptionsEvent> = eventStore
+    override fun provideEventStore(eventStore: EventStoreBase<FiveSubscriptionsEvent>): EventStore<FiveSubscriptionsEvent> = eventStore
+
+    @Provides @ElementsIntoSet
+    fun provideEventActions(
+            eventAction1: FiveSubscriptionsEventAction1,
+            eventAction2: FiveSubscriptionsEventAction2,
+            eventAction3: FiveSubscriptionsEventAction3,
+            eventAction4: FiveSubscriptionsEventAction4,
+            eventAction5: FiveSubscriptionsEventAction5
+    ): Set<EventAction<FiveSubscriptionsEvent>> {
+        return setOf(eventAction1, eventAction2, eventAction3, eventAction4, eventAction5)
+    }
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<FiveSubscriptionsEvent>): PersistableObjectInitializer<*> = initializer
