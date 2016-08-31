@@ -6,7 +6,6 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueryView
-import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.AppointmentValidator
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.timeslot.TimeSlotsAlignmentValidator
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.timeslot.TimeSlotsSpaceValidator
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
@@ -26,12 +25,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 10/01/16.
  */
 @Module
-/*internal*/ class AppointmentModule : JdoRootEntityModule<Appointment,
-        AppointmentQueries, JdoAppointmentQueries,
-        AppointmentQueryView,
-        AppointmentValidator,
-        PersistableObjectInitializer<Appointment>,
-        EntityListener<Appointment>> {
+/*internal*/ class AppointmentModule : JdoRootEntityModule<Appointment, AppointmentQueries> {
 
     @Provides
     override fun provideType(): Class<Appointment> = Appointment::class.java
@@ -40,7 +34,7 @@ import javax.inject.Singleton
     override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
 
     @Provides @Singleton
-    override fun provideQueries(queries: JdoAppointmentQueries): AppointmentQueries = queries
+    fun provideQueries(queries: JdoAppointmentQueries): AppointmentQueries = queries
 
     @Provides @IntoSet @QueryViews
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = AppointmentQueryView::class.java

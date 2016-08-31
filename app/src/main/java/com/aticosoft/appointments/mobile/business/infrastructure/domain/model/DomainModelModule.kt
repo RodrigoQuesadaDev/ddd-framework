@@ -27,13 +27,13 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
     fun provideObjectTypes(): Set<Class<out PersistableObject<*>>> = emptySet()
 
     @Provides @ElementsIntoSet
+    fun provideObjectInitializers(): Set<PersistableObjectInitializer<*>> = emptySet()
+
+    @Provides @ElementsIntoSet
     fun provideValidators(): Set<PersistableObjectValidator<*, *>> = emptySet()
 
     @Provides @ElementsIntoSet @QueryViews
     fun provideQueryViews(): Set<Class<out Enum<*>>> = setOf()
-
-    @Provides @ElementsIntoSet
-    fun provideObjectInitializers(): Set<PersistableObjectInitializer<*>> = emptySet()
 
     @Singleton
     class PostInitializer @Inject protected constructor(

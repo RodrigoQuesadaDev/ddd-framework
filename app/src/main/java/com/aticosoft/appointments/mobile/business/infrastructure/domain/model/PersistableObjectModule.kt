@@ -10,31 +10,26 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
 /**
  * Created by Rodrigo Quesada on 23/08/16.
  */
-/*internal*/ interface PersistableObjectModule<P : PersistableObject<*>,
-        V : PersistableObjectValidator<P, *>,
-        I : PersistableObjectInitializer<P>,
-        L : PersistableObjectListener<P, *>> {
-
-    //TODO change *Module stuff to use PersistableObjectModuleProvider (that way *Module implementations get way easier and this interface can define provideValidatorsIntoSet method and similiar ones)
+/*internal*/ interface PersistableObjectModule<P : PersistableObject<*>, in L : PersistableObjectListener<P, *>> {
 
     fun provideType(): Class<P>
 
     fun provideTypeIntoSet(): Class<out PersistableObject<*>>
 
-    fun provideInitializerIntoSet(initializer: I): PersistableObjectInitializer<*>
+    fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<P>): PersistableObjectInitializer<*>
 
     fun provideListenerIntoSet(listener: L): PersistableObjectListener<*, *>
+
+    fun provideValidatorsIntoSet(): Set<PersistableObjectValidator<*, *>> = emptySet()
 }
 
 /*internal*/ interface RootPersistableObjectModule<P : PersistableObject<*>,
-        out Q : Queries<P>, in QI : Q,
-        out QV : Enum<out QV>,
-        in R : Repository<P, *>,
-        V : PersistableObjectValidator<P, *>,
-        I : PersistableObjectInitializer<P>,
-        L : PersistableObjectListener<P, *>> : PersistableObjectModule<P, V, I, L> {
+        in L : PersistableObjectListener<P, *>,
+        out Q : Queries<P>,
+        in R : Repository<P, *>>
+: PersistableObjectModule<P, L> {
 
-    fun provideQueries(queries: QI): Q
+    fun provideQueries(): Q = throw UnsupportedOperationException()
 
     @QueryViews
     fun provideQueryViewsIntoSet(): Class<out Enum<*>>

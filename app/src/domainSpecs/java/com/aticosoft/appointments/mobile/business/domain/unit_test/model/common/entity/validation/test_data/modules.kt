@@ -19,11 +19,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 26/06/16.
  */
 @Module
-internal class OddValueAndEmailParentModule : TestRootEntityModule<OddValueAndEmailParent,
-        OddValueAndEmailParentQueryView,
-        PersistableObjectValidator<OddValueAndEmailParent, *>,
-        PersistableObjectInitializer<OddValueAndEmailParent>,
-        EntityListener<OddValueAndEmailParent>>() {
+internal class OddValueAndEmailParentModule : TestRootEntityModule<OddValueAndEmailParent>() {
 
     @Provides @Singleton
     override fun provideType(): Class<OddValueAndEmailParent> = OddValueAndEmailParent::class.java
@@ -45,10 +41,7 @@ internal class OddValueAndEmailParentModule : TestRootEntityModule<OddValueAndEm
 }
 
 @Module
-internal class OddValueAndEmailChildModule : EntityModule<OddValueAndEmailChild,
-        PersistableObjectValidator<OddValueAndEmailChild, *>,
-        PersistableObjectInitializer<OddValueAndEmailChild>,
-        EntityListener<OddValueAndEmailChild>> {
+internal class OddValueAndEmailChildModule : EntityModule<OddValueAndEmailChild> {
 
     @Provides @Singleton
     override fun provideType(): Class<OddValueAndEmailChild> = OddValueAndEmailChild::class.java
@@ -64,11 +57,7 @@ internal class OddValueAndEmailChildModule : EntityModule<OddValueAndEmailChild,
 }
 
 @Module
-internal class PrimeNumberAndGmailParentModule : TestRootEntityModule<PrimeNumberAndGmailParent,
-        PrimeNumberAndGmailParentQueryView,
-        PrimeNumberAndGmailParentValidator,
-        PersistableObjectInitializer<PrimeNumberAndGmailParent>,
-        EntityListener<PrimeNumberAndGmailParent>>() {
+internal class PrimeNumberAndGmailParentModule : TestRootEntityModule<PrimeNumberAndGmailParent>() {
 
     @Provides @Singleton
     override fun provideType(): Class<PrimeNumberAndGmailParent> = PrimeNumberAndGmailParent::class.java
@@ -93,10 +82,7 @@ internal class PrimeNumberAndGmailParentModule : TestRootEntityModule<PrimeNumbe
 }
 
 @Module
-internal class PrimeNumberAndGmailChildModule : EntityModule<PrimeNumberAndGmailChild,
-        PrimeNumberAndGmailChildValidator,
-        PersistableObjectInitializer<PrimeNumberAndGmailChild>,
-        EntityListener<PrimeNumberAndGmailChild>> {
+internal class PrimeNumberAndGmailChildModule : EntityModule<PrimeNumberAndGmailChild> {
 
     @Provides @Singleton
     override fun provideType(): Class<PrimeNumberAndGmailChild> = PrimeNumberAndGmailChild::class.java

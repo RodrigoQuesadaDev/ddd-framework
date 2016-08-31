@@ -6,7 +6,6 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.event.Even
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventStore
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestEventModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventStoreBase
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.JdoEventRepository
@@ -21,11 +20,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 25/08/16.
  */
 @Module
-internal class NoSubscriptionsEventModule : TestEventModule<NoSubscriptionsEvent,
-        EventAction<NoSubscriptionsEvent>,
-        PersistableObjectValidator<NoSubscriptionsEvent, *>,
-        PersistableObjectInitializer<NoSubscriptionsEvent>,
-        EventListener<NoSubscriptionsEvent>>() {
+internal class NoSubscriptionsEventModule : TestEventModule<NoSubscriptionsEvent>() {
 
     @Provides @Singleton
     override fun provideType(): Class<NoSubscriptionsEvent> = NoSubscriptionsEvent::class.java
@@ -40,7 +35,7 @@ internal class NoSubscriptionsEventModule : TestEventModule<NoSubscriptionsEvent
     override fun provideEventStore(eventStore: EventStoreBase<NoSubscriptionsEvent>): EventStore<NoSubscriptionsEvent> = eventStore
 
     @Provides @ElementsIntoSet
-    fun provideEventActions(): Set<EventAction<NoSubscriptionsEvent>> = emptySet()
+    fun provideEventActionsIntoSet(): Set<EventAction<NoSubscriptionsEvent>> = emptySet()
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<NoSubscriptionsEvent>): PersistableObjectInitializer<*> = initializer
@@ -50,11 +45,7 @@ internal class NoSubscriptionsEventModule : TestEventModule<NoSubscriptionsEvent
 }
 
 @Module
-internal class OneSubscriptionEventModule : TestEventModule<OneSubscriptionEvent,
-        EventAction<OneSubscriptionEvent>,
-        PersistableObjectValidator<OneSubscriptionEvent, *>,
-        PersistableObjectInitializer<OneSubscriptionEvent>,
-        EventListener<OneSubscriptionEvent>>() {
+internal class OneSubscriptionEventModule : TestEventModule<OneSubscriptionEvent>() {
 
     @Provides @Singleton
     override fun provideType(): Class<OneSubscriptionEvent> = OneSubscriptionEvent::class.java
@@ -69,7 +60,7 @@ internal class OneSubscriptionEventModule : TestEventModule<OneSubscriptionEvent
     override fun provideEventStore(eventStore: EventStoreBase<OneSubscriptionEvent>): EventStore<OneSubscriptionEvent> = eventStore
 
     @Provides @IntoSet
-    fun provideEventActions(eventAction: OneSubscriptionEventAction1): EventAction<OneSubscriptionEvent> = eventAction
+    fun provideEventActionsIntoSet(eventAction: OneSubscriptionEventAction1): EventAction<OneSubscriptionEvent> = eventAction
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<OneSubscriptionEvent>): PersistableObjectInitializer<*> = initializer
@@ -79,11 +70,7 @@ internal class OneSubscriptionEventModule : TestEventModule<OneSubscriptionEvent
 }
 
 @Module
-internal class FiveSubscriptionsEventModule : TestEventModule<FiveSubscriptionsEvent,
-        EventAction<FiveSubscriptionsEvent>,
-        PersistableObjectValidator<FiveSubscriptionsEvent, *>,
-        PersistableObjectInitializer<FiveSubscriptionsEvent>,
-        EventListener<FiveSubscriptionsEvent>>() {
+internal class FiveSubscriptionsEventModule : TestEventModule<FiveSubscriptionsEvent>() {
 
     @Provides @Singleton
     override fun provideType(): Class<FiveSubscriptionsEvent> = FiveSubscriptionsEvent::class.java
@@ -98,7 +85,7 @@ internal class FiveSubscriptionsEventModule : TestEventModule<FiveSubscriptionsE
     override fun provideEventStore(eventStore: EventStoreBase<FiveSubscriptionsEvent>): EventStore<FiveSubscriptionsEvent> = eventStore
 
     @Provides @ElementsIntoSet
-    fun provideEventActions(
+    fun provideEventActionsIntoSet(
             eventAction1: FiveSubscriptionsEventAction1,
             eventAction2: FiveSubscriptionsEventAction2,
             eventAction3: FiveSubscriptionsEventAction3,

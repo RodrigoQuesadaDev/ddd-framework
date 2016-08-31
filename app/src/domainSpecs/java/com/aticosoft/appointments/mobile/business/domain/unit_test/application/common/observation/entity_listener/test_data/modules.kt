@@ -5,7 +5,6 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.EntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
@@ -20,11 +19,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 26/06/16.
  */
 @Module
-internal class TestDataParentModule : TestRootEntityModule<TestDataParent,
-        TestDataParentQueryView,
-        PersistableObjectValidator<TestDataParent, *>,
-        PersistableObjectInitializer<TestDataParent>,
-        EntityListener<TestDataParent>>() {
+internal class TestDataParentModule : TestRootEntityModule<TestDataParent>() {
 
     @Provides @Singleton
     override fun provideType(): Class<TestDataParent> = TestDataParent::class.java
@@ -49,10 +44,7 @@ internal class TestDataParentModule : TestRootEntityModule<TestDataParent,
 }
 
 @Module
-internal class TestDataChildModule : EntityModule<TestDataChild,
-        PersistableObjectValidator<TestDataChild, *>,
-        PersistableObjectInitializer<TestDataChild>,
-        EntityListener<TestDataChild>> {
+internal class TestDataChildModule : EntityModule<TestDataChild> {
 
     @Provides @Singleton
     override fun provideType(): Class<TestDataChild> = TestDataChild::class.java
