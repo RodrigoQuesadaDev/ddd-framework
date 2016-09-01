@@ -1,24 +1,29 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior
 
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStoreManager
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.EventSubscriptionBehavior.EventType.A
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.EventSubscriptionBehavior.EventType.B
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.EventSubscriptionBehavior.UnitTestApplicationImpl
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.test_data.TestEventAServices
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.test_data.TestEventBServices
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.test_data.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices.AddEvent
 import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
 import com.rodrigodev.common.test.catchThrowable
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Condition
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Pending
 import org.jbehave.core.annotations.Then
 import org.jbehave.core.annotations.When
 import org.robolectric.annotation.Config
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by Rodrigo Quesada on 11/08/16.
@@ -35,8 +40,8 @@ internal class EventSubscriptionBehavior : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val eventAServices: TestEventAServices,
-            private val eventBServices: TestEventBServices
+            private val eventAMembers: EventMembers<TestEventA, TestEventAServices>,
+            private val eventBMembers: EventMembers<TestEventB, TestEventBServices>
     ) : ExceptionThrowingSteps {
 
         override var throwable: Throwable? = null
@@ -45,9 +50,29 @@ internal class EventSubscriptionBehavior : DomainStory() {
             val DEFAULT_EVENT_VALUE = 0
         }
 
+        private object DESC {
+            const val EVENT_GETS_SUBSCRIBED = "event \$eventType gets subscribed \$subsNumber times"
+            const val EVENT_OCCURS_WITH_VALUE = "event \$eventType occurs with value \$value"
+        }
+
+        @Given("the actions subscribed to event \$eventType don't update it")
+        fun givenTheActionsSubscribedToEventDontUpdateIt(eventType: EventType) {
+            eventType.m.eventStoreManager.subscribedTestActions().forEach { it.updateEvent(false) }
+        }
+
+        @Given(DESC.EVENT_GETS_SUBSCRIBED)
+        @When(DESC.EVENT_GETS_SUBSCRIBED)
+        fun givenEventGetsSubscribed(eventType: EventType, subsNumber: Int) {
+            eventType.m.eventGetsSubscribed(subsNumber)
+        }
+
+        private fun <E : Event> EventMembers<E, *>.eventGetsSubscribed(subsNumber: Int) {
+            repeat(subsNumber) { eventStoreManager.subscribeAction(TestEventAction(it)) }
+        }
+
         @When("event \$eventType occurs")
         fun whenAnEventOccurs(eventType: EventType) {
-            throwable = catchThrowable { eventType.eventServices.execute(AddEvent(DEFAULT_EVENT_VALUE)) }
+            throwable = catchThrowable { eventType.m.services.execute(AddEvent(DEFAULT_EVENT_VALUE)) }
         }
 
         @Then("no exception is thrown")
@@ -55,30 +80,14 @@ internal class EventSubscriptionBehavior : DomainStory() {
             assertThat(throwable).isNull()
         }
 
-        @Given("event \$eventType gets subscribed \$subsNumber times")
-        @Pending
-        fun givenEventGetsSubscribed(eventType: EventType, times: Int) {
-        }
-
-        @When("event \$eventType gets subscribed \$subsNumber times")
-        @Pending
-        fun whenEventGetsSubscribed(eventType: EventType, times: Int) {
-            givenEventGetsSubscribed(eventType, times)
-        }
-
         @Then("actions subscribed to event \$eventType don't get triggered")
-        @Pending
-        fun thenActionsSubscribedToEventDontGetTriggered() {
-        }
-
-        @Given("the actions subscribed to event \$eventType don't update it")
-        @Pending
-        fun givenTheActionsSubscribedToEventDontUpdateIt(eventType: EventType) {
+        fun thenActionsSubscribedToEventDontGetTriggered(eventType: EventType) {
+            assertThat(eventType.m.eventStoreManager.subscribedTestActions()).are(Triggered(false))
         }
 
         @Then("only 1 of the actions subscribed to event \$eventType gets triggered, and only once")
-        @Pending
         fun thenOnly1OfTheActionsSubscribedToEventGetsTriggeredAndOnlyOnce(eventType: EventType) {
+            assertThat(eventType.m.eventStoreManager.subscribedTestActions()).areExactly(1, Triggered(true))
         }
 
         @Then("that event A got removed")
@@ -91,15 +100,10 @@ internal class EventSubscriptionBehavior : DomainStory() {
         fun givenTheActionsSubscribedToEventIncrementItsValueUntil(eventType: EventType, untilValue: Int) {
         }
 
-        @Given("event \$eventType occurs with value \$value")
+        @Given(DESC.EVENT_OCCURS_WITH_VALUE)
+        @When(DESC.EVENT_OCCURS_WITH_VALUE)
         @Pending
         fun givenEventOccursWithValue(eventType: EventType, value: Int) {
-        }
-
-        @When("event \$eventType occurs with value \$value")
-        @Pending
-        fun whenEventOccursWithValue(eventType: EventType, value: Int) {
-            givenEventOccursWithValue(eventType, value)
         }
 
         @Then("if only 1 action is subscribed to event \$eventType, it gets triggered \$times times")
@@ -147,12 +151,22 @@ internal class EventSubscriptionBehavior : DomainStory() {
         fun thenIfMoreThanActionIsSubscribedToEventTheyGetTriggeredXTimesInTotal(eventType: EventType, times: Int) {
         }
 
+        //region Event Members
+        @Singleton
+        class EventMembers<E : Event, out S : TestEventServices<E>> @Inject protected constructor(
+                val services: S,
+                val eventStoreManager: TestEventStoreManager<E>
+        )
+        //endregion
+
         //region Utils
-        private val EventType.eventServices: TestEventServices<*>
+        private val EventType.m: EventMembers<*, *>
             get() = when (this) {
-                A -> eventAServices
-                B -> eventBServices
+                A -> eventAMembers
+                B -> eventBMembers
             }
+
+        private inline fun <E : Event> TestEventStoreManager<E>.subscribedTestActions() = subscribedActions.map { it as TestEventAction<E> }
         //endregion
     }
 
@@ -160,3 +174,10 @@ internal class EventSubscriptionBehavior : DomainStory() {
     enum class EventType {A, B }
     //endregion
 }
+
+//region Assertions
+private class Triggered(private val wasTriggered: Boolean) : Condition<TestEventAction<*>>() {
+
+    override fun matches(action: TestEventAction<*>) = action.wasTriggered == wasTriggered
+}
+//endregion

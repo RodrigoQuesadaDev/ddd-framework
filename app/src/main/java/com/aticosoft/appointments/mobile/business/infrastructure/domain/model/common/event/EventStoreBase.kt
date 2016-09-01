@@ -11,19 +11,26 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 25/08/16.
  */
 @Singleton
-/*internal*/ class EventStoreBase<E : Event> @Inject protected constructor(
-        private val repository: EventRepository<E>,
-        private val eventActions: MutableSet<EventAction<E>>
-) : EventStore<E> {
+/*internal*/ open class EventStoreBase<E : Event> @Inject protected constructor() : EventStore<E> {
+
+    private lateinit var m: InjectedMembers<E>
+
+    protected open val eventActions: Set<EventAction<E>>
+        get() = m.eventActions
 
     override fun add(event: E) {
-        repository.add(event)
+        m.repository.add(event)
     }
 
-    //region Accessor Interfaces
-    interface ActionsAccessor<E : Event> {
-        val EventStoreBase<E>.subscribedEventActions: MutableSet<EventAction<E>>
-            get() = this.eventActions
+    //region Injection
+    @Inject
+    protected fun inject(injectedMembers: InjectedMembers<E>) {
+        m = injectedMembers
     }
+
+    protected class InjectedMembers<E : Event> @Inject protected constructor(
+            val repository: EventRepository<E>,
+            val eventActions: MutableSet<EventAction<E>>
+    )
     //endregion
 }

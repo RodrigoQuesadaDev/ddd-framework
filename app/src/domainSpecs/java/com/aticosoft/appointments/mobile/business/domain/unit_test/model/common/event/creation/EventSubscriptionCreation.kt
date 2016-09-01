@@ -19,6 +19,7 @@ import com.rodrigodev.common.reflection.classes
 import com.rodrigodev.common.reflection.createReflectionsForPackages
 import com.rodrigodev.common.reflection.genericAncestor
 import org.assertj.core.api.Assertions.assertThat
+import org.jbehave.core.annotations.Alias
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.robolectric.annotation.Config
@@ -63,7 +64,8 @@ internal class EventSubscriptionCreation : DomainStory() {
             assertThat(eventType.eventStoreManager.subscribedActions).isEmpty()
         }
 
-        @Then("only \$totalSubscribedActions action{s|} {is|are} subscribed to \$eventType event and {it has|they have} the id{s [| }\$ids{]|.}")
+        @Then("only \$totalSubscribedActions action is subscribed to \$eventType event and it has the id \$ids")
+        @Alias("only \$totalSubscribedActions actions are subscribed to \$eventType event and they have the ids [\$ids]")
         fun thenOnlyXActionsAreSubscribedToEventAndTheyHaveTheIds(totalSubscribedActions: Int, eventType: EventType, ids: MutableList<Int>) {
             require(totalSubscribedActions == ids.size)
 
