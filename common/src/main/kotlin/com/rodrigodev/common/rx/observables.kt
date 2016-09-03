@@ -28,3 +28,5 @@ inline fun <T> Observable<T>.throttleLast(intervalDuration: Duration) = throttle
 inline fun <T> Observable<T>.delaySubscription(delay: Duration) = delaySubscription(delay.millis, TimeUnit.MILLISECONDS)
 
 inline fun <T> Observable<T>.firstOrNull(crossinline predicate: (T) -> Boolean): Observable<T?> = firstOrDefault<T>(null) { predicate(it) }
+
+inline fun <T> Observable<T>.firstOrNothing(crossinline predicate: (T) -> Boolean): Observable<T?> = firstOrNull { predicate(it) }.filter { it != null }

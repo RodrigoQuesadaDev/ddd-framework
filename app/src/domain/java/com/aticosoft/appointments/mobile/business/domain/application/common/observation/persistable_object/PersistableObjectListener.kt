@@ -31,11 +31,10 @@ import javax.jdo.listener.*
 
     private val threadLocalCleaner = ThreadLocalCleaner()
     private val publisher = PublishSubject<PersistableObjectChangeEvent<P>>()
+    // Synchronizing/serializing the publisher is not necessary because observeOn is being used (its implementation uses a concurrent queue to dispatch to the scheduler)
     val changes: Observable<PersistableObjectChangeEvent<P>> = publisher.observeOn(Schedulers.computation())
     // Meant to avoid unnecessary empty ArrayList allocation and subsequent iteration
-    private var newObjectChanges: Boolean by ThreadLocalDelegate(threadLocalCleaner) { false }
     private val objectChanges: MutableList<PersistableObjectChangeEvent<P>> by ThreadLocalDelegate(threadLocalCleaner) {
-        newObjectChanges = true
         arrayListOf<PersistableObjectChangeEvent<P>>()
     }
 
@@ -46,12 +45,9 @@ import javax.jdo.listener.*
     fun resetLocalState() = threadLocalCleaner.cleanUpThreadLocalInstances()
 
     fun onTransactionCommitted() {
-        if (newObjectChanges) {
-            // Prevent reentrant execution caused by recursion (onNext triggers a new transaction)
-            newObjectChanges = false
-            objectChanges.forEach { publisher.onNext(it) }
-            // No need to remove objects from list as resetLocalState should be called afterwards
-        }
+        // Prevent reentrant execution caused by recursion (onNext triggers a new transaction)
+        objectChanges.forEach { publisher.onNext(it) }
+        // No need to remove objects from list as resetLocalState should be called afterwards
     }
 
     override fun preDirty(event: InstanceLifecycleEvent) {

@@ -2,14 +2,12 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventStore
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestEventModule
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventStoreBase
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.JdoEventRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import dagger.Module
@@ -21,13 +19,8 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 25/08/16.
  */
-internal abstract class LocalTestEventModule<E : Event> : TestEventModule<E>() {
-
-    override fun provideEventStore(eventStore: EventStoreBase<E>) = throw UnsupportedOperationException()
-}
-
 @Module
-internal class TestEventAModule : LocalTestEventModule<TestEventA>() {
+internal class TestEventAModule : TestEventModule<TestEventA>() {
 
     @Provides @Singleton
     override fun provideType(): Class<TestEventA> = TestEventA::class.java
@@ -39,7 +32,7 @@ internal class TestEventAModule : LocalTestEventModule<TestEventA>() {
     override fun provideRepository(repository: JdoEventRepository<TestEventA>): EventRepository<TestEventA> = repository
 
     @Provides @Singleton
-    fun provideEventStore(eventStore: TestEventStore<TestEventA>): EventStore<TestEventA> = eventStore
+    override fun provideEventStore(eventStore: TestEventStore<TestEventA>): EventStore<TestEventA> = eventStore
 
     @Provides @ElementsIntoSet
     fun provideEventActionsIntoSet(): Set<EventAction<TestEventA>> = emptySet()
@@ -52,7 +45,7 @@ internal class TestEventAModule : LocalTestEventModule<TestEventA>() {
 }
 
 @Module
-internal class TestEventBModule : LocalTestEventModule<TestEventB>() {
+internal class TestEventBModule : TestEventModule<TestEventB>() {
 
     @Provides @Singleton
     override fun provideType(): Class<TestEventB> = TestEventB::class.java
@@ -64,7 +57,7 @@ internal class TestEventBModule : LocalTestEventModule<TestEventB>() {
     override fun provideRepository(repository: JdoEventRepository<TestEventB>): EventRepository<TestEventB> = repository
 
     @Provides @Singleton
-    fun provideEventStore(eventStore: TestEventStore<TestEventB>): EventStore<TestEventB> = eventStore
+    override fun provideEventStore(eventStore: TestEventStore<TestEventB>): EventStore<TestEventB> = eventStore
 
     @Provides @ElementsIntoSet
     fun provideEventActionsIntoSet(): Set<EventAction<TestEventB>> = emptySet()

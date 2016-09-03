@@ -11,7 +11,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.persistabl
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.rodrigodev.common.collection.plus
 import com.rodrigodev.common.rx.Observables
-import com.rodrigodev.common.rx.firstOrNull
+import com.rodrigodev.common.rx.firstOrNothing
 import org.joda.time.Duration
 import org.joda.time.Duration.millis
 import rx.Observable
@@ -72,8 +72,7 @@ import javax.inject.Singleton
         val ticks = Observables.interval(initialIntervalDuration, intervalDuration).share()
         return window(ticks)
                 .flatMap {
-                    it.firstOrNull { e -> e.objectChange.matchesAll(e.filters) }
-                            .filter { it != null }
+                    it.firstOrNothing { e -> e.objectChange.matchesAll(e.filters) }
                             .zipWith(ticks, { e, t -> e })
                 }
     }

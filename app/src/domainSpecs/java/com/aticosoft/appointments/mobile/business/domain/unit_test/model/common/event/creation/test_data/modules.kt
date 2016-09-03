@@ -7,7 +7,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.event.Even
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventStore
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestEventModule
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventStoreBase
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.JdoEventRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import dagger.Module
@@ -32,7 +32,7 @@ internal class NoSubscriptionsEventModule : TestEventModule<NoSubscriptionsEvent
     override fun provideRepository(repository: JdoEventRepository<NoSubscriptionsEvent>): EventRepository<NoSubscriptionsEvent> = repository
 
     @Provides @Singleton
-    override fun provideEventStore(eventStore: EventStoreBase<NoSubscriptionsEvent>): EventStore<NoSubscriptionsEvent> = eventStore
+    override fun provideEventStore(eventStore: TestEventStore<NoSubscriptionsEvent>): EventStore<NoSubscriptionsEvent> = eventStore
 
     @Provides @ElementsIntoSet
     fun provideEventActionsIntoSet(): Set<EventAction<NoSubscriptionsEvent>> = emptySet()
@@ -57,7 +57,7 @@ internal class OneSubscriptionEventModule : TestEventModule<OneSubscriptionEvent
     override fun provideRepository(repository: JdoEventRepository<OneSubscriptionEvent>): EventRepository<OneSubscriptionEvent> = repository
 
     @Provides @Singleton
-    override fun provideEventStore(eventStore: EventStoreBase<OneSubscriptionEvent>): EventStore<OneSubscriptionEvent> = eventStore
+    override fun provideEventStore(eventStore: TestEventStore<OneSubscriptionEvent>): EventStore<OneSubscriptionEvent> = eventStore
 
     @Provides @IntoSet
     fun provideEventActionsIntoSet(eventAction: OneSubscriptionEventAction1): EventAction<OneSubscriptionEvent> = eventAction
@@ -82,7 +82,7 @@ internal class FiveSubscriptionsEventModule : TestEventModule<FiveSubscriptionsE
     override fun provideRepository(repository: JdoEventRepository<FiveSubscriptionsEvent>): EventRepository<FiveSubscriptionsEvent> = repository
 
     @Provides @Singleton
-    override fun provideEventStore(eventStore: EventStoreBase<FiveSubscriptionsEvent>): EventStore<FiveSubscriptionsEvent> = eventStore
+    override fun provideEventStore(eventStore: TestEventStore<FiveSubscriptionsEvent>): EventStore<FiveSubscriptionsEvent> = eventStore
 
     @Provides @ElementsIntoSet
     fun provideEventActionsIntoSet(
