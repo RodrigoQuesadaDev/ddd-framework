@@ -14,7 +14,7 @@ import com.rodrigodev.common.rx.Observables
 import com.rodrigodev.common.rx.firstOrNothing
 import org.joda.time.Duration
 import rx.Observable
-import rx.Observable.merge
+import rx.Observable.never
 import rx.lang.kotlin.toObservable
 import rx.schedulers.Schedulers
 import rx.util.async.Async.fromCallable
@@ -52,47 +52,45 @@ import javax.inject.Singleton
 
     private inline fun <R> objectObservable(queryView: QueryView, query: Query<*>, crossinline queryExecution: () -> R): Observable<R> = objectObservable(queryView, query.filters, queryExecution)
 
-    private inline fun <R> objectObservable(queryView: QueryView, filters: Array<out PersistableObjectObservationFilter<*>>, crossinline queryExecution: () -> R): Observable<R> = merge(
-            fromCallable(
-                    { executeQuery(queryView, queryExecution) },
-                    Schedulers.io()
-            ),
-            filters.plusDefaultFiltersFrom(queryView)
-                    .groupByType().toObservable()
-                    .mergeWithObjectChangeEvents()
-                    .throttleFirstChangeIfDataRefreshRateTimeWasSpecified()
-                    .observeOn(Schedulers.io())
-                    .map { executeQuery(queryView, queryExecution) }
-    )
+    private inline fun <R> objectObservable(queryView: QueryView, filters: Array<out PersistableObjectObservationFilter<*>>, crossinline queryExecution: () -> R): Observable<R> {
+        val queryResult = fromCallable(
+                { executeQuery(queryView, queryExecution) },
+                Schedulers.io()
+        )
+
+        val changes = filters.plusDefaultFiltersFrom(queryView)
+                .groupByType().toObservable()
+                .mergeWithObjectChangeEvents()
+                .throttle()
+                .onBackpressureLatest()
+
+        return queryResult.repeatWhen({ o -> o.zipWith(changes, { v, c -> c }) })
+    }
 
     private inline fun <R> executeQuery(queryView: QueryView, queryExecution: () -> R): R = m.persistenceContext.execute(false) { m.queryViewsManager.withView(queryView, queryExecution) }
 
-    private inline fun Observable<FilterableObjectChangeEvent>.throttleFirstChangeIfDataRefreshRateTimeWasSpecified(): Observable<FilterableObjectChangeEvent> {
+    private inline fun Observable<FilterableObjectChangeEvent>.throttle(): Observable<FilterableObjectChangeEvent> {
         return if (dataRefreshRateTime != null) throttleFirstChange(m.timeService.randomDuration(dataRefreshRateTime), dataRefreshRateTime)
-        else this
+        else filter(FilterableObjectChangeEvent::matchesAllFilters)
     }
 
     private inline fun Observable<FilterableObjectChangeEvent>.throttleFirstChange(initialIntervalDuration: Duration, intervalDuration: Duration): Observable<FilterableObjectChangeEvent> {
         val ticks = Observables.interval(initialIntervalDuration, intervalDuration).share()
         return window(ticks)
                 .flatMap {
-                    it.firstOrNothing { e -> e.objectChange.matchesAll(e.filters) }
+                    it.firstOrNothing(FilterableObjectChangeEvent::matchesAllFilters)
                             .zipWith(ticks, { e, t -> e })
                 }
     }
 
     private inline fun Array<out PersistableObjectObservationFilter<*>>.groupByType(): List<FilterGroup> = groupBy { it.objectType }.map { FilterGroup(it.key, it.value.toTypedArray()) }
 
-    private inline fun Observable<FilterGroup>.mergeWithObjectChangeEvents(): Observable<FilterableObjectChangeEvent> = flatMap(
+    private inline fun Observable<FilterGroup>.mergeWithObjectChangeEvents(): Observable<FilterableObjectChangeEvent> = mergeWith(never()).flatMap(
             { filterGroup -> m.objectListenersManager.forType(filterGroup.type).changes },
             { filterGroup, e -> FilterableObjectChangeEvent(e, filterGroup.filters) }
     )
 
-    private inline fun PersistableObjectChangeEvent<*>.matchesAll(filters: Array<out PersistableObjectObservationFilter<*>>) = filters.all { filter -> filter(this) }
-
     private data class FilterGroup(val type: Class<out PersistableObject<*>>, val filters: Array<PersistableObjectObservationFilter<*>>)
-
-    private data class FilterableObjectChangeEvent(val objectChange: PersistableObjectChangeEvent<*>, val filters: Array<out PersistableObjectObservationFilter<*>>)
 
     //region Injection
     @Inject
@@ -110,3 +108,9 @@ import javax.inject.Singleton
     )
     //endregion
 }
+
+private inline fun FilterableObjectChangeEvent.matchesAllFilters() = objectChange.matchesAll(filters)
+
+private inline fun PersistableObjectChangeEvent<*>.matchesAll(filters: Array<out PersistableObjectObservationFilter<*>>) = filters.all { filter -> filter(this) }
+
+private data class FilterableObjectChangeEvent(val objectChange: PersistableObjectChangeEvent<*>, val filters: Array<out PersistableObjectObservationFilter<*>>)
