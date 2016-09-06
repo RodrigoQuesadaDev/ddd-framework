@@ -1,5 +1,6 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event
 
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventInternalObserver
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
@@ -18,6 +19,10 @@ import javax.inject.Singleton
     protected open val eventActions: Set<EventAction<E>>
         get() = m.eventActions
 
+    private fun init() {
+        //m.eventObserver.observe()
+    }
+
     override fun add(event: E) {
         m.repository.add(event)
     }
@@ -26,11 +31,13 @@ import javax.inject.Singleton
     @Inject
     protected fun inject(injectedMembers: InjectedMembers<E>) {
         m = injectedMembers
+        init()
     }
 
     protected class InjectedMembers<E : Event> @Inject protected constructor(
             val repository: EventRepository<E>,
-            val eventActions: MutableSet<EventAction<E>>
+            val eventActions: MutableSet<EventAction<E>>,
+            val eventObserver: EventInternalObserver<E>
     )
     //endregion
 }

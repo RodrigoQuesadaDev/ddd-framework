@@ -13,7 +13,6 @@ import com.rodrigodev.common.collection.plus
 import com.rodrigodev.common.rx.Observables
 import com.rodrigodev.common.rx.firstOrNothing
 import org.joda.time.Duration
-import org.joda.time.Duration.millis
 import rx.Observable
 import rx.Observable.merge
 import rx.lang.kotlin.toObservable
@@ -26,18 +25,18 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 15/10/15.
  */
 @Singleton
-/*internal*/ abstract class PersistableObjectObserver<P : PersistableObject<I>, I, R : Repository<P, I>> protected constructor() {
-    companion object {
-        val DATA_REFRESH_RATE_TIME = millis(500)
-    }
+/*internal*/ open class PersistableObjectObserverBase<P : PersistableObject<I>, I, R : Repository<P, I>> protected constructor(
+        private val dataRefreshRateTime: Duration? = null
+) {
+    @Inject protected constructor() : this(null)
 
     private lateinit var m: InjectedMembers<P, R>
 
     protected open val defaultQueryView = QueryView.DEFAULT
 
-    private val totalCountFilters by lazy { arrayOf(PersistableObjectObservationFilter(m.objectType, ADD, REMOVE)) }
-
     protected open fun objectByIdFilters(id: I): Array<PersistableObjectObservationFilter<*>> = arrayOf(PersistableObjectObservationFilter(m.objectType) { it.id == id })
+
+    private val totalCountFilters by lazy { arrayOf(PersistableObjectObservationFilter(m.objectType, ADD, REMOVE)) }
 
     fun observe(id: I, queryView: QueryView = defaultQueryView) = objectObservable(queryView, objectByIdFilters(id)) { m.repository.get(id) }
 
@@ -49,6 +48,8 @@ import javax.inject.Singleton
 
     fun observeTotalCount() = objectObservable(QueryView.DEFAULT, totalCountFilters) { m.repository.size() }
 
+    protected open fun Array<out PersistableObjectObservationFilter<*>>.plusDefaultFiltersFrom(queryView: QueryView) = this + queryView.defaultFiltersFor(this)
+
     private inline fun <R> objectObservable(queryView: QueryView, query: Query<*>, crossinline queryExecution: () -> R): Observable<R> = objectObservable(queryView, query.filters, queryExecution)
 
     private inline fun <R> objectObservable(queryView: QueryView, filters: Array<out PersistableObjectObservationFilter<*>>, crossinline queryExecution: () -> R): Observable<R> = merge(
@@ -59,14 +60,17 @@ import javax.inject.Singleton
             filters.plusDefaultFiltersFrom(queryView)
                     .groupByType().toObservable()
                     .mergeWithObjectChangeEvents()
-                    .throttleFirstChange(m.timeService.randomDuration(DATA_REFRESH_RATE_TIME), DATA_REFRESH_RATE_TIME)
+                    .throttleFirstChangeIfDataRefreshRateTimeWasSpecified()
                     .observeOn(Schedulers.io())
                     .map { executeQuery(queryView, queryExecution) }
     )
 
-    protected open fun Array<out PersistableObjectObservationFilter<*>>.plusDefaultFiltersFrom(queryView: QueryView) = this + queryView.defaultFiltersFor(this)
-
     private inline fun <R> executeQuery(queryView: QueryView, queryExecution: () -> R): R = m.persistenceContext.execute(false) { m.queryViewsManager.withView(queryView, queryExecution) }
+
+    private inline fun Observable<FilterableObjectChangeEvent>.throttleFirstChangeIfDataRefreshRateTimeWasSpecified(): Observable<FilterableObjectChangeEvent> {
+        return if (dataRefreshRateTime != null) throttleFirstChange(m.timeService.randomDuration(dataRefreshRateTime), dataRefreshRateTime)
+        else this
+    }
 
     private inline fun Observable<FilterableObjectChangeEvent>.throttleFirstChange(initialIntervalDuration: Duration, intervalDuration: Duration): Observable<FilterableObjectChangeEvent> {
         val ticks = Observables.interval(initialIntervalDuration, intervalDuration).share()

@@ -18,7 +18,7 @@ subprojects {
         autoFactoryVersion = '1.0-beta3'
         jodaTimeVersion = '2.8.2'
         libphonenumberVersion = '7.0.9'
-        rxJavaVersion = '1.1.6'
+        rxJavaVersion = '1.1.10'
         rxKotlinVersion = '0.60.0'
         rxAndroidVersion = '1.2.1'
         rxJavaMathVersion = '1.0.0'

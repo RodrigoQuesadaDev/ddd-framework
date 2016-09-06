@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObserver.Companion.DATA_REFRESH_RATE_TIME
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectExternalObserver.Companion.DATA_REFRESH_RATE_TIME
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices
 import com.aticosoft.appointments.mobile.business.domain.testing.application.test_data.TestDataServices.*

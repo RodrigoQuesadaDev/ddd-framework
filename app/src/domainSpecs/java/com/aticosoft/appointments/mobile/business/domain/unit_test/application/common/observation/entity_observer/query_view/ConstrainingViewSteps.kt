@@ -2,7 +2,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectExternalObserver
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParentServices.AddData
@@ -65,7 +65,7 @@ internal abstract class AbstractConstrainingViewSteps(protected val s: Services)
     }
 
     protected fun advanceTime() {
-        s.testScheduler.advanceTimeBy(PersistableObjectObserver.DATA_REFRESH_RATE_TIME)
+        s.testScheduler.advanceTimeBy(PersistableObjectExternalObserver.DATA_REFRESH_RATE_TIME)
     }
 
     @Given("dummy")
