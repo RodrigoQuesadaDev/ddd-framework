@@ -6,16 +6,11 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.QueryViewsManager
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType.ADD
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType.REMOVE
-import com.aticosoft.appointments.mobile.business.domain.common.time.TimeService
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.*
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.rodrigodev.common.collection.plus
-import com.rodrigodev.common.rx.Observables
-import com.rodrigodev.common.rx.firstOrNothing
 import org.joda.time.Duration
 import rx.Observable
-import rx.Observable.never
-import rx.lang.kotlin.toObservable
 import rx.schedulers.Schedulers
 import rx.util.async.Async.fromCallable
 import javax.inject.Inject
@@ -28,9 +23,9 @@ import javax.inject.Singleton
 /*internal*/ open class PersistableObjectObserverBase<P : PersistableObject<I>, I, R : Repository<P, I>> protected constructor(
         private val dataRefreshRateTime: Duration? = null
 ) {
-    @Inject protected constructor() : this(null)
+    private lateinit var m: InjectedMembers<P, I, R>
 
-    private lateinit var m: InjectedMembers<P, R>
+    private val changeObserver by lazy { m.changeObserverFactory.create(dataRefreshRateTime) }
 
     protected open val defaultQueryView = QueryView.DEFAULT
 
@@ -48,69 +43,39 @@ import javax.inject.Singleton
 
     fun observeTotalCount() = objectObservable(QueryView.DEFAULT, totalCountFilters) { m.repository.size() }
 
-    protected open fun Array<out PersistableObjectObservationFilter<*>>.plusDefaultFiltersFrom(queryView: QueryView) = this + queryView.defaultFiltersFor(this)
-
     private inline fun <R> objectObservable(queryView: QueryView, query: Query<*>, crossinline queryExecution: () -> R): Observable<R> = objectObservable(queryView, query.filters, queryExecution)
 
     private inline fun <R> objectObservable(queryView: QueryView, filters: Array<out PersistableObjectObservationFilter<*>>, crossinline queryExecution: () -> R): Observable<R> {
-        val queryResult = fromCallable(
+        return fromCallable(
                 { executeQuery(queryView, queryExecution) },
                 Schedulers.io()
         )
-
-        val changes = filters.plusDefaultFiltersFrom(queryView)
-                .groupByType().toObservable()
-                .mergeWithObjectChangeEvents()
-                .throttle()
-                .onBackpressureLatest()
-
-        return queryResult.repeatWhen({ o -> o.zipWith(changes, { v, c -> c }) })
+                .repeatWhenChangeOccurs(queryView, filters)
     }
 
     private inline fun <R> executeQuery(queryView: QueryView, queryExecution: () -> R): R = m.persistenceContext.execute(false) { m.queryViewsManager.withView(queryView, queryExecution) }
 
-    private inline fun Observable<FilterableObjectChangeEvent>.throttle(): Observable<FilterableObjectChangeEvent> {
-        return if (dataRefreshRateTime != null) throttleFirstChange(m.timeService.randomDuration(dataRefreshRateTime), dataRefreshRateTime)
-        else filter(FilterableObjectChangeEvent::matchesAllFilters)
+    //region Utils
+    private inline fun <R> Observable<R>.repeatWhenChangeOccurs(queryView: QueryView, filters: Array<out PersistableObjectObservationFilter<*>>): Observable<R> {
+        val changes = changeObserver.observe(filters.plusDefaultFiltersFrom(queryView))
+        return repeatWhen({ o -> o.zipWith(changes, { v, c -> c }) })
     }
 
-    private inline fun Observable<FilterableObjectChangeEvent>.throttleFirstChange(initialIntervalDuration: Duration, intervalDuration: Duration): Observable<FilterableObjectChangeEvent> {
-        val ticks = Observables.interval(initialIntervalDuration, intervalDuration).share()
-        return window(ticks)
-                .flatMap {
-                    it.firstOrNothing(FilterableObjectChangeEvent::matchesAllFilters)
-                            .zipWith(ticks, { e, t -> e })
-                }
-    }
-
-    private inline fun Array<out PersistableObjectObservationFilter<*>>.groupByType(): List<FilterGroup> = groupBy { it.objectType }.map { FilterGroup(it.key, it.value.toTypedArray()) }
-
-    private inline fun Observable<FilterGroup>.mergeWithObjectChangeEvents(): Observable<FilterableObjectChangeEvent> = mergeWith(never()).flatMap(
-            { filterGroup -> m.objectListenersManager.forType(filterGroup.type).changes },
-            { filterGroup, e -> FilterableObjectChangeEvent(e, filterGroup.filters) }
-    )
-
-    private data class FilterGroup(val type: Class<out PersistableObject<*>>, val filters: Array<PersistableObjectObservationFilter<*>>)
+    protected open fun Array<out PersistableObjectObservationFilter<*>>.plusDefaultFiltersFrom(queryView: QueryView) = this + queryView.defaultFiltersFor(this)
+    //endregion
 
     //region Injection
     @Inject
-    protected fun inject(injectedMembers: InjectedMembers<P, R>) {
+    protected fun inject(injectedMembers: InjectedMembers<P, I, R>) {
         m = injectedMembers
     }
 
-    protected class InjectedMembers<P : PersistableObject<*>, R : Repository<P, *>> @Inject constructor(
+    protected class InjectedMembers<P : PersistableObject<I>, I, R : Repository<P, I>> @Inject constructor(
             val objectType: Class<P>,
             val repository: R,
-            val objectListenersManager: PersistableObjectListenersManager,
             val queryViewsManager: QueryViewsManager,
             val persistenceContext: PersistenceContext,
-            val timeService: TimeService
+            val changeObserverFactory: PersistableObjectFilteredChangeObserver.Factory<P, I, R>
     )
     //endregion
 }
-
-private inline fun FilterableObjectChangeEvent.matchesAllFilters() = objectChange.matchesAll(filters)
-
-private inline fun PersistableObjectChangeEvent<*>.matchesAll(filters: Array<out PersistableObjectObservationFilter<*>>) = filters.all { filter -> filter(this) }
-
-private data class FilterableObjectChangeEvent(val objectChange: PersistableObjectChangeEvent<*>, val filters: Array<out PersistableObjectObservationFilter<*>>)
