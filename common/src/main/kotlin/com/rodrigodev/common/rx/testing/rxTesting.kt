@@ -1,4 +1,6 @@
-package com.rodrigodev.common.testing
+@file:Suppress("NOTHING_TO_INLINE")
+
+package com.rodrigodev.common.rx.testing
 
 import rx.Observable
 import rx.observers.TestSubscriber
@@ -8,13 +10,17 @@ import rx.schedulers.TestScheduler
 /**
  * Created by Rodrigo Quesada on 19/10/15.
  */
-fun <T> Observable<T>.testSubscribe() = TestSubscriber<T>().let { subscriber ->
+inline fun <T> Observable<T>.testSubscribe() = TestSubscriber<T>().let { subscriber ->
 
     subscribe(subscriber)
 
-    with(Schedulers.computation()) { if (this is TestScheduler) triggerActions() }
+    triggerTestSchedulerActions()
 
     subscriber.apply { assertNoErrors() }
 }
 
-fun <T> TestSubscriber<T>.firstEvent(): T = onNextEvents.first()
+inline fun <T> TestSubscriber<T>.firstEvent(): T = onNextEvents.first()
+
+inline fun triggerTestSchedulerActions() {
+    with(Schedulers.computation()) { if (this is TestScheduler) triggerActions() }
+}

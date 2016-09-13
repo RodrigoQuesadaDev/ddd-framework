@@ -9,9 +9,9 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestAppli
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.ConstrainingViewOfListQuery.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParentQueries
-import com.rodrigodev.common.testing.firstEvent
+import com.rodrigodev.common.rx.testing.firstEvent
 import com.rodrigodev.common.testing.number.isOdd
-import com.rodrigodev.common.testing.testSubscribe
+import com.rodrigodev.common.rx.testing.testSubscribe
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then

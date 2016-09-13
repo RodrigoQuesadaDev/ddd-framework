@@ -15,7 +15,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentServices
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentServices.*
 import com.rodrigodev.common.spec.story.steps.SpecSteps
-import com.rodrigodev.common.testing.testSubscribe
+import com.rodrigodev.common.rx.testing.testSubscribe
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.AsParameters
 import org.jbehave.core.annotations.Given

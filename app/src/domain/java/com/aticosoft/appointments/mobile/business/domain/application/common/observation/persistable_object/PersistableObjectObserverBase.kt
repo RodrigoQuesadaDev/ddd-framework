@@ -9,6 +9,7 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.*
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.rodrigodev.common.collection.plus
+import com.rodrigodev.common.rx.repeatWhenChangeOccurs
 import org.joda.time.Duration
 import rx.Observable
 import rx.schedulers.Schedulers
@@ -23,7 +24,7 @@ import javax.inject.Singleton
 /*internal*/ open class PersistableObjectObserverBase<P : PersistableObject<I>, I, R : Repository<P, I>> protected constructor(
         private val dataRefreshRateTime: Duration? = null
 ) {
-    private lateinit var m: InjectedMembers<P, I, R>
+    private lateinit var m: InjectedMembers<P, R>
 
     private val changeObserver by lazy { m.changeObserverFactory.create(dataRefreshRateTime) }
 
@@ -43,9 +44,9 @@ import javax.inject.Singleton
 
     fun observeTotalCount() = objectObservable(QueryView.DEFAULT, totalCountFilters) { m.repository.size() }
 
-    private inline fun <R> objectObservable(queryView: QueryView, query: Query<*>, crossinline queryExecution: () -> R): Observable<R> = objectObservable(queryView, query.filters, queryExecution)
+    private inline fun <T> objectObservable(queryView: QueryView, query: Query<*>, crossinline queryExecution: () -> T): Observable<T> = objectObservable(queryView, query.filters, queryExecution)
 
-    private inline fun <R> objectObservable(queryView: QueryView, filters: Array<out PersistableObjectObservationFilter<*>>, crossinline queryExecution: () -> R): Observable<R> {
+    private inline fun <T> objectObservable(queryView: QueryView, filters: Array<out PersistableObjectObservationFilter<*>>, crossinline queryExecution: () -> T): Observable<T> {
         return fromCallable(
                 { executeQuery(queryView, queryExecution) },
                 Schedulers.io()
@@ -53,12 +54,12 @@ import javax.inject.Singleton
                 .repeatWhenChangeOccurs(queryView, filters)
     }
 
-    private inline fun <R> executeQuery(queryView: QueryView, queryExecution: () -> R): R = m.persistenceContext.execute(false) { m.queryViewsManager.withView(queryView, queryExecution) }
+    private inline fun <T> executeQuery(queryView: QueryView, queryExecution: () -> T): T = m.persistenceContext.execute(false) { m.queryViewsManager.withView(queryView, queryExecution) }
 
     //region Utils
-    private inline fun <R> Observable<R>.repeatWhenChangeOccurs(queryView: QueryView, filters: Array<out PersistableObjectObservationFilter<*>>): Observable<R> {
+    private inline fun <T> Observable<T>.repeatWhenChangeOccurs(queryView: QueryView, filters: Array<out PersistableObjectObservationFilter<*>>): Observable<T> {
         val changes = changeObserver.observe(filters.plusDefaultFiltersFrom(queryView))
-        return repeatWhen({ o -> o.zipWith(changes, { v, c -> c }) })
+        return repeatWhenChangeOccurs(changes)
     }
 
     protected open fun Array<out PersistableObjectObservationFilter<*>>.plusDefaultFiltersFrom(queryView: QueryView) = this + queryView.defaultFiltersFor(this)
@@ -66,16 +67,16 @@ import javax.inject.Singleton
 
     //region Injection
     @Inject
-    protected fun inject(injectedMembers: InjectedMembers<P, I, R>) {
+    protected fun inject(injectedMembers: InjectedMembers<P, R>) {
         m = injectedMembers
     }
 
-    protected class InjectedMembers<P : PersistableObject<I>, I, R : Repository<P, I>> @Inject constructor(
+    protected class InjectedMembers<P : PersistableObject<*>, R : Repository<P, *>> @Inject constructor(
             val objectType: Class<P>,
             val repository: R,
             val queryViewsManager: QueryViewsManager,
             val persistenceContext: PersistenceContext,
-            val changeObserverFactory: PersistableObjectFilteredChangeObserver.Factory<P, I, R>
+            val changeObserverFactory: PersistableObjectFilteredChangeObserver.Factory<P>
     )
     //endregion
 }

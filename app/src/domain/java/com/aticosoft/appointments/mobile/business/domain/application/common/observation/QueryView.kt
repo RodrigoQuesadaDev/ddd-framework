@@ -18,6 +18,10 @@ import javax.jdo.FetchPlan
             override val fields = emptyArray<Path<*>>()
             override lateinit var _filterTypes: Sequence<Class<out PersistableObject<*>>>
             override lateinit var fetchGroupName: String
+
+            init {
+                init()
+            }
         }
     }
 
@@ -34,7 +38,7 @@ import javax.jdo.FetchPlan
 
     private inline fun nonDefaultFetchGroupName(): String = javaClass.simpleName + "." + ((this as Enum<*>)).name
 
-    fun defaultFiltersFor(filters: Array<out PersistableObjectObservationFilter<*>>): Array<out PersistableObjectObservationFilter<*>> {
+    fun defaultFiltersFor(filters: Array<out PersistableObjectObservationFilter<*>> = emptyArray()): Array<out PersistableObjectObservationFilter<*>> {
         return (_filterTypes - filters.toTypes())
                 .map { PersistableObjectObservationFilter(it) }
                 .toTypedArray()

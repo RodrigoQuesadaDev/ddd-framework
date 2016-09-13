@@ -30,6 +30,7 @@
                 </embedded>
             </field>
         </class>
+        <class name="DeleteMeEvent" table="DELETE_ME_EVENT"/>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.client">
         <class name="Client" table="CLIENT">

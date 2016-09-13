@@ -13,5 +13,8 @@ import javax.inject.Singleton
 @Singleton
 internal class TestEventStore<E : Event> @Inject protected constructor() : EventStoreBase<E>() {
 
-    public override val eventActions: MutableSet<EventAction<E>> by lazy { Sets.newConcurrentHashSet<EventAction<E>>(super.eventActions) }
+    val eventActionsSet: MutableSet<EventAction<E>> by lazy { Sets.newConcurrentHashSet(super.eventActions.toSet()) }
+
+    override val eventActions: Sequence<EventAction<E>>
+        get() = eventActionsSet.asSequence()
 }

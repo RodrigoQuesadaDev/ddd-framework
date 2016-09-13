@@ -14,9 +14,9 @@ internal class TestEventStoreManager<E : Event> @Inject protected constructor(
 ) {
 
     val subscribedActions: Set<EventAction<E>>
-        get() = eventStore.eventActions
+        get() = eventStore.eventActionsSet.toSet()
 
     fun subscribeAction(testEventAction: EventAction<E>) {
-        eventStore.eventActions.add(testEventAction)
+        eventStore.eventActionsSet.add(testEventAction)
     }
 }

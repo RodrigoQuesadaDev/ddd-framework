@@ -30,3 +30,5 @@ inline fun <T> Observable<T>.delaySubscription(delay: Duration) = delaySubscript
 inline fun <T> Observable<T>.firstOrNull(crossinline predicate: (T) -> Boolean): Observable<T?> = firstOrDefault<T>(null) { predicate(it) }
 
 inline fun <T> Observable<T>.firstOrNothing(crossinline predicate: (T) -> Boolean): Observable<T?> = firstOrNull { predicate(it) }.filter { it != null }
+
+inline fun <T> Observable<T>.repeatWhenChangeOccurs(changes: Observable<*>): Observable<T> = repeatWhen({ o -> o.zipWith(changes, { v, c -> c }) })

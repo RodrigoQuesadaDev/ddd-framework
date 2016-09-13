@@ -28,6 +28,7 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
     compile "org.reflections:reflections:$reflectionsVersion"
+    compile "com.querydsl:querydsl-jdo:$queryDslVersion"
 
     testCompile "org.jbehave:jbehave-core:$jBehaveVersion"
     jbehaveSiteResources "org.jbehave:jbehave-core:$jBehaveVersion"

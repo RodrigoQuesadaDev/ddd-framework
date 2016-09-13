@@ -5,7 +5,7 @@ import com.rodrigodev.common.rx.testing.RxSpec
 import com.rodrigodev.common.rx.throttleLast
 import com.rodrigodev.common.spec.story.converter.DurationConverter
 import com.rodrigodev.common.spec.story.steps.SpecSteps
-import com.rodrigodev.common.testing.testSubscribe
+import com.rodrigodev.common.rx.testing.testSubscribe
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.jbehave.core.annotations.When

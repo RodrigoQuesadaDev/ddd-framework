@@ -5,8 +5,8 @@ import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appoi
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.specs.use_cases.UseCaseStory
-import com.rodrigodev.common.testing.firstEvent
-import com.rodrigodev.common.testing.testSubscribe
+import com.rodrigodev.common.rx.testing.firstEvent
+import com.rodrigodev.common.rx.testing.testSubscribe
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
 import org.jbehave.core.annotations.Then

@@ -9,8 +9,8 @@ import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQuer
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
 import com.rodrigodev.common.spec.story.steps.SpecSteps
 import com.rodrigodev.common.test.catchThrowable
-import com.rodrigodev.common.testing.firstEvent
-import com.rodrigodev.common.testing.testSubscribe
+import com.rodrigodev.common.rx.testing.firstEvent
+import com.rodrigodev.common.rx.testing.testSubscribe
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.When
 import org.jbehave.core.steps.ParameterConverters

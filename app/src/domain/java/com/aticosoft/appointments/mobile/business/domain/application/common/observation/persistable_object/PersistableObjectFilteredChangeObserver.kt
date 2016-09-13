@@ -4,7 +4,6 @@ package com.aticosoft.appointments.mobile.business.domain.application.common.obs
 
 import com.aticosoft.appointments.mobile.business.domain.common.time.TimeService
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.Repository
 import com.rodrigodev.common.rx.Observables
 import com.rodrigodev.common.rx.firstOrNothing
 import dagger.MembersInjector
@@ -17,10 +16,10 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 08/09/16.
  */
-/*internal*/ open class PersistableObjectFilteredChangeObserver<P : PersistableObject<I>, I, R : Repository<P, I>> private constructor(
+/*internal*/ open class PersistableObjectFilteredChangeObserver<P : PersistableObject<*>> private constructor(
         private val dataRefreshRateTime: Duration? = null
 ) {
-    private lateinit var m: InjectedMembers<P, R>
+    private lateinit var m: InjectedMembers<P>
 
     fun observe(filters: Array<out PersistableObjectObservationFilter<*>>): Observable<FilterableObjectChangeEvent> {
         return filters.groupByType().toObservable()
@@ -55,24 +54,23 @@ import javax.inject.Singleton
     //endregion
 
     @Singleton
-    class Factory<P : PersistableObject<I>, I, R : Repository<P, I>> @Inject protected constructor(
-            private val injector: MembersInjector<PersistableObjectFilteredChangeObserver<P, I, R>>
+    class Factory<P : PersistableObject<*>> @Inject protected constructor(
+            private val injector: MembersInjector<PersistableObjectFilteredChangeObserver<P>>
     ) {
 
-        fun create(dataRefreshRateTime: Duration? = null) = PersistableObjectFilteredChangeObserver<P, I, R>(dataRefreshRateTime).apply {
+        fun create(dataRefreshRateTime: Duration? = null) = PersistableObjectFilteredChangeObserver<P>(dataRefreshRateTime).apply {
             injector.injectMembers(this)
         }
     }
 
     //region Injection
     @Inject
-    protected fun inject(injectedMembers: InjectedMembers<P, R>) {
+    protected fun inject(injectedMembers: InjectedMembers<P>) {
         m = injectedMembers
     }
 
-    protected class InjectedMembers<P : PersistableObject<*>, R : Repository<P, *>> @Inject constructor(
+    protected class InjectedMembers<P : PersistableObject<*>> @Inject constructor(
             val objectType: Class<P>,
-            val repository: R,
             val objectListenersManager: PersistableObjectListenersManager,
             val timeService: TimeService
     )

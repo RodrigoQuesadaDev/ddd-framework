@@ -8,7 +8,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentQueries
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestValueIsFilter
-import com.rodrigodev.common.testing.testSubscribe
+import com.rodrigodev.common.rx.testing.testSubscribe
 import org.jbehave.core.annotations.Given
 import org.robolectric.annotation.Config
 import rx.observers.TestSubscriber

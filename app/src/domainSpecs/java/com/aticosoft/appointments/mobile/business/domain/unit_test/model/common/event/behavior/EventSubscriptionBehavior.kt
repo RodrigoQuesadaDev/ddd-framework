@@ -72,7 +72,9 @@ internal class EventSubscriptionBehavior : DomainStory() {
 
         @When("event \$eventType occurs")
         fun whenAnEventOccurs(eventType: EventType) {
-            throwable = catchThrowable { eventType.m.services.execute(AddEvent(DEFAULT_EVENT_VALUE)) }
+            throwable = catchThrowable {
+                eventType.m.services.execute(AddEvent(DEFAULT_EVENT_VALUE))
+            }
         }
 
         @Then("no exception is thrown")

@@ -11,7 +11,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestAppli
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.ObservingTotalCount.UnitTestApplicationImpl
 import com.rodrigodev.common.rx.advanceTimeBy
-import com.rodrigodev.common.testing.testSubscribe
+import com.rodrigodev.common.rx.testing.testSubscribe
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then

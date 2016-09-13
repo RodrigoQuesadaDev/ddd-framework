@@ -1,10 +1,9 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.CountQuery
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.Queries
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.ListQuery
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.UniqueQuery
-import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.JdoQueries
 import com.rodrigodev.common.testing.number.primeNumbersUpTo
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,7 +12,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 14/11/15.
  */
 @Singleton
-internal class TestDataParentQueries @Inject constructor(private val context: PersistenceContext) : Queries<TestDataParent> {
+internal class TestDataParentQueries @Inject constructor() : JdoQueries<TestDataParent>() {
     private companion object {
         val PRIME_NUMBERS_UP_TO_100 = primeNumbersUpTo(100)
     }

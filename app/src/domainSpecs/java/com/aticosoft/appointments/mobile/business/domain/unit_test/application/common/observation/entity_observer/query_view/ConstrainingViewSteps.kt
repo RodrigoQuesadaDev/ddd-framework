@@ -10,7 +10,7 @@ import com.rodrigodev.common.nullability.nullOr
 import com.rodrigodev.common.rx.advanceTimeBy
 import com.rodrigodev.common.spec.story.converter.JsonData
 import com.rodrigodev.common.spec.story.steps.SpecSteps
-import com.rodrigodev.common.testing.firstEvent
+import com.rodrigodev.common.rx.testing.firstEvent
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then

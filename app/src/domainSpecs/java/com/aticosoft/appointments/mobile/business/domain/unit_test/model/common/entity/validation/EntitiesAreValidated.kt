@@ -18,8 +18,8 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.rodrigodev.common.spec.story.converter.JsonData
 import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
 import com.rodrigodev.common.test.catchThrowable
-import com.rodrigodev.common.testing.firstEvent
-import com.rodrigodev.common.testing.testSubscribe
+import com.rodrigodev.common.rx.testing.firstEvent
+import com.rodrigodev.common.rx.testing.testSubscribe
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.*
 import org.robolectric.annotation.Config

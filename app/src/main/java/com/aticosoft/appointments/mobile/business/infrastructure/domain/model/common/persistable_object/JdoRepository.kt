@@ -7,6 +7,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.persistabl
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.querydsl.core.types.EntityPath
 import com.querydsl.core.types.dsl.SimpleExpression
+import com.rodrigodev.common.querydsl.entityPathFor
 import javax.inject.Inject
 
 /**
@@ -52,10 +53,5 @@ import javax.inject.Inject
 }
 
 //region Utils
-private inline fun <P : PersistableObject<*>> Class<P>.entityPath(): EntityPath<P> {
-    val entityPathClass = classLoader.loadClass("${`package`.name}.Q$simpleName")
-    val entityPathField = entityPathClass.getDeclaredField(simpleName.decapitalize())
-    @Suppress("UNCHECKED_CAST")
-    return entityPathField.get(null) as EntityPath<P>
-}
+private inline fun <P : PersistableObject<*>> Class<P>.entityPath() = entityPathFor(this)
 //endregion

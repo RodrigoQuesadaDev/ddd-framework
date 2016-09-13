@@ -27,8 +27,6 @@ import javax.jdo.PersistenceManagerFactory
     }
 
     private fun registerViews() {
-        QueryView.DEFAULT.init()
-
         queryViewEnumDefinitions.asSequence()
                 .flatMap { definition -> definition.queryViews().asSequence() }
                 .peek { it.init() }

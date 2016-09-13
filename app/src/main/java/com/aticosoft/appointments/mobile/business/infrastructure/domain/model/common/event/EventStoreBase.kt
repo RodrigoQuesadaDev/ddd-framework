@@ -1,10 +1,18 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventInternalObserver
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventStore
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.QueryView
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectFilteredChangeObserver
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.*
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.UniqueQuery
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.JdoQueries
+import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
+import com.rodrigodev.common.querydsl.entityPathFor
+import com.rodrigodev.common.rx.repeatWhenChangeOccurs
+import rx.Observable
+import rx.schedulers.Schedulers
+import rx.util.async.Async.fromCallable
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,16 +24,53 @@ import javax.inject.Singleton
 
     private lateinit var m: InjectedMembers<E>
 
-    protected open val eventActions: Set<EventAction<E>>
-        get() = m.eventActions
+    private val changeObserver by lazy { m.changeObserverFactory.create() }
 
-    private fun init() {
-        //m.eventObserver.observe()
+    private val defaultFilters by lazy { QueryView.DEFAULT.defaultFiltersFor() }
+
+    protected open val eventActions: Sequence<EventAction<E>> by lazy { m.eventActions.asSequence() }
+
+    private inline fun init() {
+        fromCallable(
+                { executeEventActions() },
+                Schedulers.io()
+        )
+                .repeatWhenChangeOccurs()
+                .subscribe()
+    }
+
+    private inline fun Observable<*>.repeatWhenChangeOccurs() = repeatWhenChangeOccurs(changeObserver.observe(defaultFilters))
+
+    private inline fun executeEventActions() = with(m) {
+        //TODO implement this stuff correctly!!!
+        //Probably group them first at start...
+        //TODO optimize, move filtering to field declaration??? Also cache that sequence that is created?
+        //TODO better yet, expose 2 properties called simpleActions and overridableActions... sequences... cached???
+        this@EventStoreBase.eventActions.filterIsInstance<SimpleEventAction<E>>()
+                .forEach { action ->
+                    persistenceContext.execute {
+                        repository.find(queries.firstEvent())?.let { action.execute(it) }
+                    }
+                }
     }
 
     override fun add(event: E) {
         m.repository.add(event)
     }
+
+    //region Queries
+    @Singleton
+    protected class Queries<E : Event> @Inject protected constructor(
+            eventType: Class<E>
+    ) : JdoQueries<E>() {
+
+        private val e = entityPathFor(eventType)
+
+        fun firstEvent() = UniqueQuery {
+            context.queryFactory.selectFrom(e).orderBy(QEvent.event.id.asc()).fetchFirst()
+        }
+    }
+    //endregion
 
     //region Injection
     @Inject
@@ -36,8 +81,10 @@ import javax.inject.Singleton
 
     protected class InjectedMembers<E : Event> @Inject protected constructor(
             val repository: EventRepository<E>,
+            val queries: Queries<E>,
             val eventActions: MutableSet<EventAction<E>>,
-            val eventObserver: EventInternalObserver<E>
+            val changeObserverFactory: PersistableObjectFilteredChangeObserver.Factory<E>,
+            val persistenceContext: PersistenceContext
     )
     //endregion
 }

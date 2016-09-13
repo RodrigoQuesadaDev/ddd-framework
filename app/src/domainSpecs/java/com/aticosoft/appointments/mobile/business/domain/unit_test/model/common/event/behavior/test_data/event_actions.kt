@@ -1,6 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.SimpleEventAction
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventActionBase
 import com.rodrigodev.common.properties.delegates.AtomicBooleanDelegate
 import javax.inject.Inject
@@ -11,7 +12,7 @@ import javax.inject.Singleton
  */
 //region OneSubscriptionEvent
 @Singleton
-internal class TestEventAction<E : Event> @Inject constructor(val value: Int) : EventActionBase<E>() {
+internal class TestEventAction<E : Event> @Inject constructor(val value: Int) : EventActionBase<E>(), SimpleEventAction<E> {
 
     var wasTriggered by AtomicBooleanDelegate()
         private set
@@ -20,6 +21,10 @@ internal class TestEventAction<E : Event> @Inject constructor(val value: Int) : 
 
     fun updateEvent(value: Boolean) {
         updateEvent = value
+    }
+
+    override fun execute(event: E) {
+        wasTriggered = true
     }
 }
 //endregion

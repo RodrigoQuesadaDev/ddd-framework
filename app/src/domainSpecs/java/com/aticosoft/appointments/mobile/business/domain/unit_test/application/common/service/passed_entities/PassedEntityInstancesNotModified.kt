@@ -13,8 +13,8 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestAppli
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.PassedEntityInstancesNotModified.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.CommandTestDataServices
 import com.rodrigodev.common.spec.story.steps.SpecSteps
-import com.rodrigodev.common.testing.firstEvent
-import com.rodrigodev.common.testing.testSubscribe
+import com.rodrigodev.common.rx.testing.firstEvent
+import com.rodrigodev.common.rx.testing.testSubscribe
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then

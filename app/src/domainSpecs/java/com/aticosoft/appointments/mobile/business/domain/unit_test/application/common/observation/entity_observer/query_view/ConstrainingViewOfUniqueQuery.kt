@@ -6,7 +6,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestAppli
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.ConstrainingViewOfUniqueQuery.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParent
-import com.rodrigodev.common.testing.testSubscribe
+import com.rodrigodev.common.rx.testing.testSubscribe
 import org.robolectric.annotation.Config
 import rx.observers.TestSubscriber
 import javax.inject.Inject

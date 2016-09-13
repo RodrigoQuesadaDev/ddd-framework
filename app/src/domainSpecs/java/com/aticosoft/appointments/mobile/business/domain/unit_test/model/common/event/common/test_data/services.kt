@@ -5,6 +5,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventStore
+import com.rodrigodev.common.rx.testing.triggerTestSchedulerActions
 import javax.inject.Inject
 
 /**
@@ -20,6 +21,7 @@ internal abstract class TestEventServices<E : Event>(
 
     fun execute(command: AddEvent) = command.execute {
         m.testEventStore.add(createEvent(value))
+        triggerTestSchedulerActions()
     }
 
     //region Injection
