@@ -4,13 +4,24 @@ In order to filter the observation of a count query
 As a developer
 I want to be able to specify the filters to use when using the corresponding EntityObserver's method
 
-Scenario: main scenario
+Scenario: scenario 1
 
-!--Meta: @defaultObserverImplementation no
-
-GivenStories: com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/filtering/given_stories/filtering_observation_of_count_query.scenario1.story
-
-Given dummy step
+Given no data
+And observation filter <filter>
+And I'm observing the amount of parent entities with prime value
+When later I add [{p:1, c:1}, {p:2, c:2}, {p:3, c:3}, {p:4, c:4}, {p:5, c:5}]
+And later I add [{p:6, c:6}, {p:7, c:7}, {p:8, c:8}, {p:9, c:9}, {p:10, c:10}]
+And later I remove parents [7, 9]
+And later I change child of parent 3 to 33
+And later I change parent 3 to 23
+And later I change child of parent 23 to 34
+And later I change parent 23 to 24
+When later I add [{p:11, c:11}, {p:12, c:12}, {p:13, c:13}, {p:14, c:14}, {p:15, c:15}]
+And later I remove parents [12, 14]
+And later I change child of parent 24 to 35
+And later I change parent 24 to 3
+And later I remove parent [3]
+Then later the values observed were <result>
 
 Examples:
 | filter                           | result                    |
@@ -19,15 +30,3 @@ Examples:
 | ODD_CHILD                        | 0, 3, 4, 3, 3, 3, 4, 4, 4 |
 | ODD_CHILD_REMOVED                | 0, 3, 4                   |
 | ODD_AND_DIVISIBLE_BY_THREE_CHILD | 0, 3, 4, 3, 3, 3, 4       |
-
-!--Scenario: no filter with default EntityObserver implementation
-!--
-!--Meta: @defaultObserverImplementation yes
-!--
-!--GivenStories: com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/filtering/given_stories/filtering_observation_of_count_query.scenario1.story
-!--
-!--Given dummy step
-!--
-!--Examples:
-!--| filter                           | result                    |
-!--| NO_FILTER                        | 0, 3, 4, 3, 3, 2, 4, 5, 4 |

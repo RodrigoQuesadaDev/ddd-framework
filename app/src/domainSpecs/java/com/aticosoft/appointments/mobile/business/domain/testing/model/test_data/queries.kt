@@ -1,6 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.QueryView
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.UniqueQuery
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.JdoQueries
@@ -13,7 +14,7 @@ import javax.inject.Singleton
 @Singleton
 internal class TestDataQueries @Inject constructor() : JdoQueries<TestData>() {
 
-    fun valueIs(value: Int) = UniqueQuery {
+    fun valueIs(value: Int) = UniqueQuery(PersistableObjectObservationFilter(TestData::class.java)) {
         val d = QTestData.testData
         context.queryFactory.selectFrom(d).where(d.value.eq(value)).fetchOne()
     }

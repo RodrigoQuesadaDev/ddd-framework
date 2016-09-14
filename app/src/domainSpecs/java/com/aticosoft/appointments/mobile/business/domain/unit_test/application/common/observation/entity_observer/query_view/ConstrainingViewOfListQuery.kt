@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.ListQuery
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
@@ -10,8 +10,8 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParentQueries
 import com.rodrigodev.common.rx.testing.firstEvent
-import com.rodrigodev.common.testing.number.isOdd
 import com.rodrigodev.common.rx.testing.testSubscribe
+import com.rodrigodev.common.testing.number.isOdd
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
@@ -50,7 +50,7 @@ internal class ConstrainingViewOfListQuery : DomainStory() {
 
         private fun whenImObservingTheParents(query: TestDataParentQueries.(Array<PersistableObjectObservationFilter<*>>) -> ListQuery<TestDataParent>) {
             testSubscriber = testDataParentObserver.observe(
-                    testDataParentQueries.query(filter?.let { arrayOf(it) } ?: emptyArray()),
+                    testDataParentQueries.query(arrayOf(filter)),
                     queryView
             ).testSubscribe()
         }

@@ -4,10 +4,7 @@ import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.FilteringObservationOfSingleEntityById.UnitTestApplicationImpl
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestByIdFilter
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentObserver
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.TestDataParentQueries
+import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.test_data.*
 import com.rodrigodev.common.rx.testing.firstEvent
 import com.rodrigodev.common.rx.testing.testSubscribe
 import org.jbehave.core.annotations.Given
@@ -30,7 +27,7 @@ internal class FilteringObservationOfSingleEntityById : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val services: AbstractFilteringObservationSteps.Services,
+            services: AbstractFilteringObservationSteps.Services,
             private val testDataParentQueries: TestDataParentQueries,
             private val testDataParentObserver: TestDataParentObserver
     ) : FilteringObservationUniqueEntitySteps(services) {
@@ -41,7 +38,7 @@ internal class FilteringObservationOfSingleEntityById : DomainStory() {
         }
 
         override fun observeTheParentEntityWithValue(value: Int): TestSubscriber<TestDataParent?> {
-            val data = testDataParentObserver.observe(testDataParentQueries.valueIs(value)).testSubscribe().firstEvent()!!
+            val data = testDataParentObserver.observe(testDataParentQueries.valueIs(value, TestValueIsFilter.PARENT_WITH_VALUE)).testSubscribe().firstEvent()!!
             return testDataParentObserver.observe(data.id).testSubscribe()
         }
     }

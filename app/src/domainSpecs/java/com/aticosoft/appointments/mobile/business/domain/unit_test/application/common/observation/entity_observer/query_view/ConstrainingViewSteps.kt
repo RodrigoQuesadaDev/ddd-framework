@@ -1,16 +1,16 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectExternalObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.query_view.test_data.TestDataParentServices.AddData
 import com.rodrigodev.common.nullability.nullOr
 import com.rodrigodev.common.rx.advanceTimeBy
+import com.rodrigodev.common.rx.testing.firstEvent
 import com.rodrigodev.common.spec.story.converter.JsonData
 import com.rodrigodev.common.spec.story.steps.SpecSteps
-import com.rodrigodev.common.rx.testing.firstEvent
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
@@ -27,7 +27,7 @@ import kotlin.properties.Delegates.notNull
 internal abstract class AbstractConstrainingViewSteps(protected val s: Services) : SpecSteps() {
 
     protected var queryView by notNull<TestDataParentQueryView>()
-    protected var filter: PersistableObjectObservationFilter<*>? = null
+    protected var filter: PersistableObjectObservationFilter<*> = PersistableObjectObservationFilter(TestDataParent::class.java)
 
     @Given("data:\$values")
     fun givenData(values: MutableList<TestDataParentExample>) {
