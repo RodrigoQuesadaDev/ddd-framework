@@ -61,7 +61,7 @@ internal class ConstrainingViewOfListQuery : DomainStory() {
         }
 
         @When("I'm observing the parents with value less than \$max")
-        fun whenImObservingTheParentsWithPrimeValue(max: Int) {
+        fun whenImObservingTheParentsWithValueLessThan(max: Int) {
             whenImObservingTheParents { isLessThan(max, *it) }
         }
 

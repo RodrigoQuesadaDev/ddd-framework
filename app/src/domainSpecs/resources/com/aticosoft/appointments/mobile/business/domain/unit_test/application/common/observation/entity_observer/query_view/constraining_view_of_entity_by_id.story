@@ -7,4 +7,4 @@ I want to be able to specify the query view to be used by the corresponding Enti
 GivenStories: com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/query_view/given_stories/constraining_view_of_single_entity.story
 
 Scenario: dummy scenario
-Given dummy
+Given dummy step

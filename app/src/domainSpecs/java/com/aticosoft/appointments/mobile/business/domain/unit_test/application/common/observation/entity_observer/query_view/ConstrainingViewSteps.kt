@@ -68,10 +68,6 @@ internal abstract class AbstractConstrainingViewSteps(protected val s: Services)
         s.testScheduler.advanceTimeBy(PersistableObjectExternalObserver.DATA_REFRESH_RATE_TIME)
     }
 
-    @Given("dummy")
-    fun givenDummy() {
-    }
-
     class Services @Inject constructor(
             val testDataParentRepositoryManager: TestEntityRepositoryManager<TestDataParent>,
             val testDataParentServices: TestDataParentServices,

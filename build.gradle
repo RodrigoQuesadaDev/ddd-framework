@@ -45,7 +45,7 @@ subprojects {
         groovyVersion = '2.4.5'
 
         //Testing
-        jBehaveVersion = '4.0.4'
+        jBehaveVersion = '4.0.5'
         jBehaveSiteVersion = '3.3'
         junitVersion = '4.12'
         robolectricVersion = '3.0'

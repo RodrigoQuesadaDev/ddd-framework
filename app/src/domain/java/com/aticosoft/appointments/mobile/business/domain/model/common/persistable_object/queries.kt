@@ -1,7 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 
 /**
  * Created by Rodrigo Quesada on 04/11/15.

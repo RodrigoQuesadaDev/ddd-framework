@@ -22,6 +22,8 @@ import javax.inject.Singleton
     private lateinit var m: InjectedMembers<P>
 
     fun observe(filters: Array<out PersistableObjectObservationFilter<*>>): Observable<FilterableObjectChangeEvent> {
+        require(filters.isNotEmpty(), { "The filters passed should not be empty, make sure to always filter observation changes." })
+
         return filters.groupByType().toObservable()
                 .mergeWithObjectChangeEvents()
                 .throttle()
