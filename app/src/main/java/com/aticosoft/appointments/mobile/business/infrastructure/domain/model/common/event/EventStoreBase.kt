@@ -2,13 +2,14 @@
 
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.QueryView
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectFilteredChangeObserver
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.*
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.UniqueQuery
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.JdoQueries
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.QueryEntityForEvent
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.entityPath
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
-import com.rodrigodev.common.querydsl.entityPathFor
 import com.rodrigodev.common.rx.repeatWhenChangeOccurs
 import rx.Observable
 import rx.schedulers.Schedulers
@@ -26,7 +27,7 @@ import javax.inject.Singleton
 
     private val changeObserver by lazy { m.changeObserverFactory.create() }
 
-    private val defaultFilters by lazy { QueryView.DEFAULT.defaultFiltersFor() }
+    private val eventFilter by lazy { PersistableObjectObservationFilter(m.eventType) }
 
     protected open val eventActions: Sequence<EventAction<E>> by lazy { m.eventActions.asSequence() }
 
@@ -39,7 +40,7 @@ import javax.inject.Singleton
                 .subscribe()
     }
 
-    private inline fun Observable<*>.repeatWhenChangeOccurs() = repeatWhenChangeOccurs(changeObserver.observe(defaultFilters))
+    private inline fun Observable<*>.repeatWhenChangeOccurs() = repeatWhenChangeOccurs(changeObserver.observe(arrayOf(eventFilter)))
 
     private inline fun executeEventActions() = with(m) {
         //TODO implement this stuff correctly!!!
@@ -49,7 +50,9 @@ import javax.inject.Singleton
         this@EventStoreBase.eventActions.filterIsInstance<SimpleEventAction<E>>()
                 .forEach { action ->
                     persistenceContext.execute {
-                        repository.find(queries.firstEvent())?.let { action.execute(it) }
+                        repository.find(queries.firstEvent())?.let {
+                            action.execute(it)
+                        }
                     }
                 }
     }
@@ -64,10 +67,10 @@ import javax.inject.Singleton
             eventType: Class<E>
     ) : JdoQueries<E>() {
 
-        private val e = entityPathFor(eventType)
+        private val e by lazy { QueryEntityForEvent(eventType.entityPath()) }
 
         fun firstEvent() = UniqueQuery {
-            context.queryFactory.selectFrom(e).orderBy(QEvent.event.id.asc()).fetchFirst()
+            context.queryFactory.selectFrom(e).orderBy(e.id.asc()).fetchFirst()
         }
     }
     //endregion
@@ -80,6 +83,7 @@ import javax.inject.Singleton
     }
 
     protected class InjectedMembers<E : Event> @Inject protected constructor(
+            val eventType: Class<E>,
             val repository: EventRepository<E>,
             val queries: Queries<E>,
             val eventActions: MutableSet<EventAction<E>>,

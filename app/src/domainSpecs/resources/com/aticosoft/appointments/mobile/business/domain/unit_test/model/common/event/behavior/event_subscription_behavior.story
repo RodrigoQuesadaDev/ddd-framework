@@ -6,7 +6,7 @@ Scenario: non-subscribed event
 
 !-- right now there is no subscriptions
 When event A occurs
-Then no exception is thrown
+!-- Then no exception is thrown
 
 Scenario: different event type gets subscribed
 

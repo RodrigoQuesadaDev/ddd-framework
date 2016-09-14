@@ -13,8 +13,6 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.behavior.test_data.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices.AddEvent
-import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
-import com.rodrigodev.common.test.catchThrowable
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
 import org.jbehave.core.annotations.Given
@@ -42,9 +40,7 @@ internal class EventSubscriptionBehavior : DomainStory() {
     class LocalSteps @Inject constructor(
             private val eventAMembers: EventMembers<TestEventA, TestEventAServices>,
             private val eventBMembers: EventMembers<TestEventB, TestEventBServices>
-    ) : ExceptionThrowingSteps {
-
-        override var throwable: Throwable? = null
+    ) {
 
         private companion object {
             val DEFAULT_EVENT_VALUE = 0
@@ -72,14 +68,7 @@ internal class EventSubscriptionBehavior : DomainStory() {
 
         @When("event \$eventType occurs")
         fun whenAnEventOccurs(eventType: EventType) {
-            throwable = catchThrowable {
-                eventType.m.services.execute(AddEvent(DEFAULT_EVENT_VALUE))
-            }
-        }
-
-        @Then("no exception is thrown")
-        fun thenNoExceptionIsThrown() {
-            assertThat(throwable).isNull()
+            eventType.m.services.execute(AddEvent(DEFAULT_EVENT_VALUE))
         }
 
         @Then("actions subscribed to event \$eventType don't get triggered")

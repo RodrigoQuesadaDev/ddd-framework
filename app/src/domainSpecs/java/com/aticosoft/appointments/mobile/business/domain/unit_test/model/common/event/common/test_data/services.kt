@@ -19,8 +19,10 @@ internal abstract class TestEventServices<E : Event>(
 
     class AddEvent(val value: Int) : Command()
 
-    fun execute(command: AddEvent) = command.execute {
-        m.testEventStore.add(createEvent(value))
+    fun execute(command: AddEvent) {
+        command.execute {
+            m.testEventStore.add(createEvent(value))
+        }
         triggerTestSchedulerActions()
     }
 

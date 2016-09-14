@@ -5,9 +5,6 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.c
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.Repository
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
-import com.querydsl.core.types.EntityPath
-import com.querydsl.core.types.dsl.SimpleExpression
-import com.rodrigodev.common.querydsl.entityPathFor
 import javax.inject.Inject
 
 /**
@@ -17,7 +14,7 @@ import javax.inject.Inject
 
     private lateinit var m: InjectedMembers<P>
 
-    val queryEntity: QueryEntity<P, I> by lazy { QueryEntity(m.objectType.entityPath()) }
+    val queryEntity by lazy { QueryEntity(m.objectType.entityPath()) }
 
     override fun add(obj: P) {
         m.context.persistenceManager.makePersistent(obj)
@@ -42,16 +39,3 @@ import javax.inject.Inject
     )
     //endregion
 }
-
-/*internal*/ class QueryEntity<P : PersistableObject<I>, I>(entityPath: EntityPath<P>) : EntityPath<P> by entityPath {
-    private companion object {
-        val ID_FIELD = "id"
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    val id: SimpleExpression<I> by lazy { entityPath.javaClass.getField(ID_FIELD).get(entityPath) as SimpleExpression<I> }
-}
-
-//region Utils
-private inline fun <P : PersistableObject<*>> Class<P>.entityPath() = entityPathFor(this)
-//endregion
