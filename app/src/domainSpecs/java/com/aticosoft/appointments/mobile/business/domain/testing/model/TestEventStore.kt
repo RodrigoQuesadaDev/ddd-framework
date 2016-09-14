@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.model
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.SimpleEventAction
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventStoreBase
 import com.google.common.collect.Sets
 import javax.inject.Inject
@@ -13,8 +13,8 @@ import javax.inject.Singleton
 @Singleton
 internal class TestEventStore<E : Event> @Inject protected constructor() : EventStoreBase<E>() {
 
-    val eventActionsSet: MutableSet<EventAction<E>> by lazy { Sets.newConcurrentHashSet(super.eventActions.toSet()) }
+    val simpleActionsSet: MutableSet<SimpleEventAction<E>> by lazy { Sets.newConcurrentHashSet(super.simpleActions.toSet()) }
 
-    override val eventActions: Sequence<EventAction<E>>
-        get() = eventActionsSet.asSequence()
+    override val simpleActions: Sequence<SimpleEventAction<E>>
+        get() = simpleActionsSet.asSequence()
 }

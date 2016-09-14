@@ -2,6 +2,7 @@ package com.aticosoft.appointments.mobile.business.domain.testing.model
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.SimpleEventAction
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,9 +15,9 @@ internal class TestEventStoreManager<E : Event> @Inject protected constructor(
 ) {
 
     val subscribedActions: Set<EventAction<E>>
-        get() = eventStore.eventActionsSet.toSet()
+        get() = eventStore.simpleActionsSet.toSet()
 
-    fun subscribeAction(testEventAction: EventAction<E>) {
-        eventStore.eventActionsSet.add(testEventAction)
+    fun subscribeAction(testEventAction: SimpleEventAction<E>) {
+        eventStore.simpleActionsSet.add(testEventAction)
     }
 }

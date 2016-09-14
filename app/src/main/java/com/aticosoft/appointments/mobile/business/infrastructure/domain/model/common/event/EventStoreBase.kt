@@ -29,7 +29,15 @@ import javax.inject.Singleton
 
     private val eventFilter by lazy { PersistableObjectObservationFilter(m.eventType) }
 
-    protected open val eventActions: Sequence<EventAction<E>> by lazy { m.eventActions.asSequence() }
+    private val eventActions: Sequence<EventAction<E>> by lazy { m.eventActions.asSequence() }
+
+    protected open val simpleActions: Sequence<SimpleEventAction<E>> by lazy {
+        eventActions.filterIsInstance<SimpleEventAction<E>>()
+    }
+
+    protected open val overridableActions: Sequence<OverridableEventAction<E>> by lazy {
+        eventActions.filterIsInstance<OverridableEventAction<E>>()
+    }
 
     private inline fun init() {
         fromCallable(
@@ -44,17 +52,11 @@ import javax.inject.Singleton
 
     private inline fun executeEventActions() = with(m) {
         //TODO implement this stuff correctly!!!
-        //Probably group them first at start...
-        //TODO optimize, move filtering to field declaration??? Also cache that sequence that is created?
-        //TODO better yet, expose 2 properties called simpleActions and overridableActions... sequences... cached???
-        this@EventStoreBase.eventActions.filterIsInstance<SimpleEventAction<E>>()
-                .forEach { action ->
-                    persistenceContext.execute {
-                        repository.find(queries.firstEvent())?.let {
-                            action.execute(it)
-                        }
-                    }
-                }
+        simpleActions.forEach { action ->
+            persistenceContext.execute {
+                repository.find(queries.firstEvent())?.let { action.execute(it) }
+            }
+        }
     }
 
     override fun add(event: E) {
