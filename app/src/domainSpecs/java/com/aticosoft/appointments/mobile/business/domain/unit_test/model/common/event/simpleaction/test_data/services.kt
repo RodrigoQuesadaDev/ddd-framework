@@ -10,16 +10,16 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 05/12/15.
  */
 @Singleton
-internal class TestEventNoSubsServices @Inject protected constructor(
-        private val testEventFactory: TestEventNoSubsFactory
-) : TestEventServices<TestEventNoSubs>({ testEventFactory.create(it) })
+internal class NoSubscriptionsEventServices @Inject protected constructor(
+        private val testEventFactory: NoSubscriptionsEventFactory
+) : TestEventServices<NoSubscriptionsEvent>({ testEventFactory.create(it) })
 
 @Singleton
-internal class TestEventThreeSubsServices @Inject protected constructor(
-        private val testEventFactory: TestEventThreeSubsFactory
-) : TestEventServices<TestEventThreeSubs>({ testEventFactory.create(it) })
+internal class ThreeSubscriptionsEventServices @Inject protected constructor(
+        private val testEventFactory: ThreeSubscriptionsEventFactory
+) : TestEventServices<ThreeSubscriptionsEvent>({ testEventFactory.create(it) })
 
 @Singleton
-internal class TestEventFiveSubsServices @Inject protected constructor(
-        private val testEventFactory: TestEventFiveSubsFactory
-) : TestEventServices<TestEventFiveSubs>({ testEventFactory.create(it) })
+internal class FiveSubscriptionsEventServices @Inject protected constructor(
+        private val testEventFactory: FiveSubscriptionsEventFactory
+) : TestEventServices<FiveSubscriptionsEvent>({ testEventFactory.create(it) })

@@ -8,12 +8,12 @@ import javax.jdo.annotations.PersistenceCapable
  */
 @PersistenceCapable
 //@AutoFactory
-internal class TestEventNoSubs(value: Int) : TestEvent(value)
+internal class NoSubscriptionsEvent(value: Int) : TestEvent(value)
 
 @PersistenceCapable
 //@AutoFactory
-internal class TestEventThreeSubs(value: Int) : TestEvent(value)
+internal class ThreeSubscriptionsEvent(value: Int) : TestEvent(value)
 
 @PersistenceCapable
 //@AutoFactory
-internal class TestEventFiveSubs(value: Int) : TestEvent(value)
+internal class FiveSubscriptionsEvent(value: Int) : TestEvent(value)

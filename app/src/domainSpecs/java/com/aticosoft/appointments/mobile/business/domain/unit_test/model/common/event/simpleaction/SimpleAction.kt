@@ -2,13 +2,13 @@
 
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.isEmpty
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStoreManager
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices.AddEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.SimpleAction.UnitTestApplicationImpl
@@ -16,7 +16,6 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.rodrigodev.common.spec.story.converter.ParameterConverterBase
 import com.rodrigodev.common.spec.story.steps.SpecSteps
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Condition
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.jbehave.core.annotations.When
@@ -41,9 +40,9 @@ internal class SimpleAction : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val eventNoSubsMembers: EventMembers<TestEventNoSubs, TestEventNoSubsServices>,
-            private val eventThreeSubsMembers: EventMembers<TestEventThreeSubs, TestEventThreeSubsServices>,
-            private val eventFiveSubsMembers: EventMembers<TestEventFiveSubs, TestEventFiveSubsServices>
+            private val noSubscriptionsEventMembers: EventMembers<NoSubscriptionsEvent, NoSubscriptionsEventServices>,
+            private val threeSubscriptionsEventMembers: EventMembers<ThreeSubscriptionsEvent, ThreeSubscriptionsEventServices>,
+            private val fiveSubscriptionsEventMembers: EventMembers<FiveSubscriptionsEvent, FiveSubscriptionsEventServices>
     ) : SpecSteps() {
         private companion object {
             val DEFAULT_EVENT_VALUE = 0
@@ -83,7 +82,7 @@ internal class SimpleAction : DomainStory() {
 
         @Then("\$eventType actions don't get triggered")
         fun thenEventTypeActionsDontGetTriggered(eventType: EventType) {
-            assertThat(eventType.m.eventStoreManager.subscribedTestActions()).are(Triggered(false))
+            assertThat(eventType.m.valueProducer.producedValues).isEmpty()
         }
 
         @Then("\$eventType actions produce the next values in order: [\$values]")
@@ -98,7 +97,7 @@ internal class SimpleAction : DomainStory() {
 
         //region Event Members
         @Singleton
-        class EventMembers<E : Event, out S : TestEventServices<E>> @Inject protected constructor(
+        class EventMembers<E : TestEvent, out S : TestEventServices<E>> @Inject protected constructor(
                 val repository: EventRepository<E>,
                 val services: S,
                 val eventStoreManager: TestEventStoreManager<E>,
@@ -110,17 +109,17 @@ internal class SimpleAction : DomainStory() {
         private val EventType.m: EventMembers<*, *>
             get() = when (this) {
             //TODO trying to import EventType enums causes: Recursion detected on input: IMPORT_DIRECTIVE... error
-                EventType.NO_SUBS -> eventNoSubsMembers
-                EventType.THREE_SUBS -> eventThreeSubsMembers
-                EventType.FIVE_SUBS -> eventFiveSubsMembers
+                EventType.NO_SUBSCRIPTIONS -> noSubscriptionsEventMembers
+                EventType.THREE_SUBSCRIPTIONS -> threeSubscriptionsEventMembers
+                EventType.FIVE_SUBSCRIPTIONS -> fiveSubscriptionsEventMembers
             }
 
-        private inline fun <E : Event> TestEventStoreManager<E>.subscribedTestActions() = subscribedActions.map { it as TestEventAction<E> }
+        private inline fun <E : TestEvent> TestEventStoreManager<E>.subscribedTestActions() = subscribedActions.map { it as TestEventAction<E> }
         //endregion
     }
 
     //region Other Classes
-    enum class EventType {NO_SUBS, THREE_SUBS, FIVE_SUBS }
+    enum class EventType {NO_SUBSCRIPTIONS, THREE_SUBSCRIPTIONS, FIVE_SUBSCRIPTIONS }
 
     class ProducedValueConverter : ParameterConverterBase<TestEventAction.ProducedValue>(TestEventAction.ProducedValue::class.java) {
         private companion object {
@@ -144,10 +143,3 @@ internal class SimpleAction : DomainStory() {
     }
     //endregion
 }
-
-//region Assertions
-private class Triggered(private val wasTriggered: Boolean) : Condition<TestEventAction<*>>() {
-
-    override fun matches(action: TestEventAction<*>) = action.wasTriggered == wasTriggered
-}
-//endregion

@@ -1,12 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model
 
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataModule
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.FiveSubscriptionsEventModule
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.NoSubscriptionsEventModule
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.OneSubscriptionEventModule
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data.TestEventFiveSubsModule
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data.TestEventNoSubsModule
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data.TestEventThreeSubsModule
+
 import dagger.Module
 
 /**
@@ -25,11 +20,11 @@ import dagger.Module
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.OddValueAndEmailChildModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.PrimeNumberAndGmailParentModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.PrimeNumberAndGmailChildModule::class,
-        TestEventNoSubsModule::class,
-        TestEventThreeSubsModule::class,
-        TestEventFiveSubsModule::class,
-        NoSubscriptionsEventModule::class,
-        OneSubscriptionEventModule::class,
-        FiveSubscriptionsEventModule::class
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.NoSubscriptionsEventModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.OneSubscriptionEventModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.FiveSubscriptionsEventModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data.NoSubscriptionsEventModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data.ThreeSubscriptionsEventModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data.FiveSubscriptionsEventModule::class
 ))
 internal class TestDomainModelModule

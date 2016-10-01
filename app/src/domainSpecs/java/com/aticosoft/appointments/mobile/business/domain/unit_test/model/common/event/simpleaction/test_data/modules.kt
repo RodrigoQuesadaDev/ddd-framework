@@ -20,76 +20,90 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 25/08/16.
  */
 @Module
-internal class TestEventNoSubsModule : TestEventModule<TestEventNoSubs>() {
+internal class NoSubscriptionsEventModule : TestEventModule<NoSubscriptionsEvent>() {
 
     @Provides @Singleton
-    override fun provideType(): Class<TestEventNoSubs> = TestEventNoSubs::class.java
+    override fun provideType(): Class<NoSubscriptionsEvent> = NoSubscriptionsEvent::class.java
 
     @Provides @IntoSet
     override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
 
     @Provides @Singleton
-    override fun provideRepository(repository: JdoEventRepository<TestEventNoSubs>): EventRepository<TestEventNoSubs> = repository
+    override fun provideRepository(repository: JdoEventRepository<NoSubscriptionsEvent>): EventRepository<NoSubscriptionsEvent> = repository
 
     @Provides @Singleton
-    override fun provideEventStore(eventStore: TestEventStore<TestEventNoSubs>): EventStore<TestEventNoSubs> = eventStore
+    override fun provideEventStore(eventStore: TestEventStore<NoSubscriptionsEvent>): EventStore<NoSubscriptionsEvent> = eventStore
 
     @Provides @ElementsIntoSet
-    fun provideEventActionsIntoSet(): Set<EventAction<TestEventNoSubs>> = emptySet()
+    fun provideEventActionsIntoSet(): Set<EventAction<NoSubscriptionsEvent>> = emptySet()
 
     @Provides @IntoSet
-    override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<TestEventNoSubs>): PersistableObjectInitializer<*> = initializer
+    override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<NoSubscriptionsEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<TestEventNoSubs>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventListener<NoSubscriptionsEvent>): PersistableObjectListener<*, *> = listener
 }
 
 @Module
-internal class TestEventThreeSubsModule : TestEventModule<TestEventThreeSubs>() {
+internal class ThreeSubscriptionsEventModule : TestEventModule<ThreeSubscriptionsEvent>() {
 
     @Provides @Singleton
-    override fun provideType(): Class<TestEventThreeSubs> = TestEventThreeSubs::class.java
+    override fun provideType(): Class<ThreeSubscriptionsEvent> = ThreeSubscriptionsEvent::class.java
 
     @Provides @IntoSet
     override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
 
     @Provides @Singleton
-    override fun provideRepository(repository: JdoEventRepository<TestEventThreeSubs>): EventRepository<TestEventThreeSubs> = repository
+    override fun provideRepository(repository: JdoEventRepository<ThreeSubscriptionsEvent>): EventRepository<ThreeSubscriptionsEvent> = repository
 
     @Provides @Singleton
-    override fun provideEventStore(eventStore: TestEventStore<TestEventThreeSubs>): EventStore<TestEventThreeSubs> = eventStore
+    override fun provideEventStore(eventStore: TestEventStore<ThreeSubscriptionsEvent>): EventStore<ThreeSubscriptionsEvent> = eventStore
 
     @Provides @ElementsIntoSet
-    fun provideEventActionsIntoSet(): Set<EventAction<TestEventThreeSubs>> = emptySet()
+    fun provideEventActionsIntoSet(
+            eventAction1: ThreeSubscriptionsEventAction1,
+            eventAction2: ThreeSubscriptionsEventAction2,
+            eventAction3: ThreeSubscriptionsEventAction3
+    ): Set<EventAction<ThreeSubscriptionsEvent>> {
+        return setOf(eventAction1, eventAction2, eventAction3)
+    }
 
     @Provides @IntoSet
-    override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<TestEventThreeSubs>): PersistableObjectInitializer<*> = initializer
+    override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<ThreeSubscriptionsEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<TestEventThreeSubs>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventListener<ThreeSubscriptionsEvent>): PersistableObjectListener<*, *> = listener
 }
 
 @Module
-internal class TestEventFiveSubsModule : TestEventModule<TestEventFiveSubs>() {
+internal class FiveSubscriptionsEventModule : TestEventModule<FiveSubscriptionsEvent>() {
 
     @Provides @Singleton
-    override fun provideType(): Class<TestEventFiveSubs> = TestEventFiveSubs::class.java
+    override fun provideType(): Class<FiveSubscriptionsEvent> = FiveSubscriptionsEvent::class.java
 
     @Provides @IntoSet
     override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
 
     @Provides @Singleton
-    override fun provideRepository(repository: JdoEventRepository<TestEventFiveSubs>): EventRepository<TestEventFiveSubs> = repository
+    override fun provideRepository(repository: JdoEventRepository<FiveSubscriptionsEvent>): EventRepository<FiveSubscriptionsEvent> = repository
 
     @Provides @Singleton
-    override fun provideEventStore(eventStore: TestEventStore<TestEventFiveSubs>): EventStore<TestEventFiveSubs> = eventStore
+    override fun provideEventStore(eventStore: TestEventStore<FiveSubscriptionsEvent>): EventStore<FiveSubscriptionsEvent> = eventStore
 
     @Provides @ElementsIntoSet
-    fun provideEventActionsIntoSet(): Set<EventAction<TestEventFiveSubs>> = emptySet()
+    fun provideEventActionsIntoSet(
+            eventAction1: FiveSubscriptionsEventAction1,
+            eventAction2: FiveSubscriptionsEventAction2,
+            eventAction3: FiveSubscriptionsEventAction3,
+            eventAction4: FiveSubscriptionsEventAction4,
+            eventAction5: FiveSubscriptionsEventAction5
+    ): Set<EventAction<FiveSubscriptionsEvent>> {
+        return setOf(eventAction1, eventAction2, eventAction3, eventAction4, eventAction5)
+    }
 
     @Provides @IntoSet
-    override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<TestEventFiveSubs>): PersistableObjectInitializer<*> = initializer
+    override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<FiveSubscriptionsEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<TestEventFiveSubs>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventListener<FiveSubscriptionsEvent>): PersistableObjectListener<*, *> = listener
 }

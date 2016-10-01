@@ -4,12 +4,12 @@ import javax.annotation.Generated;
 import javax.inject.Inject;
 
 @Generated("com.google.auto.factory.processor.AutoFactoryProcessor")
-public final class TestEventNoSubsFactory {
+public final class FiveSubscriptionsEventFactory {
     @Inject
-    public TestEventNoSubsFactory() {
+    public FiveSubscriptionsEventFactory() {
     }
 
-    public TestEventNoSubs create(int value) {
-        return new TestEventNoSubs(value);
+    public FiveSubscriptionsEvent create(int value) {
+        return new FiveSubscriptionsEvent(value);
     }
 }

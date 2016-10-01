@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.SimpleEventAction
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventActionBase
 import com.rodrigodev.common.properties.delegates.AtomicBooleanDelegate
 import com.rodrigodev.common.properties.delegates.AtomicIntegerDelegate
@@ -11,13 +11,11 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 29/08/16.
  */
-@Singleton
-internal class TestEventAction<E : Event> @Inject constructor() : EventActionBase<E>(), SimpleEventAction<E> {
+internal abstract class TestEventAction<E : TestEvent> : EventActionBase<E>(), SimpleEventAction<E> {
+
+    private lateinit var m: InjectedMembers<E>
 
     private var executionPosition by AtomicIntegerDelegate()
-
-    var wasTriggered by AtomicBooleanDelegate()
-        private set
 
     private var updateEvent by AtomicBooleanDelegate()
 
@@ -29,13 +27,22 @@ internal class TestEventAction<E : Event> @Inject constructor() : EventActionBas
         updateEvent = value
     }
 
-    override fun execute(event: E) {
-        wasTriggered = true
+    override fun execute(event: E) = with(m.valueProducer) { produce(event.value) }
+
+    //region Injection
+    @Inject
+    protected fun inject(injectedMembers: InjectedMembers<E>) {
+        m = injectedMembers
     }
+
+    class InjectedMembers<E : TestEvent> @Inject protected constructor(
+            val valueProducer: ValueProducer<E>
+    )
+    //endregion
 
     //region Value Producer Classes
     @Singleton
-    class ValueProducer<E : Event> @Inject protected constructor(
+    class ValueProducer<E : TestEvent> @Inject protected constructor(
             // Code wont't compile without this.
             eventType: Class<E>
     ) {
@@ -45,8 +52,8 @@ internal class TestEventAction<E : Event> @Inject constructor() : EventActionBas
         val producedValues: List<ProducedValue>
             get() = _producedValues
 
-        fun produce(action: TestEventAction<E>, value: Int) {
-            _producedValues.add(ProducedValue(action.executionPosition, value))
+        fun TestEventAction<E>.produce(value: Int) {
+            _producedValues.add(ProducedValue(executionPosition, value))
         }
     }
 
@@ -54,6 +61,30 @@ internal class TestEventAction<E : Event> @Inject constructor() : EventActionBas
     //endregion
 }
 
-//region NoSubsEvent's actions
+//region ThreeSubscriptions event's actions
+@Singleton
+internal class ThreeSubscriptionsEventAction1 @Inject constructor() : TestEventAction<ThreeSubscriptionsEvent>()
 
+@Singleton
+internal class ThreeSubscriptionsEventAction2 @Inject constructor() : TestEventAction<ThreeSubscriptionsEvent>()
+
+@Singleton
+internal class ThreeSubscriptionsEventAction3 @Inject constructor() : TestEventAction<ThreeSubscriptionsEvent>()
+//endregion
+
+//region FiveSubscriptions event's actions
+@Singleton
+internal class FiveSubscriptionsEventAction1 @Inject constructor() : TestEventAction<FiveSubscriptionsEvent>()
+
+@Singleton
+internal class FiveSubscriptionsEventAction2 @Inject constructor() : TestEventAction<FiveSubscriptionsEvent>()
+
+@Singleton
+internal class FiveSubscriptionsEventAction3 @Inject constructor() : TestEventAction<FiveSubscriptionsEvent>()
+
+@Singleton
+internal class FiveSubscriptionsEventAction4 @Inject constructor() : TestEventAction<FiveSubscriptionsEvent>()
+
+@Singleton
+internal class FiveSubscriptionsEventAction5 @Inject constructor() : TestEventAction<FiveSubscriptionsEvent>()
 //endregion
