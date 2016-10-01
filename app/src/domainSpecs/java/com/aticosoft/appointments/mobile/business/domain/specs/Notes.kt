@@ -29,3 +29,7 @@ package com.aticosoft.appointments.mobile.business.domain.specs
 /* Testing */
 
 //TODO Currently package.jdo needs to redefine (and therefore duplicate) the metadata for the Entity class
+
+//TODO using package name "com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simple_action.test_data" produces weird DN error message: javax.jdo.JDOException: Class "Entity" : Cannot populate the class since it is already populated.
+//TODO changing the "simple_action" part removes that error
+

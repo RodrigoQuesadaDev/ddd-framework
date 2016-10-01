@@ -25,8 +25,7 @@ class DurationConverter : ParameterConverterBase<Duration>(Duration::class.java)
 
     override fun convertValue(value: String, type: Type): Duration {
         try {
-            val matchResult = DURATION_PATTERN.matchEntire(value)
-            with(matchResult!!) {
+            with(DURATION_PATTERN.matchEntire(value)!!) {
                 val timeValue: Double = NUMBER_CONVERTER.convertValue(groups[1]!!.value, Double::class.java) as Double
                 val timeUnit = groups[2]!!.value
                 return Duration.millis(when {

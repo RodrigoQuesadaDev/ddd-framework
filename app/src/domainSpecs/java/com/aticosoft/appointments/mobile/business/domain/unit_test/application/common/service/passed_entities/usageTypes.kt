@@ -43,10 +43,7 @@ internal class CollectionUsageTypeConverter : UsageTypeConverter<CollectionUsage
     override fun convertValue(value: String, type: Type) = convertValue(value, CollectionUsageType.Companion)
 }
 
-/***************************************************************************************************
- * Base Code
- **************************************************************************************************/
-
+//region Base Code
 internal abstract class UsageTypeConverter<U : UsageType>(usageTypeClass: Class<U>) : ParameterConverterBase<U>(usageTypeClass) {
 
     fun convertValue(value: String, usageTypeCompanion: UsageType.CompanionDefinition<U>) = usageTypeCompanion.from(value)
@@ -61,3 +58,4 @@ internal interface UsageType {
         fun from(text: String): U = typeMap[text] ?: error("Unrecognized usage: \"$text\"")
     }
 }
+//endregion

@@ -7,9 +7,9 @@ import kotlin.reflect.KProperty
 /**
  * Created by Rodrigo Quesada on 01/09/16.
  */
-class AtomicBooleanDelegate(private val atomicBoolean: AtomicBoolean = AtomicBoolean()) : ReadWriteProperty<Any, Boolean> {
+class AtomicBooleanDelegate(private val atomicValue: AtomicBoolean = AtomicBoolean()) : ReadWriteProperty<Any, Boolean> {
 
-    override fun getValue(thisRef: Any, property: KProperty<*>) = atomicBoolean.get()
+    override fun getValue(thisRef: Any, property: KProperty<*>) = atomicValue.get()
 
-    override fun setValue(thisRef: Any, property: KProperty<*>, value: Boolean) = atomicBoolean.set(value)
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: Boolean) = atomicValue.set(value)
 }

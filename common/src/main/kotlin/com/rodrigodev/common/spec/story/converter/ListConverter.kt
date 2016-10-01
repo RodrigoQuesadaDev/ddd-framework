@@ -18,7 +18,7 @@ class ListConverter constructor(
         val DEFAULT_LIST_SEPARATOR = ","
     }
 
-    override fun accept(type: Type) = type is ParameterizedType && type.rawType.isList && !type.argumentType.isAnnotationPresent(AsParameters::class.java)
+    override fun accept(type: Type) = type.isList && !type.argumentType.isAnnotationPresent(AsParameters::class.java)
 
     override fun convertValue(value: String, type: Type): List<*> = value.split(valueSeparator).asSequence()
             .map { it.trim() }

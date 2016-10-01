@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
+<jdo>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data">
+        <class name="TestEventNoSubs" table="TEST_EVENT_NO_SUBS"/>
+        <class name="TestEventThreeSubs" table="TEST_EVENT_THREE_SUBS"/>
+        <class name="TestEventFiveSubs" table="TEST_EVENT_FIVE_SUBS"/>
+    </package>
+</jdo>
