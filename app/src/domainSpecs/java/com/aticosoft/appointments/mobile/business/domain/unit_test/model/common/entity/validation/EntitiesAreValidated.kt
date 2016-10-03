@@ -15,11 +15,10 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.ValidationType.PRIME_NUMBER_AND_GMAIL
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data.TestDataServices.*
-import com.rodrigodev.common.spec.story.converter.JsonData
-import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
-import com.rodrigodev.common.test.catchThrowable
 import com.rodrigodev.common.rx.testing.firstEvent
 import com.rodrigodev.common.rx.testing.testSubscribe
+import com.rodrigodev.common.spec.story.converter.JsonData
+import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.*
 import org.robolectric.annotation.Config
@@ -58,18 +57,14 @@ internal class EntitiesAreValidated : DomainStory() {
             val EXTRA_VALUE = 0
         }
 
-        override var throwable: Throwable? = null
-
         private var validatedEntityInfo: EntityInfo? = null
+
+        override var _thrownException: Throwable? = null
+        override var _catchException: Boolean = false
 
         @BeforeScenario(uponType = ScenarioType.ANY)
         fun resetValidEntity() {
             validatedEntityInfo = null
-        }
-
-        @AfterScenario(uponType = ScenarioType.ANY)
-        fun checkThrowableIsNull() {
-            assertThat(throwable).isNull();
         }
 
         private fun updateValidatedEntityInfo(entityType: EntityType, validationType: ValidationType) {
@@ -96,7 +91,7 @@ internal class EntitiesAreValidated : DomainStory() {
         @When("an \$entityType entity with \$validationType validation is created with the values \$testDataValues")
         fun whenAnEntityWithValidationIsCreated(entityType: EntityType, validationType: ValidationType, testDataValues: TestDataValues) {
             clearValidatorsRunInfo()
-            throwable = catchThrowable {
+            mightThrowException {
                 when (entityType) {
                     PARENT -> when (validationType) {
                         ODD_VALUE_AND_EMAIL -> testDataServices.execute(AddOddValueAndEmailParent(testDataValues.number, testDataValues.email, ValidValues.ODD_VALUE, ValidValues.EMAIL))
@@ -114,7 +109,7 @@ internal class EntitiesAreValidated : DomainStory() {
         @When("the entity is updated with the values \$testDataValues")
         fun whenTheEntityIsUpdated(testDataValues: TestDataValues) {
             clearValidatorsRunInfo()
-            throwable = catchThrowable {
+            mightThrowException {
                 with(validatedEntityInfo!!) {
                     when (entityType) {
                         PARENT -> when (validationType) {
@@ -133,7 +128,7 @@ internal class EntitiesAreValidated : DomainStory() {
         @When("one of the entity's fields that are not validated is updated")
         fun whenOneOfTheEntitysFieldsThatAreNotValidatedIsUpdated() {
             clearValidatorsRunInfo()
-            throwable = catchThrowable {
+            mightThrowException {
                 with(validatedEntityInfo!!) {
                     when (entityType) {
                         PARENT -> testDataServices.execute(UpdateExtraValueForPrimeNumberAndGmailParent(ValidValues.EXTRA_VALUE + 1))
@@ -147,15 +142,14 @@ internal class EntitiesAreValidated : DomainStory() {
         fun thenTheSystemThrowsAConstraintViolationExceptionWithTheMessage(validationExceptionType: ValidationExceptionType, errorMessage: String) {
             when (validationExceptionType) {
                 CONSTRAINT_VIOLATION -> {
-                    assertThat(throwable).isInstanceOf(ConstraintViolationException::class.java)
-                    assertThat((throwable as ConstraintViolationException).constraintViolations.first().message).isEqualTo(errorMessage)
+                    assertThat(thrownException).isInstanceOf(ConstraintViolationException::class.java)
+                    assertThat((thrownException as ConstraintViolationException).constraintViolations.first().message).isEqualTo(errorMessage)
                 }
                 VALIDATION_EXCEPTION -> {
-                    assertThat(throwable).isInstanceOf(PrimeNumberAndGmailValidationException::class.java)
-                    assertThat((throwable as PersistableObjectValidationException).message).isEqualTo(errorMessage)
+                    assertThat(thrownException).isInstanceOf(PrimeNumberAndGmailValidationException::class.java)
+                    assertThat((thrownException as PersistableObjectValidationException).message).isEqualTo(errorMessage)
                 }
             }
-            throwable = null
         }
 
         @Then("validation runs only once per each field/class it validates")
@@ -176,11 +170,6 @@ internal class EntitiesAreValidated : DomainStory() {
                     }
                 }
             })).isEqualTo(n)
-        }
-
-        @Then("the system doesn't throw any validation exception")
-        fun thenTheSystemDoesNotThrowAnyValidationException() {
-            assertThat(throwable).isNull()
         }
 
         @Then("the entity is not updated")

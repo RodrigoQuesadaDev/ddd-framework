@@ -10,7 +10,6 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command.CommandsCannotBeReused.LocalTestDataServices.AddNestedData
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command.CommandsCannotBeReused.UnitTestApplicationImpl
 import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
-import com.rodrigodev.common.test.catchThrowable
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
@@ -37,8 +36,10 @@ internal class CommandsCannotBeReused : DomainStory() {
             private val testDataServices: LocalTestDataServices
     ) : ExceptionThrowingSteps {
 
-        override var throwable: Throwable? = null
         private lateinit var command: AddNestedData
+
+        override var _thrownException: Throwable? = null
+        override var _catchException: Boolean = false
 
         @Given("I create a command object and pass it to an application service")
         fun givenICreateACommandObjectAndPassItToAnApplicationService() {
@@ -48,17 +49,17 @@ internal class CommandsCannotBeReused : DomainStory() {
 
         @When("I reuse it a second time on another call")
         fun whenIReuseItASecondTimeOnAnotherCall() {
-            throwable = catchThrowable { testDataServices.execute(command) }
+            mightThrowException { testDataServices.execute(command) }
         }
 
         @When("I reuse one of its nested commands on a different call")
         fun whenIReuseOneOfItsNestedCommandsOnADifferentCall() {
-            throwable = catchThrowable { testDataServices.execute(command.nested) }
+            mightThrowException { testDataServices.execute(command.nested) }
         }
 
         @Then("the system throws an exception indicating the command has already being used")
         fun thenTheSystemThrowsAnExceptionIndicatingTheCommandHasAlreadyBeingUsed() {
-            assertThat(throwable).isInstanceOf(ReusedCommandException::class.java)
+            assertThat(thrownException).isInstanceOf(ReusedCommandException::class.java)
         }
     }
 

@@ -12,6 +12,7 @@ And I call an application service that modifies its value stored in the database
 
 Scenario: a stale entity is passed using a simple field
 
+Given the next step might throw an exception
 When I pass that entity to an application service that uses it without modifying it, using <usageType>
 Then the system throws an exception indicating it's stale
 
@@ -20,6 +21,7 @@ com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/s
 
 Scenario: a stale entity is passed using a collection field
 
+Given the next step might throw an exception
 When I pass that entity to an application service that uses it without modifying it, along entities [1, 5] and using <usageType>
 Then the system throws an exception indicating it's stale
 
@@ -34,6 +36,7 @@ And I call an application service that removes it
 
 Scenario: a stale entity is passed using a simple field
 
+Given the next step might throw an exception
 When I pass that entity to an application service that uses it without modifying it, using <usageType>
 Then the system throws an exception indicating that it doesn't exist anymore
 
@@ -42,6 +45,7 @@ com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/s
 
 Scenario: a stale entity is passed using a collection field
 
+Given the next step might throw an exception
 When I pass that entity to an application service that uses it without modifying it, along entities [1, 5] and using <usageType>
 Then the system throws an exception indicating that it doesn't exist anymore
 

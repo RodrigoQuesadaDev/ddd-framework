@@ -14,11 +14,10 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestAppli
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.DetachedEntityChecking.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.CommandTestDataServices
-import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
-import com.rodrigodev.common.spec.story.steps.SpecSteps
-import com.rodrigodev.common.test.catchThrowable
 import com.rodrigodev.common.rx.testing.firstEvent
 import com.rodrigodev.common.rx.testing.testSubscribe
+import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
+import com.rodrigodev.common.spec.story.steps.SpecSteps
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
@@ -49,9 +48,10 @@ internal class DetachedEntityChecking : DomainStory() {
             private val testDataQueries: TestDataQueries
     ) : SpecSteps(), UsageTypeSteps, ExceptionThrowingSteps {
 
-        override var throwable: Throwable? = null
-
         override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(SimpleUsageTypeConverter(), CollectionUsageTypeConverter())
+
+        override var _thrownException: Throwable? = null
+        override var _catchException: Boolean = false
 
         @Given("entities [\$values]")
         fun givenEntities(values: MutableList<Int>) {
@@ -61,17 +61,17 @@ internal class DetachedEntityChecking : DomainStory() {
 
         @When("I create a new entity and pass it to an application service, using \$usageType")
         fun whenICreateANewEntityAndPassItToAnApplicationServiceUsing(usageType: SimpleUsageType) {
-            throwable = catchThrowable { createNewEntity().modify(usageType) }
+            mightThrowException { createNewEntity().modify(usageType) }
         }
 
         @When("I create a new entity and pass it to an application service along entities [\$existingValues], using \$usageType")
         fun whenICreateANewEntityAndPassItToAnApplicationServiceAlongEntities(existingValues: MutableList<Int>, usageType: CollectionUsageType) {
-            throwable = catchThrowable { listWithNewEntity(existingValues).modify(usageType) }
+            mightThrowException { listWithNewEntity(existingValues).modify(usageType) }
         }
 
         @Then("the system throws an exception indicating it's not detached")
         fun thenTheSystemThrowsAnExceptionIndicatingItsNotDetached() {
-            assertThat(throwable).isInstanceOf(NonDetachedPersistableObjectException::class.java)
+            assertThat(thrownException).isInstanceOf(NonDetachedPersistableObjectException::class.java)
         }
 
         private inline fun listWithNewEntity(existingValues: MutableList<Int>) = existingValues.queryEntities() + createNewEntity()

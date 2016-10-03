@@ -6,7 +6,7 @@ Notes:
 Scenario: event with no actions
 
 When event NO_SUBSCRIPTIONS occurs
-!-- Then no exception is thrown
+!-- No exception was thrown
 
 Scenario: different event type occurs
 

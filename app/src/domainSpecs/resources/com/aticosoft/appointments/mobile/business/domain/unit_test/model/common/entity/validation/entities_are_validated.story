@@ -7,6 +7,7 @@ So that I can have them automatically validated when using them
 Scenario: unsuccessful creation
 
 Given no data
+And the next step might throw an exception
 When an <entityType> entity with <validationType> validation is created with the values <testDataValues>
 Then the system throws a <validationExceptionType> with the message "<errorMessage>"
 
@@ -19,7 +20,7 @@ Given no data
 When an <entityType> entity with <validationType> validation is created with the values <testDataValues>
 !-- TODO fix later, not so relevant right now (2016-06-21)
 !-- Then validation runs only once per each field/class it validates
-Then the system doesn't throw any validation exception
+!-- No exception was thrown
 
 Examples:
 com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/entity/validation/successful_entries.table
@@ -27,6 +28,7 @@ com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/entity/
 Scenario: unsuccessful update
 
 Given a valid <entityType> entity with <validationType> validation
+And the next step might throw an exception
 When the entity is updated with the values <testDataValues>
 Then the system throws a <validationExceptionType> with the message "<errorMessage>"
 And the entity is not updated
@@ -39,7 +41,7 @@ Scenario: successful update
 Given a valid <entityType> entity with <validationType> validation
 When the entity is updated with the values <testDataValues>
 Then validation runs only once per each field/class it validates
-And the system doesn't throw any validation exception
+!-- No exception was thrown
 
 Examples:
 com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/entity/validation/successful_entries.table

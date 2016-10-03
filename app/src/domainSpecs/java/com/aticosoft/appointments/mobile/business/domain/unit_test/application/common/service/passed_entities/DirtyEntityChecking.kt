@@ -13,11 +13,10 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestAppli
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.DirtyEntityChecking.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.CommandTestDataServices
-import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
-import com.rodrigodev.common.spec.story.steps.SpecSteps
-import com.rodrigodev.common.test.catchThrowable
 import com.rodrigodev.common.rx.testing.firstEvent
 import com.rodrigodev.common.rx.testing.testSubscribe
+import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
+import com.rodrigodev.common.spec.story.steps.SpecSteps
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
@@ -48,7 +47,9 @@ internal class DirtyEntityChecking : DomainStory() {
     ) : SpecSteps(), UsageTypeSteps, ExceptionThrowingSteps {
 
         private lateinit var keptEntity: TestData
-        override var throwable: Throwable? = null
+
+        override var _thrownException: Throwable? = null
+        override var _catchException: Boolean = false
 
         override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(SimpleUsageTypeConverter(), CollectionUsageTypeConverter())
 
@@ -67,17 +68,17 @@ internal class DirtyEntityChecking : DomainStory() {
 
         @When("I call an application service passing that entity to it, using \$usageType")
         fun whenICallAnApplicationServicePassingThatEntityToItUsing(usageType: SimpleUsageType) {
-            throwable = catchThrowable { keptEntity.modify(usageType) }
+            mightThrowException { keptEntity.modify(usageType) }
         }
 
         @When("I call an application service passing it that entity along entities [\$existingValues], using \$usageType")
         fun whenICallAnApplicationServicePassingItThatEntityAlongEntitiesUsing(existingValues: MutableList<Int>, usageType: CollectionUsageType) {
-            throwable = catchThrowable { listWithKeptEntity(existingValues).modify(usageType) }
+            mightThrowException { listWithKeptEntity(existingValues).modify(usageType) }
         }
 
         @Then("the system throws an exception indicating it's dirty")
         fun thenTheSystemThrowsAnExceptionIndicatingItSDirty() {
-            assertThat(throwable).isInstanceOf(DirtyPersistableObjectException::class.java)
+            assertThat(thrownException).isInstanceOf(DirtyPersistableObjectException::class.java)
         }
 
         private inline fun listWithKeptEntity(existingValues: MutableList<Int>) = existingValues.queryEntities() + keptEntity

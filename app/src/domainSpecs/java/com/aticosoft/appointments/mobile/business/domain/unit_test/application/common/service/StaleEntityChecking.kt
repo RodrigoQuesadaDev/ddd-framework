@@ -15,11 +15,10 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestAppli
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.StaleEntityChecking.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.test_data.CommandTestDataServices
-import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
-import com.rodrigodev.common.spec.story.steps.SpecSteps
-import com.rodrigodev.common.test.catchThrowable
 import com.rodrigodev.common.rx.testing.firstEvent
 import com.rodrigodev.common.rx.testing.testSubscribe
+import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
+import com.rodrigodev.common.spec.story.steps.SpecSteps
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
@@ -50,9 +49,11 @@ internal class StaleEntityChecking : DomainStory() {
     ) : SpecSteps(), UsageTypeSteps, ExceptionThrowingSteps {
 
         private lateinit var keptEntity: TestData
-        override var throwable: Throwable? = null
 
         override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(SimpleUsageTypeConverter(), CollectionUsageTypeConverter())
+
+        override var _thrownException: Throwable? = null
+        override var _catchException: Boolean = false
 
         @Given("entities [\$values]")
         fun givenEntities(values: MutableList<Int>) {
@@ -77,22 +78,22 @@ internal class StaleEntityChecking : DomainStory() {
 
         @When("I pass that entity to an application service that uses it without modifying it, using \$usageType")
         fun whenIPassThatEntityToAnApplicationServiceThatUsesItWithoutModifyingItUsingASimpleField(usageType: SimpleUsageType) {
-            throwable = catchThrowable { keptEntity.onlyUse(usageType) }
+            mightThrowException { keptEntity.onlyUse(usageType) }
         }
 
         @When("I pass that entity to an application service that uses it without modifying it, along entities [\$existingValues] and using \$usageType")
         fun whenIPassThatEntityToAnApplicationServiceThatUsesItWithoutModifyingItAlongEntities(existingValues: MutableList<Int>, usageType: CollectionUsageType) {
-            throwable = catchThrowable { listWithKeptEntity(existingValues).onlyUseEntities(usageType) }
+            mightThrowException { listWithKeptEntity(existingValues).onlyUseEntities(usageType) }
         }
 
         @Then("the system throws an exception indicating it's stale")
         fun thenTheSystemThrowsAnExceptionIndicatingItsStale() {
-            assertThat(throwable).isInstanceOf(StalePersistableObjectException::class.java)
+            assertThat(thrownException).isInstanceOf(StalePersistableObjectException::class.java)
         }
 
         @Then("the system throws an exception indicating that it doesn't exist anymore")
         fun thenTheSystemThrowsAnExceptionIndicatingThatItDoesNotExistAnymore() {
-            assertThat(throwable).isInstanceOf(NonExistingStalePersistableObjectException::class.java)
+            assertThat(thrownException).isInstanceOf(NonExistingStalePersistableObjectException::class.java)
         }
 
         private inline fun listWithKeptEntity(existingValues: MutableList<Int>) = existingValues.queryEntities() + keptEntity

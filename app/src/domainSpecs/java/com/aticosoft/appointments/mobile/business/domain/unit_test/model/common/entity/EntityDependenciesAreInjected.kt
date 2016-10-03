@@ -12,10 +12,9 @@ import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.EntityDependenciesAreInjected.UnitTestApplicationImpl
-import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
-import com.rodrigodev.common.test.catchThrowable
 import com.rodrigodev.common.rx.testing.firstEvent
 import com.rodrigodev.common.rx.testing.testSubscribe
+import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.*
 import org.robolectric.annotation.Config
@@ -44,7 +43,9 @@ internal class EntityDependenciesAreInjected : DomainStory() {
     ) : ExceptionThrowingSteps {
 
         private var entity: TestData? = null
-        override var throwable: Throwable? = null
+
+        override var _thrownException: Throwable? = null
+        override var _catchException: Boolean = false
 
         @BeforeScenario(uponType = ScenarioType.ANY)
         fun resetEntity() {
@@ -73,12 +74,7 @@ internal class EntityDependenciesAreInjected : DomainStory() {
 
         @When("I call an application service that makes use of an injected dependency for entity with value \$value")
         fun whenICallAnApplicationServiceThatMakesUseOfAnInjectedDependency(value: Int) {
-            throwable = catchThrowable { testDataServices.execute(UseDependency(value)) }
-        }
-
-        @Then("the method call is successful")
-        fun thenTheMethodCallIsSuccessful() {
-            assertThat(throwable).isNull()
+            mightThrowException { testDataServices.execute(UseDependency(value)) }
         }
 
         @Then("the dependency was set")

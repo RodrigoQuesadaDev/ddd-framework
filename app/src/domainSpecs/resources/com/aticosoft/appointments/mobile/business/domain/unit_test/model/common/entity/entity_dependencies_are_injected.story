@@ -14,4 +14,4 @@ Scenario: entity is loaded from store for application service
 Given entities [3]
 When I clear the datastore cache
 And I call an application service that makes use of an injected dependency for entity with value 3
-Then the method call is successful
+!-- No exception was thrown
