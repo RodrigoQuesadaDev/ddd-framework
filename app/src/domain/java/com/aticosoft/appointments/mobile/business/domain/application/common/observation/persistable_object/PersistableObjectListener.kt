@@ -4,8 +4,8 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObjectLifecycleListener
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
+import com.rodrigodev.common.properties.Delegates.threadLocal
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
-import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
 import rx.Observable
 import rx.lang.kotlin.PublishSubject
 import rx.schedulers.Schedulers
@@ -34,7 +34,7 @@ import javax.jdo.listener.*
     // Synchronizing/serializing the publisher is not necessary because observeOn is being used (its implementation uses a concurrent queue to dispatch to the scheduler)
     val changes: Observable<PersistableObjectChangeEvent<P>> = publisher.observeOn(Schedulers.computation())
     // Meant to avoid unnecessary empty ArrayList allocation and subsequent iteration
-    private val objectChanges: MutableList<PersistableObjectChangeEvent<P>> by ThreadLocalDelegate(threadLocalCleaner) {
+    private val objectChanges: MutableList<PersistableObjectChangeEvent<P>> by threadLocal(threadLocalCleaner) {
         arrayListOf<PersistableObjectChangeEvent<P>>()
     }
 

@@ -8,8 +8,8 @@ import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appoi
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueryView
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.timeslot.TimeSlotsAlignmentValidator
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.timeslot.TimeSlotsSpaceValidator
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.JdoRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
@@ -31,7 +31,7 @@ import javax.inject.Singleton
     override fun provideType(): Class<Appointment> = Appointment::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Entity> = provideType()
 
     @Provides @Singleton
     fun provideQueries(queries: JdoAppointmentQueries): AppointmentQueries = queries

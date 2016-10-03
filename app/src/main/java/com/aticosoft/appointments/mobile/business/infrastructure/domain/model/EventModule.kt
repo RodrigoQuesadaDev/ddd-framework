@@ -14,6 +14,8 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
 /*internal*/ interface EventModule<E : Event, out Q : Queries<E>, in R : EventRepository<E>>
 : RootPersistableObjectModule<E, EventListener<E>, Q, R> {
 
+    override fun provideTypeIntoSet(): Class<out Event>
+
     override fun provideRepository(repository: R): EventRepository<E>
 
     fun provideEventStore(eventStore: EventStoreBase<E>): EventStore<E>
@@ -23,5 +25,5 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
     // @Provides methods to override another method
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = throw UnsupportedOperationException()
 
-    fun provideEventActions(): Set<EventAction<E>> = emptySet()
+    fun provideEventActionsIntoSet(): Set<EventAction<*>> = emptySet()
 }

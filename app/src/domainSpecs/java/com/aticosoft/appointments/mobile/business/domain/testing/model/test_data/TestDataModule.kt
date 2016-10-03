@@ -2,8 +2,8 @@ package com.aticosoft.appointments.mobile.business.domain.testing.model.test_dat
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.JdoEntityRepository
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
@@ -22,7 +22,7 @@ internal class TestDataModule : TestRootEntityModule<TestData>() {
     override fun provideType(): Class<TestData> = TestData::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Entity> = provideType()
 
     @Provides @IntoSet
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = TestDataQueryView::class.java

@@ -1,10 +1,9 @@
 package com.aticosoft.appointments.mobile.business.domain.model.appointment
 
 import com.aticosoft.appointments.mobile.business.domain.common.values.Absent
-import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
-import com.aticosoft.appointments.mobile.business.domain.model.common.embedded.EmbeddedDelegate
-import com.aticosoft.appointments.mobile.business.domain.model.common.embedded.EmbeddedDelegate.EmbeddedProperty
+import com.aticosoft.appointments.mobile.business.domain.model.common.Delegates.embedded
 import com.aticosoft.appointments.mobile.business.domain.model.common.embedded.EmbeddedInterval
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.google.auto.factory.Provided
 import org.joda.time.Interval
 import javax.jdo.annotations.PersistenceCapable
@@ -25,6 +24,8 @@ class Appointment protected constructor(
         private set
 
     private var _scheduledTime = EmbeddedInterval(scheduledTime)
-
-    val scheduledTime: Interval by EmbeddedDelegate(EmbeddedProperty({ _scheduledTime }, { _scheduledTime = it }), EmbeddedInterval.Delegator)
+    val scheduledTime: Interval by embedded(EmbeddedInterval.Delegator,
+            get = { _scheduledTime },
+            set = { _scheduledTime = it }
+    )
 }

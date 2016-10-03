@@ -21,6 +21,20 @@
             <field name="id" primary-key="true" column="_ID" value-strategy="increment"/>
         </class>
     </package>
+    <package name="com.aticosoft.appointments.mobile.business.domain.model.common.event">
+        <class name="EventActionState">
+            <version strategy="version-number">
+                <extension key="field-name" value="version" vendor-name="datanucleus"/>
+            </version>
+            <field name="version" column="VERSION"/>
+            <field name="id" primary-key="true" column="_ID" value-strategy="increment"/>
+            <field name="actionType" column="ACTION_TYPE"/>
+            <field name="eventType" column="EVENT_TYPE"/>
+            <field name="priority" column="PRIORITY"/>
+            <field name="position" column="POSITION"/>
+            <field name="executionCount" column="EXECUTION_COUNT"/>
+        </class>
+    </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.appointment">
         <class name="Appointment"  table="APPOINTMENT">
             <field name="_scheduledTime">

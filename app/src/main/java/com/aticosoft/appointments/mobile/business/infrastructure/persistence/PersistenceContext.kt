@@ -4,8 +4,8 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObjectLifecycleListener
 import com.querydsl.jdo.JDOQueryFactory
+import com.rodrigodev.common.properties.Delegates.threadLocal
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
-import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
 import java.io.Closeable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,9 +28,9 @@ import javax.jdo.listener.InstanceLifecycleListener
 
     private val threadLocalCleaner = ThreadLocalCleaner()
 
-    val persistenceManager: PersistenceManager by ThreadLocalDelegate(threadLocalCleaner) { pmf.persistenceManager }
+    val persistenceManager: PersistenceManager by threadLocal(threadLocalCleaner) { pmf.persistenceManager }
 
-    val queryFactory: JDOQueryFactory by ThreadLocalDelegate(threadLocalCleaner) { JDOQueryFactory { persistenceManager } }
+    val queryFactory: JDOQueryFactory by threadLocal(threadLocalCleaner) { JDOQueryFactory { persistenceManager } }
 
     private val persistableObjectListenerListBuilder = PersistableObjectListenerListBuilder()
 

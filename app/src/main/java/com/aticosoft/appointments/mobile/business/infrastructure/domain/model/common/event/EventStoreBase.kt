@@ -29,14 +29,12 @@ import javax.inject.Singleton
 
     private val eventFilter by lazy { PersistableObjectObservationFilter(m.eventType) }
 
-    private val eventActions: Sequence<EventAction<E>> by lazy { m.eventActions.asSequence() }
-
     protected open val simpleActions: Sequence<SimpleEventAction<E>> by lazy {
-        eventActions.filterIsInstance<SimpleEventAction<E>>()
+        with(m) { eventActionsManager.simpleActionsFor(eventType).asSequence() }
     }
 
     protected open val overridableActions: Sequence<OverridableEventAction<E>> by lazy {
-        eventActions.filterIsInstance<OverridableEventAction<E>>()
+        with(m) { eventActionsManager.overridableActionsFor(eventType).asSequence() }
     }
 
     private inline fun init() {
@@ -88,7 +86,7 @@ import javax.inject.Singleton
             val eventType: Class<E>,
             val repository: EventRepository<E>,
             val queries: Queries<E>,
-            val eventActions: MutableSet<EventAction<E>>,
+            val eventActionsManager: EventActionsManager,
             val changeObserverFactory: PersistableObjectFilteredChangeObserver.Factory<E>,
             val persistenceContext: PersistenceContext
     )

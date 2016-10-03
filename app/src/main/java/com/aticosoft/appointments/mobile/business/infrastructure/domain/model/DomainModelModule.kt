@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model
 
 import com.aticosoft.appointments.mobile.business.ModulePostInitializer
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidatorsManager
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment.AppointmentModule
@@ -24,7 +24,7 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 /*internal*/ class DomainModelModule {
 
     @Provides @ElementsIntoSet
-    fun provideObjectTypes(): Set<Class<out PersistableObject<*>>> = emptySet()
+    fun provideEventActionsIntoSet(): Set<EventAction<*>> = emptySet()
 
     @Provides @ElementsIntoSet
     fun provideObjectInitializers(): Set<PersistableObjectInitializer<*>> = emptySet()

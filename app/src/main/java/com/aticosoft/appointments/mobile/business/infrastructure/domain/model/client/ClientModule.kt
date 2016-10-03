@@ -5,8 +5,8 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueryView
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.JdoRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.JdoEntityRepository
@@ -26,7 +26,7 @@ import javax.inject.Singleton
     override fun provideType(): Class<Client> = Client::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Entity> = provideType()
 
     @Provides @Singleton
     fun provideQueries(queries: JdoClientQueries): ClientQueries = queries

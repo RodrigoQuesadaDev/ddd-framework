@@ -1,5 +1,6 @@
 package com.rodrigodev.common.properties.delegates
 
+import com.rodrigodev.common.properties.Delegates.writableLazy
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -11,7 +12,7 @@ open class CachedProxyDelegate<P, T>(
         private val proxier: Proxier<P, T>
 ) : ReadWriteProperty<Any, P> {
 
-    private var cachedValue: P by WritableLazy { with(proxier) { proxiedProperty.getValue().proxy() } }
+    private var cachedValue: P by writableLazy { with(proxier) { proxiedProperty.getValue().proxy() } }
 
     override fun getValue(thisRef: Any, property: KProperty<*>): P = cachedValue
 
@@ -20,9 +21,9 @@ open class CachedProxyDelegate<P, T>(
         proxiedProperty.setValue(value.unProxy())
     }
 
-    open class ProxiedProperty<T>(private val getValueImpl: () -> T, private val setValueImpl: (T) -> Unit) {
-        fun getValue(): T = getValueImpl()
-        fun setValue(value: T): Unit = setValueImpl(value)
+    open class ProxiedProperty<T>(private val get: () -> T, private val set: (T) -> Unit) {
+        fun getValue(): T = get()
+        fun setValue(value: T): Unit = set(value)
     }
 
     open class Proxier<P, T>(private val proxyImpl: T.() -> P, private val unProxyImpl: P.() -> T) {

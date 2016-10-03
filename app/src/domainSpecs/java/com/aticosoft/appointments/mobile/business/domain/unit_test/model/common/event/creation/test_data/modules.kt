@@ -2,10 +2,10 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventStore
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestEventModule
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.JdoEventRepository
@@ -26,16 +26,13 @@ internal class NoSubscriptionsEventModule : TestEventModule<NoSubscriptionsEvent
     override fun provideType(): Class<NoSubscriptionsEvent> = NoSubscriptionsEvent::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Event> = provideType()
 
     @Provides @Singleton
     override fun provideRepository(repository: JdoEventRepository<NoSubscriptionsEvent>): EventRepository<NoSubscriptionsEvent> = repository
 
     @Provides @Singleton
     override fun provideEventStore(eventStore: TestEventStore<NoSubscriptionsEvent>): EventStore<NoSubscriptionsEvent> = eventStore
-
-    @Provides @ElementsIntoSet
-    fun provideEventActionsIntoSet(): Set<EventAction<NoSubscriptionsEvent>> = emptySet()
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<NoSubscriptionsEvent>): PersistableObjectInitializer<*> = initializer
@@ -51,7 +48,7 @@ internal class OneSubscriptionEventModule : TestEventModule<OneSubscriptionEvent
     override fun provideType(): Class<OneSubscriptionEvent> = OneSubscriptionEvent::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Event> = provideType()
 
     @Provides @Singleton
     override fun provideRepository(repository: JdoEventRepository<OneSubscriptionEvent>): EventRepository<OneSubscriptionEvent> = repository
@@ -60,7 +57,7 @@ internal class OneSubscriptionEventModule : TestEventModule<OneSubscriptionEvent
     override fun provideEventStore(eventStore: TestEventStore<OneSubscriptionEvent>): EventStore<OneSubscriptionEvent> = eventStore
 
     @Provides @IntoSet
-    fun provideEventActionsIntoSet(eventAction: OneSubscriptionEventAction1): EventAction<OneSubscriptionEvent> = eventAction
+    fun provideEventActionsIntoSet(eventAction: OneSubscriptionEventAction1): EventAction<*> = eventAction
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<OneSubscriptionEvent>): PersistableObjectInitializer<*> = initializer
@@ -76,7 +73,7 @@ internal class FiveSubscriptionsEventModule : TestEventModule<FiveSubscriptionsE
     override fun provideType(): Class<FiveSubscriptionsEvent> = FiveSubscriptionsEvent::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Event> = provideType()
 
     @Provides @Singleton
     override fun provideRepository(repository: JdoEventRepository<FiveSubscriptionsEvent>): EventRepository<FiveSubscriptionsEvent> = repository
@@ -91,7 +88,7 @@ internal class FiveSubscriptionsEventModule : TestEventModule<FiveSubscriptionsE
             eventAction3: FiveSubscriptionsEventAction3,
             eventAction4: FiveSubscriptionsEventAction4,
             eventAction5: FiveSubscriptionsEventAction5
-    ): Set<EventAction<FiveSubscriptionsEvent>> {
+    ): Set<EventAction<*>> {
         return setOf(eventAction1, eventAction2, eventAction3, eventAction4, eventAction5)
     }
 

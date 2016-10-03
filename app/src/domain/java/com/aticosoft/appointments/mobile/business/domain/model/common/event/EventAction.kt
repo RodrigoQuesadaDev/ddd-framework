@@ -9,7 +9,11 @@ package com.aticosoft.appointments.mobile.business.domain.model.common.event
  * same values is process again, the result is the same).
  */
 /*internal*/ interface EventAction<E : Event> {
+    val type: String
+        get() = javaClass.name
     val eventType: Class<E>
+    val eventTypeId: String
+        get() = eventType.name
 }
 
 interface SimpleEventAction<E : Event> : EventAction<E> {

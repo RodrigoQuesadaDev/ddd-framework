@@ -1,7 +1,7 @@
 package com.rodrigodev.common.specs.properties.delegates.threadlocal
 
+import com.rodrigodev.common.properties.Delegates
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
-import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
 import com.rodrigodev.common.spec.story.SpecStory
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
@@ -21,7 +21,7 @@ internal class ThreadLocalIsCleanUp : SpecStory() {
 
         private class DelegatedPropertyContainer<T>(cleaner: ThreadLocalCleaner, initialValueCall: () -> T) {
 
-            private val delegate = ThreadLocalDelegate(cleaner, initialValueCall)
+            private val delegate = Delegates.threadLocal(cleaner, initialValueCall)
             var delegatedProperty: T by delegate
         }
 

@@ -2,8 +2,8 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.EntityModule
@@ -25,7 +25,7 @@ internal class OddValueAndEmailParentModule : TestRootEntityModule<OddValueAndEm
     override fun provideType(): Class<OddValueAndEmailParent> = OddValueAndEmailParent::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Entity> = provideType()
 
     @Provides @IntoSet @QueryViews
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = OddValueAndEmailParentQueryView::class.java
@@ -47,7 +47,7 @@ internal class OddValueAndEmailChildModule : EntityModule<OddValueAndEmailChild>
     override fun provideType(): Class<OddValueAndEmailChild> = OddValueAndEmailChild::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Entity> = provideType()
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<OddValueAndEmailChild>): PersistableObjectInitializer<*> = initializer
@@ -63,7 +63,7 @@ internal class PrimeNumberAndGmailParentModule : TestRootEntityModule<PrimeNumbe
     override fun provideType(): Class<PrimeNumberAndGmailParent> = PrimeNumberAndGmailParent::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Entity> = provideType()
 
     @Provides @IntoSet @QueryViews
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = PrimeNumberAndGmailParentQueryView::class.java
@@ -88,7 +88,7 @@ internal class PrimeNumberAndGmailChildModule : EntityModule<PrimeNumberAndGmail
     override fun provideType(): Class<PrimeNumberAndGmailChild> = PrimeNumberAndGmailChild::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Entity> = provideType()
 
     @Provides @IntoSet
     fun provideValidators(primeNumberAndGmailChildValidator: PrimeNumberAndGmailChildValidator): PersistableObjectValidator<*, *> = primeNumberAndGmailChildValidator

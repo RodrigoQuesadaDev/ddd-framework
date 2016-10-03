@@ -2,8 +2,8 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.c
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.Configuration
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationQueries
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.ConfigurationQueryView
@@ -26,7 +26,7 @@ import javax.inject.Singleton
     override fun provideType(): Class<Configuration> = Configuration::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Entity> = provideType()
 
     @Provides @Singleton
     fun provideQueries(queries: JdoConfigurationQueries): ConfigurationQueries = queries

@@ -1,9 +1,9 @@
 package com.rodrigodev.common.specs.properties.delegates.threadlocal
 
+import com.rodrigodev.common.properties.Delegates
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
-import com.rodrigodev.common.properties.delegates.ThreadLocalDelegate
 import com.rodrigodev.common.spec.story.SpecStory
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.jbehave.core.annotations.When
@@ -18,15 +18,6 @@ internal class ThreadLocalDelegateSetsAndGetsValues : SpecStory() {
     }
 
     class LocalSteps {
-        private class TestProxy<T>(initialValueCall: () -> T) {
-            private companion object {
-                val DUMMY_CLEANER = ThreadLocalCleaner()
-            }
-
-            private val delegate = ThreadLocalDelegate(DUMMY_CLEANER, initialValueCall)
-            var delegatedProperty: T by delegate
-        }
-
         private lateinit var p: TestProxy<Int>
 
         @Given("a ThreadLocalDelegate that is initialized with a value of \$value")
@@ -41,7 +32,16 @@ internal class ThreadLocalDelegateSetsAndGetsValues : SpecStory() {
 
         @Then("the value of the delegated property is \$value")
         fun thenTheValueOfTheDelegatedPropertyIsX(value: Int) {
-            Assertions.assertThat(p.delegatedProperty).isEqualTo(value)
+            assertThat(p.delegatedProperty).isEqualTo(value)
+        }
+
+        private class TestProxy<T>(initialValueCall: () -> T) {
+            private companion object {
+                val DUMMY_CLEANER = ThreadLocalCleaner()
+            }
+
+            private val delegate = Delegates.threadLocal(DUMMY_CLEANER, initialValueCall)
+            var delegatedProperty: T by delegate
         }
     }
 }

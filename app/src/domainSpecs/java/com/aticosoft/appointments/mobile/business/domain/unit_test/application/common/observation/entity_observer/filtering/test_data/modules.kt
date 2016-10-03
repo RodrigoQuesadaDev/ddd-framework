@@ -3,8 +3,8 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.EntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
@@ -25,7 +25,7 @@ internal class TestDataParentModule : TestRootEntityModule<TestDataParent>() {
     override fun provideType(): Class<TestDataParent> = TestDataParent::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Entity> = provideType()
 
     @Provides @IntoSet @QueryViews
     override fun provideQueryViewsIntoSet(): Class<out Enum<*>> = TestDataParentQueryView::class.java
@@ -50,7 +50,7 @@ internal class TestDataChildModule : EntityModule<TestDataChild> {
     override fun provideType(): Class<TestDataChild> = TestDataChild::class.java
 
     @Provides @IntoSet
-    override fun provideTypeIntoSet(): Class<out PersistableObject<*>> = provideType()
+    override fun provideTypeIntoSet(): Class<out Entity> = provideType()
 
     @Provides @IntoSet
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<TestDataChild>): PersistableObjectInitializer<*> = initializer

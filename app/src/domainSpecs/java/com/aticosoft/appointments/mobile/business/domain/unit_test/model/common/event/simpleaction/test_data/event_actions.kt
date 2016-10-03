@@ -3,8 +3,8 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.SimpleEventAction
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventActionBase
-import com.rodrigodev.common.properties.delegates.AtomicBooleanDelegate
-import com.rodrigodev.common.properties.delegates.AtomicIntegerDelegate
+import com.rodrigodev.common.properties.Delegates.atomicBoolean
+import com.rodrigodev.common.properties.Delegates.atomicInteger
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,9 +15,9 @@ internal abstract class TestEventAction<E : TestEvent> : EventActionBase<E>(), S
 
     private lateinit var m: InjectedMembers<E>
 
-    private var executionPosition by AtomicIntegerDelegate()
+    private var executionPosition by atomicInteger()
 
-    private var updateEvent by AtomicBooleanDelegate()
+    private var updateEvent by atomicBoolean()
 
     fun init(executionPosition: Int) {
         this.executionPosition = executionPosition

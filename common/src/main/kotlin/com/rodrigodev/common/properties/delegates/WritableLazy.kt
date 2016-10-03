@@ -6,7 +6,7 @@ import kotlin.reflect.KProperty
 /**
  * Created by Rodrigo Quesada on 04/07/16.
  */
-internal class WritableLazy<T>(val initializer: () -> T) : ReadWriteProperty<Any, T> {
+class WritableLazy<T>(val initializer: () -> T) : ReadWriteProperty<Any, T> {
 
     private var value: T? = null
 
