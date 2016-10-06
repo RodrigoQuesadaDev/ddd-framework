@@ -1,16 +1,16 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command
+package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.value_object
 
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
-import com.aticosoft.appointments.mobile.business.domain.testing.application.common.service.command.CommandImplementationVerifier
 import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.validation.classNames
 import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.validation.containedUnder
 import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.validation.invalid
 import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.validation.valid
+import com.aticosoft.appointments.mobile.business.domain.testing.model.common.value_object.ValueObjectImplementationVerifier
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command.CommandImplementationVerification.UnitTestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.value_object.ValueObjectImplementationVerification.UnitTestApplicationImpl
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.rodrigodev.common.spec.story.converter.JsonData
 import org.assertj.core.api.Assertions.assertThat
@@ -21,12 +21,12 @@ import org.robolectric.annotation.Config
 import javax.inject.Inject
 
 /**
- * Created by Rodrigo Quesada on 04/12/15.
+ * Created by Rodrigo Quesada on 04/10/16.
  */
 @Config(application = UnitTestApplicationImpl::class)
-internal class CommandImplementationVerification : DomainStory() {
+internal class ValueObjectImplementationVerification : DomainStory() {
 
-    class UnitTestApplicationImpl : UnitTestApplication<CommandImplementationVerification>(UnitTestApplicationComponent::inject)
+    class UnitTestApplicationImpl : UnitTestApplication<ValueObjectImplementationVerification>(UnitTestApplicationComponent::inject)
 
     @Inject protected lateinit var localSteps: LocalSteps
 
@@ -36,11 +36,11 @@ internal class CommandImplementationVerification : DomainStory() {
 
     class LocalSteps @Inject constructor(
     ) {
-        private lateinit var implementationVerifier: CommandImplementationVerifier
+        private lateinit var implementationVerifier: ValueObjectImplementationVerifier
 
-        @Given("I run the code that verifies the correct definition of entities on Command classes with the configuration \$configuration")
+        @Given("I run the code that verifies the correct definition of ValueObject classes with the configuration \$configuration")
         fun givenIRunTheCodeThatVerifiesTheCorrectDefinitionOfEntitiesOnCommandClassesWithTheConfiguration(configuration: Configuration) {
-            implementationVerifier = CommandImplementationVerifier(configuration.packageNames).apply { run() }
+            implementationVerifier = ValueObjectImplementationVerifier(configuration.packageNames).apply { run() }
         }
 
         @Then("the system detects that the next classes are not correctly implemented: \$classes")
@@ -60,7 +60,7 @@ internal class CommandImplementationVerification : DomainStory() {
             assertThat(results.classNames()).containsAll(classes.classNames())
         }
 
-        @Then("the system detects there are commands under \$packageName and all are correctly implemented")
+        @Then("the system detects there are value objects under \$packageName and all are correctly implemented")
         fun thenTheSystemDetectsThereIsCommandsUnderPackageAndAllAreCorrectlyImplemented(packageName: String) {
             val results = implementationVerifier.results.containedUnder(packageName)
             assertThat(results).isNotEmpty()

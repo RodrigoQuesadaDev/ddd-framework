@@ -5,6 +5,7 @@ package com.rodrigodev.common.reflection
 import org.reflections.Reflections
 import org.reflections.scanners.ResourcesScanner
 import org.reflections.scanners.SubTypesScanner
+import org.reflections.scanners.TypeAnnotationsScanner
 import org.reflections.util.ClasspathHelper
 import org.reflections.util.ClasspathHelper.contextClassLoader
 import org.reflections.util.ClasspathHelper.staticClassLoader
@@ -18,7 +19,7 @@ inline fun createReflections(vararg prefixes: String): Reflections {
     val classLoaders: Array<ClassLoader> = arrayOf(contextClassLoader(), staticClassLoader())
 
     return Reflections(ConfigurationBuilder()
-            .setScanners(SubTypesScanner(), ResourcesScanner())
+            .setScanners(SubTypesScanner(), ResourcesScanner(), TypeAnnotationsScanner())
             .setUrls(ClasspathHelper.forClassLoader(*classLoaders))
             .filterInputsBy(FilterBuilder().includePackage(*prefixes)))
 }

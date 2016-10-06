@@ -1,14 +1,12 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.aticosoft.appointments.mobile.business.domain.testing.application.common.service
+package com.aticosoft.appointments.mobile.business.domain.testing.application.common.service.command
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices.Command
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegate
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
-import com.rodrigodev.common.reflection.createReflections
-import com.rodrigodev.common.reflection.isCollectionOf
-import com.rodrigodev.common.reflection.isKotlinClass
-import com.rodrigodev.common.reflection.isSubOfOrSameAs
+import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.validation.ValidClassImplementationResult
+import com.rodrigodev.common.reflection.*
 import org.reflections.Reflections
 import java.lang.reflect.Field
 import java.lang.reflect.Type
@@ -27,20 +25,20 @@ internal class CommandImplementationVerifier(packagePaths: Array<String>) {
 
     private val reflections: Reflections = createReflections(*packagePaths)
 
-    var results: List<CommandImplementation> by notNull()
+    var results: List<ValidClassImplementationResult> by notNull()
         private set
 
     fun run() {
         results = reflections.getSubTypesOf(Command::class.java)
-                .map { CommandImplementation(it.isValid(), it) }
+                .map { ValidClassImplementationResult(it.isValid(), it) }
     }
 }
 
 //region Validation
-private fun Class<*>.isValid() = !isKotlinClass() || kotlin.nonCommandMemberProperties().asSequence().all { it.isValid() }
+private inline fun Class<*>.isValid() = isKotlinClass() && kotlin.nonCommandMemberProperties().asSequence().all { it.isValid() }
 
 private inline fun KProperty1<*, *>.isValid(): Boolean = returnType.javaType.let { type ->
-    if (type.isEntity() || type.isCollectionOfEntities()) usesCommandEntityDelegate() else true
+    if (type.isEntity() || type.isCollectionOfEntities()) usesDelegate(CommandPersistableObjectDelegate::class) else true
 }
 //endregion
 
@@ -55,17 +53,4 @@ private inline fun KClass<*>.memberPropertiesNotIn(anotherClass: KClass<*>): Col
 private inline fun Type.isEntity() = isSubOfOrSameAs(Entity::class.java)
 
 private inline fun Type.isCollectionOfEntities() = isCollectionOf(Entity::class.java)
-//endregion
-
-//region Properties
-private inline fun <T, R> KProperty1<T, R>.usesCommandEntityDelegate(): Boolean = delegate()?.isCommandEntityDelegate() ?: false
-
-private inline fun <T> KProperty<T>.delegate(): Field? = try {
-    getter.javaMethod?.declaringClass?.getDeclaredField("$name\$delegate")
-}
-catch(e: NoSuchFieldException) {
-    null
-}
-
-private inline fun Field.isCommandEntityDelegate() = this.type.isSubOfOrSameAs(CommandPersistableObjectDelegate::class.java)
 //endregion

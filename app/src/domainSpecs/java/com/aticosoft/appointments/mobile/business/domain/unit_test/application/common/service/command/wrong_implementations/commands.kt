@@ -6,58 +6,44 @@ import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
 /**
  * Created by Rodrigo Quesada on 05/12/15.
  */
-/***************************************************************************************************
- * Simple
- **************************************************************************************************/
-
+//region Simple
 internal open class EntityOnPropertyCommand(val entity: TestData) : Command()
 
 internal class EntityOnPropertyOfParentCommand(entity: TestData) : EntityOnPropertyCommand(entity)
+//endregion
 
-/***************************************************************************************************
- * Generics
- **************************************************************************************************/
-
+//region Generics
 internal open class EntityOnGenericPropertyCommand<E : TestData>(val entity: E) : Command()
 
 internal class EntityOnGenericPropertyOfParentCommand<E : TestData>(entity: E) : EntityOnGenericPropertyCommand<E>(entity)
+//endregion
 
-/***************************************************************************************************
- * List
- **************************************************************************************************/
-
+//region List
 internal open class EntityOnListCommand(val entities: List<TestData>) : Command()
 
 internal class EntityOnListOfParentCommand(entities: List<TestData>) : EntityOnListCommand(entities)
+//endregion
 
-/***************************************************************************************************
- * Set
- **************************************************************************************************/
-
+//region Set
 internal open class EntityOnSetCommand(val entities: Set<TestData>) : Command()
 
 internal class EntityOnSetOfParentCommand(entities: Set<TestData>) : EntityOnSetCommand(entities)
+//endregion
 
-/***************************************************************************************************
- * Map as Value
- **************************************************************************************************/
-
+//region Map as Value
 internal open class EntityOnMapAsValueCommand(val entityMap: Map<Int, TestData>) : Command()
 
 internal class EntityOnMapAsValueOfParentCommand(entityMap: Map<Int, TestData>) : EntityOnMapAsValueCommand(entityMap)
+//endregion
 
-/***************************************************************************************************
- * Map as Key
- **************************************************************************************************/
-
+//region Map as Key
 internal open class EntityOnMapAsKeyCommand(val entityMap: Map<TestData, Int>) : Command()
 
 internal class EntityOnMapAsKeyOfParentCommand(entityMap: Map<TestData, Int>) : EntityOnMapAsKeyCommand(entityMap)
+//endregion
 
-/***************************************************************************************************
- * Map as Value and Key
- **************************************************************************************************/
-
+//region Map as Value and Key
 internal open class EntitiesOnMapAsValueAndKeyCommand(val entityMap: Map<TestData, TestData>) : Command()
 
 internal class EntitiesOnMapAsValueAndKeyOfParentCommand(entityMap: Map<TestData, TestData>) : EntitiesOnMapAsValueAndKeyCommand(entityMap)
+//endregion

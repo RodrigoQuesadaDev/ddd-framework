@@ -12,72 +12,58 @@ import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
 /**
  * Created by Rodrigo Quesada on 05/12/15.
  */
-/***************************************************************************************************
- * Simple
- **************************************************************************************************/
-
+//region Simple
 internal open class EntityOnPropertyCommand(entity: TestData) : Command() {
     val entity by entity.delegate()
 }
 
 internal class EntityOnPropertyOfParentCommand(entity: TestData) : EntityOnPropertyCommand(entity)
+//endregion
 
-/***************************************************************************************************
- * Generics
- **************************************************************************************************/
-
+//region Generics
 internal open class EntityOnGenericPropertyCommand<E : TestData>(entity: E) : Command() {
     val entity by entity.delegate()
 }
 
 internal class EntityOnGenericPropertyOfParentCommand<E : TestData>(entity: E) : EntityOnGenericPropertyCommand<E>(entity)
+//endregion
 
-/***************************************************************************************************
- * List
- **************************************************************************************************/
-
+//region List
 internal open class EntityOnListCommand(entities: List<TestData>) : Command() {
     val entities by entities.delegate()
 }
 
 internal class EntityOnListOfParentCommand(entities: List<TestData>) : EntityOnListCommand(entities)
+//endregion
 
-/***************************************************************************************************
- * Set
- **************************************************************************************************/
-
+//region Set
 internal open class EntityOnSetCommand(entities: Set<TestData>) : Command() {
     val entities by entities.delegate()
 }
 
 internal class EntityOnSetOfParentCommand(entities: Set<TestData>) : EntityOnSetCommand(entities)
+//endregion
 
-/***************************************************************************************************
- * Map as Value
- **************************************************************************************************/
-
+//region Map as Value
 internal open class EntityOnMapAsValueCommand(entityMap: Map<Int, TestData>) : Command() {
     val entityMap by entityMap.delegateValues()
 }
 
 internal class EntityOnMapAsValueOfParentCommand(entityMap: Map<Int, TestData>) : EntityOnMapAsValueCommand(entityMap)
+//endregion
 
-/***************************************************************************************************
- * Map as Key
- **************************************************************************************************/
-
+//region Map as Key
 internal open class EntityOnMapAsKeyCommand(entityMap: Map<TestData, Int>) : Command() {
     val entityMap by entityMap.delegateKeys()
 }
 
 internal class EntityOnMapAsKeyOfParentCommand(entityMap: Map<TestData, Int>) : EntityOnMapAsKeyCommand(entityMap)
+//endregion
 
-/***************************************************************************************************
- * Map as Value and Key
- **************************************************************************************************/
-
+//region Map as Value and Key
 internal open class EntitiesOnMapAsValueAndKeyCommand(entityMap: Map<TestData, TestData>) : Command() {
     val entityMap by entityMap.delegate()
 }
 
 internal class EntitiesOnMapAsValueAndKeyOfParentCommand(entityMap: Map<TestData, TestData>) : EntitiesOnMapAsValueAndKeyCommand(entityMap)
+//endregion

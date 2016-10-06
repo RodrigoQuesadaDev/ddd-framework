@@ -24,6 +24,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.EntitiesAreValidated
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.EventSubscriptionCreation
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.SimpleAction
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.value_object.ValueObjectImplementationVerification
 import dagger.Component
 import javax.inject.Singleton
 
@@ -52,6 +53,7 @@ internal interface UnitTestApplicationComponent : TestApplicationComponent {
     fun inject(test: PassedEntityInstancesNotModified)
     fun inject(test: CommandsCannotBeReused)
     fun inject(test: CommandImplementationVerification)
+    fun inject(test: ValueObjectImplementationVerification)
     fun inject(test: SimpleAction)
     fun inject(test: EventSubscriptionCreation)
 

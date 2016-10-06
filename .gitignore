@@ -8,6 +8,7 @@
 buildSrc/local.properties
 /.idea
 /captures
+/projectFilesBackup
 *.iml
 *.jar
 !harmony-javax-jndi.jar
