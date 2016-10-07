@@ -9,6 +9,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.ap
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client.ClientModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializersManager
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.valueobject.ValueObjectsManager
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.configuration.ConfigurationModule
 import dagger.Module
 import dagger.Provides
@@ -39,15 +40,20 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
     @Provides @ElementsIntoSet @QueryViews
     fun provideQueryViews(): Set<Class<out Enum<*>>> = setOf()
 
+    @Provides @ElementsIntoSet @ValueObjects
+    fun provideValueObjects(): Set<Class<*>> = emptySet()
+
     @Singleton
     class PostInitializer @Inject protected constructor(
             private val persistableObjectValidatorsManager: PersistableObjectValidatorsManager,
-            private val persistableObjectInitializersManager: PersistableObjectInitializersManager
+            private val persistableObjectInitializersManager: PersistableObjectInitializersManager,
+            private val valueObjectsManager: ValueObjectsManager
     ) : ModulePostInitializer {
 
         override fun init() {
             persistableObjectValidatorsManager.registerValidators()
             persistableObjectInitializersManager.registerInitializers()
+            valueObjectsManager.registerValueObjects()
         }
     }
 }
@@ -55,3 +61,7 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 @Qualifier
 @Retention(RUNTIME)
 /*internal*/ annotation class QueryViews
+
+@Qualifier
+@Retention(RUNTIME)
+/*internal*/ annotation class ValueObjects

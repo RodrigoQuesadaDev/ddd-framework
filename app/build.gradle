@@ -65,6 +65,8 @@ datanucleus {
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/filtering/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/query_view/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/entity/validation/test_data',
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/valueobject/behavior/test_data',
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/valueobject/registration/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/common/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/creation/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/simpleaction/test_data']

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
+<jdo>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.behavior.test_data">
+        <class name="EntityWithValueObject">
+            <field name="valueObject"/>
+        </class>
+        <class name="TestValueObject" embedded-only="true">
+            <field name="value"/>
+        </class>
+    </package>
+</jdo>

@@ -5,32 +5,30 @@ package com.aticosoft.appointments.mobile.business.domain.testing.application.co
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.ApplicationServices.Command
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegate
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
-import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.validation.ValidClassImplementationResult
-import com.rodrigodev.common.reflection.*
+import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.verification.ClassVerifier
+import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.verification.GenericClassVerifier
+import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.verification.ValidClassImplementationResult
+import com.rodrigodev.common.reflection.isCollectionOf
+import com.rodrigodev.common.reflection.isKotlinClass
+import com.rodrigodev.common.reflection.isSubOfOrSameAs
+import com.rodrigodev.common.reflection.usesDelegate
 import org.reflections.Reflections
-import java.lang.reflect.Field
 import java.lang.reflect.Type
-import kotlin.properties.Delegates.notNull
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty1
-import kotlin.reflect.jvm.javaMethod
 import kotlin.reflect.jvm.javaType
 import kotlin.reflect.memberProperties
 
 /**
  * Created by Rodrigo Quesada on 06/12/15.
  */
-internal class CommandImplementationVerifier(packagePaths: Array<String>) {
+internal class CommandImplementationVerifier(packagePaths: Array<String>) : ClassVerifier<ValidClassImplementationResult> {
 
-    private val reflections: Reflections = createReflections(*packagePaths)
+    override val _genericVerifier = object : GenericClassVerifier<ValidClassImplementationResult>(packagePaths) {
 
-    var results: List<ValidClassImplementationResult> by notNull()
-        private set
+        override fun Reflections.retrieveClasses() = getSubTypesOf(Command::class.java)
 
-    fun run() {
-        results = reflections.getSubTypesOf(Command::class.java)
-                .map { ValidClassImplementationResult(it.isValid(), it) }
+        override fun Class<*>.verify() = ValidClassImplementationResult(isValid(), this)
     }
 }
 

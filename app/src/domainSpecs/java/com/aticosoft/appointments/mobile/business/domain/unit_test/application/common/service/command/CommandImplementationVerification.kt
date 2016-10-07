@@ -4,10 +4,10 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.application.
 
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.application.common.service.command.CommandImplementationVerifier
-import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.validation.classNames
-import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.validation.containedUnder
-import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.validation.invalid
-import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.validation.valid
+import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.verification.classNames
+import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.verification.containedUnder
+import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.verification.invalid
+import com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.verification.valid
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command.CommandImplementationVerification.UnitTestApplicationImpl
@@ -34,34 +34,27 @@ internal class CommandImplementationVerification : DomainStory() {
         steps { listOf(localSteps) }
     }
 
-    class LocalSteps @Inject constructor(
-    ) {
+    class LocalSteps @Inject constructor() {
+
         private lateinit var implementationVerifier: CommandImplementationVerifier
 
-        @Given("I run the code that verifies the correct definition of entities on Command classes with the configuration \$configuration")
-        fun givenIRunTheCodeThatVerifiesTheCorrectDefinitionOfEntitiesOnCommandClassesWithTheConfiguration(configuration: Configuration) {
+        @Given("I run the code that verifies the correct definition of entities on Command classes with the next configuration: \$configuration")
+        fun givenIRunTheCodeThatVerifiesTheCorrectDefinitionOfEntitiesOnCommandClassesWithTheNextConfiguration(configuration: Configuration) {
             implementationVerifier = CommandImplementationVerifier(configuration.packageNames).apply { run() }
         }
 
-        @Then("the system detects that the next classes are not correctly implemented: \$classes")
+        @Then("the system detects that only the next classes are not correctly implemented: \$classes")
         fun thenTheSystemDetectsThatOnlyTheNextClassesAreNotCorrectlyImplemented(classes: MutableList<ClassExample>) {
-            theSystemDetectsTheNextClassesAre(false, classes)
+            assertThat(implementationVerifier.results.invalid().classNames()).containsOnlyElementsOf(classes.classNames())
         }
 
         @Then("the system detects that the next classes are correctly implemented: \$classes")
         fun theSystemDetectsTheNextClassesAreCorrectlyImplemented(classes: MutableList<ClassExample>) {
-            theSystemDetectsTheNextClassesAre(true, classes)
-        }
-
-        private fun theSystemDetectsTheNextClassesAre(correctlyImplemented: Boolean, classes: MutableList<ClassExample>) {
-            val results = with(implementationVerifier.results) {
-                if (correctlyImplemented) valid() else invalid()
-            }
-            assertThat(results.classNames()).containsAll(classes.classNames())
+            assertThat(implementationVerifier.results.valid().classNames()).containsAll(classes.classNames())
         }
 
         @Then("the system detects there are commands under \$packageName and all are correctly implemented")
-        fun thenTheSystemDetectsThereIsCommandsUnderPackageAndAllAreCorrectlyImplemented(packageName: String) {
+        fun thenTheSystemDetectsThereAreCommandsUnderPackageAndAllAreCorrectlyImplemented(packageName: String) {
             val results = implementationVerifier.results.containedUnder(packageName)
             assertThat(results).isNotEmpty()
             assertThat(results.all { it.valid }).isTrue()

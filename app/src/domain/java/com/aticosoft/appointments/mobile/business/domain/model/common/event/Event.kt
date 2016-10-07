@@ -8,8 +8,8 @@ import com.rodrigodev.common.properties.preventSetterCall
  */
 /*internal*/ abstract class Event : PersistableObject<Long>() {
 
-    override var id: Long = 0
+    override final var id: Long = 0
         set(value):Unit = preventSetterCall()
-    override var version: Long = 0
+    override final var version: Long = 0
         set(value):Unit = preventSetterCall()
 }

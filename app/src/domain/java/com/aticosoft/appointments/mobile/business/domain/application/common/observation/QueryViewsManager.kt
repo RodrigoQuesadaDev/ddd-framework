@@ -7,6 +7,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.persistence.Per
 import com.querydsl.core.types.Path
 import com.rodrigodev.common.collection.peek
 import com.rodrigodev.common.collection.toTypedArray
+import com.rodrigodev.common.nullability.nonNullOr
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.jdo.FetchGroup
@@ -50,7 +51,7 @@ import javax.jdo.PersistenceManagerFactory
 }
 
 //region Register Views
-private inline fun Sequence<Path<*>>.checkFields() = peek { check(it.metadata.parent?.metadata?.isRoot ?: false, { "Specified fields for QueryView must be direct fields of root element." }) }
+private inline fun Sequence<Path<*>>.checkFields() = peek { check(it.metadata.parent.nonNullOr(false) { metadata.isRoot }, { "Specified fields for QueryView must be direct fields of root element." }) }
 
 private inline fun PersistenceManagerFactory.addFetchGroupForRoot(info: FetchGroupInfo) = with(info) {
     val fetchGroup = getFetchGroup(field.root.type, name)

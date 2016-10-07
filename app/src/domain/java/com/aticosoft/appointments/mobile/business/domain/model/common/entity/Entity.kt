@@ -11,14 +11,14 @@ import javax.inject.Singleton
  */
 /*internal*/ abstract class Entity : PersistableObject<String> {
 
-    override var id: String
+    override final var id: String
         set(value) {
             //TODO change after KT-13592 gets fixed
             @Suppress("SENSELESS_COMPARISON")
             if (field != null) preventSetterCall()
             field = value
         }
-    override var version: Long = 0
+    override final var version: Long = 0
         set(value):Unit = preventSetterCall()
 
     constructor(entityContext: Context?) {

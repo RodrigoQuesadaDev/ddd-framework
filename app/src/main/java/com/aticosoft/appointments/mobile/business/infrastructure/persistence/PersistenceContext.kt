@@ -1,7 +1,6 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObjectLifecycleListener
 import com.querydsl.jdo.JDOQueryFactory
 import com.rodrigodev.common.properties.Delegates.threadLocal
@@ -45,8 +44,8 @@ import javax.jdo.listener.InstanceLifecycleListener
         registerLifecycleListener(persistableObjectLifecycleListener, persistableObjectLifecycleListener.objectType)
     }
 
-    fun registerLifecycleListener(lifecycleListener: InstanceLifecycleListener, instanceType: Class<out PersistableObject<*>>) {
-        pmf.addInstanceLifecycleListener(lifecycleListener, arrayOf(instanceType))
+    fun registerLifecycleListener(lifecycleListener: InstanceLifecycleListener, vararg instanceTypes: Class<*>) {
+        pmf.addInstanceLifecycleListener(lifecycleListener, instanceTypes)
     }
 
     fun onTransactionCommitted() {

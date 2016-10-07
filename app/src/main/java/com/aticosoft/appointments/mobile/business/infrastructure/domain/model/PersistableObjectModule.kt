@@ -21,6 +21,9 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
     fun provideListenerIntoSet(listener: L): PersistableObjectListener<*, *>
 
     fun provideValidatorsIntoSet(): Set<PersistableObjectValidator<*, *>> = emptySet()
+
+    @ValueObjects
+    fun provideValueObjectsIntoSet(): Set<Class<*>> = emptySet()
 }
 
 /*internal*/ interface RootPersistableObjectModule<P : PersistableObject<*>,

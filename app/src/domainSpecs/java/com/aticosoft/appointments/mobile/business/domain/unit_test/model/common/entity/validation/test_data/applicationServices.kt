@@ -20,10 +20,7 @@ internal class TestDataServices @Inject protected constructor(
         private val primeNumberAndGmailParentQueries: PrimeNumberAndGmailParentQueries
 ) : ApplicationServices() {
 
-    /***********************************************************************************************
-     * Add entities
-     **********************************************************************************************/
-
+    //region Add entities
     class AddOddValueAndEmailParent(val oddValue: Int, val email: String, val childOddValue: Int, val childEmail: String) : Command()
 
     fun execute(command: AddOddValueAndEmailParent) = command.execute {
@@ -35,11 +32,9 @@ internal class TestDataServices @Inject protected constructor(
     fun execute(command: AddPrimeNumberAndGmailParent) = command.execute {
         primeNumberAndGmailParentRepository.add(primeNumberAndGmailParentFactory.create(primeNumber, email, extraValue, childPrimeValue, childEmail, childExtraValue))
     }
+    //endregion
 
-    /***********************************************************************************************
-     * Update OddValueAndEmail entities
-     **********************************************************************************************/
-
+    //region Update OddValueAndEmail entities
     class UpdateOddValueAndEmailParent(number: Int, email: String) : UpdateNumberAndEmail(number, email)
 
     fun execute(command: UpdateOddValueAndEmailParent) = command.updateParent { firstOddValueAndEmailParent() }
@@ -49,11 +44,9 @@ internal class TestDataServices @Inject protected constructor(
     fun execute(command: UpdateOddValueAndEmailChild) = command.updateChild { firstOddValueAndEmailParent() }
 
     private inline fun firstOddValueAndEmailParent(): OddValueAndEmailParent = oddValueAndEmailParentRepository.find(oddValueAndEmailParentQueries.first())!!
+    //endregion
 
-    /***********************************************************************************************
-     * Update PrimeNumberAndGmail entities
-     **********************************************************************************************/
-
+    //region Update PrimeNumberAndGmail entities
     class UpdatePrimeNumberAndGmailParent(number: Int, email: String) : UpdateNumberAndEmail(number, email)
 
     fun execute(command: UpdatePrimeNumberAndGmailParent) = command.updateParent { firstPrimeNumberAndGmailParent() }
@@ -71,11 +64,9 @@ internal class TestDataServices @Inject protected constructor(
     fun execute(command: UpdateExtraValueForPrimeNumberAndGmailChild) = command.updateChild { firstPrimeNumberAndGmailParent() }
 
     private inline fun firstPrimeNumberAndGmailParent(): PrimeNumberAndGmailParent = primeNumberAndGmailParentRepository.find(primeNumberAndGmailParentQueries.first())!!
+    //endregion
 
-    /***************************************************************************************************
-     * Update Entities Code
-     **************************************************************************************************/
-
+    //region Update Entities Code
     abstract class UpdateNumberAndEmail(val number: Int, val email: String) : ApplicationServices.Command()
 
     private fun UpdateNumberAndEmail.updateParent(firstEntityCall: () -> NumberAndEmailTestData) = updateUsing(firstEntityCall) {
@@ -109,4 +100,5 @@ internal class TestDataServices @Inject protected constructor(
     private inline fun <T : NumberAndEmailTestData> UpdateExtraValue.updateUsing(crossinline firstEntityCall: () -> T, crossinline updateCall: (T) -> Unit) = execute {
         updateCall(firstEntityCall())
     }
+    //endregion
 }

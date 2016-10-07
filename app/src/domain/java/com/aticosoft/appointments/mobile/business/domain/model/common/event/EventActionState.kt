@@ -18,9 +18,11 @@ import javax.jdo.annotations.PersistenceCapable
     }
 
     override var id: Long = 0
-        set(value):Unit = preventSetterCall()
+        private set
     override var version: Long = 0
-        set(value):Unit = preventSetterCall()
+        private set
+    /*var type: Type = Type(action)
+        set(value):Unit = preventSetterCall()*/
     var actionType: String = action.type
         set(value):Unit = preventSetterCall()
     var eventType: String = action.eventTypeId
@@ -31,6 +33,16 @@ import javax.jdo.annotations.PersistenceCapable
         set(value):Unit = preventSetterCall()
     var executionCount: Int = 0
         set(value):Unit = preventSetterCall()
+
+    /*class Type(action: EventAction<*>) {
+        var actionType: String by writeOnce()
+        var eventType: String by writeOnce()
+
+        init {
+            actionType = action.type
+            eventType = action.eventTypeId
+        }
+    }*/
 }
 
 @Singleton

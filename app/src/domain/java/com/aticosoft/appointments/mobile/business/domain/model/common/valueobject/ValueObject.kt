@@ -1,4 +1,4 @@
-package com.aticosoft.appointments.mobile.business.domain.model.common.value_object
+package com.aticosoft.appointments.mobile.business.domain.model.common.valueobject
 
 import java.lang.annotation.Inherited
 

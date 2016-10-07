@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
+<orm>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.behavior.test_data">
+        <class name="EntityWithValueObject" table="ENTITY_WITH_VALUE_OBJECT">
+            <field name="valueObject">
+                <embedded>
+                    <field name="value" column="VALUE"/>
+                </embedded>
+            </field>
+        </class>
+    </package>
+</orm>

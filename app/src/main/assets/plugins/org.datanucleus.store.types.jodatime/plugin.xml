@@ -74,7 +74,7 @@ Contributors:
 
     <!-- RDBMS : JAVA TYPES MAPPING -->
     <extension point="org.datanucleus.store.rdbms.java_mapping">
-        <!-- TODO Aim to remove this when we can get RDBMS query process to work with TypeConverterMultiMapping -->
+        <!-- TODO Aim to remove this when we can get RDBMS query verify to work with TypeConverterMultiMapping -->
         <mapping java-type="org.joda.time.Interval" mapping-class="org.datanucleus.store.types.jodatime.rdbms.mapping.JodaIntervalMapping"/>
     </extension>
 

@@ -6,19 +6,14 @@ So that I can always have them correctly implemented
 
 Scenario: set-up
 
-Given I run the code that verifies the correct definition of entities on Command classes with the configuration
-
+Given I run the code that verifies the correct definition of entities on Command classes with the next configuration:
 {
-    packageNames: [
-        'com.aticosoft.appointments.mobile.business.domain.application',
-        'com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command.wrong_implementations',
-        'com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.command.correct_implementations'
-    ]
+    packageNames: ['com.aticosoft.appointments.mobile.business.domain']
 }
 
 Scenario: incorrect implementations
 
-Then the system detects that the next classes are not correctly implemented:
+Then the system detects that only the next classes are not correctly implemented:
 
 | className                                                                                                                                                      |
 |-- simple                                                                                                                                                     --|

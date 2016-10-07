@@ -77,6 +77,7 @@ import javax.jdo.listener.*
         objectChanges.add(PersistableObjectChangeEvent(EventType.Companion.from(event.eventType), previousValue = event.source as P))
     }
 
+    //region Non-Implemented Methods
     override fun preStore(event: InstanceLifecycleEvent) {
         // Do nothing!
     }
@@ -88,6 +89,7 @@ import javax.jdo.listener.*
     override fun postDirty(event: InstanceLifecycleEvent?) {
         // Do nothing!
     }
+    //endregion
 
     //region Injection
     @Inject

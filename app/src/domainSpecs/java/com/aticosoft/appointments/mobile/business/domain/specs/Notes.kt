@@ -33,3 +33,7 @@ package com.aticosoft.appointments.mobile.business.domain.specs
 //TODO using package name "com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simple_action.test_data" produces weird DN error message: javax.jdo.JDOException: Class "Entity" : Cannot populate the class since it is already populated.
 //TODO changing the "simple_action" part removes that error
 
+/* Embedded Objects */
+//TODO do dirty-checking on embedded objects
+//TODO make sure embedded objects are not modified by services when passed from presentation layer
+//TODO analyze/compare embedded objects & PersistableObject class and conclude what else should be similar (therefore some refactoring would be required?)
