@@ -20,6 +20,12 @@ internal class ValueObjectsModule {
             NonAnnotatedTransientFieldChildWithCorrectParentValueObject::class.java,
             NonAnnotatedDelegatedFieldChildWithCorrectParentValueObject::class.java,
             CorrectChildWithTransientFieldNonValueObjectParent::class.java,
-            CorrectChildWithDelegatedFieldNonValueObjectParent::class.java
+            CorrectChildWithDelegatedFieldNonValueObjectParent::class.java,
+            NonAnnotatedCorrectGrandchildWithTransientFieldGrandparentValueObject::class.java,
+            NonAnnotatedCorrectGrandchildWithDelegatedFieldGrandparentValueObject::class.java,
+            NonAnnotatedTransientFieldGrandchildWithCorrectGrandparentValueObject::class.java,
+            NonAnnotatedDelegatedFieldGrandchildWithCorrectGrandparentValueObject::class.java,
+            CorrectGrandchildWithTransientFieldNonValueObjectGrandparent::class.java,
+            CorrectGrandchildWithDelegatedFieldNonValueObjectGrandparent::class.java
     )
 }

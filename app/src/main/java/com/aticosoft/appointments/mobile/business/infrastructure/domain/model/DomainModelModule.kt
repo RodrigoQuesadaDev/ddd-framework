@@ -7,6 +7,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.persistabl
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidatorsManager
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment.AppointmentModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client.ClientModule
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.CommonModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializersManager
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.valueobject.ValueObjectsManager
@@ -22,7 +23,7 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 /**
  * Created by Rodrigo Quesada on 26/09/15.
  */
-@Module(includes = arrayOf(ConfigurationModule::class, AppointmentModule::class, ClientModule::class))
+@Module(includes = arrayOf(CommonModule::class, ConfigurationModule::class, AppointmentModule::class, ClientModule::class))
 /*internal*/ class DomainModelModule {
 
     @Provides @ElementsIntoSet

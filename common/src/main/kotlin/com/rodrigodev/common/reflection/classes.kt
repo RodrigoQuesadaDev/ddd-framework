@@ -19,7 +19,7 @@ inline fun Iterable<Class<*>>.anyIsSubOfOrSameAs(aClass: Class<*>) = any { it.is
 
 fun Class<*>.isKotlinClass() = declaredAnnotations.any { it.annotationClass.java.name == KOTLIN_METADATA_ANNOTATION_NAME }
 
-fun Class<*>.genericAncestors(): Array<Type> = if (isInterface) genericInterfaces else arrayOf(genericSuperclass)
+inline fun Class<*>.genericAncestors(): Array<Type> = if (isInterface) genericInterfaces else arrayOf(genericSuperclass)
 
 //region Utils
 //TODO move inside genericAncestor function when KT-9874/KT-8199 is resolved
@@ -32,8 +32,7 @@ private class TypeInfo(
 
 fun Class<*>.genericAncestor(ancestorClass: Class<*>): Type {
 
-
-    require(isSubOf(ancestorClass), { "This class should be a subclass of the passed one." })
+    require(isSubOf(ancestorClass), { "This class should be a subclass of \"${ancestorClass.name}\"" })
 
     var typeInfo: TypeInfo = TypeInfo(this, this)
     do {
@@ -43,6 +42,19 @@ fun Class<*>.genericAncestor(ancestorClass: Class<*>): Type {
     } while (typeInfo.subOfAncestor != ancestorClass)
 
     return typeInfo.type
+}
+
+fun <A : Annotation> Class<*>.getAnnotation(annotationType: Class<A>, honorInherited: Boolean): A? = if (honorInherited) getAnnotation(annotationType)
+else {
+    var annotation = getDeclaredAnnotation(annotationType)
+
+    if (annotation == null) annotation = superclass?.getAnnotation(annotationType, honorInherited)
+            ?: interfaces.asSequence()
+            .map { it.getAnnotation(annotationType, honorInherited) }
+            .filterNotNull()
+            .firstOrNull()
+
+    annotation
 }
 
 //region Utils

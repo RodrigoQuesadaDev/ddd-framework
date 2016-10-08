@@ -20,7 +20,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 10/01/16.
  */
 @Module
-/*internal*/ class ConfigurationModule : JdoRootEntityModule<Configuration, ConfigurationQueries> {
+internal class ConfigurationModule : JdoRootEntityModule<Configuration, ConfigurationQueries> {
 
     @Provides
     override fun provideType(): Class<Configuration> = Configuration::class.java

@@ -17,6 +17,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.classNames
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.registration.ValueObjectRegistrationVerification.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.valueobject.ValueObjectsManager
+import com.rodrigodev.common.reflection.getAnnotation
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
 import org.jbehave.core.annotations.Given
@@ -60,9 +61,14 @@ internal class ValueObjectRegistrationVerification : DomainStory() {
             assertThat(registrationVerifier.results.registered().classNames()).containsAll(classes.classNames())
         }
 
-        @Then("the system detects that all classes registered as value objects are effectively value objects")
-        fun thenTheSystemDetectsThatAllClassesRegisteredAsValueObjectsAreEffectivelyValueObjects() {
-            assertThat(valueObjectsManager.registeredValueObjects).are(ValueObjectClass())
+        @Then("all registered value object classes are annotated as ValueObjects")
+        fun thenAllRegisteredValueObjectClassesAreAnnotatedAsValueObjects() {
+            assertThat(valueObjectsManager.registeredValueObjects).are(AValueObjectClass())
+        }
+
+        @Then("no registered value object class is an interface")
+        fun thenNoRegisteredValueObjectClassIsAnInterface() {
+            assertThat(valueObjectsManager.registeredValueObjects).areNot(AnInterface())
         }
 
         @Then("the system detects there are value objects under \$packageName and all are correctly registered")
@@ -75,8 +81,13 @@ internal class ValueObjectRegistrationVerification : DomainStory() {
 }
 
 //region Assertions
-private class ValueObjectClass : Condition<Class<*>>() {
+private class AValueObjectClass : Condition<Class<*>>() {
 
-    override fun matches(clazz: Class<*>) = clazz.getAnnotation(ValueObject::class.java) != null
+    override fun matches(clazz: Class<*>) = clazz.getAnnotation(ValueObject::class.java, false) != null
+}
+
+private class AnInterface : Condition<Class<*>>() {
+
+    override fun matches(clazz: Class<*>) = clazz.isInterface
 }
 //endregion

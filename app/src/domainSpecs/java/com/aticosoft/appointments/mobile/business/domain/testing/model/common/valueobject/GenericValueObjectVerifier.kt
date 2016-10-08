@@ -10,5 +10,5 @@ import org.reflections.Reflections
  */
 internal abstract class GenericValueObjectVerifier<R : ClassVerificationResult>(packagePaths: Array<String>) : GenericClassVerifier<R>(packagePaths) {
 
-    override fun Reflections.retrieveClasses() = getTypesAnnotatedWith(ValueObject::class.java)
+    override fun Reflections.retrieveClasses() = getTypesAnnotatedWith(ValueObject::class.java).filterNot { it.isInterface }
 }

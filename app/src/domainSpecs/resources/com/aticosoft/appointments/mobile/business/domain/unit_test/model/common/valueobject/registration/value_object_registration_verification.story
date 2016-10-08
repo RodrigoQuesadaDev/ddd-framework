@@ -11,19 +11,20 @@ Scenario: not registered
 
 Then the system detects that only the next classes are not registered:
 
-| className                                                                                                                  |
+| className                                                                                                                            |
 | com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.registration.test_data.NonRegisteredValueObject |
 
 Scenario: correctly registered
 
 Then the system detects that the next classes are correctly registered:
 
-| className                                                                                                               |
+| className                                                                                                                         |
 | com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.registration.test_data.RegisteredValueObject |
 
-Scenario: registered classes are value objects
+Scenario: verify registered classes' type
 
-Then the system detects that all classes registered as value objects are effectively value objects
+Then all registered value object classes are annotated as ValueObjects
+And no registered value object class is an interface
 
 Scenario: project's base package
 

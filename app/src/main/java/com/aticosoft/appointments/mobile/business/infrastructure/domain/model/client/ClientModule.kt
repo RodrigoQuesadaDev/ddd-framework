@@ -20,7 +20,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 10/01/16.
  */
 @Module
-/*internal*/ class ClientModule : JdoRootEntityModule<Client, ClientQueries> {
+internal class ClientModule : JdoRootEntityModule<Client, ClientQueries> {
 
     @Provides
     override fun provideType(): Class<Client> = Client::class.java

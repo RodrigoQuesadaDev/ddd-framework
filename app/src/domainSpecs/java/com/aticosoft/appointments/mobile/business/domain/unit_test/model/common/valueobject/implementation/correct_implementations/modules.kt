@@ -15,6 +15,10 @@ internal class ValueObjectsModule {
     fun provideValueObjectsIntoSet(): Set<Class<*>> = setOf(
             CorrectParentValueObject::class.java,
             NonAnnotatedCorrectChildWithCorrectParentValueObject::class.java,
-            CorrectChildWithCompatibleNonValueObjectParent::class.java
+            NonAnnotatedCorrectChildWithValueObjectParentInterface::class.java,
+            CorrectChildWithCompatibleNonValueObjectParent::class.java,
+            NonAnnotatedCorrectGrandchildWithCorrectGrandparentValueObject::class.java,
+            NonAnnotatedCorrectGrandchildWithValueObjectGrandparentInterface::class.java,
+            CorrectGrandchildWithCompatibleNonValueObjectGrandparent::class.java
     )
 }

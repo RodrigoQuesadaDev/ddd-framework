@@ -11,9 +11,11 @@ import javax.jdo.annotations.EmbeddedOnly
  * Created by Rodrigo Quesada on 01/07/16.
  */
 @EmbeddedOnly
-internal class EmbeddedInterval(scheduledTime: Interval) {
+internal class EmbeddedInterval(scheduledTime: Interval) : EmbeddedValueObject {
     var start: DateTime = scheduledTime.start
+        private set
     var end: DateTime = scheduledTime.end
+        private set
 
     object Delegator : EmbeddedDelegate.Delegator<Interval, EmbeddedInterval>(
             { Interval(start, end) },
