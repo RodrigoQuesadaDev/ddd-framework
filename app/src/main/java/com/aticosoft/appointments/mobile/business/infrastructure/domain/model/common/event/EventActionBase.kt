@@ -2,17 +2,20 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.c
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction.Companion.DEFAULT_PRIORITY
 import javax.inject.Inject
 
 /**
  * Created by Rodrigo Quesada on 30/08/16.
  */
-/*internal*/ abstract class EventActionBase<E : Event> : EventAction<E> {
+/*internal*/ abstract class EventActionBase<E : Event>() : EventAction<E> {
 
     private lateinit var m: InjectedMembers<E>
 
     override final val eventType: Class<E>
         get() = m.eventType
+
+    override val priority = DEFAULT_PRIORITY
 
     //region Injection
     @Inject

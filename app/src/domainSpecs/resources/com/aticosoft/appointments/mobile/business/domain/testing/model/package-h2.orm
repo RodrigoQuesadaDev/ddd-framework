@@ -3,16 +3,24 @@
 <orm>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.common.entity">
         <class name="Entity">
-            <field name="id">
-                <column name="_ID"/>
-            </field>
+            <field name="id" column="_ID"/>
         </class>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.model.common.event">
         <class name="Event">
-            <field name="id">
-                <column name="_ID"/>
-            </field>
+            <field name="id" column="_ID"/>
+            <field name="actionTrackingPosition" column="ACTION_TRACKING_POSITION"/>
+        </class>
+        <class name="EventActionState">
+            <field name="id" column="_ID"/>
+            <field name="type"/>
+            <field name="priority" column="PRIORITY"/>
+            <field name="position" column="POSITION"/>
+            <field name="executionCount" column="EXECUTION_COUNT"/>
+        </class>
+        <class name="EventActionType">
+            <field name="actionType" column="ACTION_TYPE"/>
+            <field name="eventType" column="EVENT_TYPE"/>
         </class>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.testing.model.test_data">
@@ -22,5 +30,10 @@
             </field>
         </class>
         <class name="TestData" table="TEST_DATA"/>
+        <class name="TestEvent" table="TEST_EVENT">
+            <field name="value">
+                <column name="VALUE"/>
+            </field>
+        </class>
     </package>
 </orm>

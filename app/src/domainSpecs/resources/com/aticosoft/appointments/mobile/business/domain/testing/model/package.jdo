@@ -19,6 +19,22 @@
             </version>
             <field name="version"/>
             <field name="id" primary-key="true" value-strategy="increment"/>
+            <field name="actionTrackingPosition"/>
+        </class>
+        <class name="EventActionState">
+            <version strategy="version-number" column="VERSION">
+                <extension key="field-name" value="version" vendor-name="datanucleus"/>
+            </version>
+            <field name="version"/>
+            <field name="id" primary-key="true" value-strategy="increment"/>
+            <field name="type"/>
+            <field name="priority"/>
+            <field name="position"/>
+            <field name="executionCount"/>
+        </class>
+        <class name="EventActionType" embedded-only="true">
+            <field name="actionType"/>
+            <field name="eventType"/>
         </class>
     </package>
     <package name="com.aticosoft.appointments.mobile.business.domain.testing.model.test_data">
@@ -26,5 +42,8 @@
             <field name="value"/>
         </class>
         <class name="TestData"/>
+        <class name="TestEvent" table="TEST_EVENT">
+            <field name="value"/>
+        </class>
     </package>
 </jdo>

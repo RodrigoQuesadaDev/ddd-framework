@@ -25,10 +25,10 @@ Scenario: event is modified by some actions
 
 Given the 2nd FIVE_SUBSCRIPTIONS action that gets executed increments its value 1 time
 And the 3rd FIVE_SUBSCRIPTIONS action that gets executed increments its value 3 times
-And the 4rd FIVE_SUBSCRIPTIONS action that gets executed increments its value 2 time
+And the 4rd FIVE_SUBSCRIPTIONS action that gets executed increments its value 2 times
 When event FIVE_SUBSCRIPTIONS occurs with value 3
 Then FIVE_SUBSCRIPTIONS actions produce the next values in order:
-[a1:3, a2:4, a1:4, a2:4, a3:5, a1:5, a2:5, a3:6, a1:6, a2:6, a3:6, a4:7, a1:7, a2:7, a3:7, a4:8, a1:8, a2:8, a3:8, a4:8, a5:8]
+[a1:3, a2:4, a1:4, a2:4, a3:5, a1:5, a2:5, a3:6, a1:6, a2:6, a3:7, a1:7, a2:7, a3:7, a4:8, a1:8, a2:8, a3:8, a4:9, a1:9, a2:9, a3:9, a4:9, a5:9]
 And there are no FIVE_SUBSCRIPTIONS events left
 
 Scenario: some events occur before any action gets triggered

@@ -2,7 +2,9 @@ package com.aticosoft.appointments.mobile.business.domain.testing.model
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.SimpleEventAction
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEventAction
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventStoreBase
+import com.rodrigodev.common.rx.testing.triggerTestSchedulerActions
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,6 +14,20 @@ import javax.inject.Singleton
 @Singleton
 internal class TestEventStore<E : Event> @Inject protected constructor() : EventStoreBase<E>() {
 
-    public override val simpleActions: Sequence<SimpleEventAction<E>>
-        get() = super.simpleActions
+    public override val simpleActions: List<SimpleEventAction<E>> by lazy {
+        super.simpleActions.apply {
+            forEachIndexed { i, action ->
+                if (action is TestEventAction<*>) action.init(i)
+            }
+        }
+    }
+
+    fun suspendActionsExecution() {
+        actionsSubscription!!.unsubscribe()
+    }
+
+    fun resumeActionsExecution() {
+        resubscribeActions()
+        triggerTestSchedulerActions()
+    }
 }

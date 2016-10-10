@@ -5,10 +5,10 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.isEmpty
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStoreManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices.AddEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.SimpleAction.UnitTestApplicationImpl
@@ -16,9 +16,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.rodrigodev.common.spec.story.converter.ParameterConverterBase
 import com.rodrigodev.common.spec.story.steps.SpecSteps
 import org.assertj.core.api.Assertions.assertThat
-import org.jbehave.core.annotations.Given
-import org.jbehave.core.annotations.Then
-import org.jbehave.core.annotations.When
+import org.jbehave.core.annotations.*
 import org.jbehave.core.steps.ParameterConverters
 import org.jbehave.core.steps.ParameterConverters.ParameterConvertionFailed
 import java.lang.reflect.Type
@@ -50,14 +48,21 @@ internal class SimpleAction : DomainStory() {
 
         override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(ProducedValueConverter())
 
-        @Given("\$eventType actions don't modify the event")
-        fun givenEventTypeActionsDontModifyTheEvent(eventType: SimpleAction.EventType) {
-            eventType.m.eventStoreManager.subscribedTestActions().forEach { it.updateEvent(false) }
+        @BeforeScenario(uponType = ScenarioType.ANY)
+        fun clearValues() {
+            EventType.values().forEach { it.m.valueProducer.clear() }
         }
 
-        @Given("the \${executionPosition}{st|nd|rd|th} \$eventType action that gets executed increments its value \$times time{s|}")
-        fun givenTheNthEventActionThatGetsExecutedIncrementsItsValueXTimes(executionPosition: Int, eventType: EventType, times: Int) {
+        @Given("\$eventType actions don't modify the event")
+        fun givenEventTypeActionsDontModifyTheEvent(eventType: SimpleAction.EventType) {
+            eventType.m.eventStoreManager.subscribedTestActions().forEach { it.updateEvent(0) }
+        }
 
+        @Given("the \${position}{st|nd|rd|th} \$eventType action that gets executed increments its value \$times time{s|}")
+        fun givenTheNthEventActionThatGetsExecutedIncrementsItsValueXTimes(position: Int, eventType: EventType, times: Int) {
+            eventType.m.eventStoreManager.subscribedTestActions()
+                    .filter { it.executionPosition == position - 1 }
+                    .forEach { it.updateEvent(times) }
         }
 
         @Given("\$eventType actions execution is suspended")
@@ -76,7 +81,7 @@ internal class SimpleAction : DomainStory() {
         }
 
         @When("\$eventType actions execution is resumed")
-        fun whenThreeSubsActionsExecutionIsResumed(eventType: EventType) {
+        fun whenEventTypeActionsExecutionIsResumed(eventType: EventType) {
             eventType.m.eventStoreManager.resumeActionsExecution()
         }
 
@@ -86,7 +91,7 @@ internal class SimpleAction : DomainStory() {
         }
 
         @Then("\$eventType actions produce the next values in order: [\$values]")
-        fun thenActionsProduceTheNextValuesInOrder(eventType: EventType, values: MutableList<TestEventAction.ProducedValue>) {
+        fun thenActionsProduceTheNextValuesInOrder(eventType: EventType, values: MutableList<LocalTestEventAction.ProducedValue>) {
             assertThat(eventType.m.valueProducer.producedValues).containsExactlyElementsOf(values)
         }
 
@@ -100,8 +105,8 @@ internal class SimpleAction : DomainStory() {
         class EventMembers<E : TestEvent, out S : TestEventServices<E>> @Inject protected constructor(
                 val repository: EventRepository<E>,
                 val services: S,
-                val eventStoreManager: TestEventStoreManager<E>,
-                val valueProducer: TestEventAction.ValueProducer<E>
+                val eventStoreManager: TestEventStore<E>,
+                val valueProducer: LocalTestEventAction.ValueProducer<E>
         )
         //endregion
 
@@ -114,23 +119,23 @@ internal class SimpleAction : DomainStory() {
                 EventType.FIVE_SUBSCRIPTIONS -> fiveSubscriptionsEventMembers
             }
 
-        private inline fun <E : TestEvent> TestEventStoreManager<E>.subscribedTestActions() = subscribedActions.map { it as TestEventAction<E> }
+        private inline fun <E : TestEvent> TestEventStore<E>.subscribedTestActions() = simpleActions.map { it as LocalTestEventAction<E> }
         //endregion
     }
 
     //region Other Classes
     enum class EventType {NO_SUBSCRIPTIONS, THREE_SUBSCRIPTIONS, FIVE_SUBSCRIPTIONS }
 
-    class ProducedValueConverter : ParameterConverterBase<TestEventAction.ProducedValue>(TestEventAction.ProducedValue::class.java) {
+    class ProducedValueConverter : ParameterConverterBase<LocalTestEventAction.ProducedValue>(LocalTestEventAction.ProducedValue::class.java) {
         private companion object {
             //a1:3
             val VALUE_PATTERN = Regex("a(\\d+):(\\d+)", RegexOption.IGNORE_CASE)
         }
 
-        override fun convertValue(value: String, type: Type): TestEventAction.ProducedValue {
+        override fun convertValue(value: String, type: Type): LocalTestEventAction.ProducedValue {
             try {
                 with(VALUE_PATTERN.matchEntire(value)!!) {
-                    return TestEventAction.ProducedValue(
+                    return LocalTestEventAction.ProducedValue(
                             groups[1]!!.value.toInt(),
                             groups[2]!!.value.toInt()
                     )

@@ -1,4 +1,4 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data
+package com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 

@@ -12,16 +12,18 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.rodrigodev.common.rx.repeatWhenChangeOccurs
 import rx.Observable
+import rx.Subscription
 import rx.schedulers.Schedulers
 import rx.util.async.Async.fromCallable
 import javax.inject.Inject
 import javax.inject.Singleton
+import javax.jdo.JDOHelper
 
 /**
  * Created by Rodrigo Quesada on 25/08/16.
  */
 @Singleton
-/*internal*/ open class EventStoreBase<E : Event> @Inject protected constructor() : EventStore<E> {
+/*internal*/ open class EventStoreBase<E : Event> @Inject protected constructor() : EventStore<E>, Event.ActionTrackingAccess {
 
     private lateinit var m: InjectedMembers<E>
 
@@ -29,16 +31,23 @@ import javax.inject.Singleton
 
     private val eventFilter by lazy { PersistableObjectObservationFilter(m.eventType) }
 
-    protected open val simpleActions: Sequence<SimpleEventAction<E>> by lazy {
-        with(m) { eventActionsManager.simpleActionsFor(eventType).asSequence() }
+    protected open val simpleActions: List<SimpleEventAction<E>> by lazy {
+        with(m) { eventActionsManager.simpleActionsFor(eventType) }
     }
 
-    protected open val overridableActions: Sequence<OverridableEventAction<E>> by lazy {
-        with(m) { eventActionsManager.overridableActionsFor(eventType).asSequence() }
+    protected open val overridableActions: List<OverridableEventAction<E>> by lazy {
+        with(m) { eventActionsManager.overridableActionsFor(eventType) }
     }
+
+    protected var actionsSubscription: Subscription? = null
 
     private inline fun init() {
-        fromCallable(
+        resubscribeActions()
+    }
+
+    protected fun resubscribeActions() {
+        actionsSubscription?.unsubscribe()
+        actionsSubscription = fromCallable(
                 { executeEventActions() },
                 Schedulers.io()
         )
@@ -46,13 +55,22 @@ import javax.inject.Singleton
                 .subscribe()
     }
 
+    //TODO performance can be improved by using CREATE event filter AND local observable such as "eventsWereUpdatedObservable"
     private inline fun Observable<*>.repeatWhenChangeOccurs() = repeatWhenChangeOccurs(changeObserver.observe(arrayOf(eventFilter)))
 
-    private inline fun executeEventActions() = with(m) {
-        //TODO implement this stuff correctly!!!
-        simpleActions.forEach { action ->
+    private inline fun executeEventActions(): Unit = with(m) {
+        repository.find(queries.firstEvent())?.let { event ->
             persistenceContext.execute {
-                repository.find(queries.firstEvent())?.let { action.execute(it) }
+                if (event.actionTrackingPosition == simpleActions.size) {
+                    repository.remove(event)
+                }
+                else {
+                    val action = simpleActions[event.actionTrackingPosition]
+                    action.execute(event)
+
+                    if (JDOHelper.isDirty(event)) event.actionTrackingPosition = 0
+                    else ++event.actionTrackingPosition
+                }
             }
         }
     }

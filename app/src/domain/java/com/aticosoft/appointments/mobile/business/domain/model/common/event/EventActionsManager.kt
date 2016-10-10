@@ -16,10 +16,17 @@ import javax.inject.Singleton
         private val queries: Queries,
         eventActions: MutableSet<EventAction<*>>
 ) {
-    //private val actionStatesByType = eventActionStateRepository.find(queries.allSorted()).groupBy { it.type }
-    private val actionsMap = eventActions.groupBy { it.eventType }.mapValues { it.value/*.sort*/ }
-    private val simpleActionsMap = actionsMap.filterValuesAreInstance(SimpleEventAction::class.java)
-    private val overridableActionsMap = actionsMap.filterValuesAreInstance(OverridableEventAction::class.java)
+    private val actionsByEvent: Map<Class<out Event>, List<EventAction<*>>> = eventActions.groupBy { it.eventType }
+    /*.mapValues {
+        val eventType = it.key
+        val actions = it.value
+
+        val actionStatesByType = eventActionStateRepository.find(queries.sortedFor(eventType))
+        it.value
+    }*/
+
+    private val simpleActionsMap = actionsByEvent.filterValuesAreInstance(SimpleEventAction::class.java)
+    private val overridableActionsMap = actionsByEvent.filterValuesAreInstance(OverridableEventAction::class.java)
 
     fun <E : Event> simpleActionsFor(eventType: Class<E>): List<SimpleEventAction<E>> = eventType.actionsFrom(simpleActionsMap)
 
@@ -34,9 +41,14 @@ import javax.inject.Singleton
     @Singleton
     class Queries @Inject protected constructor() : JdoQueries<EventActionState>() {
 
-        fun allSorted(): ListQuery<EventActionState> = ListQuery {
-            val e = QEventActionState.eventActionState
-            context.queryFactory.selectFrom(e).orderBy(e.priority.desc(), e.id.asc()).fetch()
+        fun sortedFor(eventType: Class<out Event>): ListQuery<EventActionState> = ListQuery {
+            with(EventActionType.Companion) {
+                val e = QEventActionState.eventActionState
+                context.queryFactory.selectFrom(e)
+                        .where(e.type.eventType.eq(eventType.typeString))
+                        .orderBy(e.priority.desc(), e.id.asc())
+                        .fetch()
+            }
         }
     }
 //endregion

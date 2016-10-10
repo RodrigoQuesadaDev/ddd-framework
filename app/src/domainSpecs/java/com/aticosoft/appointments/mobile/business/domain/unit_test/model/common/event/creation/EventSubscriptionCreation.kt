@@ -5,15 +5,15 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStoreManager
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.EventSubscriptionCreation.EventType.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.EventSubscriptionCreation.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.FiveSubscriptionsEvent
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.LocalTestEventAction
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.NoSubscriptionsEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.OneSubscriptionEvent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.TestEventAction
 import com.rodrigodev.common.reflection.anyIsSubOfOrSameAs
 import com.rodrigodev.common.reflection.classes
 import com.rodrigodev.common.reflection.createReflectionsForPackages
@@ -41,9 +41,9 @@ internal class EventSubscriptionCreation : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val noSubscriptionsEventStore: TestEventStoreManager<NoSubscriptionsEvent>,
-            private val oneSubscriptionEventStore: TestEventStoreManager<OneSubscriptionEvent>,
-            private val fiveSubscriptionsEventStore: TestEventStoreManager<FiveSubscriptionsEvent>
+            private val noSubscriptionsEventStore: TestEventStore<NoSubscriptionsEvent>,
+            private val oneSubscriptionEventStore: TestEventStore<OneSubscriptionEvent>,
+            private val fiveSubscriptionsEventStore: TestEventStore<FiveSubscriptionsEvent>
     ) {
         @Given("no declared actions for \$eventType event")
         fun givenNoDeclaredActionsForEvent(eventType: EventType) {
@@ -61,7 +61,7 @@ internal class EventSubscriptionCreation : DomainStory() {
 
         @Then("no actions are subscribed to \$eventType event")
         fun thenNoActionsAreSubscribedToEvent(eventType: EventType) {
-            assertThat(eventType.eventStoreManager.subscribedActions).isEmpty()
+            assertThat(eventType.eventStoreManager.simpleActions).isEmpty()
         }
 
         @Then("only \$totalSubscribedActions action is subscribed to \$eventType event and it has the id \$ids")
@@ -69,7 +69,7 @@ internal class EventSubscriptionCreation : DomainStory() {
         fun thenOnlyXActionsAreSubscribedToEventAndTheyHaveTheIds(totalSubscribedActions: Int, eventType: EventType, ids: MutableList<Int>) {
             require(totalSubscribedActions == ids.size)
 
-            val subscribedActions = eventType.eventStoreManager.subscribedActions
+            val subscribedActions = eventType.eventStoreManager.simpleActions
             assertThat(subscribedActions).hasSize(totalSubscribedActions)
             assertThat(
                     subscribedActions.asSequence()
@@ -81,7 +81,7 @@ internal class EventSubscriptionCreation : DomainStory() {
         }
 
         //region Utils
-        private val EventType.eventStoreManager: TestEventStoreManager<*>
+        private val EventType.eventStoreManager: TestEventStore<*>
             get() = when (this) {
                 NO_SUBSCRIPTIONS -> noSubscriptionsEventStore
                 ONE_SUBSCRIPTION -> oneSubscriptionEventStore
@@ -95,17 +95,17 @@ internal class EventSubscriptionCreation : DomainStory() {
                 FIVE_SUBSCRIPTIONS -> FiveSubscriptionsEvent::class.java
             }
 
-        private val EventType.declaredEventActions: Sequence<TestEventAction<*>>
+        private val EventType.declaredEventActions: Sequence<LocalTestEventAction<*>>
             get() {
                 data class TypeInfo(val type: Class<*>) {
-                    val testEventActionAncestor: ParameterizedType = type.genericAncestor(TestEventAction::class.java) as ParameterizedType
+                    val testEventActionAncestor: ParameterizedType = type.genericAncestor(LocalTestEventAction::class.java) as ParameterizedType
                 }
 
                 return createReflectionsForPackages(eventClass.`package`)
-                        .getSubTypesOf(TestEventAction::class.java).asSequence()
+                        .getSubTypesOf(LocalTestEventAction::class.java).asSequence()
                         .map { TypeInfo(it) }
                         .filter { it.testEventActionAncestor.actualTypeArguments[0].classes().anyIsSubOfOrSameAs(eventClass) }
-                        .map { it.type.newInstance() as TestEventAction<*> }
+                        .map { it.type.newInstance() as LocalTestEventAction<*> }
             }
         //endregion
     }
@@ -116,7 +116,7 @@ internal class EventSubscriptionCreation : DomainStory() {
 }
 
 //region Utils
-private inline fun Sequence<EventAction<*>>.toTestEventActions() = map { it as TestEventAction<*> }
+private inline fun Sequence<EventAction<*>>.toTestEventActions() = map { it as LocalTestEventAction<*> }
 
-private fun Sequence<TestEventAction<*>>.toValues() = map { it.value }
+private fun Sequence<LocalTestEventAction<*>>.toValues() = map { it.value }
 //endregion

@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEvent
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
 import javax.jdo.annotations.PersistenceCapable
 
 /**
