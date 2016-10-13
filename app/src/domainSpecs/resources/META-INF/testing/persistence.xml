@@ -15,6 +15,7 @@
         <mapping-file>com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/common/test_data/package.jdo</mapping-file>
         <mapping-file>com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/creation/test_data/package.jdo</mapping-file>
         <mapping-file>com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/simpleaction/test_data/package.jdo</mapping-file>
+        <mapping-file>com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/priority/test_data/package.jdo</mapping-file>
         <exclude-unlisted-classes/>
     </persistence-unit>
 </persistence>

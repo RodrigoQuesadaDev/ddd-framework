@@ -2,8 +2,8 @@
 <!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
 <jdo>
     <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data">
-        <class name="NoSubscriptionsEvent" table="NO_SUBSCRIPTIONS_EVENT_2"/>
-        <class name="ThreeSubscriptionsEvent" table="THREE_SUBSCRIPTIONS_EVENT_2"/>
-        <class name="FiveSubscriptionsEvent" table="FIVE_SUBSCRIPTIONS_EVENT_2"/>
+        <class name="NoSubscriptionsEvent"/>
+        <class name="ThreeSubscriptionsEvent"/>
+        <class name="FiveSubscriptionsEvent"/>
     </package>
 </jdo>

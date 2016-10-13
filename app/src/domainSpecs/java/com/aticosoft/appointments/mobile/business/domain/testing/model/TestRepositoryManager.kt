@@ -13,12 +13,16 @@ internal abstract class TestRepositoryManager<P : PersistableObject<I>, I, R : J
 
     private lateinit var m: InjectedMembers<P, I, R>
 
-    fun clear() = with(m) {
+    fun clear(): Unit = with(m) {
         context.execute { context.queryFactory.delete(repository.queryEntity).execute() }
     }
 
-    fun clearCache() = with(m) {
+    fun clearCache(): Unit = with(m) {
         context.pmf.dataStoreCache.evictAll(true, repository.queryEntity.type)
+    }
+
+    fun <RT> repository(repositoryCall: R.() -> RT): RT = with(m) {
+        context.execute { repository.repositoryCall() }
     }
 
     //region Injection

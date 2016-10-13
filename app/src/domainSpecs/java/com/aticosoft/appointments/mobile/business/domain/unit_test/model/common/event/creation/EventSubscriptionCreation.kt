@@ -8,22 +8,18 @@ import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.declaredActions
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.EventSubscriptionCreation.EventType.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.EventSubscriptionCreation.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.FiveSubscriptionsEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.LocalTestEventAction
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.NoSubscriptionsEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.OneSubscriptionEvent
-import com.rodrigodev.common.reflection.anyIsSubOfOrSameAs
-import com.rodrigodev.common.reflection.classes
-import com.rodrigodev.common.reflection.createReflectionsForPackages
-import com.rodrigodev.common.reflection.genericAncestor
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Alias
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.robolectric.annotation.Config
-import java.lang.reflect.ParameterizedType
 import javax.inject.Inject
 
 /**
@@ -96,17 +92,7 @@ internal class EventSubscriptionCreation : DomainStory() {
             }
 
         private val EventType.declaredEventActions: Sequence<LocalTestEventAction<*>>
-            get() {
-                data class TypeInfo(val type: Class<*>) {
-                    val testEventActionAncestor: ParameterizedType = type.genericAncestor(LocalTestEventAction::class.java) as ParameterizedType
-                }
-
-                return createReflectionsForPackages(eventClass.`package`)
-                        .getSubTypesOf(LocalTestEventAction::class.java).asSequence()
-                        .map { TypeInfo(it) }
-                        .filter { it.testEventActionAncestor.actualTypeArguments[0].classes().anyIsSubOfOrSameAs(eventClass) }
-                        .map { it.type.newInstance() as LocalTestEventAction<*> }
-            }
+            get() = eventClass.declaredActions()
         //endregion
     }
 

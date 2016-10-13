@@ -35,6 +35,9 @@ import javax.transaction.Synchronization
         override fun afterCompletion(status: Int) {
             if (status == Status.STATUS_COMMITTED) {
                 context.onTransactionCommitted()
+                //TODO remove when this issue is fixed in the future?
+                //Issue: this prevents the listener from being called again for the same transaction
+                context.persistenceManager.currentTransaction().synchronization = null
             }
         }
     }

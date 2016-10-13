@@ -50,7 +50,6 @@ internal abstract class LocalTestEventAction<E : TestEvent> : TestEventAction<E>
             // Code wont't compile without this.
             eventType: Class<E>
     ) {
-
         private val _producedValues = mutableListOf<ProducedValue>()
 
         val producedValues: List<ProducedValue>

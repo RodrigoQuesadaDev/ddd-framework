@@ -37,3 +37,6 @@ package com.aticosoft.appointments.mobile.business.domain.specs
 //TODO do dirty-checking on embedded objects
 //TODO make sure embedded objects are not modified by services when passed from presentation layer
 //TODO analyze/compare embedded objects & PersistableObject class and conclude what else should be similar (therefore some refactoring would be required?)
+
+/* Events */
+//TODO implement infrastructure feature to allow code to get executed each time the app is upgraded (events state should be reset)

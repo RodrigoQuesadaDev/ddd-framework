@@ -14,7 +14,6 @@
         <class name="EventActionState">
             <field name="id" column="_ID"/>
             <field name="type"/>
-            <field name="priority" column="PRIORITY"/>
             <field name="position" column="POSITION"/>
             <field name="executionCount" column="EXECUTION_COUNT"/>
         </class>

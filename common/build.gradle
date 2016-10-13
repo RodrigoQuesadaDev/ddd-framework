@@ -18,6 +18,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     compile "commons-io:commons-io:$commonsIoVersion"
+    compile "org.apache.commons:commons-lang3:$commonsLangVersion"
     compile "joda-time:joda-time:$jodaTimeVersion"
     compile "io.reactivex:rxjava:$rxJavaVersion"
     compile "io.reactivex:rxkotlin:$rxKotlinVersion"

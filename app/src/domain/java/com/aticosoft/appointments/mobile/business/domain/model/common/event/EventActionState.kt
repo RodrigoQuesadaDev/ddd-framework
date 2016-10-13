@@ -21,8 +21,6 @@ import javax.jdo.annotations.PersistenceCapable
         private set
     var type: EventActionType = EventActionType(action)
         private set
-    var priority: Int = action.priority
-        private set
     var position: Int = position
         private set
     var executionCount: Int = 0

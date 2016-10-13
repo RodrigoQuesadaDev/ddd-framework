@@ -4,17 +4,19 @@ Notes:
  * The actions used by the scenarios of this story use multiple-times actions.
 
 Scenario: event with no actions
-
+Given event NO_SUBSCRIPTIONS has 0 actions subscribed
 When event NO_SUBSCRIPTIONS occurs
 !-- No exception was thrown
 
 Scenario: different event type occurs
 
+Given event FIVE_SUBSCRIPTIONS has 5 actions subscribed
 When event FIVE_SUBSCRIPTIONS occurs
 Then THREE_SUBSCRIPTIONS actions don't get triggered
 
 Scenario: event is not modified by any action
 
+Given event THREE_SUBSCRIPTIONS has 3 actions subscribed
 Given THREE_SUBSCRIPTIONS actions don't modify the event
 When event THREE_SUBSCRIPTIONS occurs with value 3
 Then THREE_SUBSCRIPTIONS actions produce the next values in order:

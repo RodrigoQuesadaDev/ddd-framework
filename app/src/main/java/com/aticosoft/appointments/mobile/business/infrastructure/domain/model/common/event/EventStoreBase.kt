@@ -59,8 +59,9 @@ import javax.jdo.JDOHelper
     private inline fun Observable<*>.repeatWhenChangeOccurs() = repeatWhenChangeOccurs(changeObserver.observe(arrayOf(eventFilter)))
 
     private inline fun executeEventActions(): Unit = with(m) {
-        repository.find(queries.firstEvent())?.let { event ->
-            persistenceContext.execute {
+        persistenceContext.execute {
+            repository.find(queries.firstEvent())?.let { event ->
+
                 if (event.actionTrackingPosition == simpleActions.size) {
                     repository.remove(event)
                 }

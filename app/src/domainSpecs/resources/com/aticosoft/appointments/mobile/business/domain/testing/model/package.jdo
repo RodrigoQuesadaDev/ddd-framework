@@ -25,15 +25,18 @@
             <version strategy="version-number" column="VERSION">
                 <extension key="field-name" value="version" vendor-name="datanucleus"/>
             </version>
+            <unique name="UNIQUE_POSITION">
+                <column name="EVENT_TYPE"/>
+                <column name="POSITION"/>
+            </unique>
             <field name="version"/>
             <field name="id" primary-key="true" value-strategy="increment"/>
             <field name="type"/>
-            <field name="priority"/>
             <field name="position"/>
             <field name="executionCount"/>
         </class>
         <class name="EventActionType" embedded-only="true">
-            <field name="actionType"/>
+            <field name="actionType" unique="true"/>
             <field name="eventType"/>
         </class>
     </package>

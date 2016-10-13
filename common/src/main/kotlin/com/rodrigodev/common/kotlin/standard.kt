@@ -10,3 +10,10 @@ package com.rodrigodev.common.kotlin
 inline fun <T, R> T.pass(block: (T) -> R): T {
     block(this); return this
 }
+
+inline fun <T, R> T.nullable(block: T.() -> R): R? = try {
+    block()
+}
+catch(e: Throwable) {
+    null
+}

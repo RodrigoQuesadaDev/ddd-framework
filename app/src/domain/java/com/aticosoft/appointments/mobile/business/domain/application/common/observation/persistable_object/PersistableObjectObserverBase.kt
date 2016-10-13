@@ -54,6 +54,7 @@ import javax.inject.Singleton
                 .repeatWhenChangeOccurs(queryView, filters)
     }
 
+    // observation is performed outside transactions, that way they should perform better
     private inline fun <T> executeQuery(queryView: QueryView, queryExecution: () -> T): T = m.persistenceContext.execute(false) { m.queryViewsManager.withView(queryView, queryExecution) }
 
     //region Utils

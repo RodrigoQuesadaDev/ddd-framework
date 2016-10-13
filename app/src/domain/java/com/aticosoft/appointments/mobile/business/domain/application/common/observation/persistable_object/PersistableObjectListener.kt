@@ -45,7 +45,6 @@ import javax.jdo.listener.*
     fun resetLocalState() = threadLocalCleaner.cleanUpThreadLocalInstances()
 
     fun onTransactionCommitted() {
-        // Prevent reentrant execution caused by recursion (onNext triggers a new transaction)
         objectChanges.forEach { publisher.onNext(it) }
         // No need to remove objects from list as resetLocalState should be called afterwards
     }

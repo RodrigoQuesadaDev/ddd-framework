@@ -23,7 +23,8 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.EntityDependenciesAreInjected
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.EntitiesAreValidated
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.EventSubscriptionCreation
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.SimpleAction
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.priority.EventActionPriority
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.SimpleEventAction
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.behavior.ValueObjectBehavior
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.implementation.ValueObjectImplementationVerification
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.registration.ValueObjectRegistrationVerification
@@ -58,7 +59,8 @@ internal interface UnitTestApplicationComponent : TestApplicationComponent {
     fun inject(test: ValueObjectImplementationVerification)
     fun inject(test: ValueObjectRegistrationVerification)
     fun inject(test: ValueObjectBehavior)
-    fun inject(test: SimpleAction)
+    fun inject(test: SimpleEventAction)
+    fun inject(test: EventActionPriority)
     fun inject(test: EventSubscriptionCreation)
 
     @Component.Builder

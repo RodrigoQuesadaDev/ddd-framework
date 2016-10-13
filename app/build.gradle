@@ -69,7 +69,8 @@ datanucleus {
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/valueobject/registration/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/common/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/creation/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/simpleaction/test_data']
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/simpleaction/test_data',
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/priority/test_data']
     alwaysDetachable = true
 }
 
@@ -143,4 +144,5 @@ dependencies {
     testCompile "org.apache.logging.log4j:log4j-1.2-api:$log4jVersion"
     testCompile "org.reflections:reflections:$reflectionsVersion"
     testCompile "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
+    testCompile "org.apache.commons:commons-lang3:$commonsLangVersion"
 }

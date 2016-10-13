@@ -2,16 +2,18 @@
 
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.isEmpty
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices.AddEvent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.SimpleAction.UnitTestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.declaredActions
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.SimpleEventAction.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data.*
 import com.rodrigodev.common.spec.story.converter.ParameterConverterBase
 import com.rodrigodev.common.spec.story.steps.SpecSteps
@@ -19,6 +21,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.*
 import org.jbehave.core.steps.ParameterConverters
 import org.jbehave.core.steps.ParameterConverters.ParameterConvertionFailed
+import org.robolectric.annotation.Config
 import java.lang.reflect.Type
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,12 +29,12 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 11/08/16.
  */
-@org.robolectric.annotation.Config(application = UnitTestApplicationImpl::class)
-internal class SimpleAction : DomainStory() {
+@Config(application = UnitTestApplicationImpl::class)
+internal class SimpleEventAction : DomainStory() {
 
-    class UnitTestApplicationImpl : UnitTestApplication<SimpleAction>(UnitTestApplicationComponent::inject)
+    class UnitTestApplicationImpl : UnitTestApplication<SimpleEventAction>(UnitTestApplicationComponent::inject)
 
-    @Inject protected lateinit var localSteps: SimpleAction.LocalSteps
+    @Inject protected lateinit var localSteps: SimpleEventAction.LocalSteps
 
     init {
         steps { listOf(localSteps) }
@@ -53,8 +56,13 @@ internal class SimpleAction : DomainStory() {
             EventType.values().forEach { it.m.valueProducer.clear() }
         }
 
+        @Given("event \$eventType has \$n actions subscribed")
+        fun givenEventHasNActionsSubscribed(eventType: EventType, n: Int) {
+            assertThat(eventType.declaredEventActions.toList()).hasSize(n)
+        }
+
         @Given("\$eventType actions don't modify the event")
-        fun givenEventTypeActionsDontModifyTheEvent(eventType: SimpleAction.EventType) {
+        fun givenEventTypeActionsDontModifyTheEvent(eventType: EventType) {
             eventType.m.eventStoreManager.subscribedTestActions().forEach { it.updateEvent(0) }
         }
 
@@ -97,13 +105,13 @@ internal class SimpleAction : DomainStory() {
 
         @Then("there are no \$eventType events left")
         fun thenThereAreNoEventsLeft(eventType: EventType) {
-            assertThat(eventType.m.repository.isEmpty()).isTrue()
+            assertThat(eventType.m.repositoryManager.repository { isEmpty() }).isTrue()
         }
 
         //region Event Members
         @Singleton
         class EventMembers<E : TestEvent, out S : TestEventServices<E>> @Inject protected constructor(
-                val repository: EventRepository<E>,
+                val repositoryManager: TestEventRepositoryManager<E>,
                 val services: S,
                 val eventStoreManager: TestEventStore<E>,
                 val valueProducer: LocalTestEventAction.ValueProducer<E>
@@ -119,7 +127,17 @@ internal class SimpleAction : DomainStory() {
                 EventType.FIVE_SUBSCRIPTIONS -> fiveSubscriptionsEventMembers
             }
 
+        private val EventType.eventClass: Class<out Event>
+            get() = when (this) {
+                EventType.NO_SUBSCRIPTIONS -> NoSubscriptionsEvent::class.java
+                EventType.THREE_SUBSCRIPTIONS -> ThreeSubscriptionsEvent::class.java
+                EventType.FIVE_SUBSCRIPTIONS -> FiveSubscriptionsEvent::class.java
+            }
+
         private inline fun <E : TestEvent> TestEventStore<E>.subscribedTestActions() = simpleActions.map { it as LocalTestEventAction<E> }
+
+        private val EventType.declaredEventActions: Sequence<LocalTestEventAction<*>>
+            get() = eventClass.declaredActions()
         //endregion
     }
 

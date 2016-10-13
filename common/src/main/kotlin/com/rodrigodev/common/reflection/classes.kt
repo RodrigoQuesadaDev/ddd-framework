@@ -2,7 +2,9 @@
 
 package com.rodrigodev.common.reflection
 
+import org.apache.commons.lang3.reflect.TypeUtils
 import java.lang.reflect.Type
+import java.lang.reflect.TypeVariable
 
 /**
  * Created by Rodrigo Quesada on 30/06/16.
@@ -30,19 +32,14 @@ private class TypeInfo(
 )
 //endregion
 
-fun Class<*>.genericAncestor(ancestorClass: Class<*>): Type {
+inline fun Class<*>.hierarchyTypeArgumentsMap(ancestorClass: Class<*>): Map<TypeVariable<*>, Type> = TypeUtils.getTypeArguments(this, ancestorClass)
 
-    require(isSubOf(ancestorClass), { "This class should be a subclass of \"${ancestorClass.name}\"" })
-
-    var typeInfo: TypeInfo = TypeInfo(this, this)
-    do {
-        typeInfo = typeInfo.subOfAncestor!!.genericAncestors().asSequence()
-                .map { TypeInfo(ancestorClass, it) }
-                .first { it.subOfAncestor != null }
-    } while (typeInfo.subOfAncestor != ancestorClass)
-
-    return typeInfo.type
-}
+/*
+* This method uses hierarchyTypeArgumentsMap, so if you are going to query more than 1 type
+* argument, then better use hierarchyTypeArgumentsMap directly, performance should be better that
+* way.
+* */
+inline fun Class<*>.typeArgument(ancestorClass: Class<*>, argumentIndex: Int): Type? = hierarchyTypeArgumentsMap(ancestorClass)[ancestorClass.typeParameters[argumentIndex]]
 
 fun <A : Annotation> Class<*>.getAnnotation(annotationType: Class<A>, honorInherited: Boolean): A? = if (honorInherited) getAnnotation(annotationType)
 else {

@@ -27,6 +27,7 @@ subprojects {
         rxJavaJoinsVersion = '0.22.0'
         rxJavaAsyncVersion = '0.21.0'
         commonsIoVersion = '2.4'
+        commonsLangVersion = '3.4'
         //datanucleusJdoRdbmsVersion = '4.2.2'
         datanucleusCoreVersion = '4.1.13'
         datanucleusApiJdoVersion = '4.1.4'

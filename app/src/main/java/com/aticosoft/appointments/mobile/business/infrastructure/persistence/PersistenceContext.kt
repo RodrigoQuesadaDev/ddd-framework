@@ -5,6 +5,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.persistabl
 import com.querydsl.jdo.JDOQueryFactory
 import com.rodrigodev.common.properties.Delegates.threadLocal
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
+import org.datanucleus.PropertyNames
 import java.io.Closeable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -52,12 +53,17 @@ import javax.jdo.listener.InstanceLifecycleListener
         persistableObjectListeners.forEach { it.onTransactionCommitted() }
     }
 
+    @Suppress("NON_PUBLIC_CALL_FROM_PUBLIC_INLINE")
     inline fun <R> execute(transactional: Boolean = true, block: () -> R): R = if (transactional) {
         executeWithinContext { tm.withinTransactional { block() } }
     }
-    else executeWithinContext { block() }
+    else executeWithinContext {
+        // Allow non-transactional reads
+        persistenceManager.setProperty(PropertyNames.PROPERTY_NONTX_READ, true)
+        block()
+    }
 
-    inline fun <R> executeWithinContext(block: () -> R): R = use { block() }
+    internal inline fun <R> executeWithinContext(block: () -> R): R = use { block() }
 
     override fun close() {
         persistenceManager.close()
