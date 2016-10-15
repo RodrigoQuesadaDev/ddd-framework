@@ -1,73 +1,31 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.SimpleEventAction
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEventAction
-import com.rodrigodev.common.concurrent.inc
-import java.util.concurrent.atomic.AtomicInteger
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.ProducedValue
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.ValueProducer
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
  * Created by Rodrigo Quesada on 29/08/16.
  */
-internal abstract class LocalTestEventAction<E : TestEvent> : TestEventAction<E>(), SimpleEventAction<E> {
+internal abstract class LocalTestEventAction<E : TestEvent> : TestSimpleEventAction<E, LocalValueProducer<E>, LocalProducedValue>()
 
-    private val lock = Any()
-    private lateinit var m: InjectedMembers<E>
+//region Produced Values
+@Singleton
+internal class LocalValueProducer<E : TestEvent> @Inject protected constructor() : ValueProducer<E, LocalProducedValue>() {
 
-    private var updateEventTimes: Int = 0
-    private val eventUpdateCountMap = mutableMapOf<Long, AtomicInteger>()
-
-    fun updateEvent(times: Int): Unit = synchronized(lock) {
-        updateEventTimes = times
-    }
-
-    override fun execute(event: E) = synchronized(lock) {
-        var updateCount = eventUpdateCountMap[event.id]
-        if (updateCount == null) updateCount = eventUpdateCountMap.getOrPut(event.id, { AtomicInteger() })
-        if (updateCount.get() < updateEventTimes) {
-            ++event.value
-            ++updateCount
-        }
-        with(m.valueProducer) { produce(event.value) }
-    }
-
-    //region Injection
-    @Inject
-    protected fun inject(injectedMembers: InjectedMembers<E>) {
-        m = injectedMembers
-    }
-
-    class InjectedMembers<E : TestEvent> @Inject protected constructor(
-            val valueProducer: ValueProducer<E>
-    )
-    //endregion
-
-    //region Value Producer Classes
-    @Singleton
-    class ValueProducer<E : TestEvent> @Inject protected constructor(
-            // Code wont't compile without this.
-            eventType: Class<E>
-    ) {
-        private val _producedValues = mutableListOf<ProducedValue>()
-
-        val producedValues: List<ProducedValue>
-            get() = _producedValues
-
-        fun LocalTestEventAction<E>.produce(value: Int) {
-            _producedValues.add(ProducedValue(executionPosition + 1, value))
-        }
-
-        fun clear(): Unit = _producedValues.clear()
-    }
-
-    data class ProducedValue(val actionExecutionPosition: Int, val value: Int) {
-
-        override fun toString() = "a$actionExecutionPosition:$value"
-    }
-    //endregion
+    override fun producedValue(eventAction: TestEventAction<*>, value: Int)
+            = LocalProducedValue(eventAction.executionPosition + 1, value)
 }
+
+internal data class LocalProducedValue(val actionExecutionPosition: Int, val value: Int) : ProducedValue {
+
+    override fun toString() = "a$actionExecutionPosition:$value"
+}
+//endregion
 
 //region ThreeSubscriptions event's actions
 @Singleton

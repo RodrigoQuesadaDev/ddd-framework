@@ -46,7 +46,7 @@ subprojects {
         groovyVersion = '2.4.5'
 
         //Testing
-        jBehaveVersion = '4.0.5'
+        jBehaveVersion = '4.0.5c'//customized JBehave code
         jBehaveSiteVersion = '3.3'
         junitVersion = '4.12'
         robolectricVersion = '3.0'
@@ -58,7 +58,8 @@ subprojects {
     buildscript {
         repositories {
             jcenter()
-            //mavenLocal()
+            //TODO comment out mavenLocal after removing library customization (e.g. JBehave customizations)
+            mavenLocal()
             maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
         }
         dependencies {
@@ -68,7 +69,7 @@ subprojects {
 
     repositories {
         jcenter()
-        //mavenLocal()
+        mavenLocal()
         maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
     }
 }

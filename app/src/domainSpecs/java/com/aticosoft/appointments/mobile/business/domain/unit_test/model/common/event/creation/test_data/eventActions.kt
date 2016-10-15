@@ -1,19 +1,16 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
-import com.aticosoft.appointments.mobile.business.domain.model.common.event.SimpleEventAction
-import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEventAction
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.EmptyValueProducer
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.ProducedValue
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
  * Created by Rodrigo Quesada on 29/08/16.
  */
-internal abstract class LocalTestEventAction<E : Event>(val value: Int) : TestEventAction<E>(), SimpleEventAction<E> {
-
-    override fun execute(event: E) {
-    }
-}
+internal abstract class LocalTestEventAction<E : TestEvent>(val value: Int) : TestSimpleEventAction<E, EmptyValueProducer<E>, ProducedValue>()
 
 //region OneSubscriptionEvent
 @Singleton

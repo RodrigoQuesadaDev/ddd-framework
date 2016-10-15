@@ -6,21 +6,26 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.event.Even
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
+import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.EmptyValueProducer
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.declaredActions
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.EventSubscriptionCreation.EventType.*
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.EventActionStepBase
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.EventSubscriptionCreation.LocalSteps.LocalEventType
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.EventSubscriptionCreation.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.FiveSubscriptionsEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.LocalTestEventAction
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.NoSubscriptionsEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.OneSubscriptionEvent
+import com.rodrigodev.common.properties.Delegates.unsupportedOperation
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Alias
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.robolectric.annotation.Config
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by Rodrigo Quesada on 11/08/16.
@@ -37,16 +42,20 @@ internal class EventSubscriptionCreation : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val noSubscriptionsEventStore: TestEventStore<NoSubscriptionsEvent>,
-            private val oneSubscriptionEventStore: TestEventStore<OneSubscriptionEvent>,
-            private val fiveSubscriptionsEventStore: TestEventStore<FiveSubscriptionsEvent>
-    ) {
+            private val noSubscriptionsEventMembers: LocalEventMembers<NoSubscriptionsEvent>,
+            private val oneSubscriptionEventMembers: LocalEventMembers<OneSubscriptionEvent>,
+            private val fiveSubscriptionsEventMembers: LocalEventMembers<FiveSubscriptionsEvent>
+    ) : EventActionStepBase<LocalSteps, LocalEventType, LocalTestEventAction<*>>() {
+
+        override val eventTypeValues = LocalEventType.values()
+        override val actionType = LocalTestEventAction::class.java
+
         @Given("no declared actions for \$eventType event")
-        fun givenNoDeclaredActionsForEvent(eventType: EventType) {
+        fun givenNoDeclaredActionsForEvent(eventType: LocalEventType) {
         }
 
         @Given("\$eventType event actions with the next ids are declared: [\$ids]")
-        fun givenEventActionsWithTheNextIdsAreDeclared(eventType: EventType, ids: MutableList<Int>) {
+        fun givenEventActionsWithTheNextIdsAreDeclared(eventType: LocalEventType, ids: MutableList<Int>) {
             assertThat(eventType.declaredEventActions
                     .toValues()
                     .toList()
@@ -56,16 +65,16 @@ internal class EventSubscriptionCreation : DomainStory() {
         }
 
         @Then("no actions are subscribed to \$eventType event")
-        fun thenNoActionsAreSubscribedToEvent(eventType: EventType) {
-            assertThat(eventType.eventStoreManager.simpleActions).isEmpty()
+        fun thenNoActionsAreSubscribedToEvent(eventType: LocalEventType) = with(eventType) {
+            assertThat(m.eventStoreManager.simpleActions).isEmpty()
         }
 
         @Then("only \$totalSubscribedActions action is subscribed to \$eventType event and it has the id \$ids")
         @Alias("only \$totalSubscribedActions actions are subscribed to \$eventType event and they have the ids [\$ids]")
-        fun thenOnlyXActionsAreSubscribedToEventAndTheyHaveTheIds(totalSubscribedActions: Int, eventType: EventType, ids: MutableList<Int>) {
+        fun thenOnlyXActionsAreSubscribedToEventAndTheyHaveTheIds(totalSubscribedActions: Int, eventType: LocalEventType, ids: MutableList<Int>) = with(eventType) {
             require(totalSubscribedActions == ids.size)
 
-            val subscribedActions = eventType.eventStoreManager.simpleActions
+            val subscribedActions = m.eventStoreManager.simpleActions
             assertThat(subscribedActions).hasSize(totalSubscribedActions)
             assertThat(
                     subscribedActions.asSequence()
@@ -76,29 +85,27 @@ internal class EventSubscriptionCreation : DomainStory() {
                     .containsOnlyElementsOf(ids)
         }
 
-        //region Utils
-        private val EventType.eventStoreManager: TestEventStore<*>
-            get() = when (this) {
-                NO_SUBSCRIPTIONS -> noSubscriptionsEventStore
-                ONE_SUBSCRIPTION -> oneSubscriptionEventStore
-                FIVE_SUBSCRIPTIONS -> fiveSubscriptionsEventStore
-            }
+        //region Event Members
+        @Singleton
+        class LocalEventMembers<E : TestEvent> @Inject protected constructor(
+                override val eventStoreManager: TestEventStore<E>,
+                override val valueProducer: EmptyValueProducer<E>
+        ) : EventMembers<E, TestEventServices<E>> {
+            override val services: TestEventServices<E> by unsupportedOperation()
+        }
+        //endregion
 
-        private val EventType.eventClass: Class<out Event>
-            get() = when (this) {
-                NO_SUBSCRIPTIONS -> NoSubscriptionsEvent::class.java
-                ONE_SUBSCRIPTION -> OneSubscriptionEvent::class.java
-                FIVE_SUBSCRIPTIONS -> FiveSubscriptionsEvent::class.java
-            }
-
-        private val EventType.declaredEventActions: Sequence<LocalTestEventAction<*>>
-            get() = eventClass.declaredActions()
+        //region Other Classes
+        enum class LocalEventType(
+                override val eventClass: Class<out Event>,
+                override val eventMembers: LocalSteps.() -> LocalEventMembers<*>
+        ) : EventType<LocalSteps, LocalEventMembers<*>> {
+            NO_SUBSCRIPTIONS(NoSubscriptionsEvent::class.java, { noSubscriptionsEventMembers }),
+            ONE_SUBSCRIPTION(OneSubscriptionEvent::class.java, { oneSubscriptionEventMembers }),
+            FIVE_SUBSCRIPTIONS(FiveSubscriptionsEvent::class.java, { fiveSubscriptionsEventMembers })
+        }
         //endregion
     }
-
-    //region Other Classes
-    enum class EventType {NO_SUBSCRIPTIONS, ONE_SUBSCRIPTION, FIVE_SUBSCRIPTIONS }
-    //endregion
 }
 
 //region Utils

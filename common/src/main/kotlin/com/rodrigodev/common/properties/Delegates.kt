@@ -27,4 +27,6 @@ object Delegates {
     inline fun <T : Any> writeOnce(initialValue: T) = WriteOnceDelegate(initialValue)
 
     inline fun <T : Any> lateinitReadOnly() = writeOnce<T>()
+
+    inline fun <T> unsupportedOperation() = UnsupportedOperationDelegate<T>()
 }
