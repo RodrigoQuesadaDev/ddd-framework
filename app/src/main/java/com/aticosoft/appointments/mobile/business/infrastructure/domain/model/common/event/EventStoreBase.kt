@@ -64,13 +64,23 @@ import javax.jdo.JDOHelper
 
                 if (event.actionTrackingPosition == simpleActions.size) {
                     repository.remove(event)
+                    stateRepository.find(stateQueries.by(eventType)).forEach(EventActionState::restExecutionCount)
                 }
                 else {
                     val action = simpleActions[event.actionTrackingPosition]
-                    action.execute(event)
+                    val actionState = stateRepository.find(stateQueries.by(action))!!
 
-                    if (JDOHelper.isDirty(event)) event.actionTrackingPosition = 0
-                    else ++event.actionTrackingPosition
+                    var eventWasModified = false
+                    if (with(action) { event.conditionIsMet(actionState) }) {
+                        action.execute(event)
+                        actionState.incExecutionCount()
+                        if (JDOHelper.isDirty(event)) {
+                            event.actionTrackingPosition = 0
+                            eventWasModified = true
+                        }
+                    }
+
+                    if (!eventWasModified) ++event.actionTrackingPosition
                 }
             }
         }
@@ -107,7 +117,9 @@ import javax.jdo.JDOHelper
             val queries: Queries<E>,
             val eventActionsManager: EventActionsManager,
             val changeObserverFactory: PersistableObjectFilteredChangeObserver.Factory<E>,
-            val persistenceContext: PersistenceContext
+            val persistenceContext: PersistenceContext,
+            val stateRepository: EventActionStateRepository,
+            val stateQueries: EventActionStateQueries
     )
     //endregion
 }

@@ -34,7 +34,7 @@ internal class SimpleEventActionBehavior : DomainStory() {
 
     class UnitTestApplicationImpl : UnitTestApplication<SimpleEventActionBehavior>(UnitTestApplicationComponent::inject)
 
-    @Inject protected lateinit var localSteps: SimpleEventActionBehavior.LocalSteps
+    @Inject protected lateinit var localSteps: LocalSteps
 
     init {
         steps { listOf(localSteps) }
@@ -88,7 +88,6 @@ internal class SimpleEventActionBehavior : DomainStory() {
 
         class ProducedValueConverter : ParameterConverterBase<LocalProducedValue>(LocalProducedValue::class.java) {
             private companion object {
-                //a1:3
                 val VALUE_PATTERN = Regex("a(\\d+):(\\d+)", RegexOption.IGNORE_CASE)
             }
 

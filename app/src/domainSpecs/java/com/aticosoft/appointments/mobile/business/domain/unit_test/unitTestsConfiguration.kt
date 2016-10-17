@@ -25,6 +25,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.EventSubscriptionCreation
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.priority.EventActionPriority
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.SimpleEventActionBehavior
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.timesreceived.TimesEventIsReceivedByAction
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.behavior.ValueObjectBehavior
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.implementation.ValueObjectImplementationVerification
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.registration.ValueObjectRegistrationVerification
@@ -62,6 +63,7 @@ internal interface UnitTestApplicationComponent : TestApplicationComponent {
     fun inject(test: SimpleEventActionBehavior)
     fun inject(test: EventActionPriority)
     fun inject(test: EventSubscriptionCreation)
+    fun inject(test: TimesEventIsReceivedByAction)
 
     @Component.Builder
     interface Builder : TestApplicationComponent.Builder<UnitTestApplicationComponent, Builder>

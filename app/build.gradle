@@ -70,7 +70,8 @@ datanucleus {
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/common/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/creation/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/simpleaction/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/priority/test_data']
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/priority/test_data',
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/timesreceived/test_data']
     alwaysDetachable = true
 }
 

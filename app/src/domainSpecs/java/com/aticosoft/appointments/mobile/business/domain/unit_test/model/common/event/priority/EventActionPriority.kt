@@ -90,7 +90,6 @@ internal class EventActionPriority : DomainStory() {
 
         class ProducedValueConverter : ParameterConverterBase<LocalProducedValue>(LocalProducedValue::class.java) {
             private companion object {
-                //a1:3
                 val VALUE_PATTERN = Regex("a(-?\\d+):(\\d+)", RegexOption.IGNORE_CASE)
             }
 

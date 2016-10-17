@@ -15,6 +15,10 @@ package com.aticosoft.appointments.mobile.business.domain.model.common.event
 
     val eventType: Class<E>
     val priority: Int
+
+    val timesReceived: TimesReceivedEvaluator
+
+    fun E.conditionIsMet(state: EventActionState): Boolean
 }
 
 interface SimpleEventAction<E : Event> : EventAction<E> {
@@ -23,4 +27,16 @@ interface SimpleEventAction<E : Event> : EventAction<E> {
 
 interface OverridableEventAction<E : Event> : EventAction<E> {
     fun execute()
+}
+
+enum class TimesReceivedEvaluator {
+    SINGLE_TIME {
+        override fun conditionIsMetFor(action: EventActionState) = action.executionCount == 0
+    },
+
+    MULTIPLE_TIMES {
+        override fun conditionIsMetFor(action: EventActionState) = true
+    };
+
+    abstract fun conditionIsMetFor(action: EventActionState): Boolean
 }

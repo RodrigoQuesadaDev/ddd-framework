@@ -1,5 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.priority.test_data
 
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.TimesReceivedEvaluator.MULTIPLE_TIMES
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEventAction
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction
@@ -11,7 +12,7 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 29/08/16.
  */
-internal abstract class LocalTestEventAction<E : TestEvent> : TestSimpleEventAction<E, LocalValueProducer<E>, LocalProducedValue>()
+internal abstract class LocalTestEventAction<E : TestEvent> : TestSimpleEventAction<E, LocalValueProducer<E>, LocalProducedValue>(MULTIPLE_TIMES)
 
 //region Value Producer Classes
 @Singleton

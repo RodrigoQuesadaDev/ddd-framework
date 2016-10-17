@@ -1,6 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.SimpleEventAction
+import com.aticosoft.appointments.mobile.business.domain.model.common.event.TimesReceivedEvaluator
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.ProducedValue
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.ValueProducer
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventActionBase
@@ -13,7 +14,7 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 09/10/16.
  */
-internal abstract class TestEventAction<E : TestEvent> : EventActionBase<E>() {
+internal abstract class TestEventAction<E : TestEvent>(timesReceived: TimesReceivedEvaluator) : EventActionBase<E>(timesReceived) {
 
     var executionPosition by atomicInteger()
         private set
@@ -23,7 +24,9 @@ internal abstract class TestEventAction<E : TestEvent> : EventActionBase<E>() {
     }
 }
 
-internal abstract class TestSimpleEventAction<E : TestEvent, P : ValueProducer<E, V>, V : ProducedValue> : TestEventAction<E>(), SimpleEventAction<E> {
+internal abstract class TestSimpleEventAction<E : TestEvent, P : ValueProducer<E, V>, V : ProducedValue>(
+        timesReceived: TimesReceivedEvaluator
+) : TestEventAction<E>(timesReceived), SimpleEventAction<E> {
 
     private val lock = Any()
     private lateinit var m: InjectedMembers<E, P, V>

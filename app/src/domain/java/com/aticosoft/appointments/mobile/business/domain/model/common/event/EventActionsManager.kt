@@ -3,11 +3,7 @@
 package com.aticosoft.appointments.mobile.business.domain.model.common.event
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventActionType.Companion.typeString
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.CountQuery
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.ListQuery
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.JdoQueries
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
-import com.querydsl.jdo.JDOQuery
 import com.rodrigodev.common.collection.identifiedBy
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,7 +15,7 @@ import javax.inject.Singleton
 /*internal*/ class EventActionsManager @Inject protected constructor(
         private val persistenceContext: PersistenceContext,
         private val eventActionStateRepository: EventActionStateRepository,
-        private val queries: Queries,
+        private val queries: EventActionStateQueries,
         eventActions: MutableSet<EventAction<*>>
 ) {
     private val actionsByEvent: Map<Class<out Event>, List<EventAction<*>>> = eventActions.groupBy { it.eventType }
@@ -55,27 +51,6 @@ import javax.inject.Singleton
         eventActionStateRepository.find(queries.sortedFor(this))
     }
     //endregion
-
-    //region Queries
-    @Singleton
-    class Queries @Inject protected constructor() : JdoQueries<EventActionState>() {
-
-        fun countBy(eventType: Class<out Event>): CountQuery<EventActionState>
-                = CountQuery { jdoQueryBy(eventType).fetchCount() }
-
-        fun sortedFor(eventType: Class<out Event>): ListQuery<EventActionState> = ListQuery {
-            val e = QEventActionState.eventActionState
-            jdoQueryBy(eventType)
-                    .orderBy(e.position.asc())
-                    .fetch()
-        }
-
-        private inline fun jdoQueryBy(eventType: Class<out Event>): JDOQuery<EventActionState> {
-            val e = QEventActionState.eventActionState
-            return context.queryFactory.selectFrom(e).where(e.type.eventType.eq(eventType.typeString))
-        }
-    }
-//endregion
 }
 
 //region Utils

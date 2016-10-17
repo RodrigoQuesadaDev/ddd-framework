@@ -32,6 +32,7 @@ import dagger.Module
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data.FiveSubscriptionsEventModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.priority.test_data.SamePriorityEventModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.priority.test_data.DifferentPriorityEventModule::class,
-        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.priority.test_data.DefaultPriorityEventModule::class
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.priority.test_data.DefaultPriorityEventModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.timesreceived.test_data.SampleEventModule::class
 ))
 internal class TestDomainModelModule
