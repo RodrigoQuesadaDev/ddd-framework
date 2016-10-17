@@ -24,12 +24,12 @@ internal abstract class TestEventAction<E : TestEvent>(timesReceived: TimesRecei
     }
 }
 
-internal abstract class TestSimpleEventAction<E : TestEvent, P : ValueProducer<E, V>, V : ProducedValue>(
+internal abstract class TestSimpleEventAction<E : TestEvent, A : TestEventAction<E>, P : ValueProducer<E, A, V>, V : ProducedValue>(
         timesReceived: TimesReceivedEvaluator
 ) : TestEventAction<E>(timesReceived), SimpleEventAction<E> {
 
     private val lock = Any()
-    private lateinit var m: InjectedMembers<E, P, V>
+    private lateinit var m: InjectedMembers<E, A, P, V>
 
     private var updateEventTimes: Int = 0
     private val eventUpdateCountMap = mutableMapOf<Long, AtomicInteger>()
@@ -50,18 +50,18 @@ internal abstract class TestSimpleEventAction<E : TestEvent, P : ValueProducer<E
 
     //region Injection
     @Inject
-    protected fun inject(injectedMembers: InjectedMembers<E, P, V>) {
+    protected fun inject(injectedMembers: InjectedMembers<E, A, P, V>) {
         m = injectedMembers
     }
 
-    class InjectedMembers<E : TestEvent, P : ValueProducer<E, V>, V : ProducedValue> @Inject protected constructor(
+    class InjectedMembers<E : TestEvent, A : TestEventAction<E>, P : ValueProducer<E, A, V>, V : ProducedValue> @Inject protected constructor(
             val valueProducer: P
     )
     //endregion
 
     //region Value Producer Classes
     @Singleton
-    abstract class ValueProducer<E : TestEvent, out V : ProducedValue> protected constructor() {
+    abstract class ValueProducer<E : TestEvent, in A : TestEventAction<E>, out V : ProducedValue> protected constructor() {
 
         // Code wont't compile without this.
         private lateinit var eventType: Class<E>
@@ -72,18 +72,19 @@ internal abstract class TestSimpleEventAction<E : TestEvent, P : ValueProducer<E
             get() = _producedValues
 
         fun TestEventAction<E>.produce(value: Int) {
-            _producedValues.add(producedValue(this, value))
+            @Suppress("UNCHECKED_CAST")
+            _producedValues.add(producedValue(this as A, value))
         }
 
-        protected abstract fun producedValue(eventAction: TestEventAction<*>, value: Int): V
+        protected abstract fun producedValue(eventAction: A, value: Int): V
 
         fun clear(): Unit = _producedValues.clear()
     }
 
     @Singleton
-    internal class EmptyValueProducer<E : TestEvent> @Inject protected constructor() : TestSimpleEventAction.ValueProducer<E, ProducedValue>() {
+    internal class EmptyValueProducer<E : TestEvent> @Inject protected constructor() : TestSimpleEventAction.ValueProducer<E, TestEventAction<E>, ProducedValue>() {
 
-        override fun producedValue(eventAction: TestEventAction<*>, value: Int) = object : ProducedValue {}
+        override fun producedValue(eventAction: TestEventAction<E>, value: Int) = object : ProducedValue {}
     }
 
     interface ProducedValue

@@ -2,10 +2,12 @@
 
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event
 
+import com.aticosoft.appointments.mobile.business.Application
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectFilteredChangeObserver
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.*
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.UniqueQuery
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.exceptions.IllegallyModifiedEvent
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.JdoQueries
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.QueryEntityForEvent
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.entityPath
@@ -72,6 +74,8 @@ import javax.jdo.JDOHelper
 
                     var eventWasModified = false
                     if (with(action) { event.conditionIsMet(actionState) }) {
+                        if (application.testingMode && JDOHelper.isDirty(event)) throw IllegallyModifiedEvent(event)
+
                         action.execute(event)
                         actionState.incExecutionCount()
                         if (JDOHelper.isDirty(event)) {
@@ -119,7 +123,8 @@ import javax.jdo.JDOHelper
             val changeObserverFactory: PersistableObjectFilteredChangeObserver.Factory<E>,
             val persistenceContext: PersistenceContext,
             val stateRepository: EventActionStateRepository,
-            val stateQueries: EventActionStateQueries
+            val stateQueries: EventActionStateQueries,
+            val application: Application<*, *>
     )
     //endregion
 }

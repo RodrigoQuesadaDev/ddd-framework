@@ -4,6 +4,7 @@ import com.rodrigodev.common.test.catchThrowable
 import org.jbehave.core.annotations.BeforeScenario
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.ScenarioType
+import rx.exceptions.OnErrorNotImplementedException
 
 /**
  * Created by Rodrigo Quesada on 10/12/15.
@@ -30,6 +31,8 @@ interface ExceptionThrowingSteps {
     fun mightThrowException(call: () -> Unit) {
         if (_catchException) {
             _thrownException = catchThrowable { call() }
+            //TODO add exception unwrappers in order to decouple from RxJava
+            _thrownException.let { e -> if (e is OnErrorNotImplementedException) _thrownException = e.cause ?: e }
             _catchException = false
         }
         else {

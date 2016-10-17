@@ -71,7 +71,8 @@ datanucleus {
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/creation/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/simpleaction/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/priority/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/timesreceived/test_data']
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/timesreceived/test_data',
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/condition/test_data']
     alwaysDetachable = true
 }
 
@@ -80,6 +81,7 @@ dependencies {
     compile(project(':common')) {
         transitive = false
     }
+    compile "com.google.guava:guava:$guavaVersion"
     //TODO use https://github.com/dlew/joda-time-android#why-this-library or https://github.com/JakeWharton/ThreeTenABP?
     //TODO check http://blog.joda.org/2009/11/why-jsr-310-isn-joda-time_4941.html
     compile "joda-time:joda-time:$jodaTimeVersion"

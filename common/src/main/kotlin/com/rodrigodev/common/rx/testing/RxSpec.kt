@@ -27,6 +27,6 @@ abstract class RxSpec : SpecStory() {
     interface TestComponent {
 
         fun inject(spec: RxSpec)
-        fun rxConfigurator(): RxConfigurator
+        fun rxConfigurator(): RxTestingConfigurator
     }
 }

@@ -25,6 +25,8 @@ package com.aticosoft.appointments.mobile.business.domain.specs
 //TODO use retryWhen to add exponential back-off retry (starts at 0.5s to a max of 5s),
 //TODO for this probably a custom operator is necessary since RxJava retry*/CATCH*??? operators do not reset after a successful emission? (Use composition for this custom operator?)
 
+//TODO check code thoroughly (such as EventStoreBase class? does it need to get resubscribed after an error?)
+//TODO carefully create hierarchy of exceptions to handle them based on that? (to log; to just shut app; both... etc...)
 
 /* Testing */
 

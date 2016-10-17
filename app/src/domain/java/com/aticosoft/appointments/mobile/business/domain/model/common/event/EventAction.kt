@@ -18,6 +18,8 @@ package com.aticosoft.appointments.mobile.business.domain.model.common.event
 
     val timesReceived: TimesReceivedEvaluator
 
+    fun init()
+
     fun E.conditionIsMet(state: EventActionState): Boolean
 }
 

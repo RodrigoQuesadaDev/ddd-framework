@@ -2,7 +2,7 @@ package com.aticosoft.appointments.mobile.business.domain.testing
 
 import com.aticosoft.appointments.mobile.business.Application
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
-import com.rodrigodev.common.rx.testing.RxConfigurator
+import com.rodrigodev.common.rx.testing.RxTestingConfigurator
 import org.robolectric.TestLifecycleApplication
 import java.lang.reflect.Method
 import javax.inject.Inject
@@ -17,16 +17,18 @@ internal abstract class TestApplication<S : DomainStory, C : TestApplicationComp
 
     private val c: Context = Context()
 
+    override val testingMode = true
+
     @Suppress("UNCHECKED_CAST")
     override protected fun createApplicationComponentBuilder(): B = createBuilder()
 
     override fun C.afterBuild() {
         component.inject(c)
-        c.rxConfigurator.configure()
+        c.rxTestingConfigurator.configure()
     }
 
     class Context() {
-        @Inject lateinit var rxConfigurator: RxConfigurator
+        @Inject lateinit var rxTestingConfigurator: RxTestingConfigurator
     }
 
     //region Test Lifecycle

@@ -11,5 +11,5 @@ import javax.inject.Singleton
 class TestRxModule {
 
     @Provides @Singleton
-    fun provideTestScheduler(rxConfigurator: RxConfigurator) = rxConfigurator.registeredSchedulersHook!!.testScheduler
+    fun provideTestScheduler(rxTestingConfigurator: RxTestingConfigurator) = rxTestingConfigurator.registeredSchedulersHook!!.testScheduler
 }

@@ -18,6 +18,7 @@ import javax.inject.Singleton
         private val queries: EventActionStateQueries,
         eventActions: MutableSet<EventAction<*>>
 ) {
+
     private val actionsByEvent: Map<Class<out Event>, List<EventAction<*>>> = eventActions.groupBy { it.eventType }
             .mapValues {
                 val eventType = it.key
@@ -30,6 +31,10 @@ import javax.inject.Singleton
 
     private val simpleActionsMap = actionsByEvent.filterValuesAreInstance(SimpleEventAction::class.java)
     private val overridableActionsMap = actionsByEvent.filterValuesAreInstance(OverridableEventAction::class.java)
+
+    init {
+        eventActions.forEach { it.init() }
+    }
 
     fun <E : Event> simpleActionsFor(eventType: Class<E>): List<SimpleEventAction<E>> = eventType.actionsFrom(simpleActionsMap)
 

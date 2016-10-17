@@ -3,6 +3,7 @@ package com.aticosoft.appointments.mobile.business
 import android.app.Application
 import com.aticosoft.appointments.mobile.business.domain.application.ModelServices
 import com.aticosoft.appointments.mobile.business.domain.application.ModelServices.InitializeModel
+import com.aticosoft.appointments.mobile.business.infrastructure.rx.RxConfigurator
 import javax.inject.Inject
 import kotlin.properties.Delegates.notNull
 
@@ -15,6 +16,8 @@ import kotlin.properties.Delegates.notNull
 
     var component: C by notNull()
         private set
+
+    open val testingMode: Boolean = false
 
     override fun onCreate() {
         super.onCreate()
@@ -40,9 +43,11 @@ import kotlin.properties.Delegates.notNull
 
     class Configurator {
 
+        @Inject protected lateinit var rxConfigurator: RxConfigurator
         @Inject protected lateinit var modulePostInitializer: ApplicationModule.PostInitializer
 
         fun configure() {
+            rxConfigurator.configure()
             modulePostInitializer.init()
         }
     }

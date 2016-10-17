@@ -12,6 +12,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices.AddEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.declaredActions
+import com.rodrigodev.common.spec.story.steps.ExceptionThrowingSteps
 import com.rodrigodev.common.spec.story.steps.SpecSteps
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.*
@@ -19,13 +20,16 @@ import org.jbehave.core.annotations.*
 /**
  * Created by Rodrigo Quesada on 13/10/16.
  */
-internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T : EventType<S, *>, A : TestSimpleEventAction<*, *, *>> : SpecSteps() {
+internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T : EventType<S, *>, A : TestSimpleEventAction<*, *, *, *>> : SpecSteps(), ExceptionThrowingSteps {
     private companion object {
         val DEFAULT_EVENT_VALUE = 0
     }
 
     protected abstract val eventTypeValues: Array<T>
     protected abstract val actionType: Class<A>
+
+    override var _thrownException: Throwable? = null
+    override var _catchException: Boolean = false
 
     @BeforeScenario(uponType = ScenarioType.ANY)
     fun clearValues() {
@@ -56,12 +60,12 @@ internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T 
 
     @When("event \$eventType occurs")
     fun whenAnEventOccurs(eventType: T) {
-        whenAnEventOccursWithValue(eventType, DEFAULT_EVENT_VALUE)
+        mightThrowException { whenAnEventOccursWithValue(eventType, DEFAULT_EVENT_VALUE) }
     }
 
     @When("event \$eventType occurs with value \$value")
     fun whenAnEventOccursWithValue(eventType: T, value: Int) = with(eventType) {
-        m.services.execute(AddEvent(value))
+        mightThrowException { m.services.execute(AddEvent(value)) }
     }
 
     @Then("\$eventType actions produce the next values in order: [\$values]")
@@ -70,10 +74,14 @@ internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T 
     }
 
     protected fun <E : TestEvent> TestEventStore<E>.subscribedTestActions()
-            : List<TestSimpleEventAction<E, *, *>> = simpleActions.map { it as TestSimpleEventAction<E, *, *> }
+            : List<TestSimpleEventAction<E, *, *, *>> = simpleActions.map { it as TestSimpleEventAction<E, *, *, *> }
 
     protected val T.declaredEventActions: Sequence<A>
         get() = eventClass.declaredActions(actionType)
+
+    protected val TestEventStore<*>.simpleLocalActions: List<A>
+        @Suppress("UNCHECKED_CAST")
+        get() = simpleActions.map { it as A }
 
     interface EventType<S : EventActionStepBase<S, *, *>, out M : EventMembers<*, *>> {
         val eventClass: Class<out Event>
@@ -86,6 +94,6 @@ internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T 
     interface EventMembers<E : TestEvent, out S : TestEventServices<E>> {
         val eventStoreManager: TestEventStore<E>
         val services: S
-        val valueProducer: ValueProducer<E, *>
+        val valueProducer: ValueProducer<E, *, *>
     }
 }

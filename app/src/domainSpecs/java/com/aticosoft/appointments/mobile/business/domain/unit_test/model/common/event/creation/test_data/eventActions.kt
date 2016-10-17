@@ -11,7 +11,7 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 29/08/16.
  */
-internal abstract class LocalTestEventAction<E : TestEvent>(val value: Int) : TestSimpleEventAction<E, EmptyValueProducer<E>, ProducedValue>(MULTIPLE_TIMES)
+internal abstract class LocalTestEventAction<E : TestEvent>(val value: Int) : TestSimpleEventAction<E, LocalTestEventAction<E>, EmptyValueProducer<E>, ProducedValue>(MULTIPLE_TIMES)
 
 //region OneSubscriptionEvent
 @Singleton

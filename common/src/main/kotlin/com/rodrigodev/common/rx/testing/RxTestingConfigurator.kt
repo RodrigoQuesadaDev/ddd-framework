@@ -8,7 +8,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 29/10/15.
  */
 @Singleton
-class RxConfigurator @Inject constructor(
+class RxTestingConfigurator @Inject constructor(
         private val rxJavaSchedulersHook: TestRxJavaSchedulersHook
 ) {
     companion object {

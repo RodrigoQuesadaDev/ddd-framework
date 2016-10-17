@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
+<orm>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.condition.test_data">
+        <class name="SampleEvent" table="SAMPLE_EVENT_2"/>
+        <class name="BadCondModifiesEvent" table="BAD_COND_MODIFIES_EVENT"/>
+        <class name="BadCondAddedAfterInitEvent" table="BAD_COND_ADDED_AFTER_INIT_EVENT"/>
+    </package>
+</orm>

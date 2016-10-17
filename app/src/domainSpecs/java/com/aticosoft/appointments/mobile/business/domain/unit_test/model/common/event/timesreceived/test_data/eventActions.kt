@@ -5,7 +5,6 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.event.Time
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.TimesReceivedEvaluator.MULTIPLE_TIMES
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.TimesReceivedEvaluator.SINGLE_TIME
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
-import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEventAction
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.ProducedValue
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.ValueProducer
@@ -17,13 +16,13 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 29/08/16.
  */
 internal abstract class LocalTestEventAction<E : TestEvent>(timesReceived: TimesReceivedEvaluator)
-: TestSimpleEventAction<E, LocalValueProducer<E>, LocalProducedValue>(timesReceived)
+: TestSimpleEventAction<E, LocalTestEventAction<E>, LocalValueProducer<E>, LocalProducedValue>(timesReceived)
 
 //region Produced Values
 @Singleton
-internal class LocalValueProducer<E : TestEvent> @Inject protected constructor() : ValueProducer<E, LocalProducedValue>() {
+internal class LocalValueProducer<E : TestEvent> @Inject protected constructor() : ValueProducer<E, LocalTestEventAction<E>, LocalProducedValue>() {
 
-    override fun producedValue(eventAction: TestEventAction<*>, value: Int)
+    override fun producedValue(eventAction: LocalTestEventAction<E>, value: Int)
             = LocalProducedValue(TimesReceivedType.from(eventAction), value)
 }
 
@@ -31,19 +30,18 @@ internal data class LocalProducedValue(val type: TimesReceivedType, val value: I
 
     override fun toString() = "${type.symbol}:$value"
 
-    enum class TimesReceivedType(val symbol: String) { SINGLE("S"), MULTIPLE("M");
+    enum class TimesReceivedType(val symbol: String, val type: TimesReceivedEvaluator) {
+        SINGLE("S", TimesReceivedEvaluator.SINGLE_TIME),
+        MULTIPLE("M", TimesReceivedEvaluator.MULTIPLE_TIMES);
 
         companion object {
-            fun from(symbol: String): TimesReceivedType = when (symbol) {
-                "S" -> SINGLE
-                "M" -> MULTIPLE
-                else -> throw IllegalArgumentException()
-            }
+            private val symbolsMap = TimesReceivedType.values().associateBy { it.symbol }
 
-            fun from(action: EventAction<*>): TimesReceivedType = when (action.timesReceived) {
-                TimesReceivedEvaluator.SINGLE_TIME -> SINGLE
-                TimesReceivedEvaluator.MULTIPLE_TIMES -> MULTIPLE
-            }
+            private val typesMap = TimesReceivedType.values().associateBy { it.type }
+
+            fun from(symbol: String): TimesReceivedType = symbolsMap[symbol]!!
+
+            fun from(action: EventAction<*>): TimesReceivedType = typesMap[action.timesReceived]!!
         }
     }
 }
