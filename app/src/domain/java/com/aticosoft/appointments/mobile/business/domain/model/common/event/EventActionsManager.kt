@@ -12,49 +12,79 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 30/09/16.
  */
 @Singleton
-/*internal*/ class EventActionsManager @Inject protected constructor(
-        private val persistenceContext: PersistenceContext,
-        private val eventActionStateRepository: EventActionStateRepository,
-        private val queries: EventActionStateQueries,
-        eventActions: MutableSet<EventAction<*>>
-) {
+/*internal*/ interface EventActionsManager {
 
-    private val actionsByEvent: Map<Class<out Event>, List<EventAction<*>>> = eventActions.groupBy { it.eventType }
-            .mapValues {
-                val eventType = it.key
-                val actions = it.value
-                val actionsByType = actions.identifiedBy { it.typeString }
+    fun <E : Event> simpleActionsFor(eventType: Class<E>): List<SimpleEventAction<E>>
 
-                eventType.loadSortedActionStates(actions)
-                        .map { actionsByType[it.type.actionType]!! }
-            }
+    fun <E : Event> overridableActionsFor(eventType: Class<E>): List<OverridableEventAction<E>>
+}
 
-    private val simpleActionsMap = actionsByEvent.filterValuesAreInstance(SimpleEventAction::class.java)
-    private val overridableActionsMap = actionsByEvent.filterValuesAreInstance(OverridableEventAction::class.java)
+@Singleton
+/*internal*/ open class EventActionsManagerImpl @Inject protected constructor() : EventActionsManager {
 
-    init {
+    private lateinit var m: InjectedMembers
+
+    private val actionsByEvent: Map<Class<out Event>, List<EventAction<*>>> by lazy {
+        with(m) {
+            eventActions.groupBy { it.eventType }
+                    .mapValues {
+                        val eventType = it.key
+                        val actions = it.value
+                        val actionsByType = actions.identifiedBy { it.typeString }
+
+                        eventType.loadSortedActionStates(actions)
+                                .map { actionsByType[it.type.actionType]!! }
+                    }
+        }
+    }
+
+    private val simpleActionsMap by lazy { actionsByEvent.filterValuesAreInstance(SimpleEventAction::class.java) }
+    private val overridableActionsMap by lazy { actionsByEvent.filterValuesAreInstance(OverridableEventAction::class.java) }
+
+    private fun init() = with(m) {
         eventActions.forEach { it.init() }
     }
 
-    fun <E : Event> simpleActionsFor(eventType: Class<E>): List<SimpleEventAction<E>> = eventType.actionsFrom(simpleActionsMap)
+    override fun <E : Event> simpleActionsFor(eventType: Class<E>): List<SimpleEventAction<E>> = eventType.actionsFrom(simpleActionsMap)
 
-    fun <E : Event> overridableActionsFor(eventType: Class<E>): List<OverridableEventAction<E>> = eventType.actionsFrom(overridableActionsMap)
+    override fun <E : Event> overridableActionsFor(eventType: Class<E>): List<OverridableEventAction<E>> = eventType.actionsFrom(overridableActionsMap)
 
     private inline fun <E : Event, A : EventAction<E>> Class<E>.actionsFrom(map: Map<Class<out Event>, List<EventAction<*>>>): List<A> {
         @Suppress("UNCHECKED_CAST")
         return map[this] as? List<A> ?: emptyList()
     }
 
-    //region Actions Sorting
-    private inline fun Class<out Event>.loadSortedActionStates(actions: List<EventAction<*>>): List<EventActionState> = persistenceContext.execute {
-        if (eventActionStateRepository.count(queries.countBy(this)) == 0L) {
-            actions.sortedByDescending { it.priority }
-                    .forEachIndexed { i, action ->
-                        eventActionStateRepository.add(EventActionState(action, i))
-                    }
-        }
-        eventActionStateRepository.find(queries.sortedFor(this))
+    //region Injection
+    @Inject
+    protected fun inject(injectedMembers: InjectedMembers) {
+        m = injectedMembers
+        init()
     }
+
+    class InjectedMembers @Inject protected constructor(
+            val persistenceContext: PersistenceContext,
+            val eventActionStateRepository: EventActionStateRepository,
+            val queries: EventActionStateQueries,
+            val eventActions: MutableSet<EventAction<*>>
+    )
+    //endregion
+
+    //region Actions Sorting
+    private inline fun Class<out Event>.loadSortedActionStates(actions: List<EventAction<*>>): List<EventActionState> = with(m) {
+        persistenceContext.execute {
+            if (eventActionStateRepository.count(queries.countBy(this@loadSortedActionStates)) == 0L) {
+                actions.sort().forEachIndexed { i, action ->
+                    eventActionStateRepository.add(EventActionState(action, i))
+                }
+            }
+            eventActionStateRepository.find(queries.sortedFor(this@loadSortedActionStates))
+        }
+    }
+
+    private inline fun List<EventAction<*>>.sort(): List<EventAction<*>> = sortActions(this)
+
+    //TODO remove and leave only extension function after KT-7859 is resolved
+    protected open fun sortActions(actions: List<EventAction<*>>): List<EventAction<*>> = actions.sortedByDescending { it.priority }
     //endregion
 }
 

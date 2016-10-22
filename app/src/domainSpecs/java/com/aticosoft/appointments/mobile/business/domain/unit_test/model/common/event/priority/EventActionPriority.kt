@@ -14,15 +14,14 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.priority.EventActionPriority.LocalSteps.LocalEventType
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.priority.EventActionPriority.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.priority.test_data.*
+import com.rodrigodev.common.assertj.Assertions.assertThatList
 import com.rodrigodev.common.kotlin.nullable
 import com.rodrigodev.common.spec.story.converter.ParameterConverterBase
-import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
-import org.jbehave.core.steps.ParameterConverters
+import org.jbehave.core.steps.ParameterConverters.ParameterConverter
 import org.jbehave.core.steps.ParameterConverters.ParameterConvertionFailed
 import org.robolectric.annotation.Config
 import java.lang.reflect.Type
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -49,16 +48,12 @@ internal class EventActionPriority : DomainStory() {
         override val eventTypeValues = LocalEventType.values()
         override val actionType = LocalTestEventAction::class.java
 
-        override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(ProducedValueConverter())
+        override val converters: Array<ParameterConverter> = arrayOf(ProducedValueConverter())
 
         @Given("\$eventType actions have priority values: [\$values]")
         fun givenSamePriorityActionsHavePriorityValues(eventType: LocalEventType, values: MutableList<Int?>) {
-            assertThat(eventType.declaredEventActions
-                    .map { it.declaredPriority() }
-                    .sortedWith(PriorityComparator)
-                    .toList()
-            )
-                    .containsExactlyElementsOf(values.sortedWith(PriorityComparator))
+            assertThatList(eventType.declaredEventActions.map { it.declaredPriority() }.toList())
+                    .containsExactlyElementsOfInAnyOrder(values)
         }
 
         //region Event Members
@@ -104,18 +99,6 @@ internal class EventActionPriority : DomainStory() {
                 }
                 catch(e: Exception) {
                     throw ParameterConvertionFailed("Unable to convert value to ProducedValue.", e)
-                }
-            }
-        }
-
-        object PriorityComparator : Comparator<Int?> {
-
-            override fun compare(lhs: Int?, rhs: Int?): Int {
-                return when {
-                    lhs == rhs -> 0
-                    lhs == null -> -1
-                    rhs == null -> 1
-                    else -> lhs.compareTo(rhs)
                 }
             }
         }

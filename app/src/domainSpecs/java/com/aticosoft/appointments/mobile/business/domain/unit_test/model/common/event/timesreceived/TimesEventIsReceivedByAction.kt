@@ -5,7 +5,6 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
-import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
@@ -16,11 +15,10 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.timesreceived.TimesEventIsReceivedByAction.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.timesreceived.test_data.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.timesreceived.test_data.LocalProducedValue.TimesReceivedType
-import com.google.common.collect.ComparisonChain
+import com.rodrigodev.common.assertj.Assertions.assertThatList
 import com.rodrigodev.common.spec.story.converter.ParameterConverterBase
-import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
-import org.jbehave.core.steps.ParameterConverters
+import org.jbehave.core.steps.ParameterConverters.ParameterConverter
 import org.jbehave.core.steps.ParameterConverters.ParameterConvertionFailed
 import org.robolectric.annotation.Config
 import java.lang.reflect.Type
@@ -48,20 +46,19 @@ internal class TimesEventIsReceivedByAction : DomainStory() {
         override val eventTypeValues = LocalEventType.values()
         override val actionType = LocalTestEventAction::class.java
 
-        override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(ProducedValueConverter(), EventActionDefinitionConverter())
+        override val converters: Array<ParameterConverter> = arrayOf(ProducedValueConverter(), EventActionDefinitionConverter())
 
         @Given("\$eventType actions are defined like: [\$definitions]")
         fun givenSampleActionsAreDefinedLike(eventType: LocalEventType, definitions: MutableList<EventActionDefinition>) {
-            assertThat(
-                    eventType.declaredEventActions.toEventActionDefinitions().sorted().toList()
+            assertThatList(
+                    eventType.declaredEventActions.toEventActionDefinitions().toList()
             )
-                    .containsExactlyElementsOf(definitions.sorted())
+                    .containsExactlyElementsOfInAnyOrder(definitions)
         }
 
         //region Event Members
         @Singleton
         class LocalEventMembers<E : TestEvent, out S : TestEventServices<E>> @Inject protected constructor(
-                val repositoryManager: TestEventRepositoryManager<E>,
                 override val eventStoreManager: TestEventStore<E>,
                 override val services: S,
                 override val valueProducer: LocalValueProducer<E>
@@ -76,15 +73,7 @@ internal class TimesEventIsReceivedByAction : DomainStory() {
             SAMPLE(SampleEvent::class.java, { sampleEventMembers }),
         }
 
-        data class EventActionDefinition(val type: TimesReceivedType, val priority: Int) : Comparable<EventActionDefinition> {
-
-            override fun compareTo(other: EventActionDefinition): Int {
-                return ComparisonChain.start()
-                        .compare(type, other.type)
-                        .compare(priority, other.priority)
-                        .result()
-            }
-        }
+        data class EventActionDefinition(val type: TimesReceivedType, val priority: Int)
 
         private inline fun EventAction<*>.toEventActionDefinition() = EventActionDefinition(TimesReceivedType.from(this), priority)
 

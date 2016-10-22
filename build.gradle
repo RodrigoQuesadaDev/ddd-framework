@@ -46,6 +46,7 @@ subprojects {
         groovyVersion = '2.4.5'
 
         //Testing
+        //jBehaveVersion = '4.1-SNAPSHOT'
         jBehaveVersion = '4.0.5c'//customized JBehave code
         jBehaveSiteVersion = '3.3'
         junitVersion = '4.12'

@@ -18,6 +18,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.LocalTestEventAction
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.NoSubscriptionsEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data.OneSubscriptionEvent
+import com.rodrigodev.common.assertj.Assertions.assertThatList
 import com.rodrigodev.common.properties.Delegates.unsupportedOperation
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Alias
@@ -56,12 +57,8 @@ internal class EventSubscriptionCreation : DomainStory() {
 
         @Given("\$eventType event actions with the next ids are declared: [\$ids]")
         fun givenEventActionsWithTheNextIdsAreDeclared(eventType: LocalEventType, ids: MutableList<Int>) {
-            assertThat(eventType.declaredEventActions
-                    .toValues()
-                    .toList()
-            )
-                    .containsOnlyElementsOf(ids)
-                    .doesNotHaveDuplicates()
+            assertThatList(eventType.declaredEventActions.toValues().toList())
+                    .containsExactlyElementsOfInAnyOrder(ids)
         }
 
         @Then("no actions are subscribed to \$eventType event")

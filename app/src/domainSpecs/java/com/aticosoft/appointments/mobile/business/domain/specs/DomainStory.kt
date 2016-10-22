@@ -5,7 +5,7 @@ import com.rodrigodev.common.spec.story.SpecStory
 import com.rodrigodev.common.spec.story.steps.SpecSteps
 import org.jbehave.core.annotations.Given
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricGradleTestRunner
+import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 17/09/15.
  */
-@RunWith(RobolectricGradleTestRunner::class)
+@RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(19))
 internal abstract class DomainStory : SpecStory() {
 

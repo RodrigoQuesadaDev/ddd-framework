@@ -25,6 +25,10 @@ package com.aticosoft.appointments.mobile.business.domain.specs
 //TODO use retryWhen to add exponential back-off retry (starts at 0.5s to a max of 5s),
 //TODO for this probably a custom operator is necessary since RxJava retry*/CATCH*??? operators do not reset after a successful emission? (Use composition for this custom operator?)
 
+//TODO test internal observables are not use on presentation layer and vice versa (presentation observables used in the domain layer)
+
+/* Errors*/
+
 //TODO check code thoroughly (such as EventStoreBase class? does it need to get resubscribed after an error?)
 //TODO carefully create hierarchy of exceptions to handle them based on that? (to log; to just shut app; both... etc...)
 
@@ -35,6 +39,8 @@ package com.aticosoft.appointments.mobile.business.domain.specs
 //TODO using package name "com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simple_action.test_data" produces weird DN error message: javax.jdo.JDOException: Class "Entity" : Cannot populate the class since it is already populated.
 //TODO changing the "simple_action" part removes that error
 
+//TODO test state is maintained between app executions (such as entity data or event action tracking data). This will probably require some sort of instrumentation testing? (doesn't seem so straightforward to implement right now)
+
 /* Embedded Objects */
 //TODO do dirty-checking on embedded objects
 //TODO make sure embedded objects are not modified by services when passed from presentation layer
@@ -42,3 +48,5 @@ package com.aticosoft.appointments.mobile.business.domain.specs
 
 /* Events */
 //TODO implement infrastructure feature to allow code to get executed each time the app is upgraded (events state should be reset)
+
+//TODO allow actions to marked events to be kept? (such as a long running process that needs to wait for an appointment to be canceled...)

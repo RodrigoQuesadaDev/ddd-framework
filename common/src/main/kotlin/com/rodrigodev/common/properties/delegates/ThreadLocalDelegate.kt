@@ -1,5 +1,9 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.rodrigodev.common.properties.delegates
 
+import com.rodrigodev.common.collection.synchronized
+import com.rodrigodev.common.collection.unmodifiable
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -23,15 +27,34 @@ class ThreadLocalDelegate<T>(cleaner: ThreadLocalCleaner, initialValueCall: () -
     override fun setValue(thisRef: Any, property: KProperty<*>, value: T) = localValue.set(value)
 }
 
-class ThreadLocalCleaner {
 
-    private val registeredThreadLocals = arrayListOf<ThreadLocal<*>>()
+open class ThreadLocalCleaner {
+
+    protected open var registeredThreadLocals: MutableList<ThreadLocal<*>> = arrayListOf()
 
     fun register(threadLocal: ThreadLocal<*>) {
         registeredThreadLocals.add(threadLocal)
     }
 
-    fun cleanUpThreadLocalInstances() {
+    open fun cleanUpThreadLocalInstances() {
         registeredThreadLocals.forEach { it.remove() }
+    }
+}
+
+class SafeThreadLocalCleaner : ThreadLocalCleaner() {
+
+    @Volatile override var registeredThreadLocals = arrayListOf<ThreadLocal<*>>().synchronized()
+    @Volatile private var registrationsClosed = false
+
+    override fun cleanUpThreadLocalInstances() {
+        closeRegistrations()
+        super.cleanUpThreadLocalInstances()
+    }
+
+    private inline fun closeRegistrations() {
+        if (!registrationsClosed) {
+            registeredThreadLocals = registeredThreadLocals.unmodifiable()
+            registrationsClosed = true
+        }
     }
 }

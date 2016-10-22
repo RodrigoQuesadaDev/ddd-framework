@@ -7,7 +7,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.persistabl
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidatorsManager
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment.AppointmentModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client.ClientModule
-import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.CommonModule
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.DomainModelCommonModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializer
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.PersistableObjectInitializersManager
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.valueobject.ValueObjectsManager
@@ -23,8 +23,26 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 /**
  * Created by Rodrigo Quesada on 26/09/15.
  */
-@Module(includes = arrayOf(CommonModule::class, ConfigurationModule::class, AppointmentModule::class, ClientModule::class))
+@Module(includes = arrayOf(DomainModelBaseModule::class, DomainModelCommonModule::class))
 /*internal*/ class DomainModelModule {
+
+    @Singleton
+    class PostInitializer @Inject protected constructor(
+            private val persistableObjectValidatorsManager: PersistableObjectValidatorsManager,
+            private val persistableObjectInitializersManager: PersistableObjectInitializersManager,
+            private val valueObjectsManager: ValueObjectsManager
+    ) : ModulePostInitializer {
+
+        override fun init() {
+            persistableObjectValidatorsManager.registerValidators()
+            persistableObjectInitializersManager.registerInitializers()
+            valueObjectsManager.registerValueObjects()
+        }
+    }
+}
+
+@Module(includes = arrayOf(ConfigurationModule::class, AppointmentModule::class, ClientModule::class))
+/*internal*/ class DomainModelBaseModule {
 
     @Provides @ElementsIntoSet
     fun provideEventActionsIntoSet(): Set<EventAction<*>> = emptySet()
@@ -43,20 +61,6 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 
     @Provides @ElementsIntoSet @ValueObjects
     fun provideValueObjects(): Set<Class<*>> = emptySet()
-
-    @Singleton
-    class PostInitializer @Inject protected constructor(
-            private val persistableObjectValidatorsManager: PersistableObjectValidatorsManager,
-            private val persistableObjectInitializersManager: PersistableObjectInitializersManager,
-            private val valueObjectsManager: ValueObjectsManager
-    ) : ModulePostInitializer {
-
-        override fun init() {
-            persistableObjectValidatorsManager.registerValidators()
-            persistableObjectInitializersManager.registerInitializers()
-            valueObjectsManager.registerValueObjects()
-        }
-    }
 }
 
 @Qualifier

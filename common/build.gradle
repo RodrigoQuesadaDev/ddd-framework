@@ -30,6 +30,7 @@ dependencies {
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
     compile "org.reflections:reflections:$reflectionsVersion"
     compile "com.querydsl:querydsl-jdo:$queryDslVersion"
+    compile "org.assertj:assertj-core:$assertjVersion"
 
     testCompile "org.jbehave:jbehave-core:$jBehaveVersion"
     jbehaveSiteResources "org.jbehave:jbehave-core:$jBehaveVersion"

@@ -1,24 +1,23 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction
+package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.betweenruns
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.isEmpty
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventActionsManagerImpl
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.betweenruns.EventActionExecutionOrderIsMaintainedBetweenRuns.LocalSteps.LocalEventType
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.betweenruns.EventActionExecutionOrderIsMaintainedBetweenRuns.UnitTestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.betweenruns.test_data.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.EventActionStepBase
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.SimpleEventActionBehavior.LocalSteps.LocalEventType
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.SimpleEventActionBehavior.UnitTestApplicationImpl
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.simpleaction.test_data.*
+import com.rodrigodev.common.assertj.Assertions.assertThatList
 import com.rodrigodev.common.spec.story.converter.ParameterConverterBase
-import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
-import org.jbehave.core.annotations.Then
 import org.jbehave.core.steps.ParameterConverters.ParameterConverter
 import org.jbehave.core.steps.ParameterConverters.ParameterConvertionFailed
 import org.robolectric.annotation.Config
@@ -27,12 +26,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Created by Rodrigo Quesada on 11/08/16.
+ * Created by Rodrigo Quesada on 18/10/16.
  */
 @Config(application = UnitTestApplicationImpl::class)
-internal class SimpleEventActionBehavior : DomainStory() {
+internal class EventActionExecutionOrderIsMaintainedBetweenRuns : DomainStory() {
 
-    class UnitTestApplicationImpl : UnitTestApplication<SimpleEventActionBehavior>(UnitTestApplicationComponent::inject)
+    class UnitTestApplicationImpl : UnitTestApplication<EventActionExecutionOrderIsMaintainedBetweenRuns>(UnitTestApplicationComponent::inject)
 
     @Inject protected lateinit var localSteps: LocalSteps
 
@@ -41,29 +40,24 @@ internal class SimpleEventActionBehavior : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val noSubscriptionsEventMembers: LocalEventMembers<NoSubscriptionsEvent, NoSubscriptionsEventServices>,
-            private val threeSubscriptionsEventMembers: LocalEventMembers<ThreeSubscriptionsEvent, ThreeSubscriptionsEventServices>,
-            private val fiveSubscriptionsEventMembers: LocalEventMembers<FiveSubscriptionsEvent, FiveSubscriptionsEventServices>
+            private val sampleEventMembers: LocalEventMembers<SampleEvent, SampleEventServices>,
+            private val eventActionsManager: TestEventActionsManagerImpl
     ) : EventActionStepBase<LocalSteps, LocalEventType, LocalTestEventAction<*>>() {
 
         override val eventTypeValues = LocalEventType.values()
         override val actionType = LocalTestEventAction::class.java
 
-        override val converters: Array<ParameterConverter> = arrayOf(ProducedValueConverter())
+        override val converters: Array<ParameterConverter> = arrayOf(ProducedValueConverter(), EventActionDefinitionConverter())
 
-        @Given("event \$eventType has \$n actions subscribed")
-        fun givenEventHasNActionsSubscribed(eventType: LocalEventType, n: Int) {
-            assertThat(eventType.declaredEventActions.toList()).hasSize(n)
+        @Given("\$eventType actions are defined like: [\$definitions]")
+        fun givenSampleActionsAreDefinedLike(eventType: LocalEventType, definitions: MutableList<EventActionDefinition>) {
+            assertThatList(eventType.declaredEventActions.toEventActionDefinitions().toList())
+                    .containsExactlyElementsOfInAnyOrder(definitions)
         }
 
-        @Then("\$eventType actions don't get triggered")
-        fun thenLocalEventTypeActionsDontGetTriggered(eventType: LocalEventType) = with(eventType) {
-            assertThat(m.valueProducer.producedValues).isEmpty()
-        }
-
-        @Then("there are no \$eventType events left")
-        fun thenThereAreNoEventsLeft(eventType: LocalEventType) = with(eventType) {
-            assertThat(m.repositoryManager.repository { isEmpty() }).isTrue()
+        @Given("action events order is randomized by EventActionsManager")
+        fun givenActionEventsOrderIsRandomizedByEventActionsManager() {
+            eventActionsManager.randomizeEventActionsOrder()
         }
 
         //region Event Members
@@ -81,14 +75,20 @@ internal class SimpleEventActionBehavior : DomainStory() {
                 override val eventClass: Class<out Event>,
                 override val eventMembers: LocalSteps.() -> LocalEventMembers<*, *>
         ) : EventType<LocalSteps, LocalEventMembers<*, *>> {
-            NO_SUBSCRIPTIONS(NoSubscriptionsEvent::class.java, { noSubscriptionsEventMembers }),
-            THREE_SUBSCRIPTIONS(ThreeSubscriptionsEvent::class.java, { threeSubscriptionsEventMembers }),
-            FIVE_SUBSCRIPTIONS(FiveSubscriptionsEvent::class.java, { fiveSubscriptionsEventMembers })
+            SAMPLE(SampleEvent::class.java, { sampleEventMembers })
         }
 
+        data class EventActionDefinition(val id: Int, val priority: Int)
+
+        private inline fun LocalTestEventAction<*>.toEventActionDefinition() = EventActionDefinition(id, priority)
+
+        private inline fun Sequence<LocalTestEventAction<*>>.toEventActionDefinitions() = map { it.toEventActionDefinition() }
+        //endregion
+
+        //region Converters
         class ProducedValueConverter : ParameterConverterBase<LocalProducedValue>(LocalProducedValue::class.java) {
             private companion object {
-                val VALUE_PATTERN = Regex("a(\\d+):(\\d+)", RegexOption.IGNORE_CASE)
+                val VALUE_PATTERN = Regex("id(\\d+):(\\d+)", RegexOption.IGNORE_CASE)
             }
 
             override fun convertValue(value: String, type: Type): LocalProducedValue {
@@ -102,6 +102,26 @@ internal class SimpleEventActionBehavior : DomainStory() {
                 }
                 catch(e: Exception) {
                     throw ParameterConvertionFailed("Unable to convert value to ProducedValue.", e)
+                }
+            }
+        }
+
+        class EventActionDefinitionConverter : ParameterConverterBase<EventActionDefinition>(EventActionDefinition::class.java) {
+            private companion object {
+                val VALUE_PATTERN = Regex("id(\\d+):p(\\d+)", RegexOption.IGNORE_CASE)
+            }
+
+            override fun convertValue(value: String, type: Type): EventActionDefinition {
+                try {
+                    with(VALUE_PATTERN.matchEntire(value)!!) {
+                        return EventActionDefinition(
+                                groups[1]!!.value.toInt(),
+                                groups[2]!!.value.toInt()
+                        )
+                    }
+                }
+                catch(e: Exception) {
+                    throw ParameterConvertionFailed("Unable to convert value to EventActionDefinition.", e)
                 }
             }
         }

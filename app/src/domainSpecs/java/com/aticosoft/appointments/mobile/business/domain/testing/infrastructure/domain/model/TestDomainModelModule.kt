@@ -1,13 +1,16 @@
 package com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model
 
+import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.common.TestDomainModelCommonModule
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestDataModule
-
+import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.DomainModelBaseModule
 import dagger.Module
 
 /**
  * Created by Rodrigo Quesada on 04/12/15.
  */
 @Module(includes = arrayOf(
+        DomainModelBaseModule::class,
+        TestDomainModelCommonModule::class,
         TestDataModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataChildModule::class,
@@ -36,6 +39,7 @@ import dagger.Module
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.timesreceived.test_data.SampleEventModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.condition.test_data.SampleEventModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.condition.test_data.BadCondModifiesEventModule::class,
-        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.condition.test_data.BadCondAddedAfterInitEventModule::class
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.condition.test_data.BadCondAddedAfterInitEventModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.betweenruns.test_data.SampleEventModule::class
 ))
 internal class TestDomainModelModule

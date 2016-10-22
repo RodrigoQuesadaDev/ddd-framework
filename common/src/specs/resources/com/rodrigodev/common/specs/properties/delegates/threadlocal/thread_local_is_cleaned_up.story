@@ -4,9 +4,12 @@ In order to clean up ThreadLocal values automatically
 As a developer
 I want to be able to be able to register various ThreadLocal instances with a given object that should trigger that action
 
+!-- TODO change after this stuff is fixed: http://jbehave.org/reference/latest/given-stories.html (not working!!!)
+Meta: @threadLocalCleanerType UNSAFE
+
 Scenario: a clean-up object is created
 
-Given a ThreadLocalCleaner object is created
+Given a <threadLocalCleanerType> ThreadLocalCleaner object is created
 
 Scenario: ThreadLocal instances are created
 

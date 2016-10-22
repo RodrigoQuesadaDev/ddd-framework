@@ -3,6 +3,8 @@
 package com.rodrigodev.common.properties
 
 import com.rodrigodev.common.properties.delegates.*
+import com.rodrigodev.common.properties.delegates.PostInitializedPropertyDelegate.PropertyInitializer
+import com.rodrigodev.common.properties.delegates.UnsafePostInitializedPropertyDelegate.UnsafePropertyInitializer
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -29,4 +31,20 @@ object Delegates {
     inline fun <T : Any> lateinitReadOnly() = writeOnce<T>()
 
     inline fun <T> unsupportedOperation() = UnsupportedOperationDelegate<T>()
+
+    inline fun <T : Any> postInitialized(
+            type: PostInitializedPropertyType,
+            initializer: PropertyInitializer,
+            noinline initialization: () -> T
+    ): PostInitializedPropertyDelegate<T> = when (type) {
+        PostInitializedPropertyType.UNSAFE -> {
+            require(initializer is UnsafePropertyInitializer, { "Initializer should be of type UnsafePropertyInitializer." })
+            UnsafePostInitializedPropertyDelegate(initializer as UnsafePropertyInitializer, initialization)
+        }
+    }
 }
+
+//region Other Classes
+//TODO implement safe version based on lazy
+enum class PostInitializedPropertyType { UNSAFE }
+//endregion

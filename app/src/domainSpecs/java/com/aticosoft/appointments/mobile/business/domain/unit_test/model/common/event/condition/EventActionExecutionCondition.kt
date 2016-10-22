@@ -16,13 +16,13 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.condition.test_data.*
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.condition.test_data.LocalProducedValue.ExecutionConditionType
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.exceptions.IllegallyModifiedEvent
-import com.google.common.collect.ComparisonChain
+import com.rodrigodev.common.assertj.Assertions.assertThatList
 import com.rodrigodev.common.spec.story.converter.ParameterConverterBase
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.Then
 import org.jbehave.core.annotations.When
-import org.jbehave.core.steps.ParameterConverters
+import org.jbehave.core.steps.ParameterConverters.ParameterConverter
 import org.jbehave.core.steps.ParameterConverters.ParameterConvertionFailed
 import org.robolectric.annotation.Config
 import java.lang.reflect.Type
@@ -52,14 +52,14 @@ internal class EventActionExecutionCondition : DomainStory() {
         override val eventTypeValues = LocalEventType.values()
         override val actionType = LocalTestEventAction::class.java
 
-        override val converters: Array<ParameterConverters.ParameterConverter> = arrayOf(ProducedValueConverter(), EventActionDefinitionConverter())
+        override val converters: Array<ParameterConverter> = arrayOf(ProducedValueConverter(), EventActionDefinitionConverter())
 
         @Given("\$eventType actions are defined like: [\$definitions]")
         fun givenSampleActionsAreDefinedLike(eventType: LocalEventType, definitions: MutableList<EventActionDefinition>) {
-            assertThat(
-                    eventType.declaredEventActions.toEventActionDefinitions().sorted().toList()
+            assertThatList(
+                    eventType.declaredEventActions.toEventActionDefinitions().toList()
             )
-                    .containsExactlyElementsOf(definitions.sorted())
+                    .containsExactlyElementsOfInAnyOrder(definitions)
         }
 
         @Given("\$eventType action modifies the event during condition evaluation")
@@ -102,15 +102,7 @@ internal class EventActionExecutionCondition : DomainStory() {
             BAD_COND_ADDED_AFTER_INIT(BadCondAddedAfterInitEvent::class.java, { badCondAddedAfterInitEventMembers }),
         }
 
-        data class EventActionDefinition(val conditionType: ExecutionConditionType, val priority: Int) : Comparable<EventActionDefinition> {
-
-            override fun compareTo(other: EventActionDefinition): Int {
-                return ComparisonChain.start()
-                        .compare(conditionType, other.conditionType)
-                        .compare(priority, other.priority)
-                        .result()
-            }
-        }
+        data class EventActionDefinition(val conditionType: ExecutionConditionType, val priority: Int)
 
         private inline fun LocalTestEventAction<*>.toEventActionDefinition() = EventActionDefinition(ExecutionConditionType.from(this), priority)
 
