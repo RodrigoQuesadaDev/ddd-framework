@@ -4,6 +4,7 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObjectLifecycleListener
 import com.querydsl.jdo.JDOQueryFactory
 import com.rodrigodev.common.properties.Delegates.threadLocal
+import com.rodrigodev.common.properties.Delegates.unsafeLazy
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
 import org.datanucleus.PropertyNames
 import java.io.Closeable
@@ -34,7 +35,8 @@ import javax.jdo.listener.InstanceLifecycleListener
 
     private val persistableObjectListenerListBuilder = PersistableObjectListenerListBuilder()
 
-    private val persistableObjectListeners: List<PersistableObjectListener<*, *>> by lazy { persistableObjectListenerListBuilder.build() }
+    // It is fine to use unsafeLazy here, thread safety necessary here
+    private val persistableObjectListeners: List<PersistableObjectListener<*, *>> by unsafeLazy { persistableObjectListenerListBuilder.build() }
 
     fun registerPersistableObjectListener(persistableObjectListener: PersistableObjectListener<*, *>) {
         registerPersistableObjectLifecycleListener(persistableObjectListener)
@@ -85,5 +87,5 @@ private class PersistableObjectListenerListBuilder {
         listeners.add(listener)
     }
 
-    fun build() = listeners
+    fun build(): List<PersistableObjectListener<*, *>> = listeners
 }

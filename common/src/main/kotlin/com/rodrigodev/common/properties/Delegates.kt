@@ -22,6 +22,8 @@ object Delegates {
 
     inline fun <T> writableLazy(noinline initializer: () -> T) = WritableLazy(initializer)
 
+    inline fun <T> unsafeLazy(noinline initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)
+
     inline fun <T> readOnly(initialValue: T) = ReadOnlyDelegate<T>(initialValue)
 
     inline fun <T : Any> writeOnce() = WriteOnceDelegate<T>()
@@ -42,9 +44,29 @@ object Delegates {
             UnsafePostInitializedPropertyDelegate(initializer as UnsafePropertyInitializer, initialization)
         }
     }
+
+    inline fun <T : Any> PostInitialized.postInitialized(noinline initialization: () -> T)
+            : PostInitializedPropertyDelegate<T> = Delegates.postInitialized(_postInitializedPropertyType, _propertyInitializer, initialization)
 }
 
 //region Other Classes
 //TODO implement safe version based on lazy
 enum class PostInitializedPropertyType { UNSAFE }
+
+interface PostInitialized {
+
+    val _propertyInitializer: PropertyInitializer
+    val _postInitializedPropertyType: PostInitializedPropertyType
+}
+
+interface UnsafePostInitialized : PostInitialized {
+
+    override val _propertyInitializer: UnsafePropertyInitializer
+    override val _postInitializedPropertyType: PostInitializedPropertyType
+        get() = PostInitializedPropertyType.UNSAFE
+
+    fun _init() {
+        _propertyInitializer.init()
+    }
+}
 //endregion

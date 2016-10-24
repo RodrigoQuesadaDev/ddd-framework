@@ -7,10 +7,10 @@ import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appoi
 import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
-import com.rodrigodev.common.spec.story.steps.SpecSteps
-import com.rodrigodev.common.test.catchThrowable
 import com.rodrigodev.common.rx.testing.firstEvent
 import com.rodrigodev.common.rx.testing.testSubscribe
+import com.rodrigodev.common.spec.story.steps.SpecSteps
+import com.rodrigodev.common.test.catchThrowable
 import org.jbehave.core.annotations.Given
 import org.jbehave.core.annotations.When
 import org.jbehave.core.steps.ParameterConverters
@@ -26,12 +26,11 @@ internal class AppointmentGlobalSteps @Inject protected constructor(
         private val appointmentRepositoryManager: TestEntityRepositoryManager<Appointment>,
         private val appointmentServices: AppointmentServices,
         private val clientObserver: EntityObserver<Client>,
-        private val clientQueries: ClientQueries
+        private val clientQueries: ClientQueries,
+        appointmentTimeConverter: AppointmentTimeConverter
 ) : SpecSteps() {
 
-    @Inject protected lateinit var appointmentTimeConverter: AppointmentTimeConverter
-
-    override val converters by lazy { arrayOf<ParameterConverters.ParameterConverter>(appointmentTimeConverter) }
+    override val converters = arrayOf<ParameterConverters.ParameterConverter>(appointmentTimeConverter)
 
     var thrownScheduleException: Throwable? = null
         private set

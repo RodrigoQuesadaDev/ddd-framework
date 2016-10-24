@@ -5,6 +5,9 @@ package com.aticosoft.appointments.mobile.business.domain.model.common.event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventActionType.Companion.typeString
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.rodrigodev.common.collection.identifiedBy
+import com.rodrigodev.common.properties.Delegates.postInitialized
+import com.rodrigodev.common.properties.UnsafePostInitialized
+import com.rodrigodev.common.properties.delegates.UnsafePostInitializedPropertyDelegate.UnsafePropertyInitializer
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,11 +23,12 @@ import javax.inject.Singleton
 }
 
 @Singleton
-/*internal*/ open class EventActionsManagerImpl @Inject protected constructor() : EventActionsManager {
+/*internal*/ open class EventActionsManagerImpl @Inject protected constructor() : EventActionsManager, UnsafePostInitialized {
 
     private lateinit var m: InjectedMembers
+    override val _propertyInitializer = UnsafePropertyInitializer()
 
-    private val actionsByEvent: Map<Class<out Event>, List<EventAction<*>>> by lazy {
+    private val actionsByEvent: Map<Class<out Event>, List<EventAction<*>>> by postInitialized {
         with(m) {
             eventActions.groupBy { it.eventType }
                     .mapValues {
@@ -38,11 +42,14 @@ import javax.inject.Singleton
         }
     }
 
-    private val simpleActionsMap by lazy { actionsByEvent.filterValuesAreInstance(SimpleEventAction::class.java) }
-    private val overridableActionsMap by lazy { actionsByEvent.filterValuesAreInstance(OverridableEventAction::class.java) }
+    private val simpleActionsMap by postInitialized { actionsByEvent.filterValuesAreInstance(SimpleEventAction::class.java) }
+    private val overridableActionsMap by postInitialized { actionsByEvent.filterValuesAreInstance(OverridableEventAction::class.java) }
 
-    private fun init() = with(m) {
-        eventActions.forEach { it.init() }
+    override fun _init() {
+        super._init()
+        with(m) {
+            eventActions.forEach { it.init() }
+        }
     }
 
     override fun <E : Event> simpleActionsFor(eventType: Class<E>): List<SimpleEventAction<E>> = eventType.actionsFrom(simpleActionsMap)
@@ -58,10 +65,10 @@ import javax.inject.Singleton
     @Inject
     protected fun inject(injectedMembers: InjectedMembers) {
         m = injectedMembers
-        init()
+        _init()
     }
 
-    class InjectedMembers @Inject protected constructor(
+    protected class InjectedMembers @Inject constructor(
             val persistenceContext: PersistenceContext,
             val eventActionStateRepository: EventActionStateRepository,
             val queries: EventActionStateQueries,

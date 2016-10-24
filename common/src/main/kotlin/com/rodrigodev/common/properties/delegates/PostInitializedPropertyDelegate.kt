@@ -2,12 +2,15 @@
 
 package com.rodrigodev.common.properties.delegates
 
+import com.rodrigodev.common.collection.unmodifiable
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 /**
  * Created by Rodrigo Quesada on 26/10/15.
  */
+private val DUMMY_REGISTERED_DELEGATES = mutableListOf<PostInitializedPropertyDelegate<*>>().unmodifiable()
+
 abstract class PostInitializedPropertyDelegate<T : Any> : ReadOnlyProperty<Any, T> {
 
     protected abstract var value: T?
@@ -28,6 +31,11 @@ abstract class PostInitializedPropertyDelegate<T : Any> : ReadOnlyProperty<Any, 
     }
 
     abstract class PropertyInitializer {
+        companion object {
+            val DUMMY = object : PropertyInitializer() {
+                override val registeredDelegates = DUMMY_REGISTERED_DELEGATES
+            }
+        }
 
         protected abstract val registeredDelegates: MutableList<PostInitializedPropertyDelegate<*>>
 
@@ -50,7 +58,12 @@ class UnsafePostInitializedPropertyDelegate<T : Any>(initializer: UnsafeProperty
     }
 
     open class UnsafePropertyInitializer : PropertyInitializer() {
+        companion object {
+            val DUMMY = object : UnsafePropertyInitializer() {
+                override val registeredDelegates = DUMMY_REGISTERED_DELEGATES
+            }
+        }
 
-        override var registeredDelegates: MutableList<PostInitializedPropertyDelegate<*>> = arrayListOf()
+        override val registeredDelegates: MutableList<PostInitializedPropertyDelegate<*>> = arrayListOf()
     }
 }

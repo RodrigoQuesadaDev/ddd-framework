@@ -12,7 +12,7 @@ import com.google.auto.factory.Provided
  */
 //@AutoFactory
 internal class ValueObjectRegistrationVerifier(
-        @Provided private val valueObjectsManager: ValueObjectsManager, packagePaths: Array<String>
+        @Provided valueObjectsManager: ValueObjectsManager, packagePaths: Array<String>
 ) : ClassVerifier<ClassRegistrationResult> {
 
     override val _genericVerifier = object : GenericValueObjectVerifier<ClassRegistrationResult>(packagePaths) {
@@ -20,7 +20,7 @@ internal class ValueObjectRegistrationVerifier(
         override fun Class<*>.verify() = ClassRegistrationResult(isRegistered(), this)
     }
 
-    private val registeredValueObjects: Set<Class<*>> by lazy { valueObjectsManager.registeredValueObjects.toSet() }
+    private val registeredValueObjects: Set<Class<*>> = valueObjectsManager.registeredValueObjects.toSet()
 
     //region Verification
     private inline fun Class<*>.isRegistered() = registeredValueObjects.contains(this)

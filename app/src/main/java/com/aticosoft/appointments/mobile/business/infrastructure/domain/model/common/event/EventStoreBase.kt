@@ -12,6 +12,9 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.QueryEntityForEvent
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.entityPath
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
+import com.rodrigodev.common.properties.Delegates.postInitialized
+import com.rodrigodev.common.properties.UnsafePostInitialized
+import com.rodrigodev.common.properties.delegates.UnsafePostInitializedPropertyDelegate.UnsafePropertyInitializer
 import com.rodrigodev.common.rx.repeatWhenChangeOccurs
 import rx.Observable
 import rx.Subscription
@@ -25,25 +28,27 @@ import javax.jdo.JDOHelper
  * Created by Rodrigo Quesada on 25/08/16.
  */
 @Singleton
-/*internal*/ open class EventStoreBase<E : Event> @Inject protected constructor() : EventStore<E>, Event.ActionTrackingAccess {
+/*internal*/ open class EventStoreBase<E : Event> @Inject protected constructor() : EventStore<E>, Event.ActionTrackingAccess, UnsafePostInitialized {
 
     private lateinit var m: InjectedMembers<E>
+    override val _propertyInitializer = UnsafePropertyInitializer()
 
-    private val changeObserver by lazy { m.changeObserverFactory.create() }
+    private val changeObserver by postInitialized { m.changeObserverFactory.create() }
 
-    private val eventFilter by lazy { PersistableObjectObservationFilter(m.eventType) }
+    private val eventFilter by postInitialized { PersistableObjectObservationFilter(m.eventType) }
 
-    protected open val simpleActions: List<SimpleEventAction<E>> by lazy {
+    protected open val simpleActions: List<SimpleEventAction<E>> by postInitialized {
         with(m) { eventActionsManager.simpleActionsFor(eventType) }
     }
 
-    protected open val overridableActions: List<OverridableEventAction<E>> by lazy {
+    protected open val overridableActions: List<OverridableEventAction<E>> by postInitialized {
         with(m) { eventActionsManager.overridableActionsFor(eventType) }
     }
 
     protected var actionsSubscription: Subscription? = null
 
-    private inline fun init() {
+    override fun _init() {
+        super._init()
         resubscribeActions()
     }
 
@@ -96,11 +101,11 @@ import javax.jdo.JDOHelper
 
     //region Queries
     @Singleton
-    protected class Queries<E : Event> @Inject protected constructor(
+    class Queries<E : Event> @Inject protected constructor(
             eventType: Class<E>
     ) : JdoQueries<E>() {
 
-        private val e by lazy { QueryEntityForEvent(eventType.entityPath()) }
+        private val e = QueryEntityForEvent(eventType.entityPath())
 
         fun firstEvent() = UniqueQuery {
             context.queryFactory.selectFrom(e).orderBy(e.id.asc()).fetchFirst()
@@ -110,12 +115,12 @@ import javax.jdo.JDOHelper
 
     //region Injection
     @Inject
-    protected fun inject(injectedMembers: InjectedMembers<E>) {
+    protected fun _inject(injectedMembers: InjectedMembers<E>) {
         m = injectedMembers
-        init()
+        _init()
     }
 
-    protected class InjectedMembers<E : Event> @Inject protected constructor(
+    protected class InjectedMembers<E : Event> @Inject constructor(
             val eventType: Class<E>,
             val repository: EventRepository<E>,
             val queries: Queries<E>,

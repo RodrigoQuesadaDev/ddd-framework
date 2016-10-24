@@ -18,7 +18,7 @@ import com.rodrigodev.common.querydsl.entityPathFor
     }
 
     @Suppress("UNCHECKED_CAST")
-    val id: X1 by lazy { entityPath.javaClass.getField(ID_FIELD).get(entityPath) as X1 }
+    val id: X1 = entityPath.javaClass.getField(ID_FIELD).get(entityPath) as X1
 }
 
 /*internal*/ open class QueryEntity<P : PersistableObject<I>, I>(entityPath: EntityPath<P>) : QueryEntityBase<P, I, SimpleExpression<I>>(entityPath)

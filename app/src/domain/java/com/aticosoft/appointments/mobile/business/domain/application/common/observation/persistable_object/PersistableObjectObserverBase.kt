@@ -9,6 +9,9 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.*
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.rodrigodev.common.collection.plus
+import com.rodrigodev.common.properties.Delegates.postInitialized
+import com.rodrigodev.common.properties.UnsafePostInitialized
+import com.rodrigodev.common.properties.delegates.UnsafePostInitializedPropertyDelegate.UnsafePropertyInitializer
 import com.rodrigodev.common.rx.repeatWhenChangeOccurs
 import org.joda.time.Duration
 import rx.Observable
@@ -23,16 +26,18 @@ import javax.inject.Singleton
 @Singleton
 /*internal*/ open class PersistableObjectObserverBase<P : PersistableObject<I>, I, R : Repository<P, I>> protected constructor(
         private val dataRefreshRateTime: Duration? = null
-) {
-    private lateinit var m: InjectedMembers<P, R>
+) : UnsafePostInitialized {
 
-    private val changeObserver by lazy { m.changeObserverFactory.create(dataRefreshRateTime) }
+    private lateinit var m: InjectedMembers<P, R>
+    override val _propertyInitializer = UnsafePropertyInitializer()
+
+    private val changeObserver by postInitialized { m.changeObserverFactory.create(dataRefreshRateTime) }
 
     protected open val defaultQueryView = QueryView.DEFAULT
 
     protected open fun objectByIdFilters(id: I): Array<PersistableObjectObservationFilter<*>> = arrayOf(PersistableObjectObservationFilter(m.objectType) { it.id == id })
 
-    private val totalCountFilters by lazy { arrayOf(PersistableObjectObservationFilter(m.objectType, ADD, REMOVE)) }
+    private val totalCountFilters by postInitialized { arrayOf(PersistableObjectObservationFilter(m.objectType, ADD, REMOVE)) }
 
     fun observe(id: I, queryView: QueryView = defaultQueryView) = objectObservable(queryView, objectByIdFilters(id)) { m.repository.get(id) }
 
@@ -70,6 +75,7 @@ import javax.inject.Singleton
     @Inject
     protected fun inject(injectedMembers: InjectedMembers<P, R>) {
         m = injectedMembers
+        _init()
     }
 
     protected class InjectedMembers<P : PersistableObject<*>, R : Repository<P, *>> @Inject constructor(
