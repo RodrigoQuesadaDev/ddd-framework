@@ -130,6 +130,7 @@ dependencies {
     compile "io.reactivex:rxjava-async-util:$rxJavaAsyncVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    compile "com.googlecode.javaewah:JavaEWAH:$javaewahVersion"
 
     testCompile "org.jbehave:jbehave-core:$jBehaveVersion"
     jbehaveSiteResources "org.jbehave:jbehave-core:$jBehaveVersion"

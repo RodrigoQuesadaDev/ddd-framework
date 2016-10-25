@@ -68,7 +68,7 @@ internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T 
         mightThrowException { m.services.execute(AddEvent(value)) }
     }
 
-    @Then("\$eventType actions produce the next values in order: [\$values]")
+    @Then("\$eventType actions produce{d|} the next values in order: [\$values]")
     fun thenActionsProduceTheNextValuesInOrder(eventType: T, values: MutableList<ProducedValue>) = with(eventType) {
         assertThat(m.valueProducer.producedValues).containsExactlyElementsOf(values)
     }

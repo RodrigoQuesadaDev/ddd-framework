@@ -13,6 +13,8 @@ package com.aticosoft.appointments.mobile.business.domain.model.common.event
         val DEFAULT_PRIORITY = 0
     }
 
+    //TODO local and local-ephemeral data???
+
     val eventType: Class<E>
     val priority: Int
 
