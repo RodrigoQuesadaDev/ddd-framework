@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
-<jdo>
-    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.condition.test_data">
-        <class name="SampleEvent"/>
-        <class name="BadCondModifiesEvent"/>
-        <class name="BadCondAddedAfterInitEvent"/>
-    </package>
-</jdo>

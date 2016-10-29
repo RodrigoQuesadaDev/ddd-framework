@@ -54,7 +54,7 @@ internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T 
     }
 
     @When("\$eventType actions execution is resumed")
-    fun whenLocalEventTypeActionsExecutionIsResumed(eventType: T) = with(eventType) {
+    fun FIVE_ACTIONSFIVE_ACTIONSwhenLocalEventTypeActionsExecutionIsResumed(eventType: T) = with(eventType) {
         m.eventStoreManager.resumeActionsExecution()
     }
 
@@ -68,7 +68,7 @@ internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T 
         mightThrowException { m.services.execute(AddEvent(value)) }
     }
 
-    @Then("\$eventType actions produce{d|} the next values in order: [\$values]")
+    @Then("\$eventType action{s|} produce{d|s|} the next values in order: [\$values]")
     fun thenActionsProduceTheNextValuesInOrder(eventType: T, values: MutableList<ProducedValue>) = with(eventType) {
         assertThat(m.valueProducer.producedValues).containsExactlyElementsOf(values)
     }
