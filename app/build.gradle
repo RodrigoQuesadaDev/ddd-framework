@@ -67,13 +67,7 @@ datanucleus {
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/entity/validation/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/valueobject/behavior/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/valueobject/registration/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/common/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/creation/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/simpleaction/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/priority/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/timesreceived/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/condition/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/betweenruns/test_data']
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/action/subscription/test_data']
     alwaysDetachable = true
 }
 

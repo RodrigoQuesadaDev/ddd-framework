@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
 <jdo>
-    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.test_data">
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.subscription.test_data">
         <class name="NoSubscriptionsEvent" table="NO_SUBSCRIPTIONS_EVENT"/>
         <class name="OneSubscriptionEvent" table="ONE_SUBSCRIPTION_EVENT"/>
         <class name="FiveSubscriptionsEvent" table="FIVE_SUBSCRIPTIONS_EVENT"/>

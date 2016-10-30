@@ -15,15 +15,7 @@ import javax.inject.Singleton
  * Created by Rodrigo Quesada on 30/09/16.
  */
 @Singleton
-/*internal*/ interface EventActionsManager {
-
-    fun <E : Event> simpleActionsFor(eventType: Class<E>): List<SimpleEventAction<E>>
-
-    fun <E : Event> overridableActionsFor(eventType: Class<E>): List<OverridableEventAction<E>>
-}
-
-@Singleton
-/*internal*/ open class EventActionsManagerImpl @Inject protected constructor() : EventActionsManager, UnsafePostInitialized {
+/*internal*/  class EventActionsManager @Inject protected constructor() : UnsafePostInitialized {
 
     private lateinit var m: InjectedMembers
     override val _propertyInitializer = UnsafePropertyInitializer()
@@ -52,13 +44,24 @@ import javax.inject.Singleton
         }
     }
 
-    override fun <E : Event> simpleActionsFor(eventType: Class<E>): List<SimpleEventAction<E>> = eventType.actionsFrom(simpleActionsMap)
+    fun <E : Event> simpleActionsFor(eventType: Class<E>): List<SimpleEventAction<E>> = eventType.actionsFrom(simpleActionsMap)
 
-    override fun <E : Event> overridableActionsFor(eventType: Class<E>): List<OverridableEventAction<E>> = eventType.actionsFrom(overridableActionsMap)
+    fun <E : Event> overridableActionsFor(eventType: Class<E>): List<OverridableEventAction<E>> = eventType.actionsFrom(overridableActionsMap)
 
     private inline fun <E : Event, A : EventAction<E>> Class<E>.actionsFrom(map: Map<Class<out Event>, List<EventAction<*>>>): List<A> {
         @Suppress("UNCHECKED_CAST")
         return map[this] as? List<A> ?: emptyList()
+    }
+
+    private inline fun Class<out Event>.loadSortedActionStates(actions: List<EventAction<*>>): List<EventActionState> = with(m) {
+        persistenceContext.execute {
+            if (eventActionStateRepository.count(queries.countBy(this@loadSortedActionStates)) == 0L) {
+                actions.sortedByDescending { it.priority }.forEachIndexed { i, action ->
+                    eventActionStateRepository.add(EventActionState(action, i))
+                }
+            }
+            eventActionStateRepository.find(queries.sortedFor(this@loadSortedActionStates))
+        }
     }
 
     //region Injection
@@ -74,24 +77,6 @@ import javax.inject.Singleton
             val queries: EventActionStateQueries,
             val eventActions: MutableSet<EventAction<*>>
     )
-    //endregion
-
-    //region Actions Sorting
-    private inline fun Class<out Event>.loadSortedActionStates(actions: List<EventAction<*>>): List<EventActionState> = with(m) {
-        persistenceContext.execute {
-            if (eventActionStateRepository.count(queries.countBy(this@loadSortedActionStates)) == 0L) {
-                actions.sort().forEachIndexed { i, action ->
-                    eventActionStateRepository.add(EventActionState(action, i))
-                }
-            }
-            eventActionStateRepository.find(queries.sortedFor(this@loadSortedActionStates))
-        }
-    }
-
-    private inline fun List<EventAction<*>>.sort(): List<EventAction<*>> = sortActions(this)
-
-    //TODO remove and leave only extension function after KT-7859 is resolved
-    protected open fun sortActions(actions: List<EventAction<*>>): List<EventAction<*>> = actions.sortedByDescending { it.priority }
     //endregion
 }
 

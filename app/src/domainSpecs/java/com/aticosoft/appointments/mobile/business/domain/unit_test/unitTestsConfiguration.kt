@@ -22,11 +22,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.PassedEntityInstancesNotModified
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.EntityDependenciesAreInjected
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.EntitiesAreValidated
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.actionbehavior.EventActionBehavior
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.condition.EventActionExecutionCondition
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.creation.EventSubscriptionCreation
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.priority.EventActionPriority
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.timesreceived.TimesEventIsReceivedByAction
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.subscription.EventSubscriptionCreation
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.behavior.ValueObjectBehavior
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.implementation.ValueObjectImplementationVerification
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.registration.ValueObjectRegistrationVerification
@@ -61,11 +57,7 @@ internal interface UnitTestApplicationComponent : TestApplicationComponent {
     fun inject(test: ValueObjectImplementationVerification)
     fun inject(test: ValueObjectRegistrationVerification)
     fun inject(test: ValueObjectBehavior)
-    fun inject(test: EventActionBehavior)
-    fun inject(test: EventActionPriority)
     fun inject(test: EventSubscriptionCreation)
-    fun inject(test: TimesEventIsReceivedByAction)
-    fun inject(test: EventActionExecutionCondition)
 
     @Component.Builder
     interface Builder : TestApplicationComponent.Builder<UnitTestApplicationComponent, Builder>
