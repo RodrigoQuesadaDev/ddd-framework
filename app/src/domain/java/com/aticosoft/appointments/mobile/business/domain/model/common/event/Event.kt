@@ -1,7 +1,6 @@
 package com.aticosoft.appointments.mobile.business.domain.model.common.event
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
-import com.googlecode.javaewah.EWAHCompressedBitmap
 
 /**
  * Created by Rodrigo Quesada on 12/08/16.
@@ -13,9 +12,11 @@ import com.googlecode.javaewah.EWAHCompressedBitmap
     override final var version: Long = 0
         private set
     private var actionTrackingPosition: Int = 0
-    //TODO uncomment?
-    //private val processed: EWAHCompressedBitmap
-    //private val keep: EWAHCompressedBitmap
+
+    //TODO assign emptyBitSet?!!!
+    //private val processedFlags: Long
+    //TODO should it bee single boolean flag (only 1, not many flags?)
+    //private val keepFlags: EWAHCompressedBitmap
 
     interface ActionTrackingAccess {
 

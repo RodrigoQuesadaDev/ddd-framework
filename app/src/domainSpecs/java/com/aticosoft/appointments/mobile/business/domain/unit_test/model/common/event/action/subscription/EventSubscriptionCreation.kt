@@ -5,6 +5,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.EmptyValueProducer
@@ -83,6 +84,7 @@ internal class EventSubscriptionCreation : DomainStory() {
         //region Event Members
         @Singleton
         class LocalEventMembers<E : TestEvent> @Inject protected constructor(
+                override val repositoryManager: TestEventRepositoryManager<E>,
                 override val eventStoreManager: TestEventStore<E>,
                 override val valueProducer: EmptyValueProducer<E>
         ) : EventMembers<E, TestEventServices<E>> {

@@ -3,6 +3,8 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.isEmpty
+import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEventStore
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestEvent
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction
@@ -34,6 +36,11 @@ internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T 
     @BeforeScenario(uponType = ScenarioType.ANY)
     fun clearValues() {
         eventTypeValues.forEach { with(it) { m.valueProducer.clear() } }
+    }
+
+    @Given("event \$eventType has \$n actions defined")
+    fun givenEventHasNActionsDefined(eventType: T, n: Int) {
+        assertThat(eventType.declaredEventActions.count()).isEqualTo(n)
     }
 
     @Given("\$eventType actions don't modify the event")
@@ -68,6 +75,11 @@ internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T 
         mightThrowException { m.services.execute(AddEvent(value)) }
     }
 
+    @Then("there are no \$eventType events left")
+    fun thenThereAreNoEventsLeft(eventType: T) = with(eventType) {
+        assertThat(m.repositoryManager.repository { isEmpty() }).isTrue()
+    }
+
     @Then("\$eventType action{s|} produce{d|s|} the next values in order: [\$values]")
     fun thenActionsProduceTheNextValuesInOrder(eventType: T, values: MutableList<ProducedValue>) = with(eventType) {
         assertThat(m.valueProducer.producedValues).containsExactlyElementsOf(values)
@@ -92,6 +104,7 @@ internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T 
     }
 
     interface EventMembers<E : TestEvent, out S : TestEventServices<E>> {
+        val repositoryManager: TestEventRepositoryManager<E>
         val eventStoreManager: TestEventStore<E>
         val services: S
         val valueProducer: ValueProducer<E, *, *>

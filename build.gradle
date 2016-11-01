@@ -44,7 +44,6 @@ subprojects {
         //kotlinVersion = '0.1-SNAPSHOT'
         kotlinVersion = '1.0.4'
         groovyVersion = '2.4.5'
-        javaewahVersion = '1.1.6'
 
         //Testing
         //jBehaveVersion = '4.1-SNAPSHOT'

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
 <jdo>
-    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.actionbehavior.test_data">
-        <class name="NoSubscriptionsEvent"/>
-        <class name="ThreeSubscriptionsEvent"/>
-        <class name="FiveSubscriptionsEvent"/>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.executionorder.test_data">
+        <class name="NoActionsEvent"/>
+        <class name="ThreeActionsEvent"/>
+        <class name="FiveActionsEvent"/>
     </package>
 </jdo>

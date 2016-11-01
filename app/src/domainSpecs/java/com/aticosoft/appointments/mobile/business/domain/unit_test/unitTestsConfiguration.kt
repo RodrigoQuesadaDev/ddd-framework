@@ -22,6 +22,8 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.application.c
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.service.passed_entities.PassedEntityInstancesNotModified
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.EntityDependenciesAreInjected
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.EntitiesAreValidated
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.executionorder.EventActionDoesNotGetExecuted
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.executionorder.EventActionExecutionWhenIsNotKept
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.subscription.EventSubscriptionCreation
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.behavior.ValueObjectBehavior
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.implementation.ValueObjectImplementationVerification
@@ -52,12 +54,14 @@ internal interface UnitTestApplicationComponent : TestApplicationComponent {
     fun inject(test: DirtyEntityChecking)
     fun inject(test: StaleEntityChecking)
     fun inject(test: PassedEntityInstancesNotModified)
+    fun inject(test: EventSubscriptionCreation)
+    fun inject(test: EventActionDoesNotGetExecuted)
+    fun inject(test: EventActionExecutionWhenIsNotKept)
     fun inject(test: CommandsCannotBeReused)
     fun inject(test: CommandImplementationVerification)
     fun inject(test: ValueObjectImplementationVerification)
     fun inject(test: ValueObjectRegistrationVerification)
     fun inject(test: ValueObjectBehavior)
-    fun inject(test: EventSubscriptionCreation)
 
     @Component.Builder
     interface Builder : TestApplicationComponent.Builder<UnitTestApplicationComponent, Builder>
