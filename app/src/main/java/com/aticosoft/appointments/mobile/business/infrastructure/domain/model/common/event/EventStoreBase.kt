@@ -3,9 +3,11 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event
 
 import com.aticosoft.appointments.mobile.business.Application
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType.UPDATE
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectFilteredChangeObserver
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.*
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.ListQuery
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.UniqueQuery
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.exceptions.IllegallyModifiedEvent
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.persistable_object.JdoQueries
@@ -28,7 +30,7 @@ import javax.jdo.JDOHelper
  * Created by Rodrigo Quesada on 25/08/16.
  */
 @Singleton
-/*internal*/ open class EventStoreBase<E : Event> @Inject protected constructor() : EventStore<E>, Event.ActionTrackingAccess, UnsafePostInitialized {
+/*internal*/ open class EventStoreBase<E : Event> @Inject protected constructor() : EventStore<E>, UnsafePostInitialized {
 
     private lateinit var m: InjectedMembers<E>
     override val _propertyInitializer = UnsafePropertyInitializer()
@@ -47,9 +49,10 @@ import javax.jdo.JDOHelper
 
     protected var actionsSubscription: Subscription? = null
 
-    override fun _init() {
+    override fun _init() = with(m) {
         super._init()
         resubscribeActions()
+        processedEventsListener.subscribe()
     }
 
     protected fun resubscribeActions() {
@@ -63,10 +66,11 @@ import javax.jdo.JDOHelper
     }
 
     //TODO performance can be improved by using CREATE event filter AND local observable such as "eventsWereUpdatedObservable"
+    //TODO REMOVE EVENTS should not trigger???!
     private inline fun Observable<*>.repeatWhenChangeOccurs() = repeatWhenChangeOccurs(changeObserver.observe(arrayOf(eventFilter)))
 
     private inline fun executeEventActions(): Unit = with(m) {
-        persistenceContext.execute {
+        /*persistenceContext.execute {
             repository.find(queries.firstEvent())?.let { event ->
 
                 if (event.actionTrackingPosition == simpleActions.size) {
@@ -92,7 +96,7 @@ import javax.jdo.JDOHelper
                     if (!eventWasModified) ++event.actionTrackingPosition
                 }
             }
-        }
+        }*/
     }
 
     override fun add(event: E) {
@@ -121,6 +125,7 @@ import javax.jdo.JDOHelper
     }
 
     protected class InjectedMembers<E : Event> @Inject constructor(
+            val processedEventsListener: ProcessedEventsListener<E>,
             val eventType: Class<E>,
             val repository: EventRepository<E>,
             val queries: Queries<E>,
@@ -131,5 +136,49 @@ import javax.jdo.JDOHelper
             val stateQueries: EventActionStateQueries,
             val application: Application<*, *>
     )
+    //endregion
+}
+
+@Singleton
+/*internal*/ class ProcessedEventsListener<E : Event> @Inject protected constructor(
+        eventType: Class<E>,
+        private val repository: EventRepository<E>,
+        private val queries: Queries<E>,
+        changeObserverFactory: PersistableObjectFilteredChangeObserver.Factory<E>
+) {
+    private val changeObserver = changeObserverFactory.create()
+
+    private val eventFilter = PersistableObjectObservationFilter(eventType, UPDATE)
+
+    //TODO resubscribable...
+    //TODO ...and test when subscription is resumed after having totally processed events
+    fun subscribe() {
+
+        /*changeObserver.observe(arrayOf(eventFilter)).
+
+        fromCallable(
+                { executeEventActions() },
+                Schedulers.io()
+        )
+                .repeatWhenChangeOccurs()
+                .subscribe()*/
+    }
+
+    private inline fun removeNonKeptProcessedEvent() {
+        repository.find(queries.nonKeptProcessedEvent())
+    }
+
+    //region Queries
+    @Singleton
+    class Queries<E : Event> @Inject protected constructor(
+            eventType: Class<E>
+    ) : JdoQueries<E>() {
+
+        private val e = QueryEntityForEvent(eventType.entityPath())
+
+        fun nonKeptProcessedEvent() = ListQuery {
+            context.queryFactory.selectFrom(e).orderBy(e.id.asc()).fetch()
+        }
+    }
     //endregion
 }

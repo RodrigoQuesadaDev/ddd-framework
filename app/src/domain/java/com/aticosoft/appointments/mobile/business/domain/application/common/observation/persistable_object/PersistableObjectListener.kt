@@ -58,7 +58,7 @@ import javax.jdo.listener.*
 
     override fun postCreate(event: InstanceLifecycleEvent) {
         @Suppress("UNCHECKED_CAST")
-        objectChanges.add(PersistableObjectChangeEvent(EventType.Companion.from(event.eventType), currentValue = event.source as P))
+        objectChanges.add(PersistableObjectChangeEvent(EventType.from(event.eventType), currentValue = event.source as P))
     }
 
     override fun postStore(event: InstanceLifecycleEvent) {
@@ -66,14 +66,14 @@ import javax.jdo.listener.*
         if (!JDOHelper.isNew(event.source)) {
             @Suppress("UNCHECKED_CAST")
             (event.source as P).let { obj ->
-                objectChanges.add(PersistableObjectChangeEvent(EventType.Companion.from(event.eventType), previousValue = obj.previousValue as P, currentValue = obj))
+                objectChanges.add(PersistableObjectChangeEvent(EventType.from(event.eventType), previousValue = obj.previousValue as P, currentValue = obj))
             }
         }
     }
 
     override fun postDelete(event: InstanceLifecycleEvent) {
         @Suppress("UNCHECKED_CAST")
-        objectChanges.add(PersistableObjectChangeEvent(EventType.Companion.from(event.eventType), previousValue = event.source as P))
+        objectChanges.add(PersistableObjectChangeEvent(EventType.from(event.eventType), previousValue = event.source as P))
     }
 
     //region Non-Implemented Methods
