@@ -1,10 +1,10 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data
+package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.QueryView
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestByIdFilter.DEFAULT
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data.TestByIdFilter.DEFAULT
 import com.querydsl.core.types.Path
 import javax.inject.Inject
 import javax.inject.Singleton

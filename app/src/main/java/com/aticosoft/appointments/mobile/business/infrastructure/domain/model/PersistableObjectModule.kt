@@ -1,6 +1,6 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.Queries
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.Repository
@@ -10,7 +10,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
 /**
  * Created by Rodrigo Quesada on 23/08/16.
  */
-/*internal*/ interface PersistableObjectModule<P : PersistableObject<*>, in L : PersistableObjectListener<P, *>> {
+/*internal*/ interface PersistableObjectModule<P : PersistableObject<*>, in L : PersistableObjectAsyncListener<P, *>> {
 
     fun provideType(): Class<P>
 
@@ -18,7 +18,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
 
     fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<P>): PersistableObjectInitializer<*>
 
-    fun provideListenerIntoSet(listener: L): PersistableObjectListener<*, *>
+    fun provideListenerIntoSet(listener: L): PersistableObjectAsyncListener<*, *>
 
     fun provideValidatorsIntoSet(): Set<PersistableObjectValidator<*, *>> = emptySet()
 
@@ -27,7 +27,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
 }
 
 /*internal*/ interface RootPersistableObjectModule<P : PersistableObject<*>,
-        in L : PersistableObjectListener<P, *>,
+        in L : PersistableObjectAsyncListener<P, *>,
         out Q : Queries<P>,
         in R : Repository<P, *>>
 : PersistableObjectModule<P, L> {

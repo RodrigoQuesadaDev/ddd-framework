@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
 import com.aticosoft.appointments.mobile.business.ModulePostInitializer
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListenersManager
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListenersManager
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.configuration.PersistenceConfigurator
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.configuration.PersistenceConfiguratorModule
 import dagger.Module
@@ -16,7 +16,7 @@ import javax.inject.Singleton
 /*internal*/ class PersistenceModule {
 
     @Singleton
-    class PostInitializer @Inject protected constructor(private val objectListenersManager: PersistableObjectListenersManager) : ModulePostInitializer {
+    class PostInitializer @Inject protected constructor(private val objectListenersManager: PersistableObjectAsyncListenersManager) : ModulePostInitializer {
 
         override fun init() {
             objectListenersManager.registerListeners()

@@ -1,7 +1,9 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object
+package com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async
 
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.common.time.TimeService
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.rodrigodev.common.rx.Observables
@@ -16,7 +18,7 @@ import javax.inject.Singleton
 /**
  * Created by Rodrigo Quesada on 08/09/16.
  */
-/*internal*/ open class PersistableObjectFilteredChangeObserver<P : PersistableObject<*>> private constructor(
+/*internal*/ open class PersistableObjectFilteredAsyncChangeObserver<P : PersistableObject<*>> private constructor(
         private val dataRefreshRateTime: Duration? = null
 ) {
     private lateinit var m: InjectedMembers<P>
@@ -57,10 +59,10 @@ import javax.inject.Singleton
 
     @Singleton
     class Factory<P : PersistableObject<*>> @Inject protected constructor(
-            private val injector: MembersInjector<PersistableObjectFilteredChangeObserver<P>>
+            private val injector: MembersInjector<PersistableObjectFilteredAsyncChangeObserver<P>>
     ) {
 
-        fun create(dataRefreshRateTime: Duration? = null) = PersistableObjectFilteredChangeObserver<P>(dataRefreshRateTime).apply {
+        fun create(dataRefreshRateTime: Duration? = null) = PersistableObjectFilteredAsyncChangeObserver<P>(dataRefreshRateTime).apply {
             injector.injectMembers(this)
         }
     }
@@ -73,7 +75,7 @@ import javax.inject.Singleton
 
     protected class InjectedMembers<P : PersistableObject<*>> @Inject constructor(
             val objectType: Class<P>,
-            val objectListenersManager: PersistableObjectListenersManager,
+            val objectListenersManager: PersistableObjectAsyncListenersManager,
             val timeService: TimeService
     )
     //endregion

@@ -6,7 +6,7 @@
 
     <persistence-unit name="Testing">
         <mapping-file>com/aticosoft/appointments/mobile/business/domain/testing/model/package.jdo</mapping-file>
-        <mapping-file>com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_listener/test_data/package.jdo</mapping-file>
+        <mapping-file>com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/persistable_object/listener/async/test_data/package.jdo</mapping-file>
         <mapping-file>com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/filtering/test_data/package.jdo</mapping-file>
         <mapping-file>com/aticosoft/appointments/mobile/business/domain/unit_test/application/common/observation/entity_observer/query_view/test_data/package.jdo</mapping-file>
         <mapping-file>com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/entity/validation/test_data/package.jdo</mapping-file>

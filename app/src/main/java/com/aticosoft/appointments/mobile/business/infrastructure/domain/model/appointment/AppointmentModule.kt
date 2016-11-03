@@ -1,8 +1,8 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueryView
@@ -55,7 +55,7 @@ internal class AppointmentModule : JdoRootEntityModule<Appointment, AppointmentQ
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<Appointment>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EntityListener<Appointment>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EntityAsyncListener<Appointment>): PersistableObjectAsyncListener<*, *> = listener
 
     @Provides @Singleton
     fun provideEntityObserver(observer: AppointmentObserver): EntityObserver<Appointment> = observer

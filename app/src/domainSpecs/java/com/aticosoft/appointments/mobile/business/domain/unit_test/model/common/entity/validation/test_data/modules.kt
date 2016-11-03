@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.entity.validation.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityListener
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
@@ -37,7 +37,7 @@ internal class OddValueAndEmailParentModule : TestRootEntityModule<OddValueAndEm
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<OddValueAndEmailParent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EntityListener<OddValueAndEmailParent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EntityAsyncListener<OddValueAndEmailParent>): PersistableObjectAsyncListener<*, *> = listener
 }
 
 @Module
@@ -53,7 +53,7 @@ internal class OddValueAndEmailChildModule : EntityModule<OddValueAndEmailChild>
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<OddValueAndEmailChild>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EntityListener<OddValueAndEmailChild>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EntityAsyncListener<OddValueAndEmailChild>): PersistableObjectAsyncListener<*, *> = listener
 }
 
 @Module
@@ -78,7 +78,7 @@ internal class PrimeNumberAndGmailParentModule : TestRootEntityModule<PrimeNumbe
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<PrimeNumberAndGmailParent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EntityListener<PrimeNumberAndGmailParent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EntityAsyncListener<PrimeNumberAndGmailParent>): PersistableObjectAsyncListener<*, *> = listener
 }
 
 @Module
@@ -97,5 +97,5 @@ internal class PrimeNumberAndGmailChildModule : EntityModule<PrimeNumberAndGmail
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<PrimeNumberAndGmailChild>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EntityListener<PrimeNumberAndGmailChild>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EntityAsyncListener<PrimeNumberAndGmailChild>): PersistableObjectAsyncListener<*, *> = listener
 }

@@ -7,6 +7,7 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.obse
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType.ADD
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType.REMOVE
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.*
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectFilteredAsyncChangeObserver
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.rodrigodev.common.collection.plus
 import com.rodrigodev.common.properties.Delegates.postInitialized
@@ -83,7 +84,7 @@ import javax.inject.Singleton
             val repository: R,
             val queryViewsManager: QueryViewsManager,
             val persistenceContext: PersistenceContext,
-            val changeObserverFactory: PersistableObjectFilteredChangeObserver.Factory<P>
+            val changeObserverFactory: PersistableObjectFilteredAsyncChangeObserver.Factory<P>
     )
     //endregion
 }

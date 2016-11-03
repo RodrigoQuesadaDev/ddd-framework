@@ -5,7 +5,7 @@ import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.display.DataRefreshRateIsThrottled
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.ObservingEntityChanges
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.ObservingEntityChangesAsync
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.ObservingTotalCount
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.FilteringObservationOfCountQuery
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.FilteringObservationOfListQuery
@@ -38,7 +38,7 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(TestApplicationModule::class))
 internal interface UnitTestApplicationComponent : TestApplicationComponent {
 
-    fun inject(test: ObservingEntityChanges)
+    fun inject(test: ObservingEntityChangesAsync)
     fun inject(test: ObservingTotalCount)
     fun inject(test: FilteringObservationOfSingleEntityById)
     fun inject(test: FilteringObservationOfUniqueQuery)

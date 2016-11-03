@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.configuration
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityListener
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.Configuration
@@ -41,5 +41,5 @@ internal class ConfigurationModule : JdoRootEntityModule<Configuration, Configur
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<Configuration>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EntityListener<Configuration>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EntityAsyncListener<Configuration>): PersistableObjectAsyncListener<*, *> = listener
 }

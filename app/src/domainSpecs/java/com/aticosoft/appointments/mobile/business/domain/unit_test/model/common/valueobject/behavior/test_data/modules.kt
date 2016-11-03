@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.behavior.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityListener
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestRootEntityModule
@@ -37,7 +37,7 @@ internal class EntityWithValueObjectModule : TestRootEntityModule<EntityWithValu
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<EntityWithValueObject>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EntityListener<EntityWithValueObject>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EntityAsyncListener<EntityWithValueObject>): PersistableObjectAsyncListener<*, *> = listener
 
     @Provides @ElementsIntoSet @ValueObjects
     fun provideValueObjects(): Set<Class<*>> = setOf(TestValueObject::class.java)

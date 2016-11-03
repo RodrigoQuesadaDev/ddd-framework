@@ -3,7 +3,7 @@
 package com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObjectLifecycleListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.PersistableObjectLifecycleListener
 import com.aticosoft.appointments.mobile.business.domain.model.configuration.services.ConfigurationManager
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.querydsl.core.types.Path

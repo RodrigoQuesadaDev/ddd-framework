@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.garbage.condition.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
@@ -47,7 +47,7 @@ internal class SampleEventModule : TestEventModule<SampleEvent>() {
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<SampleEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<SampleEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<SampleEvent>): PersistableObjectAsyncListener<*, *> = listener
 }
 
 @Module
@@ -76,7 +76,7 @@ internal class BadCondModifiesEventModule : TestEventModule<BadCondModifiesEvent
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<BadCondModifiesEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<BadCondModifiesEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<BadCondModifiesEvent>): PersistableObjectAsyncListener<*, *> = listener
 }
 
 @Module
@@ -105,5 +105,5 @@ internal class BadCondAddedAfterInitEventModule : TestEventModule<BadCondAddedAf
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<BadCondAddedAfterInitEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<BadCondAddedAfterInitEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<BadCondAddedAfterInitEvent>): PersistableObjectAsyncListener<*, *> = listener
 }

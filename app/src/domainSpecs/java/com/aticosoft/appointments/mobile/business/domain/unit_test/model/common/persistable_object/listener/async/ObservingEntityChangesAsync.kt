@@ -1,21 +1,21 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener
+package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListenersManager
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListenersManager
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.EntityType.CHILD
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.EntityType.PARENT
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.ObservingEntityChanges.UnitTestApplicationImpl
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataChild
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentServices
-import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data.TestDataParentServices.*
-import com.rodrigodev.common.spec.story.steps.SpecSteps
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.EntityType.CHILD
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.EntityType.PARENT
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.ObservingEntityChangesAsync.UnitTestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data.TestDataChild
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data.TestDataParent
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data.TestDataParentServices
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data.TestDataParentServices.*
 import com.rodrigodev.common.rx.testing.testSubscribe
+import com.rodrigodev.common.spec.story.steps.SpecSteps
 import org.assertj.core.api.Assertions.assertThat
 import org.jbehave.core.annotations.AsParameters
 import org.jbehave.core.annotations.Given
@@ -30,9 +30,9 @@ import javax.inject.Inject
  * Created by Rodrigo Quesada on 31/10/15.
  */
 @Config(application = UnitTestApplicationImpl::class)
-internal class ObservingEntityChanges : DomainStory() {
+internal class ObservingEntityChangesAsync : DomainStory() {
 
-    class UnitTestApplicationImpl : UnitTestApplication<ObservingEntityChanges>(UnitTestApplicationComponent::inject)
+    class UnitTestApplicationImpl : UnitTestApplication<ObservingEntityChangesAsync>(UnitTestApplicationComponent::inject)
 
     @Inject protected lateinit var localSteps: LocalSteps
 
@@ -41,7 +41,7 @@ internal class ObservingEntityChanges : DomainStory() {
     }
 
     class LocalSteps @Inject constructor(
-            private val persistableObjectListenersManager: PersistableObjectListenersManager,
+            persistableObjectListenersManager: PersistableObjectAsyncListenersManager,
             private val testDataRepositoryManager: TestEntityRepositoryManager<TestDataParent>,
             private val testDataServices: TestDataParentServices,
             private val testScheduler: TestScheduler

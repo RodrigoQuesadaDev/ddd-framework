@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObjectLifecycleListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.PersistableObjectLifecycleListener
 import com.querydsl.jdo.JDOQueryFactory
 import com.rodrigodev.common.properties.Delegates.threadLocal
 import com.rodrigodev.common.properties.Delegates.unsafeLazy
@@ -33,14 +33,14 @@ import javax.jdo.listener.InstanceLifecycleListener
 
     val queryFactory: JDOQueryFactory by threadLocal(threadLocalCleaner) { JDOQueryFactory { persistenceManager } }
 
-    private val persistableObjectListenerListBuilder = PersistableObjectListenerListBuilder()
+    private val persistableObjectAsyncListenerListBuilder = PersistableObjectAsyncListenerListBuilder()
 
     // It is fine to use unsafeLazy here, thread safety necessary here
-    private val persistableObjectListeners: List<PersistableObjectListener<*, *>> by unsafeLazy { persistableObjectListenerListBuilder.build() }
+    private val persistableObjectAsyncListeners: List<PersistableObjectAsyncListener<*, *>> by unsafeLazy { persistableObjectAsyncListenerListBuilder.build() }
 
-    fun registerPersistableObjectListener(persistableObjectListener: PersistableObjectListener<*, *>) {
-        registerPersistableObjectLifecycleListener(persistableObjectListener)
-        persistableObjectListenerListBuilder.add(persistableObjectListener)
+    fun registerPersistableObjectAsyncListener(listener: PersistableObjectAsyncListener<*, *>) {
+        registerPersistableObjectLifecycleListener(listener)
+        persistableObjectAsyncListenerListBuilder.add(listener)
     }
 
     fun registerPersistableObjectLifecycleListener(persistableObjectLifecycleListener: PersistableObjectLifecycleListener<*>) {
@@ -52,7 +52,7 @@ import javax.jdo.listener.InstanceLifecycleListener
     }
 
     fun onTransactionCommitted() {
-        persistableObjectListeners.forEach { it.onTransactionCommitted() }
+        persistableObjectAsyncListeners.forEach { it.onTransactionCommitted() }
     }
 
     @Suppress("NON_PUBLIC_CALL_FROM_PUBLIC_INLINE")
@@ -70,7 +70,7 @@ import javax.jdo.listener.InstanceLifecycleListener
     override fun close() {
         persistenceManager.close()
         threadLocalCleaner.cleanUpThreadLocalInstances()
-        persistableObjectListeners.forEach { it.resetLocalState() }
+        persistableObjectAsyncListeners.forEach { it.resetLocalState() }
     }
 
     interface PersistenceManagerFactoryAccessor {
@@ -79,13 +79,13 @@ import javax.jdo.listener.InstanceLifecycleListener
     }
 }
 
-private class PersistableObjectListenerListBuilder {
+private class PersistableObjectAsyncListenerListBuilder {
 
-    private val listeners: MutableList<PersistableObjectListener<*, *>> = arrayListOf()
+    private val listeners: MutableList<PersistableObjectAsyncListener<*, *>> = arrayListOf()
 
-    fun add(listener: PersistableObjectListener<*, *>) {
+    fun add(listener: PersistableObjectAsyncListener<*, *>) {
         listeners.add(listener)
     }
 
-    fun build(): List<PersistableObjectListener<*, *>> = listeners
+    fun build(): List<PersistableObjectAsyncListener<*, *>> = listeners
 }

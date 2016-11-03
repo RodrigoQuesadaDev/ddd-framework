@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.garbage.actionbehavior.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
@@ -38,7 +38,7 @@ internal class NoSubscriptionsEventModule : TestEventModule<NoActionsEvent>() {
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<NoActionsEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<NoActionsEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<NoActionsEvent>): PersistableObjectAsyncListener<*, *> = listener
 }
 
 @Module
@@ -69,7 +69,7 @@ internal class ThreeSubscriptionsEventModule : TestEventModule<ThreeActionsEvent
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<ThreeActionsEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<ThreeActionsEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<ThreeActionsEvent>): PersistableObjectAsyncListener<*, *> = listener
 }
 
 @Module
@@ -102,5 +102,5 @@ internal class FiveSubscriptionsEventModule : TestEventModule<FiveActionsEvent>(
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<FiveActionsEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<FiveActionsEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<FiveActionsEvent>): PersistableObjectAsyncListener<*, *> = listener
 }

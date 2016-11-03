@@ -1,5 +1,6 @@
-package com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object
+package com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener
 
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import javax.jdo.listener.InstanceLifecycleListener
 
 /**

@@ -1,4 +1,4 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data;
+package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data;
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity;
 

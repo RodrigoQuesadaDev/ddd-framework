@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.garbage.priority.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
@@ -50,7 +50,7 @@ internal class SamePriorityEventModule : TestEventModule<SamePriorityEvent>() {
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<SamePriorityEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<SamePriorityEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<SamePriorityEvent>): PersistableObjectAsyncListener<*, *> = listener
 }
 
 @Module
@@ -83,7 +83,7 @@ internal class DifferentPriorityEventModule : TestEventModule<DifferentPriorityE
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<DifferentPriorityEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<DifferentPriorityEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<DifferentPriorityEvent>): PersistableObjectAsyncListener<*, *> = listener
 }
 
 @Module
@@ -114,5 +114,5 @@ internal class DefaultPriorityEventModule : TestEventModule<DefaultPriorityEvent
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<DefaultPriorityEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<DefaultPriorityEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<DefaultPriorityEvent>): PersistableObjectAsyncListener<*, *> = listener
 }

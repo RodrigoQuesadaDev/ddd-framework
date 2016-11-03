@@ -1,8 +1,9 @@
-package com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object
+package com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async
 
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObjectLifecycleListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.PersistableObjectLifecycleListener
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.rodrigodev.common.properties.Delegates.threadLocal
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
@@ -18,7 +19,7 @@ import javax.jdo.listener.*
  * Created by Rodrigo Quesada on 18/10/15.
  */
 @Singleton
-/*internal*/ abstract class PersistableObjectListener<P : PersistableObject<I>, I> protected constructor()
+/*internal*/ abstract class PersistableObjectAsyncListener<P : PersistableObject<I>, I> protected constructor()
 : PersistableObjectLifecycleListener<P>, PersistableObject.PersistableObjectStateAccess<I>, CreateLifecycleListener, StoreLifecycleListener, DeleteLifecycleListener, DirtyLifecycleListener {
 
     //TODO create JdoPersistableObjectListenerBase on infrastructure stuff??? (this class pertains to domain)
@@ -39,7 +40,7 @@ import javax.jdo.listener.*
     }
 
     fun register() {
-        m.persistenceContext.registerPersistableObjectListener(this)
+        m.persistenceContext.registerPersistableObjectAsyncListener(this)
     }
 
     fun resetLocalState() = threadLocalCleaner.cleanUpThreadLocalInstances()
@@ -52,13 +53,14 @@ import javax.jdo.listener.*
     override fun preDirty(event: InstanceLifecycleEvent) {
         @Suppress("UNCHECKED_CAST")
         (event.source as P).let { obj ->
+            //TODO move code somewhere else...
             obj.previousValue = m.persistenceContext.persistenceManager.detachCopy(obj)
         }
     }
 
     override fun postCreate(event: InstanceLifecycleEvent) {
         @Suppress("UNCHECKED_CAST")
-        objectChanges.add(PersistableObjectChangeEvent(EventType.from(event.eventType), currentValue = event.source as P))
+        objectChanges.add(PersistableObjectChangeEvent(EventType.Companion.from(event.eventType), currentValue = event.source as P))
     }
 
     override fun postStore(event: InstanceLifecycleEvent) {
@@ -66,14 +68,14 @@ import javax.jdo.listener.*
         if (!JDOHelper.isNew(event.source)) {
             @Suppress("UNCHECKED_CAST")
             (event.source as P).let { obj ->
-                objectChanges.add(PersistableObjectChangeEvent(EventType.from(event.eventType), previousValue = obj.previousValue as P, currentValue = obj))
+                objectChanges.add(PersistableObjectChangeEvent(EventType.Companion.from(event.eventType), previousValue = obj.previousValue as P, currentValue = obj))
             }
         }
     }
 
     override fun postDelete(event: InstanceLifecycleEvent) {
         @Suppress("UNCHECKED_CAST")
-        objectChanges.add(PersistableObjectChangeEvent(EventType.from(event.eventType), previousValue = event.source as P))
+        objectChanges.add(PersistableObjectChangeEvent(EventType.Companion.from(event.eventType), previousValue = event.source as P))
     }
 
     //region Non-Implemented Methods

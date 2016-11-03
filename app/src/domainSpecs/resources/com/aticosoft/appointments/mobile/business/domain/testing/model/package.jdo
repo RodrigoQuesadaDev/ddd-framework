@@ -19,7 +19,7 @@
             </version>
             <field name="version"/>
             <field name="id" primary-key="true" value-strategy="increment"/>
-            <field name="actionTrackingPosition"/>
+            <field name="processedFlags"/>
         </class>
         <class name="EventActionState">
             <version strategy="version-number" column="VERSION">

@@ -1,4 +1,4 @@
-package com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data
+package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data
 
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.AbstractTestData
@@ -26,4 +26,4 @@ internal class TestDataParent protected constructor(@Provided c: Context, value:
 
 @PersistenceCapable
 //@AutoFactory
-internal class TestDataChild protected constructor(@Provided context: Entity.Context, value: Int) : AbstractTestData(context, value)
+internal class TestDataChild protected constructor(@Provided context: Context, value: Int) : AbstractTestData(context, value)

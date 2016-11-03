@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.subscription.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventListener
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectListener
+import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
@@ -38,7 +38,7 @@ internal class NoSubscriptionsEventModule : TestEventModule<NoSubscriptionsEvent
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<NoSubscriptionsEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<NoSubscriptionsEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<NoSubscriptionsEvent>): PersistableObjectAsyncListener<*, *> = listener
 }
 
 @Module
@@ -63,7 +63,7 @@ internal class OneSubscriptionEventModule : TestEventModule<OneSubscriptionEvent
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<OneSubscriptionEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<OneSubscriptionEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<OneSubscriptionEvent>): PersistableObjectAsyncListener<*, *> = listener
 }
 
 @Module
@@ -96,5 +96,5 @@ internal class FiveSubscriptionsEventModule : TestEventModule<FiveSubscriptionsE
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<FiveSubscriptionsEvent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EventListener<FiveSubscriptionsEvent>): PersistableObjectListener<*, *> = listener
+    override fun provideListenerIntoSet(listener: EventAsyncListener<FiveSubscriptionsEvent>): PersistableObjectAsyncListener<*, *> = listener
 }

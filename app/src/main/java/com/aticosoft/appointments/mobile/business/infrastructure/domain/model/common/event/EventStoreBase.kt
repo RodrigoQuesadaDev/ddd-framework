@@ -4,7 +4,7 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.c
 
 import com.aticosoft.appointments.mobile.business.Application
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType.UPDATE
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectFilteredChangeObserver
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectFilteredAsyncChangeObserver
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.*
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.ListQuery
@@ -130,7 +130,7 @@ import javax.jdo.JDOHelper
             val repository: EventRepository<E>,
             val queries: Queries<E>,
             val eventActionsManager: EventActionsManager,
-            val changeObserverFactory: PersistableObjectFilteredChangeObserver.Factory<E>,
+            val changeObserverFactory: PersistableObjectFilteredAsyncChangeObserver.Factory<E>,
             val persistenceContext: PersistenceContext,
             val stateRepository: EventActionStateRepository,
             val stateQueries: EventActionStateQueries,
@@ -144,7 +144,7 @@ import javax.jdo.JDOHelper
         eventType: Class<E>,
         private val repository: EventRepository<E>,
         private val queries: Queries<E>,
-        changeObserverFactory: PersistableObjectFilteredChangeObserver.Factory<E>
+        changeObserverFactory: PersistableObjectFilteredAsyncChangeObserver.Factory<E>
 ) {
     private val changeObserver = changeObserverFactory.create()
 

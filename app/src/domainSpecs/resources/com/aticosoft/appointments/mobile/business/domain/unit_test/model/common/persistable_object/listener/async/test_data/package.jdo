@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
 <jdo>
-    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_listener.test_data">
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data">
         <class name="TestDataParent">
             <field name="child" dependent="true"/>
         </class>
