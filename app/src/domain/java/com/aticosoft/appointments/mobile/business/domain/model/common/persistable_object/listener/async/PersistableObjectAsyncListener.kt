@@ -54,6 +54,7 @@ import javax.jdo.listener.*
         @Suppress("UNCHECKED_CAST")
         (event.source as P).let { obj ->
             //TODO move code somewhere else...
+            //TODO apparently it is only used for EntityObserver... so... probably just leave it here...
             obj.previousValue = m.persistenceContext.persistenceManager.detachCopy(obj)
         }
     }

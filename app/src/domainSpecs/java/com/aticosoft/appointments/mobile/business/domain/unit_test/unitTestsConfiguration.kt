@@ -5,7 +5,6 @@ import com.aticosoft.appointments.mobile.business.domain.testing.TestApplication
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.testing.TestApplicationModule
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.display.DataRefreshRateIsThrottled
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.ObservingEntityChangesAsync
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.ObservingTotalCount
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.FilteringObservationOfCountQuery
 import com.aticosoft.appointments.mobile.business.domain.unit_test.application.common.observation.entity_observer.filtering.FilteringObservationOfListQuery
@@ -25,6 +24,11 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.executionorder.EventActionDoesNotGetExecuted
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.executionorder.EventActionExecutionWhenIsNotKept
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.subscription.EventSubscriptionCreation
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.ObservingObjectChangesAsync
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.TransactionalActionObservationBehavior
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.TransactionalActionPriority
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.TransactionalActionSubscriptionCreation
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.TransactionalActionUpdateBehavior
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.behavior.ValueObjectBehavior
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.implementation.ValueObjectImplementationVerification
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.registration.ValueObjectRegistrationVerification
@@ -38,7 +42,7 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(TestApplicationModule::class))
 internal interface UnitTestApplicationComponent : TestApplicationComponent {
 
-    fun inject(test: ObservingEntityChangesAsync)
+    fun inject(test: ObservingObjectChangesAsync)
     fun inject(test: ObservingTotalCount)
     fun inject(test: FilteringObservationOfSingleEntityById)
     fun inject(test: FilteringObservationOfUniqueQuery)
@@ -62,6 +66,10 @@ internal interface UnitTestApplicationComponent : TestApplicationComponent {
     fun inject(test: ValueObjectImplementationVerification)
     fun inject(test: ValueObjectRegistrationVerification)
     fun inject(test: ValueObjectBehavior)
+    fun inject(test: TransactionalActionSubscriptionCreation)
+    fun inject(test: TransactionalActionObservationBehavior)
+    fun inject(test: TransactionalActionUpdateBehavior)
+    fun inject(test: TransactionalActionPriority)
 
     @Component.Builder
     interface Builder : TestApplicationComponent.Builder<UnitTestApplicationComponent, Builder>

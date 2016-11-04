@@ -9,7 +9,7 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestAppli
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.EntityType.CHILD
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.EntityType.PARENT
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.ObservingEntityChangesAsync.UnitTestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.ObservingObjectChangesAsync.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data.TestDataChild
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data.TestDataParent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data.TestDataParentServices
@@ -30,9 +30,9 @@ import javax.inject.Inject
  * Created by Rodrigo Quesada on 31/10/15.
  */
 @Config(application = UnitTestApplicationImpl::class)
-internal class ObservingEntityChangesAsync : DomainStory() {
+internal class ObservingObjectChangesAsync : DomainStory() {
 
-    class UnitTestApplicationImpl : UnitTestApplication<ObservingEntityChangesAsync>(UnitTestApplicationComponent::inject)
+    class UnitTestApplicationImpl : UnitTestApplication<ObservingObjectChangesAsync>(UnitTestApplicationComponent::inject)
 
     @Inject protected lateinit var localSteps: LocalSteps
 
