@@ -25,10 +25,10 @@ import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.executionorder.EventActionExecutionWhenIsNotKept
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.action.subscription.EventSubscriptionCreation
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.ObservingObjectChangesAsync
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.TransactionalActionObservationBehavior
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.observationbehavior.TransactionalActionObservationBehavior
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.TransactionalActionPriority
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.TransactionalActionSubscriptionCreation
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.TransactionalActionUpdateBehavior
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.subscription.TransactionalActionSubscriptionCreation
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.TransactionalActionUpdatingBehavior
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.behavior.ValueObjectBehavior
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.implementation.ValueObjectImplementationVerification
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.registration.ValueObjectRegistrationVerification
@@ -68,7 +68,7 @@ internal interface UnitTestApplicationComponent : TestApplicationComponent {
     fun inject(test: ValueObjectBehavior)
     fun inject(test: TransactionalActionSubscriptionCreation)
     fun inject(test: TransactionalActionObservationBehavior)
-    fun inject(test: TransactionalActionUpdateBehavior)
+    fun inject(test: TransactionalActionUpdatingBehavior)
     fun inject(test: TransactionalActionPriority)
 
     @Component.Builder

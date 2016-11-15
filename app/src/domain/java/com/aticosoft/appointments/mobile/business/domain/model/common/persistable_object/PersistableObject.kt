@@ -8,11 +8,11 @@ package com.aticosoft.appointments.mobile.business.domain.model.common.persistab
     abstract val id: I
     abstract val version: Long
 
-    @Transient private var previousValue: PersistableObject<I>? = null
+    @Transient private var previousValue: PersistableObject<*>? = null
 
     //TODO making previousValue internal should be enough (problem is right now this class is not on a separate module)
-    interface PersistableObjectStateAccess<I> {
-        var PersistableObject<I>.previousValue: PersistableObject<I>?
+    interface PersistableObjectStateAccess {
+        var PersistableObject<*>.previousValue: PersistableObject<*>?
             get() = this.previousValue
             set(value) {
                 this.previousValue = value

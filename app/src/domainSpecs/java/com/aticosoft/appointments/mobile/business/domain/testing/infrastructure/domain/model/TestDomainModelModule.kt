@@ -32,6 +32,17 @@ import dagger.Module
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.behavior.test_data.EntityWithValueObjectModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.implementation.correct_implementations.ValueObjectsModule::class,
         com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.implementation.wrong_implementations.ValueObjectsModule::class,
-        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.registration.test_data.ValueObjectsModule::class
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.valueobject.registration.test_data.ValueObjectsModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.subscription.test_data.NoSubscriptionsEntityModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.subscription.test_data.OneSubscriptionEntityModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.subscription.test_data.FiveSubscriptionsEntityModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.observationbehavior.test_data.ParentSingleEntityModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.observationbehavior.test_data.ChildSingleEntityModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.observationbehavior.test_data.SampleMultiEntityModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.observationbehavior.test_data.SampleManyUpdatesEntityModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.observationbehavior.test_data.SampleUpdateDifferentObjectsEntityModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.observationbehavior.test_data.SampleManyActionsSameTypeEntityModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.observationbehavior.test_data.SampleUpdateWithPreviousValueEntityModule::class,
+        com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.observationbehavior.test_data.SampleDefaultEntityModule::class
 ))
 internal class TestDomainModelModule

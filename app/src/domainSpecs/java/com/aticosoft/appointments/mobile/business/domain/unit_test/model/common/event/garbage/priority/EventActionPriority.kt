@@ -11,7 +11,7 @@ import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.EventActionStepBase
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.common.test_data.TestEventServices
+import TestEventServices
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.garbage.priority.EventActionPriority.LocalSteps.LocalEventType
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.garbage.priority.EventActionPriority.UnitTestApplicationImpl
 import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.event.garbage.priority.test_data.*

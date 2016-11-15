@@ -24,10 +24,7 @@ abstract class CommandDelegate<V>(private val value: V) : ReadOnlyProperty<Comma
     abstract fun V.initUsing(command: Command)
 }
 
-/***************************************************************************************************
- * Delegates
- **************************************************************************************************/
-
+//region Delegates
 object CommandDelegates {
 
     private class NestedCommand<N : Command>(nestedCommand: N) : CommandDelegate<N>(nestedCommand) {
@@ -37,8 +34,17 @@ object CommandDelegates {
 
     fun <N : Command> N.delegate(): CommandDelegate<N> = NestedCommand(this)
 
+    object Arrays {
+        private class NestedCommands<N : Command>(iterable: Array<N>) : CommandDelegate<Array<N>>(iterable) {
+
+            override fun Array<N>.initUsing(command: Command) = forEach { it.initUsing(command) }
+        }
+
+        fun <N : Command> Array<N>.delegate(): CommandDelegate<Array<N>> = NestedCommands(this)
+    }
+
     object Iterables {
-        private class NestedCommands<I : Iterable<N>, N : Command>(iterable: I) : CommandDelegate<I>(iterable) {
+        private class NestedCommands<I : Iterable<N>, out N : Command>(iterable: I) : CommandDelegate<I>(iterable) {
 
             override fun I.initUsing(command: Command) = initIterableUsing(command)
         }
@@ -47,7 +53,7 @@ object CommandDelegates {
     }
 
     object Maps {
-        private class NestedCommandMap<M : Map<N1, N2>, N1 : Command, N2 : Command>(map: M) : CommandDelegate<M>(map) {
+        private class NestedCommandMap<M : Map<N1, N2>, N1 : Command, out N2 : Command>(map: M) : CommandDelegate<M>(map) {
 
             override fun M.initUsing(command: Command) = forEach {
                 it.key.initUsing(command)
@@ -58,7 +64,7 @@ object CommandDelegates {
         fun <M : Map<N1, N2>, N1 : Command, N2 : Command> M.delegate(): CommandDelegate<M> = NestedCommandMap(this)
 
         object Values {
-            private class NestedCommandMapValues<M : Map<K, N>, K, N : Command>(map: M) : CommandDelegate<M>(map) {
+            private class NestedCommandMapValues<M : Map<K, N>, K, out N : Command>(map: M) : CommandDelegate<M>(map) {
 
                 override fun M.initUsing(command: Command) = values.initIterableUsing(command)
             }
@@ -78,3 +84,4 @@ object CommandDelegates {
 }
 
 private inline fun <I : Iterable<N>, N : Command> I.initIterableUsing(command: Command) = forEach { it.initUsing(command) }
+//endregion

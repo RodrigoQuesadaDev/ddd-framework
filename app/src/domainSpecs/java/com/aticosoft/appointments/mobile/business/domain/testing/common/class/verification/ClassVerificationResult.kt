@@ -2,6 +2,7 @@
 
 package com.aticosoft.appointments.mobile.business.domain.testing.common.`class`.verification
 
+import com.rodrigodev.common.nullability.nonNullOr
 import com.rodrigodev.common.reflection.isContainedUnder
 
 /**
@@ -17,4 +18,5 @@ internal inline fun <R : ClassVerificationResult> List<R>.classNames() = classes
 
 internal inline fun <R : ClassVerificationResult> List<R>.packages() = classes().map { it.`package` }
 
-internal inline fun <R : ClassVerificationResult> List<R>.containedUnder(packageName: String) = filter { it.clazz.`package`.isContainedUnder(packageName) }
+internal inline fun <R : ClassVerificationResult> List<R>.containedUnder(packageName: String, excludingPackageName: String? = null)
+        = filter { it.clazz.isContainedUnder(packageName) && excludingPackageName.nonNullOr(true) { !it.clazz.isContainedUnder(this@nonNullOr) } }

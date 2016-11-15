@@ -3,7 +3,7 @@ package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplication
 import com.aticosoft.appointments.mobile.business.domain.unit_test.UnitTestApplicationComponent
-import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.TransactionalActionSubscriptionCreation.UnitTestApplicationImpl
+import com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.TransactionalActionUpdatingBehavior.UnitTestApplicationImpl
 import com.rodrigodev.common.spec.story.steps.SpecSteps
 import org.robolectric.annotation.Config
 import javax.inject.Inject
@@ -12,9 +12,9 @@ import javax.inject.Inject
  * Created by Rodrigo Quesada on 03/11/16.
  */
 @Config(application = UnitTestApplicationImpl::class)
-internal class TransactionalActionSubscriptionCreation : DomainStory() {
+internal class TransactionalActionUpdatingBehavior : DomainStory() {
 
-    class UnitTestApplicationImpl : UnitTestApplication<TransactionalActionSubscriptionCreation>(UnitTestApplicationComponent::inject)
+    class UnitTestApplicationImpl : UnitTestApplication<TransactionalActionUpdatingBehavior>(UnitTestApplicationComponent::inject)
 
     @Inject protected lateinit var localSteps: LocalSteps
 

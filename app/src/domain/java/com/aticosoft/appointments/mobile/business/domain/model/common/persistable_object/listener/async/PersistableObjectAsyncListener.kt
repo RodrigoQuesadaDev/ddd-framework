@@ -1,9 +1,10 @@
 package com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.PersistableObjectLifecycleListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectChangeEvent.EventType
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectChangeEvent.EventType.ADD
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectChangeEvent.EventType.UPDATE
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
 import com.rodrigodev.common.properties.Delegates.threadLocal
 import com.rodrigodev.common.properties.delegates.ThreadLocalCleaner
@@ -13,14 +14,16 @@ import rx.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.jdo.JDOHelper
-import javax.jdo.listener.*
+import javax.jdo.listener.DeleteLifecycleListener
+import javax.jdo.listener.InstanceLifecycleEvent
+import javax.jdo.listener.StoreLifecycleListener
 
 /**
  * Created by Rodrigo Quesada on 18/10/15.
  */
 @Singleton
-/*internal*/ abstract class PersistableObjectAsyncListener<P : PersistableObject<I>, I> protected constructor()
-: PersistableObjectLifecycleListener<P>, PersistableObject.PersistableObjectStateAccess<I>, CreateLifecycleListener, StoreLifecycleListener, DeleteLifecycleListener, DirtyLifecycleListener {
+/*internal*/ class PersistableObjectAsyncListener<P : PersistableObject<*>> @Inject protected constructor()
+: PersistableObjectLifecycleListener<P>, PersistableObject.PersistableObjectStateAccess, StoreLifecycleListener, DeleteLifecycleListener {
 
     //TODO create JdoPersistableObjectListenerBase on infrastructure stuff??? (this class pertains to domain)
     //TODO create JdoPersistableObjectChangeEvent on infrastructure stuff??? (this class pertains to domain)
@@ -50,45 +53,27 @@ import javax.jdo.listener.*
         // No need to remove objects from list as resetLocalState should be called afterwards
     }
 
-    override fun preDirty(event: InstanceLifecycleEvent) {
-        @Suppress("UNCHECKED_CAST")
-        (event.source as P).let { obj ->
-            //TODO move code somewhere else...
-            //TODO apparently it is only used for EntityObserver... so... probably just leave it here...
-            obj.previousValue = m.persistenceContext.persistenceManager.detachCopy(obj)
+    @Suppress("UNCHECKED_CAST")
+    override fun postStore(event: InstanceLifecycleEvent): Unit = (event.source as P).let { obj ->
+        if (JDOHelper.isNew(obj)) {
+            objectChanges.add(PersistableObjectChangeEvent(ADD, currentValue = obj))
         }
-    }
-
-    override fun postCreate(event: InstanceLifecycleEvent) {
-        @Suppress("UNCHECKED_CAST")
-        objectChanges.add(PersistableObjectChangeEvent(EventType.Companion.from(event.eventType), currentValue = event.source as P))
-    }
-
-    override fun postStore(event: InstanceLifecycleEvent) {
-        //only updates
-        if (!JDOHelper.isNew(event.source)) {
-            @Suppress("UNCHECKED_CAST")
-            (event.source as P).let { obj ->
-                objectChanges.add(PersistableObjectChangeEvent(EventType.Companion.from(event.eventType), previousValue = obj.previousValue as P, currentValue = obj))
-            }
+        else {
+            objectChanges.add(PersistableObjectChangeEvent(UPDATE, previousValue = obj.previousValue as P, currentValue = obj))
         }
     }
 
     override fun postDelete(event: InstanceLifecycleEvent) {
         @Suppress("UNCHECKED_CAST")
-        objectChanges.add(PersistableObjectChangeEvent(EventType.Companion.from(event.eventType), previousValue = event.source as P))
+        objectChanges.add(PersistableObjectChangeEvent(EventType.REMOVE, previousValue = event.source as P))
     }
 
-    //region Non-Implemented Methods
+    //region Non-Implemented Lifecycle Methods
     override fun preStore(event: InstanceLifecycleEvent) {
         // Do nothing!
     }
 
     override fun preDelete(event: InstanceLifecycleEvent) {
-        // Do nothing!
-    }
-
-    override fun postDirty(event: InstanceLifecycleEvent?) {
         // Do nothing!
     }
     //endregion

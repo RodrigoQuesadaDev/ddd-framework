@@ -9,12 +9,12 @@ import javax.inject.Singleton
  */
 @Singleton
 /*internal*/ class PersistableObjectAsyncListenersManager @Inject protected constructor(
-        private val objectListeners: MutableSet<PersistableObjectAsyncListener<*, *>>
+        private val objectListeners: MutableSet<PersistableObjectAsyncListener<*>>
 ) {
-    private val objectListenerMap: Map<Class<*>, PersistableObjectAsyncListener<*, *>> = objectListeners.associateBy { it.objectType }
+    private val objectListenerMap: Map<Class<*>, PersistableObjectAsyncListener<*>> = objectListeners.associateBy { it.objectType }
 
     @Suppress("UNCHECKED_CAST")
-    fun <P : PersistableObject<*>> forType(type: Class<P>): PersistableObjectAsyncListener<P, *> = objectListenerMap[type]!! as PersistableObjectAsyncListener<P, *>
+    fun <P : PersistableObject<*>> forType(type: Class<P>): PersistableObjectAsyncListener<P> = objectListenerMap[type]!! as PersistableObjectAsyncListener<P>
 
     fun registerListeners(): Unit = objectListeners.forEach { it.register() }
 }

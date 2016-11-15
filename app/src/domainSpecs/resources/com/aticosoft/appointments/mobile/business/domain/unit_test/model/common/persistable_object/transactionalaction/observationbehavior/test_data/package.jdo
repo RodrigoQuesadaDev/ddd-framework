@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE jdo SYSTEM "file:/javax/jdo/jdo_3_1.dtd">
+<jdo>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.observationbehavior.test_data">
+        <class name="ParentSingleEntity">
+            <field name="child" dependent="true"/>
+        </class>
+        <class name="ChildSingleEntity"/>
+        <class name="SampleMultiEntity"/>
+        <class name="SampleManyUpdatesEntity"/>
+        <class name="SampleUpdateDifferentObjectsEntity"/>
+        <class name="SampleManyActionsSameTypeEntity"/>
+        <class name="SampleUpdateWithPreviousValueEntity"/>
+        <class name="SampleDefaultEntity"/>
+    </package>
+</jdo>

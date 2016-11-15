@@ -37,8 +37,8 @@ import javax.inject.Singleton
     private val simpleActionsMap by postInitialized { actionsByEvent.filterValuesAreInstance(SimpleEventAction::class.java) }
     private val overridableActionsMap by postInitialized { actionsByEvent.filterValuesAreInstance(OverridableEventAction::class.java) }
 
-    override fun _init() {
-        super._init()
+    override fun _postInit() {
+        super._postInit()
         with(m) {
             eventActions.forEach { it.init() }
         }
@@ -68,7 +68,7 @@ import javax.inject.Singleton
     @Inject
     protected fun inject(injectedMembers: InjectedMembers) {
         m = injectedMembers
-        _init()
+        _postInit()
     }
 
     protected class InjectedMembers @Inject constructor(

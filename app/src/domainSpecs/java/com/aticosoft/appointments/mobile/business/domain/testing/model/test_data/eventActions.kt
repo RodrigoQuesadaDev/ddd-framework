@@ -5,6 +5,7 @@ import com.aticosoft.appointments.mobile.business.domain.model.common.event.Time
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.ProducedValue
 import com.aticosoft.appointments.mobile.business.domain.testing.model.test_data.TestSimpleEventAction.ValueProducer
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event.EventActionBase
+import com.rodrigodev.common.collection.synchronized
 import com.rodrigodev.common.concurrent.inc
 import com.rodrigodev.common.properties.Delegates.atomicInteger
 import java.util.concurrent.atomic.AtomicInteger
@@ -63,10 +64,10 @@ internal abstract class TestSimpleEventAction<E : TestEvent, A : TestEventAction
     @Singleton
     abstract class ValueProducer<E : TestEvent, in A : TestEventAction<E>, out V : ProducedValue> protected constructor() {
 
-        // Code wont't compile without this.
+        // Code won't compile without this.
         private lateinit var eventType: Class<E>
 
-        private val _producedValues = mutableListOf<V>()
+        private val _producedValues = mutableListOf<V>().synchronized()
 
         val producedValues: List<V>
             get() = _producedValues

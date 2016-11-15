@@ -15,6 +15,10 @@ inline fun Class<*>.isSuperOfOrSameAs(aClass: Class<*>) = isAssignableFrom(aClas
 
 inline fun Class<*>.isSubOfOrSameAs(aClass: Class<*>) = aClass.isSuperOfOrSameAs(this)
 
+inline fun Class<*>.isContainedUnder(packageName: String) = `package`.isContainedUnder(packageName)
+
+inline fun Class<*>.isContainedUnder(`package`: Package) = isContainedUnder(`package`.name)
+
 inline fun Iterable<Class<*>>.anyIsSuperOfOrSameAs(aClass: Class<*>) = any { it.isSuperOfOrSameAs(aClass) }
 
 inline fun Iterable<Class<*>>.anyIsSubOfOrSameAs(aClass: Class<*>) = any { it.isSubOfOrSameAs(aClass) }

@@ -8,6 +8,8 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.serv
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.NonExistingStalePersistableObjectException
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.StalePersistableObjectException
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
+import com.rodrigodev.common.collection.nullCopy
+import com.rodrigodev.common.collection.toTypedArray
 import javax.jdo.JDOHelper
 import javax.jdo.JDOObjectNotFoundException
 import javax.jdo.PersistenceManager
@@ -41,6 +43,15 @@ object CommandPersistableObjectDelegates {
     }
 
     fun <P : PersistableObject<*>> P.delegate(): CommandPersistableObjectDelegate<P> = CommandPersistableObject(this)
+
+    object Arrays {
+        private class CommandPersistableObjectArray<P : PersistableObject<*>>(objects: Array<P>) : CommandPersistableObjectDelegate<Array<P>>(objects) {
+
+            override fun Array<P>.processUsing(command: Command) = asSequence().map { it.processObjectUsing(command) }.toTypedArray(nullCopy())
+        }
+
+        fun <P : PersistableObject<*>> Array<P>.delegate(): CommandPersistableObjectDelegate<Array<P>> = CommandPersistableObjectArray(this)
+    }
 
     object Lists {
         private class CommandPersistableObjectList<P : PersistableObject<*>>(objects: List<P>) : CommandPersistableObjectDelegate<List<P>>(objects) {

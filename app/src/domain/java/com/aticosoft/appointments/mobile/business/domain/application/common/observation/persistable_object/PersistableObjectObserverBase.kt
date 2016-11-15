@@ -4,8 +4,8 @@ package com.aticosoft.appointments.mobile.business.domain.application.common.obs
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.QueryView
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.QueryViewsManager
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType.ADD
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType.REMOVE
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectChangeEvent.EventType.ADD
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectChangeEvent.EventType.REMOVE
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.*
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectFilteredAsyncChangeObserver
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
@@ -76,7 +76,7 @@ import javax.inject.Singleton
     @Inject
     protected fun inject(injectedMembers: InjectedMembers<P, R>) {
         m = injectedMembers
-        _init()
+        _postInit()
     }
 
     protected class InjectedMembers<P : PersistableObject<*>, R : Repository<P, *>> @Inject constructor(

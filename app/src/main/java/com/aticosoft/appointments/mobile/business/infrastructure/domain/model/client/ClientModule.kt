@@ -1,12 +1,12 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.client
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityAsyncListener
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.client.Client
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueries
 import com.aticosoft.appointments.mobile.business.domain.model.client.ClientQueryView
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.sync.PersistableObjectSyncListener
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.JdoRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.entity.JdoEntityRepository
@@ -41,5 +41,8 @@ internal class ClientModule : JdoRootEntityModule<Client, ClientQueries> {
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<Client>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EntityAsyncListener<Client>): PersistableObjectAsyncListener<*, *> = listener
+    override fun provideSyncListenerIntoSet(listener: PersistableObjectSyncListener<Client>): PersistableObjectSyncListener<*> = listener
+
+    @Provides @IntoSet
+    override fun provideAsyncListenerIntoSet(listener: PersistableObjectAsyncListener<Client>): PersistableObjectAsyncListener<*> = listener
 }

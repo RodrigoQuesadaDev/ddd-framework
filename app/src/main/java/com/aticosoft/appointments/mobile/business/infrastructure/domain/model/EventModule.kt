@@ -1,6 +1,5 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.event.EventAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.Event
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventRepository
@@ -12,7 +11,7 @@ import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.co
  * Created by Rodrigo Quesada on 23/08/16.
  */
 /*internal*/ interface EventModule<E : Event, out Q : Queries<E>, in R : EventRepository<E>>
-: RootPersistableObjectModule<E, EventAsyncListener<E>, Q, R> {
+: RootPersistableObjectModule<E, Q, R> {
 
     override fun provideTypeIntoSet(): Class<out Event>
 

@@ -1,8 +1,6 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.Appointment
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueries
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.AppointmentQueryView
@@ -10,6 +8,8 @@ import com.aticosoft.appointments.mobile.business.domain.model.appointment.valid
 import com.aticosoft.appointments.mobile.business.domain.model.appointment.validation.timeslot.TimeSlotsSpaceValidator
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.sync.PersistableObjectSyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.JdoRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
@@ -55,7 +55,10 @@ internal class AppointmentModule : JdoRootEntityModule<Appointment, AppointmentQ
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<Appointment>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EntityAsyncListener<Appointment>): PersistableObjectAsyncListener<*, *> = listener
+    override fun provideSyncListenerIntoSet(listener: PersistableObjectSyncListener<Appointment>): PersistableObjectSyncListener<*> = listener
+
+    @Provides @IntoSet
+    override fun provideAsyncListenerIntoSet(listener: PersistableObjectAsyncListener<Appointment>): PersistableObjectAsyncListener<*> = listener
 
     @Provides @Singleton
     fun provideEntityObserver(observer: AppointmentObserver): EntityObserver<Appointment> = observer

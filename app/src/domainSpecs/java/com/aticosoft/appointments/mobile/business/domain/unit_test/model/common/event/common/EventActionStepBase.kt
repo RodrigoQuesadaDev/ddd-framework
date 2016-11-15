@@ -40,7 +40,7 @@ internal abstract class EventActionStepBase<S : EventActionStepBase<S, *, *>, T 
 
     @Given("event \$eventType has \$n actions defined")
     fun givenEventHasNActionsDefined(eventType: T, n: Int) {
-        assertThat(eventType.declaredEventActions.count()).isEqualTo(n)
+        assertThat(eventType.declaredEventActions.toList()).hasSize(n)
     }
 
     @Given("\$eventType actions don't modify the event")

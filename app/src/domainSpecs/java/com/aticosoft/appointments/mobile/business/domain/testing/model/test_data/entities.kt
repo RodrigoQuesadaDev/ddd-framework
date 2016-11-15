@@ -27,7 +27,7 @@ internal open class TestData protected constructor(@Provided c: TestData.Context
     )
 }
 
-internal abstract class AbstractTestData(context: Entity.Context, var value: Int) : Entity(context)
+internal abstract class AbstractTestData(context: Entity.Context, open var value: Int) : Entity(context)
 
 @Singleton
 internal class TestDependency @Inject protected constructor() {

@@ -35,7 +35,7 @@ import javax.inject.Inject
     //region Injection
     protected @Inject fun inject(injectedFields: InjectedMembers<P>) {
         m = injectedFields
-        _init()
+        _postInit()
     }
 
     protected class InjectedMembers<P : PersistableObject<*>> @Inject constructor(

@@ -3,7 +3,7 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.domain.model.common.event
 
 import com.aticosoft.appointments.mobile.business.Application
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType.UPDATE
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectChangeEvent.EventType.UPDATE
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectFilteredAsyncChangeObserver
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.*
@@ -49,8 +49,8 @@ import javax.jdo.JDOHelper
 
     protected var actionsSubscription: Subscription? = null
 
-    override fun _init() = with(m) {
-        super._init()
+    override fun _postInit() = with(m) {
+        super._postInit()
         resubscribeActions()
         processedEventsListener.subscribe()
     }
@@ -121,7 +121,7 @@ import javax.jdo.JDOHelper
     @Inject
     protected fun _inject(injectedMembers: InjectedMembers<E>) {
         m = injectedMembers
-        _init()
+        _postInit()
     }
 
     protected class InjectedMembers<E : Event> @Inject constructor(

@@ -1,10 +1,10 @@
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async.test_data
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.entity.EntityObserver
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.Entity
 import com.aticosoft.appointments.mobile.business.domain.model.common.entity.EntityRepository
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.sync.PersistableObjectSyncListener
 import com.aticosoft.appointments.mobile.business.domain.testing.infrastructure.domain.model.TestRootEntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.EntityModule
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.QueryViews
@@ -40,7 +40,10 @@ internal class TestDataParentModule : TestRootEntityModule<TestDataParent>() {
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<TestDataParent>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EntityAsyncListener<TestDataParent>): PersistableObjectAsyncListener<*, *> = listener
+    override fun provideSyncListenerIntoSet(listener: PersistableObjectSyncListener<TestDataParent>): PersistableObjectSyncListener<*> = listener
+
+    @Provides @IntoSet
+    override fun provideAsyncListenerIntoSet(listener: PersistableObjectAsyncListener<TestDataParent>): PersistableObjectAsyncListener<*> = listener
 }
 
 @Module
@@ -56,5 +59,8 @@ internal class TestDataChildModule : EntityModule<TestDataChild> {
     override fun provideInitializerIntoSet(initializer: PersistableObjectInitializer<TestDataChild>): PersistableObjectInitializer<*> = initializer
 
     @Provides @IntoSet
-    override fun provideListenerIntoSet(listener: EntityAsyncListener<TestDataChild>): PersistableObjectAsyncListener<*, *> = listener
+    override fun provideSyncListenerIntoSet(listener: PersistableObjectSyncListener<TestDataChild>): PersistableObjectSyncListener<*> = listener
+
+    @Provides @IntoSet
+    override fun provideAsyncListenerIntoSet(listener: PersistableObjectAsyncListener<TestDataChild>): PersistableObjectAsyncListener<*> = listener
 }

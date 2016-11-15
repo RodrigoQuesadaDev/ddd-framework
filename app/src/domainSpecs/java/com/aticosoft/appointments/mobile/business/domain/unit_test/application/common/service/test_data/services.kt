@@ -7,6 +7,7 @@ import com.aticosoft.appointments.mobile.business.domain.application.common.serv
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandDelegates.Maps.Values.delegateValues
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandDelegates.Maps.delegate
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandDelegates.delegate
+import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegates.Arrays.delegate
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegates.Lists.delegate
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegates.Maps.Keys.delegateKeys
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.CommandPersistableObjectDelegates.Maps.Values.delegateValues
@@ -39,6 +40,24 @@ internal class CommandTestDataServices @Inject protected constructor() : TestDat
     }
 
     fun execute(command: OnlyUseEntityFromNestedProperty) = command.execute { nested.entity.use() }
+
+    class OnlyUseEntitiesFromArray(entities: Array<TestData>) : Command() {
+        val entities by entities.delegate()
+    }
+
+    fun execute(command: OnlyUseEntitiesFromArray) = command.execute { entities.use() }
+
+    class OnlyUseEntitiesFromNestedArray(entities: Array<TestData>) : Command() {
+        val nested by NestedArray(entities).delegate()
+    }
+
+    fun execute(command: OnlyUseEntitiesFromNestedArray) = command.execute { nested.entities.use() }
+
+    class OnlyUseNestedEntitiesFromArray(entities: Array<TestData>) : Command() {
+        val nestedEntities by entities.toNestedEntities().delegate()
+    }
+
+    fun execute(command: OnlyUseNestedEntitiesFromArray) = command.execute { nestedEntities.useNested() }
 
     class OnlyUseEntitiesFromList(entities: List<TestData>) : Command() {
         val entities by entities.delegate()
@@ -143,6 +162,24 @@ internal class CommandTestDataServices @Inject protected constructor() : TestDat
     }
 
     fun execute(command: ModifyEntityFromNestedProperty) = command.execute { nested.modify() }
+
+    class ModifyEntitiesFromArray(entities: Array<TestData>) : Command() {
+        val entities by entities.delegate()
+    }
+
+    fun execute(command: ModifyEntitiesFromArray) = command.execute { entities.modify() }
+
+    class ModifyEntitiesFromNestedArray(entities: Array<TestData>) : Command() {
+        val nested by NestedArray(entities).delegate()
+    }
+
+    fun execute(command: ModifyEntitiesFromNestedArray) = command.execute { nested.entities.modify() }
+
+    class ModifyEntitiesFromArrayOfNestedEntities(entities: Array<TestData>) : Command() {
+        val nestedEntities by entities.toNestedEntities().delegate()
+    }
+
+    fun execute(command: ModifyEntitiesFromArrayOfNestedEntities) = command.execute { nestedEntities.modifyNested() }
 
     class ModifyEntitiesFromList(entities: List<TestData>) : Command() {
         val entities by entities.delegate()
@@ -265,6 +302,10 @@ internal class CommandTestDataServices @Inject protected constructor() : TestDat
         val entity by entity.delegate()
     }
 
+    class NestedArray(entities: Array<TestData>) : Command() {
+        val entities by entities.delegate()
+    }
+
     class NestedList(entities: List<TestData>) : Command() {
         val entities by entities.delegate()
     }
@@ -292,6 +333,8 @@ private inline fun TestData.use() = toString()
 
 private inline fun NestedValue.use() = run { entity.use() }
 
+private inline fun Array<TestData>.use() = forEach { it.use() }
+
 private inline fun Iterable<TestData>.use() = forEach { it.use() }
 
 private inline fun Iterable<NestedValue>.useNested() = forEach { it.use() }
@@ -312,6 +355,8 @@ private inline fun TestData.modify() = run { value += 10 }
 
 private inline fun NestedValue.modify() = run { entity.modify() }
 
+private inline fun Array<TestData>.modify() = forEach { it.modify() }
+
 private inline fun Iterable<TestData>.modify() = forEach { it.modify() }
 
 private inline fun Iterable<NestedValue>.modifyNested() = forEach { it.modify() }
@@ -328,9 +373,11 @@ private inline fun Map<NestedValue, NestedValue>.modifyNested() = forEach {
 //endregion
 
 //region Map to Nested Entity
-private inline fun List<TestData>.toNestedEntities() = map { NestedValue(it) }
+private inline fun Array<TestData>.toNestedEntities() = map(::NestedValue)
 
-private inline fun Set<TestData>.toNestedEntities() = map { NestedValue(it) }.toSet()
+private inline fun List<TestData>.toNestedEntities() = map(::NestedValue)
+
+private inline fun Set<TestData>.toNestedEntities() = map(::NestedValue).toSet()
 
 private inline fun Map<Int, TestData>.mapValuesToNestedEntities(): Map<Int, NestedValue> = mapValues { NestedValue(it.value) }
 

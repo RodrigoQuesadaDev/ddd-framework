@@ -1,7 +1,8 @@
 package com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent.EventType
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectChangeEvent.EventType
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectChangeEvent
 import com.rodrigodev.common.nullability.nonNullOr
 
 /**

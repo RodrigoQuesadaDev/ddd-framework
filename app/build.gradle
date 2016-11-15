@@ -68,7 +68,9 @@ datanucleus {
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/action/subscription/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/event/action/executionorder/test_data',
                     'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/valueobject/behavior/test_data',
-                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/valueobject/registration/test_data']
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/valueobject/registration/test_data',
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/persistable_object/transactionalaction/subscription/test_data',
+                    'com/aticosoft/appointments/mobile/business/domain/unit_test/model/common/persistable_object/transactionalaction/observationbehavior/test_data']
     alwaysDetachable = true
 }
 

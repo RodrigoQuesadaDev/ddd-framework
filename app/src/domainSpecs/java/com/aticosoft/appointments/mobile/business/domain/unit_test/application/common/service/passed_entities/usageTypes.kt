@@ -19,6 +19,9 @@ internal class SimpleUsageTypeConverter : UsageTypeConverter<SimpleUsageType>(Si
 }
 
 internal enum class CollectionUsageType(override val text: String) : UsageType {
+    ARRAY("an array"),
+    NESTED_ARRAY("a nested array"),
+    ARRAY_OF_NESTED_ENTITIES("an array of nested entities"),
     LIST("a list"),
     NESTED_LIST("a nested list"),
     LIST_OF_NESTED_ENTITIES("a list of nested entities"),

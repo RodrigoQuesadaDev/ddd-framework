@@ -2,7 +2,6 @@
 
 package com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent
 import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectObservationFilter
 import com.aticosoft.appointments.mobile.business.domain.common.time.TimeService
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.PersistableObject

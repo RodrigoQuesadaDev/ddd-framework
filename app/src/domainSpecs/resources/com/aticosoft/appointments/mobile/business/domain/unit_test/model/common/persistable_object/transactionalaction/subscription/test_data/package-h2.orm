@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
+<orm>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.subscription.test_data">
+        <class name="NoSubscriptionsEntity" table="NO_SUBSCRIPTIONS_ENTITY"/>
+        <class name="OneSubscriptionEntity" table="ONE_SUBSCRIPTION_ENTITY"/>
+        <class name="FiveSubscriptionsEntity" table="FIVE_SUBSCRIPTIONS_ENTITY"/>
+    </package>
+</orm>

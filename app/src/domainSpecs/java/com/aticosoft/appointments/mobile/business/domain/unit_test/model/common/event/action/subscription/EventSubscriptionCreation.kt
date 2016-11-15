@@ -54,6 +54,7 @@ internal class EventSubscriptionCreation : DomainStory() {
 
         @Given("no declared actions for \$eventType event")
         fun givenNoDeclaredActionsForEvent(eventType: LocalEventType) {
+            assertThat(eventType.declaredEventActions.toList()).isEmpty()
         }
 
         @Given("\$eventType event actions with the next ids are declared: [\$ids]")
@@ -108,5 +109,5 @@ internal class EventSubscriptionCreation : DomainStory() {
 //region Utils
 private inline fun Sequence<EventAction<*>>.toTestEventActions() = map { it as LocalTestEventAction<*> }
 
-private fun Sequence<LocalTestEventAction<*>>.toValues() = map { it.value }
+private inline fun Sequence<LocalTestEventAction<*>>.toValues() = map { it.value }
 //endregion

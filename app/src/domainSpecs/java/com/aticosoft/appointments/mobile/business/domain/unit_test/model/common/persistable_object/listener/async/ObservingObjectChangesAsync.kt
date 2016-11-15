@@ -1,6 +1,8 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.listener.async
 
-import com.aticosoft.appointments.mobile.business.domain.application.common.observation.persistable_object.PersistableObjectChangeEvent
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectChangeEvent
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListenersManager
 import com.aticosoft.appointments.mobile.business.domain.specs.DomainStory
 import com.aticosoft.appointments.mobile.business.domain.testing.model.TestEntityRepositoryManager
@@ -87,7 +89,7 @@ internal class ObservingObjectChangesAsync : DomainStory() {
     }
 }
 
-private fun PersistableObjectChangeEvent<AbstractTestData>.toExample() = ChangeEventExample(type, previous = previousValue?.value, current = currentValue?.value)
+private inline fun PersistableObjectChangeEvent<AbstractTestData>.toExample() = ChangeEventExample(type, previous = previousValue?.value, current = currentValue?.value)
 
 @AsParameters
 internal data class ChangeEventExample(

@@ -37,6 +37,9 @@ internal interface UsageTypeSteps {
     fun List<TestData>.modify(usageType: CollectionUsageType) = let { entities ->
         with(testDataServices) {
             when (usageType) {
+                ARRAY -> execute(ModifyEntitiesFromArray(entities.toTypedArray()))
+                NESTED_ARRAY -> execute(ModifyEntitiesFromNestedArray(entities.toTypedArray()))
+                ARRAY_OF_NESTED_ENTITIES -> execute(ModifyEntitiesFromArrayOfNestedEntities(entities.toTypedArray()))
                 LIST -> execute(ModifyEntitiesFromList(entities))
                 NESTED_LIST -> execute(ModifyEntitiesFromNestedList(entities))
                 LIST_OF_NESTED_ENTITIES -> execute(ModifyEntitiesFromListOfNestedEntities(entities))
@@ -59,6 +62,9 @@ internal interface UsageTypeSteps {
     fun List<TestData>.onlyUseEntities(usageType: CollectionUsageType) = let { entities ->
         with(testDataServices) {
             when (usageType) {
+                ARRAY -> execute(OnlyUseEntitiesFromArray(entities.toTypedArray()))
+                NESTED_ARRAY -> execute(OnlyUseEntitiesFromNestedArray(entities.toTypedArray()))
+                ARRAY_OF_NESTED_ENTITIES -> execute(OnlyUseNestedEntitiesFromArray(entities.toTypedArray()))
                 LIST -> execute(OnlyUseEntitiesFromList(entities))
                 NESTED_LIST -> execute(OnlyUseEntitiesFromNestedList(entities))
                 LIST_OF_NESTED_ENTITIES -> execute(OnlyUseNestedEntitiesFromList(entities))

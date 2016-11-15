@@ -65,7 +65,7 @@ interface UnsafePostInitialized : PostInitialized {
     override val _postInitializedPropertyType: PostInitializedPropertyType
         get() = PostInitializedPropertyType.UNSAFE
 
-    fun _init() {
+    fun _postInit() {
         _propertyInitializer.init()
     }
 }

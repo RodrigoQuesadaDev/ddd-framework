@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm_3_1.dtd">
+<orm>
+    <package name="com.aticosoft.appointments.mobile.business.domain.unit_test.model.common.persistable_object.transactionalaction.observationbehavior.test_data">
+        <class name="ParentSingleEntity" table="PARENT_SINGLE_ENTITY">
+            <field name="child">
+                <column name="CHILD_ID"/>
+            </field>
+        </class>
+        <class name="ChildSingleEntity" table="CHILD_SINGLE_ENTITY"/>
+        <class name="SampleMultiEntity" table="SAMPLE_MULTI_ENTITY"/>
+        <class name="SampleManyUpdatesEntity" table="SAMPLE_MANY_UPDATES_ENTITY"/>
+        <class name="SampleUpdateDifferentObjectsEntity" table="SAMPLE_UPDATE_DIFFERENT_OBJECTS_ENTITY"/>
+        <class name="SampleManyActionsSameTypeEntity" table="SAMPLE_MANY_ACTIONS_SAME_TYPE_ENTITY"/>
+        <class name="SampleUpdateWithPreviousValueEntity" table="SAMPLE_UPDATE_WITH_PREVIOUS_VALUE_ENTITY"/>
+        <class name="SampleDefaultEntity" table="SAMPLE_DEFAULT_ENTITY"/>
+    </package>
+</orm>

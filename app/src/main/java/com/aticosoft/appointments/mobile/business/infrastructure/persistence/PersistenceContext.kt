@@ -1,7 +1,7 @@
 package com.aticosoft.appointments.mobile.business.infrastructure.persistence
 
-import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.PersistableObjectLifecycleListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
 import com.querydsl.jdo.JDOQueryFactory
 import com.rodrigodev.common.properties.Delegates.threadLocal
 import com.rodrigodev.common.properties.Delegates.unsafeLazy
@@ -36,9 +36,9 @@ import javax.jdo.listener.InstanceLifecycleListener
     private val persistableObjectAsyncListenerListBuilder = PersistableObjectAsyncListenerListBuilder()
 
     // It is fine to use unsafeLazy here, thread safety necessary here
-    private val persistableObjectAsyncListeners: List<PersistableObjectAsyncListener<*, *>> by unsafeLazy { persistableObjectAsyncListenerListBuilder.build() }
+    private val persistableObjectAsyncListeners: List<PersistableObjectAsyncListener<*>> by unsafeLazy { persistableObjectAsyncListenerListBuilder.build() }
 
-    fun registerPersistableObjectAsyncListener(listener: PersistableObjectAsyncListener<*, *>) {
+    fun registerPersistableObjectAsyncListener(listener: PersistableObjectAsyncListener<*>) {
         registerPersistableObjectLifecycleListener(listener)
         persistableObjectAsyncListenerListBuilder.add(listener)
     }
@@ -81,11 +81,11 @@ import javax.jdo.listener.InstanceLifecycleListener
 
 private class PersistableObjectAsyncListenerListBuilder {
 
-    private val listeners: MutableList<PersistableObjectAsyncListener<*, *>> = arrayListOf()
+    private val listeners: MutableList<PersistableObjectAsyncListener<*>> = arrayListOf()
 
-    fun add(listener: PersistableObjectAsyncListener<*, *>) {
+    fun add(listener: PersistableObjectAsyncListener<*>) {
         listeners.add(listener)
     }
 
-    fun build(): List<PersistableObjectAsyncListener<*, *>> = listeners
+    fun build(): List<PersistableObjectAsyncListener<*>> = listeners
 }

@@ -3,6 +3,9 @@ package com.aticosoft.appointments.mobile.business.infrastructure.domain.model
 import com.aticosoft.appointments.mobile.business.ModulePostInitializer
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventAction
 import com.aticosoft.appointments.mobile.business.domain.model.common.event.EventActionState
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.AbstractTransactionalAction
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.async.PersistableObjectAsyncListener
+import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.listener.sync.PersistableObjectSyncListener
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidator
 import com.aticosoft.appointments.mobile.business.domain.model.common.persistable_object.validation.PersistableObjectValidatorsManager
 import com.aticosoft.appointments.mobile.business.infrastructure.domain.model.appointment.AppointmentModule
@@ -44,14 +47,17 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 @Module(includes = arrayOf(ConfigurationModule::class, AppointmentModule::class, ClientModule::class))
 /*internal*/ class DomainModelBaseModule {
 
-    @Provides @ElementsIntoSet
-    fun provideEventActionsIntoSet(): Set<EventAction<*>> = emptySet()
-
     @Provides
     fun provideEventActionStateType(): Class<EventActionState> = EventActionState::class.java
 
     @Provides @ElementsIntoSet
     fun provideObjectInitializers(): Set<PersistableObjectInitializer<*>> = emptySet()
+
+    @Provides @ElementsIntoSet
+    fun provideSyncListeners(): Set<PersistableObjectSyncListener<*>> = emptySet()
+
+    @Provides @ElementsIntoSet
+    fun provideAsyncListeners(): Set<PersistableObjectAsyncListener<*>> = emptySet()
 
     @Provides @ElementsIntoSet
     fun provideValidators(): Set<PersistableObjectValidator<*, *>> = emptySet()
@@ -61,6 +67,12 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 
     @Provides @ElementsIntoSet @ValueObjects
     fun provideValueObjects(): Set<Class<*>> = emptySet()
+
+    @Provides @ElementsIntoSet
+    fun provideTransactionalActionsIntoSet(): Set<AbstractTransactionalAction<*>> = emptySet()
+
+    @Provides @ElementsIntoSet
+    fun provideEventActionsIntoSet(): Set<EventAction<*>> = emptySet()
 }
 
 @Qualifier

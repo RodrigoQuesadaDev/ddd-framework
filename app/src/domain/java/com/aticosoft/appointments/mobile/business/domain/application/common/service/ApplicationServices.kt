@@ -4,7 +4,6 @@ package com.aticosoft.appointments.mobile.business.domain.application.common.ser
 
 import com.aticosoft.appointments.mobile.business.domain.application.common.service.exceptions.ReusedCommandException
 import com.aticosoft.appointments.mobile.business.infrastructure.persistence.PersistenceContext
-import com.aticosoft.appointments.mobile.business.infrastructure.persistence.TransactionManager
 import javax.inject.Inject
 import javax.jdo.PersistenceManager
 
@@ -51,7 +50,6 @@ import javax.jdo.PersistenceManager
     }
 
     class InjectedMembers @Inject protected constructor(
-            val tm: TransactionManager,
             val persistenceContext: PersistenceContext
     )
     //endregion
