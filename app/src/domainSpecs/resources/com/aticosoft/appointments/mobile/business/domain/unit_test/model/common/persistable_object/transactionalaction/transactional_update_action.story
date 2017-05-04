@@ -40,3 +40,5 @@ Then the values observed by the S3 transactional update action were exactly (and
 | priority      | 100 | 90 | 100 | 90 | 100 | 90 | 80 |
 | previousValue | 11  | 11 | 11  | 11 | 11  | 11 | 11 |
 | value         | 17  | 17 | 18  | 18 | 19  | 19 | 19 |
+
+!-- TODO What happens when nested entities/embeddeds change??? Hmmm... maybe just need a way to get to the parent/root entity from nested entities/embeddeds?

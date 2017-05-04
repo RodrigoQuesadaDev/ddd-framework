@@ -23,6 +23,7 @@ class Appointment protected constructor(
     var clientId = clientId
         private set
 
+    //TODO this pattern is actually pretty shitty... no need for generated delegate, do it manually!
     private var _scheduledTime = EmbeddedInterval(scheduledTime)
     val scheduledTime: Interval by embedded(EmbeddedInterval.Delegator,
             get = { _scheduledTime },
